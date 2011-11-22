@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_701_Mac_OS.Olives" errors="0" failures="0" tests="1" time="0.0">
+<testcase classname="Firefox_701_Mac_OS.Olives" name="test Olives should be an Object" time="0.0"/>
+</testsuite>

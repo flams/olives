@@ -1,0 +1,12 @@
+{
+"version":2,
+"file":"build/Olives.js",
+"lineCount":1,
+"lineMaps":["UBA/EC"],
+"mappings":[[0,1,0],
+[0,1,0,0],
+[0,1,9],
+],
+"sources":["build/temp/concat.js"],
+"names":["Olives"]
+}
