@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Firefox_701_Mac_OS.Olives" errors="0" failures="0" tests="1" time="0.0">
-<testcase classname="Firefox_701_Mac_OS.Olives" name="test Olives should be an Object" time="0.0"/>
+<testsuite name="Firefox_701_Mac_OS.Olives" errors="0" failures="0" tests="5" time="0.0010">
+<testcase classname="Firefox_701_Mac_OS.Olives" name="test Olives is an object" time="0.0"/>
+<testcase classname="Firefox_701_Mac_OS.Olives" name="test Olives API" time="0.0"/>
+<testcase classname="Firefox_701_Mac_OS.Olives" name="test define new UI" time="0.0010"/>
+<testcase classname="Firefox_701_Mac_OS.Olives" name="test create a new UI" time="0.0"/>
+<testcase classname="Firefox_701_Mac_OS.Olives" name="test UI can inherit from others" time="0.0"/>
 </testsuite>

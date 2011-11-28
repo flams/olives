@@ -10,20 +10,39 @@ TestCase("Olives", {
 		assertObject(Olives);
 	},
 	
-	"test Olives has declare function": function () {
-		assertFunction(Olives.declare);
+	"test Olives API": function () {
+		assertFunction(Olives.define);
+		assertFunction(Olives.create);
 	},
 	
-	"test declare new UI": function () {
-		assertFalse(Olives.declare("UI"));
-		assertFalse(Olives.declare(this.UI));
-		assertFalse(Olives.declare(this.UI, "UI"));
-		assertFalse(Olives.declare("UI", {}));
-		assertSame(this.UI, Olives.declare("UI", this.UI));
+	"test define new UI": function () {
+		assertFalse(Olives.define("UI"));
+		assertFalse(Olives.define(this.UI));
+		assertFalse(Olives.define(this.UI, "UI"));
+		assertFalse(Olives.define("UI", {}));
+		assertSame(this.UI, Olives.define("UI", this.UI));
+	},
+
+	
+	"test create a new UI": function () {
+		assertObject(Olives.create("UI"));
+		assertSame(Emily, Olives.create("UI").API);
 	},
 	
-	"test require a declared UI": function () {
-		assertSame(Emily, Olives.require("UI").API);
+	"test UI can inherit from others": function () {
+		var obj = {},
+			UI2 = function () {
+				this.getObj = function () {
+				return obj;
+				};
+			},
+			ui;
+		Olives.define("UI2", UI2);
+		assertSame(this.UI, Olives.define("UI", "UI2", this.UI));
+		
+		ui = Olives.create("UI");
+		
+		assertSame(obj, ui.getObj());
 	}
 
 });

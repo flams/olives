@@ -5,16 +5,13 @@ function Olives(FWK) {
 			return _namespace + "." + name;
 		};
 		
-	this.declare = function declare(name, constructor) {
-			if (typeof name == "string" && typeof constructor == "function") {
-				return FWK.declare(_addNS(name), constructor);
-			} else {
-				return false;
-			}
-		};
+	this.define = function define(name, inherits, constructor) {
+		inherits = typeof inherits == "string" ? _addNS(inherits) : inherits;
+		return FWK.declare(_addNS(name), inherits, constructor);
+	};
 		
-	this.require = function require(name) {
-		return FWK.require(_addNS(name));
+	this.create = function create(name) {
+		return Object.create(FWK.require(_addNS(name)));
 	};
 };
 
