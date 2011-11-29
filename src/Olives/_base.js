@@ -1,15 +1,16 @@
-Olives.define("_base", function _base(API) {
+Olives.define("_base",
+/** 
+* @class 
+* _base is an abstract class that every UI can inherit from.
+* It should provide code that is easy to reuse
+*/
+function _base(API) {
 	
+	/**
+	 * The model of the UI is a TinyStore
+	 * @type object
+	 */
 	this.model = API.require("TinyStore").create();
-	
-	this.bind = function bind(node, field, func, scope) {
-		return this.model.watch(field, func || function (value) {
-			node.innerHTML = value;
-		}, scope);
-	};
-	
-	this.unbind = function unbind(handler) {
-		return this.model.unwatch(handler);
-	};
+
 	
 });
