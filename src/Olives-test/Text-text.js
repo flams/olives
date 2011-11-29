@@ -6,5 +6,7 @@ TestCase("TextTest", {
 	"test Text exists and inherits from base": function () {
 		assertObject(this.Text);
 		assertObject(this.Text.model);
+		assertFunction(this.Text.bind);
+		assertFunction(this.Text.unbind);
 	}
 });
