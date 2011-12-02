@@ -44,24 +44,13 @@ function Olives(FWK) {
 	};
 };
 
-var Olives = new Olives(Emily);Olives.define("Text",
-		
-// Text inherits form _base		
-"_base",
-
-/** 
-* @class 
-* Text is a simple paragraph with a unique property that shows the way UI work.
-*/		
-function Text() {
-		
-});Olives.define("_base",
+var Olives = new Olives(Emily);Olives.define("OObject",
 /** 
 * @class 
 * _base is an abstract class that every UI can inherit from.
 * It should provide code that is easy to reuse
 */
-function _base(API) {
+function OObject(API) {
 	
 	/**
 	 * The model of the UI is a TinyStore
@@ -97,4 +86,15 @@ function _base(API) {
 		
 		return this;
 	};
+});Olives.define("Text",
+		
+// Text inherits form _base		
+"OObject",
+
+/** 
+* @class 
+* Text is a simple paragraph with a unique property that shows the way UI work.
+*/		
+function Text() {
+		
 });

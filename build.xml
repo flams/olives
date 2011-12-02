@@ -9,6 +9,7 @@
 	<property name="docs.dir" value="docs"/>
     <property name="temp.dir" value="${build.dir}/temp"/>
     <property name="reports.dir" value="${build.dir}/reports"/>
+	<property name="integration.dir" value="integration"/>
     
     <property name="JsDoc.dir" value="${tools.dir}/JsDoc"/>
     <property name="JsDoc" value="${JsDoc.dir}/jsrun.jar"/>
@@ -50,19 +51,26 @@
     
     <target name="BUILD_concat" description="Concatenates all files" depends="BUILD_clean">
         <concat destfile="${temp.dir}/concat.js">
-            <filelist dir="${Olives.dir}" files="Olives.js"/>
-            <fileset dir="${Olives.dir}" includes="*.js" excludes="Olives.js"/>
+            <filelist dir="${Olives.dir}" files="Olives.js, OObject.js"/>
+            <fileset dir="${Olives.dir}" includes="*.js" excludes="Olives.js, OObject.js"/>
         </concat>
     </target>
     
     <target name="BUILD_minify" description="Minifies files" depends="BUILD_concat">
         <mkdir dir="${temp.dir}"/>
         <java jar="${GoogleCompiler}" fork="true">
-            <arg line="--js ${temp.dir}/concat.js"/>
-            <arg line="--js_output_file ${build.dir}/Olives.js"/>
-            <arg line="--create_source_map ${build.dir}/Olives-map"/>        
+            <arg line="--js ${temp.dir}/concat.js" />
+            <arg line="--js_output_file ${build.dir}/Olives.js" />
+            <arg line="--create_source_map ${build.dir}/Olives-map" />        
         </java>
     </target>
+	
+	<target name="BUILD_integration_page" description="Creates an html page that loads everything for integration testing purpose">
+		<copy todir="${integration.dir}/lib">
+		    <fileset dir="${src.dir}/lib" excludes="sinon*.js" />
+		 </copy>
+		<copy file="${build.dir}/Olives.js" todir="${integration.dir}/"/>
+	</target>
     
     <target name="BUILD" description="Builds the whole project, generates doc and tests reports" depends="TESTS_unit_run, DOC_generate, BUILD_minify">
         <echo message="Enjoy Olives!"/>

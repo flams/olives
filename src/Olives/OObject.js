@@ -1,10 +1,10 @@
-Olives.define("_base",
+Olives.define("OObject",
 /** 
 * @class 
 * _base is an abstract class that every UI can inherit from.
 * It should provide code that is easy to reuse
 */
-function _base(API) {
+function OObject(API) {
 	
 	/**
 	 * The model of the UI is a TinyStore
