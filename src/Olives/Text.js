@@ -1,6 +1,6 @@
 Olives.define("Text",
 		
-// Text inherits form _base		
+// Text inherits form OObject		
 "OObject",
 
 /** 

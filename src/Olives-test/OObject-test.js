@@ -28,30 +28,30 @@ TestCase("OObjectTemplateTest", {
 			uiTemplate = '<p id="tag">hello</p>';
 		
 		assertFunction(this.OObject.place);
+		assertUndefined(this.OObject.rootNode);
+		
 		this.OObject.template = uiTemplate;
 		assertEquals(this.OObject, this.OObject.place(div));
 		assertEquals(1, div.querySelectorAll("p#tag").length);
+		
+		assertSame(div, this.OObject.rootNode);
 	}
 	
 });
 
-TestCase("OObjectTemplateBinding", {
-
+TestCase("OObjectLinksWithTemplate", {
+	
 	setUp: function () {
 		this.OObject = Olives.create("OObject");
+		this.OObject.template = "<p data-connect='greetingz'>hello</p>\n<div data-connect='body'>how are you?</div>";
+		
 		this.div = document.createElement("div");
-		this.OObject.template = '<p data-bind="greetingz">hello</p>';
 		this.OObject.place(this.div);
 	},
 	
-	"test OObject template can bind view to model": function () {
-		assertTrue(this.OObject.model.has("greetingz"));
-		assertEquals("hello", this.OObject.model.get("greetingz"));
-	},
-	
-	"test OObject template view is updated on model change": function () {
-		this.OObject.model.set("greetingz", "Olives is cool");
-		assertSame("Olives is cool", this.div.querySelector("p").innerHTML);
+	"test p greetingz exists in OObject": function () {
+		assertObject(this.OObject.connects);
+		assertInstanceOf(HTMLElement, this.OObject.connects["greetingz"]);
+		assertInstanceOf(HTMLElement, this.OObject.connects["body"]);
 	}
-	
 });
