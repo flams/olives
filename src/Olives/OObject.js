@@ -41,9 +41,7 @@ function OObject(API) {
 			this.connects[node.getAttribute("data-connect")] = node;
 		}, this);
 		
-		this.rootNode = rootNode;
-		
-		return this;
+		return this.rootNode = rootNode;
 	};
 	
 	

@@ -31,7 +31,7 @@ TestCase("OObjectTemplateTest", {
 		assertUndefined(this.OObject.rootNode);
 		
 		this.OObject.template = uiTemplate;
-		assertEquals(this.OObject, this.OObject.place(div));
+		assertEquals(div, this.OObject.place(div));
 		assertEquals(1, div.querySelectorAll("p#tag").length);
 		
 		assertSame(div, this.OObject.rootNode);
