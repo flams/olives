@@ -1,57 +1,63 @@
-TestCase("OObjectTest", {
+require(["Olives/OObject", "TinyStore", "Tools"], function (OObject, TinyStore, Tools) {
+	TestCase("OObjectTest", {
 
-	setUp: function () {
-		this.OObject = Olives.create("OObject");
-	},
-	
-	"test OObject's model is a TinyStore": function () {
-		var model = this.OObject.model,
-			tinyStore = Emily.require("TinyStore").create(),
-			tools = Emily.require("Tools");
+		setUp: function () {
+			this.OObject = OObject;
+		},
 		
-		assertTrue(tools.compareObjects(tinyStore, model));
-	}
-});
+		"test OObject's model is a TinyStore": function () {
+			var model = this.OObject.model,
+				tinyStore = TinyStore.create(),
+				tools = Tools;
+			
+			assertTrue(tools.compareObjects(tinyStore, model));
+		}
+	});
 
-TestCase("OObjectTemplateTest", {
-	
-	setUp: function () {
-		this.OObject = Olives.create("OObject");
-	},
-	
-	"test OObject has a template property": function () {
-		assertString(this.OObject.template);
-	},
-	
-	"test OObject has a place method to add the UI to the dom": function () {
-		var div = document.createElement("div"),
-			uiTemplate = '<p id="tag">hello</p>';
+	TestCase("OObjectTemplateTest", {
 		
-		assertFunction(this.OObject.place);
-		assertUndefined(this.OObject.rootNode);
+		setUp: function () {
+			this.OObject = OObject;
+		},
 		
-		this.OObject.template = uiTemplate;
-		assertEquals(div, this.OObject.place(div));
-		assertEquals(1, div.querySelectorAll("p#tag").length);
+		"test OObject has template property": function () {
+			assertObject(this.OObject.template);
+		},
 		
-		assertSame(div, this.OObject.rootNode);
-	}
-	
-});
+		"test OObject has a place method to add the UI to the dom": function () {
+			var domFragment = document.createDocumentFragment();
+			
+			this.OObject.template = document.createElement("p");
+			this.OObject.template.id = "Text";
+			
+			assertFunction(this.OObject.place);
 
-TestCase("OObjectLinksWithTemplate", {
-	
-	setUp: function () {
-		this.OObject = Olives.create("OObject");
-		this.OObject.template = "<p data-connect='greetingz'>hello</p>\n<div data-connect='body'>how are you?</div>";
+			assertSame(domFragment, this.OObject.place(domFragment));
+
+			assertEquals(1, domFragment.querySelectorAll("p#Text").length);
+		}
 		
-		this.div = document.createElement("div");
-		this.OObject.place(this.div);
-	},
-	
-	"test p greetingz exists in OObject": function () {
-		assertObject(this.OObject.connects);
-		assertInstanceOf(HTMLElement, this.OObject.connects["greetingz"]);
-		assertInstanceOf(HTMLElement, this.OObject.connects["body"]);
-	}
+	});
+
+	TestCase("OObjectLinksWithTemplate", {
+		
+		setUp: function () {
+			var p;
+			
+			this.OObject = OObject;
+			this.OObject.template = document.createElement("div");
+			
+			p = document.createElement("p");
+			p.setAttribute("data-connect", "greetingz");
+			this.OObject.template.appendChild(p);
+			
+			this.domFragment = document.createDocumentFragment();
+			this.OObject.place(this.domFragment);
+		},
+		
+		"test p greetingz exists in OObject": function () {
+			assertObject(this.OObject.connects);
+			assertInstanceOf(HTMLElement, this.OObject.connects["greetingz"]);
+		}
+	});
 });

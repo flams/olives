@@ -1,48 +1,44 @@
-Olives.define("OObject",
+define("Olives/OObject", ["Tools", "TinyStore"],
 /** 
 * @class 
 * _base is an abstract class that every UI can inherit from.
 * It should provide code that is easy to reuse
 */
-function OObject(API) {
-		
-	/**
-	 * The model of the UI is a TinyStore
-	 * @type object
-	 */
-	this.model = API.require("TinyStore").create();
-
-	/**
-	 * The UI's template.
-	 * @type string
-	 */
-	this.template = "";
+function OObject(Tools, Tinystore) {
 	
-	/**
-	 * Connects contains references to dom nodes with data-connect attributes
-	 * @type object 
-	 */
-	this.connects = {};
+	return {
+		/**
+		 * The model of the UI is a TinyStore
+		 * @type object
+		 */
+		model: Tinystore.create(),
 	
-	/**
-	 * Render the UI at a given place (dom node)
-	 * @param {HTMLElement} rootNode the node where to append the UI
-	 * @returns {Object} the UI
-	 */
-	this.place = function place(rootNode) {
+		/**
+		 * The UI's template.
+		 * @type HTMLElement
+		 */
+		template: null,
 		
-		var childNodes;
+		/**
+		 * Connects contains references to dom nodes with data-connect attributes
+		 * @type object 
+		 */
+		connects: {},
 		
-		rootNode.innerHTML = this.template;	
-		
-		// Add the dom nodes with data-connect attribute to this.connects
-		childNodes = rootNode.querySelectorAll("[data-connect]");
-		Array.prototype.forEach.call(childNodes, function (node) {
-			this.connects[node.getAttribute("data-connect")] = node;
-		}, this);
-		
-		return this.rootNode = rootNode;
+		/**
+		 * Render the UI at a given place (dom node)
+		 * @param {HTMLElement} rootNode the node where to append the UI
+		 * @returns {Object} the UI
+		 */
+		place: function place(parentNode) {
+			
+			Tools.toArray(this.template.querySelectorAll("[data-connect]")).forEach(function (node) {
+				this.connects[node.getAttribute("data-connect")] = node;
+			}, this);
+	
+			parentNode.appendChild(this.template);		
+			return parentNode;
+		}
 	};
-	
 	
 });

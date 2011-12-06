@@ -51,8 +51,8 @@
     
     <target name="BUILD_concat" description="Concatenates all files" depends="BUILD_clean">
         <concat destfile="${temp.dir}/concat.js">
-            <filelist dir="${Olives.dir}" files="Olives.js, OObject.js"/>
-            <fileset dir="${Olives.dir}" includes="*.js" excludes="Olives.js, OObject.js"/>
+            <filelist dir="${Olives.dir}" files="OObject.js"/>
+            <fileset dir="${Olives.dir}" includes="*.js" excludes="OObject.js"/>
         </concat>
     </target>
     
