@@ -17,7 +17,7 @@ function Text(OObject) {
 			_Text.prototype = OObject;
 			return new _Text;
 		}
-	}
+	};
 
 	
 });

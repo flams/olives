@@ -3,3 +3,4 @@
 .project
 build/temp
 */.DS_Store
+./jsTestDriver.conf
