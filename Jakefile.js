@@ -141,16 +141,7 @@ namespace("tests", function () {
 		
 	});
 	
-	task("node", [], function () {
-		
-		LIBS_LOADING_ORDER.forEach(_requireList);
-		PROJECT_LOADING_ORDER.forEach(_requireList);
-		SPECS_LOADING_ORDER.forEach(_requireList);
-		jasmine.getEnv().addReporter(new TerminalReporter({}));
-		jasmine.getEnv().execute();
-	});
-	
-	task("all", ["tests:jstd", "tests:node"], function () {});
+	task("all", ["tests:jstd"], function () {});
 });
 
 desc("This is the default task");

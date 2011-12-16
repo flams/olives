@@ -10,12 +10,20 @@ function Text(OObject) {
 	
 	function _Text() {
 		
+		this.template = "<p data-connect='content'></p>";
+		
+		this.onRender = function onRender() {
+			this.model.watch("content", function (value) {
+				this.connects["content"].innerHTML = value;
+			}, this);
+		};
+		
 	}
 	
 	return {
 		create: function create() {
-			_Text.prototype = OObject;
-			return new _Text;
+			var augmentedText = OObject.augment(_Text);
+			return new augmentedText;
 		}
 	};
 
