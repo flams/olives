@@ -213,6 +213,7 @@ ul.inheritsList
 				
 			
 				OObject is an abstract class that any UI can inherit from.
+I will use UI for a piece of user interface, I've also could have called it a widget but UI's shorter.
 It should provide code that is easy to reuse
 				
 				
@@ -235,7 +236,7 @@ It should provide code that is easy to reuse
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#constructor">OObject</a></b>(TinyStore, StateMachine)
+								<b><a href="../symbols/OObject.html#constructor">OObject</a></b>(TinyStore, StateMachine, Tools)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -246,8 +247,130 @@ It should provide code that is easy to reuse
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class OObject.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/OObject.html#connects">connects</a></b>
+								</div>
+								<div class="description">Connects associates dom nodes with their data-connect attribute</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/OObject.html#dom">dom</a></b>
+								</div>
+								<div class="description">This will hold the dom nodes built from the template.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/OObject.html#model">model</a></b>
+								</div>
+								<div class="description">The UI's TinyStore
+It has set/get/del/has/watch/unwatch methods</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/OObject.html#template">template</a></b>
+								</div>
+								<div class="description">Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class OObject.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/OObject.html#action">action</a></b>(name, params)
+								</div>
+								<div class="description">Action triggers a state change, such as "place" or "render.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">OObject.<b><a href="../symbols/OObject.html#.augment">augment</a></b>(func)
+								</div>
+								<div class="description">Makes an UI be an OObject and inherit from its properties and behaviour</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">OObject.<b><a href="../symbols/OObject.html#.isAugmenting">isAugmenting</a></b>(module,)
+								</div>
+								<div class="description">Check if an UI is augmented with OObject</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/OObject.html#onPlace">onPlace</a></b>()
+								</div>
+								<div class="description">This function can be overridden.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/OObject.html#onRender">onRender</a></b>()
+								</div>
+								<div class="description">This function can be overridden.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -260,7 +383,7 @@ It should provide code that is easy to reuse
 				</div>
 				
 				<div class="fixedFont">
-						<b>OObject</b>(TinyStore, StateMachine)
+						<b>OObject</b>(TinyStore, StateMachine, Tools)
 				</div>
 				
 				<div class="description">
@@ -287,12 +410,29 @@ It should provide code that is easy to reuse
 							</dt>
 								<dd></dd>
 						
+							<dt>
+								 <b>Tools</b>
+								
+							</dt>
+								<dd></dd>
+						
 						</dl>
 					
 					
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">Requires:</dt>
+						
+							<dd>TinyStore</dd>
+						
+							<dd>StateMachine</dd>
+						
+							<dd>Tools</dd>
+						
+						</dl>
 					
 					
 
@@ -301,8 +441,295 @@ It should provide code that is easy to reuse
 
 <!-- ============================== field details ========================== -->		
 			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="connects"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>connects</b>
+					
+					</div>
+					<div class="description">
+						Connects associates dom nodes with their data-connect attribute
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="dom"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>dom</b>
+					
+					</div>
+					<div class="description">
+						This will hold the dom nodes built from the template.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="model"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>model</b>
+					
+					</div>
+					<div class="description">
+						The UI's TinyStore
+It has set/get/del/has/watch/unwatch methods
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+							<dd>Emily's doc for more info on how it works.</dd>
+							
+							</dl>
+						
+						
+
+					<hr />
+				
+					<a name="template"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string or HTMLElement}</span>
+					<b>template</b>
+					
+					</div>
+					<div class="description">
+						Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
+			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name="action"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>action</b>(name, params)
+					
+					</div>
+					<div class="description">
+						Action triggers a state change, such as "place" or "render.
+Watch the life cycle documentation for more info.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>the name of the action</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>params</b>
+									
+								</dt>
+								<dd>the parameters to pass to the actions</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".augment"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">OObject.</span><b>augment</b>(func)
+					
+					</div>
+					<div class="description">
+						Makes an UI be an OObject and inherit from its properties and behaviour
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Function}</span> <b>func</b>
+									
+								</dt>
+								<dd>the UI's constructor</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>the superpowered UI</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isAugmenting"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">OObject.</span><b>isAugmenting</b>(module,)
+					
+					</div>
+					<div class="description">
+						Check if an UI is augmented with OObject
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Function or object}</span> <b>module,</b>
+									
+								</dt>
+								<dd>instantiated or not</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>true if superpowered by OObject.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="onPlace"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>onPlace</b>()
+					
+					</div>
+					<div class="description">
+						This function can be overridden. 
+It's called when the placing is done.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="onRender"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>onRender</b>()
+					
+					</div>
+					<div class="description">
+						This function can be overridden. 
+It's called when the rendering is done.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		
@@ -315,7 +742,7 @@ It should provide code that is easy to reuse
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Dec 16 2011 13:51:45 GMT+0100 (CET)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Dec 18 2011 17:07:36 GMT+0100 (CET)
 		</div>
 	</body>
 </html>
