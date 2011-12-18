@@ -20,8 +20,12 @@ function Text(OObject) {
 		 * @param {String} content the text
 		 */
 		this.setContent = function setContent(content) {
-			this.connects["content"].innerHTML = content;
+			if (this.connects["content"]) {
+				this.connects["content"].innerHTML = content;
+			}
 		};
+		
+		this.handlers = {};
 
 		/**
 		 * onRender is called after action("render")
@@ -31,8 +35,11 @@ function Text(OObject) {
 		};
 
 		// If a content is given at init, set it.
-		content && this.model.set("content", content);
-		// Watch for its modifications
+		this.provide = function provide(content) {
+			return this.model.set("content", content);
+		};
+
+		this.provide(content);
 		this.model.watch("content", this.setContent, this);	
 		
 	}

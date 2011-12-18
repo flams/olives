@@ -2,16 +2,20 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 	
 	describe("TextTest", function () {
 	
-		var text = null;
-		
-		beforeEach(function() {
-			text = Text.create();
-		});
-		
 		it("should be an object with a create function", function () {
 			expect(Text).toBeInstanceOf(Object);
 			expect(Text.create).toBeInstanceOf(Function);
 		});
+		
+	});
+	
+	describe("TextStructure", function () {
+
+		var text = null;
+		
+		beforeEach(function() {
+			text = Text.create();
+		});		
 		
 		it("should inherit from OObject once created", function () {
 			var text = Text.create();
@@ -23,14 +27,10 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 			expect(text.dom.querySelectorAll("p").length).toEqual(1);
 		});
 		
-		it("should have its p tag's innerHTML connected to the model", function () {
-			text.action("render");
-			var p = text.dom.querySelector("p[data-connect]"),
-				name = p.getAttribute("data-connect");
-			text.model.set(name, "Olives is cool!");
-			expect(p.innerHTML).toEqual("Olives is cool!");
-			text.model.set(name, "This one's just for fun!");
-			expect(p.innerHTML).toEqual("This one's just for fun!");
+		it("should have a provide function to provide data", function () {
+			expect(text.provide).toBeInstanceOf(Function);
+			expect(text.provide("new content")).toEqual(true);
+			expect(text.model.get("content")).toEqual("new content");
 		});
 		
 	});
@@ -44,27 +44,42 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 			text = Text.create(content);
 		});
 		
-		it("should be cool from the begining", function () {
-			text.action("render");
+		it("should pass the content at creation", function () {
 			expect(text.model.get("content")).toEqual(content);
+			text.action("render");
 			expect(text.dom.querySelector("[data-connect='content']").innerHTML).toEqual(content);
 		});
 		
-		it("should always reflect the model's value", function () {
-			var innerHTML = function () {
-					return text.dom.querySelector("[data-connect]").innerHTML;
-				};
+		it("should connect the model to the dom on first render", function () {
+			text.provide("shouldn't crash");
+			expect(text.dom).toEqual(null);
 			text.action("render");
-			text.model.set("content", "new text");
-			expect(innerHTML()).toEqual("new text");
+			expect(text.dom.querySelector("[data-connect='content']").innerHTML).toEqual("shouldn't crash");
+		});
+		
+		it("should have its p tag's innerHTML connected to the model", function () {
+			text.action("render");
+			var p = text.dom.querySelector("p[data-connect]");
+			text.provide("Olives is cool!");
+			expect(p.innerHTML).toEqual("Olives is cool!");
+			text.provide("This one's just for fun!");
+			expect(p.innerHTML).toEqual("This one's just for fun!");
+		});
+		
+		it("should always reflect the model's value", function () {
+			text.action("render");
+
+			text.provide("new text");
+			expect(text.dom.querySelector("p[data-connect]").innerHTML).toEqual("new text");
 			
 			text.template = "<p data-connect='content'></p>";
 			text.action("render");
-			expect(innerHTML()).toEqual("new text");
+			expect(text.dom.querySelector("p[data-connect]").innerHTML).toEqual("new text");
 
-			text.model.set("content", "should work");
-			expect(innerHTML()).toEqual("should work");
+			text.provide("should work");
+			expect(text.dom.querySelector("p[data-connect]").innerHTML).toEqual("should work");
 		});
+
 
 		
 	});
