@@ -8,39 +8,44 @@ define("Olives/Text",
 */		
 function Text(OObject) {
 	
-	function _Text(content) {
-		
-		/**
-		 * The UI's template that will generate the dom nodes to be placed on the application's page.
-		 */
-		this.template = "<p data-connect='content'></p>";
+	function _Text(texts) {
 		
 		/**
 		 * Set the paragraph's innherHTML with given content
 		 * @param {String} content the text
 		 */
-		this.setContent = function setContent(content) {
-			if (this.connects["content"]) {
-				this.connects["content"].innerHTML = content;
-			}
+		var setInnerHTML = function setInnerHTML(node, value) {
+			node.innerHTML = value;		
 		};
 		
-		this.handlers = {};
+		/**
+		 * Construction of the UI
+		 */
+		// Sets the data
+		this.model.reset(texts);
+		// Watch for modifications
+		this.model.watch("updated", function (name, value) {
+			setInnerHTML(this.connects[name], value);
+		}, this);
+		
+		/**
+		 * The UI's template that will generate the dom nodes to be placed on the application's page.
+		 */
+		this.template = "<p data-connect='content'></p>";
 
 		/**
 		 * onRender is called after action("render")
 		 */
 		this.onRender = function onRender() {
-			this.setContent(this.model.get("content"));
-		};
+			for (var name in this.connects) {
+				if (this.model.has(name)) {
+					setInnerHTML(this.connects[name], this.model.get(name));
+				} else {
+					this.model.set(name, this.connects[name].innerHTML);
+				}
 
-		// If a content is given at init, set it.
-		this.provide = function provide(content) {
-			return this.model.set("content", content);
+			}
 		};
-
-		this.provide(content);
-		this.model.watch("content", this.setContent, this);	
 		
 	}
 	

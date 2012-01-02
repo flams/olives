@@ -67,11 +67,11 @@
 					  .concat(PROJECT_LOADING_ORDER),
 				        
 				test: SPECS_LOADING_ORDER,
-	/*
+	
 				plugin: ['name: "coverage" \n' +
 				         '   jar: "../tools/JsTestDriver/coverage-1.3.3d.jar" \n' +
 				         '   module: "com.google.jstestdriver.coverage.CoverageModule"'
-				         ],*/
+				         ],
 				
 				timeout: 90	
 			},

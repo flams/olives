@@ -184,5 +184,18 @@ require(["Olives/OObject", "TinyStore", "Tools"], function (OObject, TinyStore, 
 		
 	});
 	
+	describe("OObjectsIsolation", function () {
+		var UI1 = OObject.augment(function () {}),
+			UI2 = OObject.augment(function () {});
+		
+		UI1 = new UI1;
+		UI2 = new UI2;
+		
+		it("should make UIs properties  isolated", function () {
+			UI1.model.set("test");
+			expect(UI2.model.has("test")).toEqual(false);
+		});
+	});
+	
 	
 });

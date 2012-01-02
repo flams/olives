@@ -46,7 +46,7 @@ function OObject(TinyStore, StateMachine, Tools) {
 				UI.onRender && UI.onRender();
 			} else {
 				// An explicit message I hope
-				throw "UI.template must be set prior to render";
+				throw Error("UI.template must be set prior to render");
 			}
 
 		},
