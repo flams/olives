@@ -11,8 +11,7 @@ require(["Olives/List", "Olives/OObject", "TinyStore", "Tools"], function (List,
 	
 	describe("ListStructure", function () {
 		
-		var list = null,
-			data = ["Olives", "is cool!"];
+		var list = null;
 		
 		beforeEach(function () {
 			list = List.create();
@@ -120,15 +119,15 @@ require(["Olives/List", "Olives/OObject", "TinyStore", "Tools"], function (List,
 		
 		var list = null,
 		initialData = ["Olives", "is cool!"],
-		resetData = ["Enjoy","it!"];
+		resetData = ["Enjoy","it!", "pls"];
 	
 		beforeEach(function () {
 			list = List.create(initialData);
 		});
 		
-		it("should update display when a piece data is updated", function () {
+		it("should update display when a piece of data is updated", function () {
 			list.action("render");
-			list.model.set(1, "is very cool!");
+			list.model.push("is very cool!");
 			expect(list.dom.querySelectorAll("li")[1].innerHTML).toEqual("is very cool!");
 		});
 		
@@ -136,6 +135,7 @@ require(["Olives/List", "Olives/OObject", "TinyStore", "Tools"], function (List,
 			list.action("render");
 			list.model.reset(resetData);
 			list.action("render");
+
 			expect(list.dom.querySelectorAll("li")[1].innerHTML).toEqual("it!");
 		});
 		
@@ -150,7 +150,7 @@ require(["Olives/List", "Olives/OObject", "TinyStore", "Tools"], function (List,
 		});
 		
 		it("should add an item", function () {
-			list.model.set(2, "I");
+			list.model.push("I");
 			
 			list.action("render");
 			expect(list.dom.querySelectorAll("li")[2].innerHTML).toEqual("I");
@@ -158,13 +158,32 @@ require(["Olives/List", "Olives/OObject", "TinyStore", "Tools"], function (List,
 		
 		it("should add an item when dom is rendered", function () {
 			list.action("render");
-			list.model.set(2, "I");
+
+			list.model.push("I");
+
 			expect(list.dom.querySelectorAll("li")[2].innerHTML).toEqual("I");
 		});
 		
 		it("should add an item between two other items", function () {
-			list.model.set(1, "very");
-
+			list.model.splice(1, 0, "very");
+			list.action("render");
+			expect(list.dom.querySelectorAll("li")[1].innerHTML).toEqual("very");
+			expect(list.dom.querySelectorAll("li")[2].innerHTML).toEqual("is cool!");
+		});
+		
+		it("should remove an item", function () {
+			list.action("render");
+			list.model.splice(1, 1);
+			expect(list.dom.querySelectorAll("li")[1]).toBeUndefined();
+		});
+		
+		it("should remove multiple items", function () {
+			list.model.push("innit!");
+			list.action("render");
+			list.model.splice(0, 2);
+			expect(list.dom.querySelectorAll("li").length).toEqual(1);
+			expect(list.dom.querySelectorAll("li")[0].innerHTML).toEqual("innit!");
+			
 		});
 		
 	});
