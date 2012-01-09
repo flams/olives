@@ -2,13 +2,36 @@
 <html>
 	<head>
 		<title>test olives</title>
+		<style type="text/css">
+		* { margin: 2px; padding: 2px;}
+		li { border: 1px solid black; width: 500px;}
+		li p { background-color: #ccc;}
+		</style>
 		<script src="/require.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/Emily.js"></script>
 		<script src="/Olives.js"></script>
 		<script>
-		require(["Transport"], function (Transport) { 
-			transport = Transport.create("http://localhost:8000");
+		require(["Transport", "CouchDBStore", "Olives/List"], function (Transport, Store, OList) { 
+			transport = new Transport("http://"+location.host);
+			store = new Store();
+			olist = new OList;
+			olist.itemRenderer = function (item) {
+				var li = document.createElement("li");
+				li.innerHTML = "[" + item.value.date + "] " + item.value.title +"<p>" + item.value.body +"</p>";
+				return li;
+			};
+			olist.model = store;
+			olist.model.setTransport(transport);
+			olist.model.sync("blog", "blog", "foo");
+
+			setTimeout(function () {
+				olist.action("render")
+				olist.action("place", document.body);
+			}, 1000);
+
+
+
 		});
 		
 		</script>

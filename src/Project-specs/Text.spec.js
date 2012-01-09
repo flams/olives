@@ -2,9 +2,20 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 	
 	describe("TextTest", function () {
 	
-		it("should be an object with a create function", function () {
-			expect(Text).toBeInstanceOf(Object);
-			expect(Text.create).toBeInstanceOf(Function);
+		it("should be a constructor function", function () {
+			expect(Text).toBeInstanceOf(Function);
+		});
+		
+		it("should inherit from OObject", function () {
+			expect(new Text).toBeInstanceOf(OObject);
+		});
+		
+		it("should'nt have shared prototypes", function () {
+			var txt1 = new Text(),
+				txt2 = new Text();
+			expect(Object.getPrototypeOf(txt1) === Object.getPrototypeOf(txt2)).toEqual(false);
+			txt1.model.set("a", 5);
+			expect(txt2.model.get("a")).not.toEqual(5)
 		});
 		
 	});
@@ -14,13 +25,9 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 		var text = null;
 		
 		beforeEach(function() {
-			text = Text.create();
+			text = new Text();
 		});		
 		
-		it("should inherit from OObject once created", function () {
-			expect(OObject.isAugmenting(text)).toEqual(true);
-		});
-
 		it("should have only one p tag in its rendered dom", function () {
 			text.action("render");
 			expect(text.dom.querySelectorAll("p").length).toEqual(1);
@@ -35,7 +42,7 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 			content = "Olives is cool!";
 		
 		beforeEach(function () {
-			text = Text.create({content: content});
+			text = new Text({content: content});
 		});
 		
 		it("should pass the content at creation", function () {
@@ -77,7 +84,7 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 						"<span data-connect='txt2'></span>";
 		
 		beforeEach(function () {
-			text = Text.create();
+			text = new Text();
 		});
 		
 		it("should associate the values to the new template", function () {
@@ -91,7 +98,7 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 		});
 		
 		it("should associate the value to the new template from the beginning", function () {
-			text = Text.create({
+			text = new Text({
 				txt1: txt1,
 				txt2: txt2
 			});
@@ -104,12 +111,12 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 		});
 		
 		it("should also associate the values from the template", function () {
-			text = Text.create();
 			text.template = "<span data-connect='txt1'>Olives</span>" +
 			"<span data-connect='txt2'>is cool!</span>";
 			
 
 			text.action("render");
+
 			expect(text.dom.querySelector("[data-connect='txt1']").innerHTML).toEqual("Olives");
 			expect(text.dom.querySelector("[data-connect='txt2']").innerHTML).toEqual("is cool!");
 			
@@ -121,7 +128,4 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 			
 		});
 	});
-
-
-	
 });

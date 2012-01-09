@@ -8,7 +8,7 @@ define("Olives/Text",
 */		
 function Text(OObject) {
 	
-	function _Text(texts) {
+	function TextConstructor(texts) {
 		
 		/**
 		 * Set the paragraph's innherHTML with given content
@@ -49,16 +49,9 @@ function Text(OObject) {
 		
 	}
 	
-	return {
-		/**
-		 * Create a new Text UI
-		 * @returns the new ui
-		 */
-		create: function create(content) {
-			var augmentedText = OObject.augment(_Text);
-			var text = new augmentedText(content);
-			return text;
-		}
+	return function TextFactory(texts) {
+		TextConstructor.prototype = new OObject;
+		return new TextConstructor(texts);
 	};
 
 	

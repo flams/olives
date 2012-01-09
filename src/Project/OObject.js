@@ -1,16 +1,16 @@
-define("Olives/OObject", ["TinyStore", "StateMachine", "Tools"],
+define("Olives/OObject", ["Store", "StateMachine", "Tools"],
 /** 
 * @class 
 * OObject is an abstract class that any UI can inherit from.
 * I will use UI for a piece of user interface, I've also could have called it a widget but UI's shorter.
 * It should provide code that is easy to reuse
-* @requires TinyStore
+* @requires Store
 * @requires StateMachine
 * @requires Tools
 */
-function OObject(TinyStore, StateMachine, Tools) {
+function OObject(Store, StateMachine, Tools) {
 	
-	function OObject() {
+	return function OObjectConstructor() {
 		
 		/**
 		 * This function creates the dom of the UI from it's template
@@ -84,7 +84,7 @@ function OObject(TinyStore, StateMachine, Tools) {
 		 * Please open an issue if you want to propose a better one
 		 * @private
 		 */
-		_stateMachine = StateMachine.create("Init", {
+		_stateMachine = new StateMachine("Init", {
 			"Init": [["render", render, this, "Rendered"],
 			         ["place", renderNPlace, this, "Rendered"]],
 			"Rendered": [["place", place, this],
@@ -92,11 +92,11 @@ function OObject(TinyStore, StateMachine, Tools) {
 		});
 		
 		/**
-		 * The UI's TinyStore
+		 * The UI's Store
 		 * It has set/get/del/has/watch/unwatch methods
 		 * @see Emily's doc for more info on how it works.
 		 */
-		this.model = TinyStore.create();
+		this.model = new Store();
 		
 		/**
 		 * Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
@@ -141,28 +141,6 @@ function OObject(TinyStore, StateMachine, Tools) {
 			
 		};
 		
-	};
-	
-	return {
-		/**
-		 * Makes an UI be an OObject and inherit from its properties and behaviour
-		 * @param {Function} func the UI's constructor
-		 * @returns the superpowered UI
-		 */
-		augment: function augment(func) {
-			func.prototype = new OObject;
-			return func;
-		},
-		
-		/**
-		 * Check if an UI is augmented with OObject
-		 * @param {Function or object} module, instantiated or not
-		 * @returns true if superpowered by OObject.
-		 */
-		isAugmenting: function isAugmenting(module) {
-			var proto = module.prototype ? module.prototype : Object.getPrototypeOf(module);
-			return proto instanceof OObject;
-		}
 	};
 	
 });

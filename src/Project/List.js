@@ -1,10 +1,10 @@
 define("Olives/List",
 		
-["Olives/OObject", "TinyStore"], 
+["Olives/OObject", "Store"], 
 
-function (OObject, TinyStore) {
+function (OObject, Store) {
 	
-	function _List(array) {
+	function ListConstructor(array) {
 
 		this.model.reset(array);
 		
@@ -40,11 +40,9 @@ function (OObject, TinyStore) {
 		
 	}
 	
-	return {
-		create: function create(array) {
-			var augmentedList = OObject.augment(_List);
-			return new augmentedList(array);
-		}
+	return function ListFactory(array) {
+		ListConstructor.prototype = new OObject;
+		return new ListConstructor(array);
 	};
 	
 });

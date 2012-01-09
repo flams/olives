@@ -1,70 +1,62 @@
-require(["Olives/OObject", "TinyStore", "Tools"], function (OObject, TinyStore, Tools) {
+require(["Olives/OObject", "Store", "Tools"], function (OObject, Store, Tools) {
 	
 	describe("OObjectTest", function () {
 		
-		var UI = function UI() {};
 		
-		it("should be an object with an extend function", function () {
-			expect(OObject).toBeInstanceOf(Object);
-			expect(OObject.augment).toBeInstanceOf(Function);
-		});
-		
-		it("should make UIs inherit from it", function () {
-			var augmentedUI = OObject.augment(UI),
-				fake = function UI() {};
-				
-			expect(OObject.isAugmenting(augmentedUI)).toEqual(true);
-			expect(OObject.isAugmenting(new augmentedUI)).toEqual(true);
-			expect(OObject.isAugmenting(fake)).toEqual(false);
+		jstestdriver.console.log(OObject)
+		it("should be a constructor function", function () {
+			expect(OObject).toBeInstanceOf(Function);
 		});
 		
 		it("should give augmented UI the following API", function () {
-			UI = OObject.augment(UI),
-			UI = new UI;
+			var UI = function () {};
+			UI.prototype = new OObject;
+			ui = new UI;
 			
-			expect(UI.model).toBeInstanceOf(Object);
-			expect(Tools.compareObjects(TinyStore.create(), UI.model)).toEqual(true);
+			expect(ui.model).toBeInstanceOf(Object);
+			expect(ui.model).toBeInstanceOf(Store);
 			
-			expect(UI.template).toEqual(null);
-			expect(UI.dom).toEqual(null);
-			expect(UI.onRender).toBeInstanceOf(Function);
-			expect(UI.action).toBeInstanceOf(Function);
-			expect(UI.onPlace).toBeInstanceOf(Function);
-			expect(UI.connects).toBeInstanceOf(Object);
+			expect(ui.template).toEqual(null);
+			expect(ui.dom).toEqual(null);
+			expect(ui.onRender).toBeInstanceOf(Function);
+			expect(ui.action).toBeInstanceOf(Function);
+			expect(ui.onPlace).toBeInstanceOf(Function);
+			expect(ui.connects).toBeInstanceOf(Object);
 		});
 
 	});
 	
 	describe("OObjectTemplating", function () {
 		
-		var UI = null;
+		var ui = null,
+			UI = function () {};
 		
 		beforeEach(function () {
-			UI = OObject.augment(function () {});
-			UI = new UI;
+			UI.prototype = new OObject;
+			ui = new UI;
 		});
 		
 		it("should render a string template ", function () {
-			UI.template = "<p></p>";
-			UI.action("render");
-			expect(UI.dom.querySelectorAll("p").length).toEqual(1);
+			ui.template = "<p></p>";
+			ui.action("render");
+			expect(ui.dom.querySelectorAll("p").length).toEqual(1);
 			
 		});
 		
 		it("should render a dom tree template", function () {
-			UI.template = document.createElement("p");
-			UI.action("render");
-			expect(UI.dom.querySelectorAll("p").length).toEqual(1);
+			ui.template = document.createElement("p");
+			ui.action("render");
+			expect(ui.dom.querySelectorAll("p").length).toEqual(1);
 		});
 		
 		it("should allow for template modification", function () {
-			UI.template = "<p></p>";
-			UI.action("render");
-			expect(UI.dom.querySelectorAll("p").length).toEqual(1);
-			UI.template = "<p></p><p></p>";
-			expect(UI.dom.querySelectorAll("p").length).toEqual(1);
-			UI.action("render");
-			expect(UI.dom.querySelectorAll("p").length).toEqual(2);
+			ui.template = "<p></p>";
+			ui.action("render");
+			expect(ui.dom.querySelectorAll("p").length).toEqual(1);
+			ui.template = "<p></p><p></p>";
+			expect(ui.dom.querySelectorAll("p").length).toEqual(1);
+			ui.action("render");
+			expect(ui.dom.querySelectorAll("p").length).toEqual(2);
 		});
 		
 	});
@@ -72,61 +64,62 @@ require(["Olives/OObject", "TinyStore", "Tools"], function (OObject, TinyStore, 
 	
 	describe("OObjectLifeCycle", function () {
 		
-		var UI = null;
+		var ui = null,
+		UI = function () {};
 		
 		beforeEach(function () {
-			UI = OObject.augment(function () {});
-			UI = new UI;
-			
+			UI.prototype = new OObject;
+			ui = new UI;
 		});
 		
+		
 		it("should not render if template is not set", function () {
-			expect(function () { UI.action("render"); }).toThrow();
+			expect(function () { ui.action("render"); }).toThrow();
 		});
 		
 		it("should trigger onRender after calling render", function () {
-			UI.template = "<p></p>";
-			spyOn(UI, "onRender");
-			UI.action("render");
-			expect(UI.onRender).toHaveBeenCalled();
-			expect(UI.onRender.mostRecentCall.object).toBe(UI);
+			ui.template = "<p></p>";
+			spyOn(ui, "onRender");
+			ui.action("render");
+			expect(ui.onRender).toHaveBeenCalled();
+			expect(ui.onRender.mostRecentCall.object).toBe(ui);
 		});
 		
 		it("should trigger onPlace after place", function () {
-			UI.template = "<p></p>";
-			UI.action("render");
-			spyOn(UI, "onPlace");
-			UI.action("place");
-			expect(UI.onPlace).toHaveBeenCalled();
+			ui.template = "<p></p>";
+			ui.action("render");
+			spyOn(ui, "onPlace");
+			ui.action("place");
+			expect(ui.onPlace).toHaveBeenCalled();
 		});
 		
 		it("should be able to place directly", function () {
-			UI.template = "<p></p>";
-			spyOn(UI, "onPlace");
-			spyOn(UI, "onRender");
-			UI.action("place");
-			expect(UI.onRender).toHaveBeenCalled();
-			expect(UI.onPlace).toHaveBeenCalled();
+			ui.template = "<p></p>";
+			spyOn(ui, "onPlace");
+			spyOn(ui, "onRender");
+			ui.action("place");
+			expect(ui.onRender).toHaveBeenCalled();
+			expect(ui.onPlace).toHaveBeenCalled();
 		});
 
 	});
 	
 	describe("OObjectPlace", function () {
 		
-		var UI = null;
+		var ui = null,
+			UI = function () {};
 		
 		beforeEach(function () {
-			UI = OObject.augment(function () {});
-			UI = new UI;
-			
+			UI.prototype = new OObject;
+			ui = new UI;
 		});
 		
 		it("should render&place the dom node at the given place", function () {
 			var place = document.createElement("div"),
 				template = document.createElement("p");
 			
-			UI.template = template;
-			UI.action("place", place);
+			ui.template = template;
+			ui.action("place", place);
 			
 			expect(place.querySelectorAll("p").length).toEqual(1);
 		});
@@ -136,10 +129,10 @@ require(["Olives/OObject", "TinyStore", "Tools"], function (OObject, TinyStore, 
 				place2 = document.createElement("div"),
 				template = document.createElement("p");
 			
-			UI.template = template;
-			UI.action("place", place1);
+			ui.template = template;
+			ui.action("place", place1);
 			
-			UI.action("place", place2);
+			ui.action("place", place2);
 			expect(place2.querySelectorAll("p").length).toEqual(1);
 			expect(place1.querySelectorAll("p").length).toEqual(0);
 		});
@@ -150,17 +143,17 @@ require(["Olives/OObject", "TinyStore", "Tools"], function (OObject, TinyStore, 
 				text = "Olives is cool!";
 				template = "<p>" + text + "</p>";
 			
-			UI.template = template;
-			UI.onRender = function () {
+				ui.template = template;
+				ui.onRender = function () {
 				this.p = this.dom.querySelector("p");
 			};
-			UI.action("place", place1);
-			expect(UI.p.innerHTML).toEqual(text);
-			UI.action("place", place2);
-			UI.p.innerHTML = "test";
+			ui.action("place", place1);
+			expect(ui.p.innerHTML).toEqual(text);
+			ui.action("place", place2);
+			ui.p.innerHTML = "test";
 			expect(place2.querySelector("p").innerHTML).toEqual("test");
 			
-			UI.action("render");
+			ui.action("render");
 			expect(place2.querySelector("p").innerHTML).toEqual(text);
 			
 		});
@@ -169,31 +162,36 @@ require(["Olives/OObject", "TinyStore", "Tools"], function (OObject, TinyStore, 
 	
 	describe("OOBjectConnects", function () {
 		
-		var UI = null;
+		var ui = null,
+			UI = function () {};
 		
 		beforeEach(function () {
-			UI = OObject.augment(function () {});
-			UI = new UI;
-			UI.template = "<p data-connect='content'></p>";
+			UI.prototype = new OObject;
+			ui = new UI;
+			ui.template = "<p data-connect='content'></p>";
 		});
+
 		
 		it("should list data-connect", function () {
-			UI.action("render");
-			expect(UI.connects["content"]).toBe(UI.dom.querySelector("p[data-connect='content']"));
+			ui.action("render");
+			expect(ui.connects["content"]).toBe(ui.dom.querySelector("p[data-connect='content']"));
 		});
 		
 	});
 	
 	describe("OObjectsIsolation", function () {
-		var UI1 = OObject.augment(function () {}),
-			UI2 = OObject.augment(function () {});
+		var UI1 = function () {},
+			UI2 = function () {};
+			
+		UI1.prototype = new OObject,
+		UI2.prototype = new OObject;
 		
-		UI1 = new UI1;
-		UI2 = new UI2;
+		ui1 = new UI1;
+		ui2 = new UI2;
 		
 		it("should make UIs properties  isolated", function () {
-			UI1.model.set("test");
-			expect(UI2.model.has("test")).toEqual(false);
+			ui1.model.set("test");
+			expect(ui2.model.has("test")).toEqual(false);
 		});
 	});
 	
