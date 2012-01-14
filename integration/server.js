@@ -24,9 +24,9 @@ var app = require('http').createServer(function (req, res) {
   , fs = require('fs')
   , http = require('http');
 
+http.globalAgent.maxSockets = Infinity;
 
 io.sockets.on("connection", function (socket) {
-	console.log(socket)
 	socket.on("CouchDB", function (data) {
 		data.hostname = "127.0.0.1";
 		data.port = 5984;

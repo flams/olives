@@ -6,11 +6,11 @@
 		// Directory where all .js sources are located
 		SRC_DIR = "src",
 		// External libs directory (like jasmine)
-		LIBS_DIR = SRC_DIR + "/lib",
+		LIBS_DIR = "lib",
 		// The main project's js sources
-		PROJECT_SRC_DIR = SRC_DIR + "/Project",
+		PROJECT_SRC_DIR = "src",
 		// The directory where the specs are located
-		PROJECT_SPECS_DIR = SRC_DIR + "/Project-specs",
+		PROJECT_SPECS_DIR = "specs",
 		
 		// The tools directory, should have compilers, doc generators...
 		TOOLS_DIR = "../tools",

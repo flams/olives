@@ -11,28 +11,27 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/Emily.js"></script>
 		<script src="/Olives.js"></script>
-		<script>
-		require(["Transport", "CouchDBStore", "Olives/List"], function (Transport, Store, OList) { 
-			transport = new Transport("http://"+location.host);
-			store = new Store();
-			olist = new OList;
-			olist.itemRenderer = function (item) {
-				var li = document.createElement("li");
-				li.innerHTML = "[" + item.value.date + "] " + item.value.title +"<p>" + item.value.body +"</p>";
-				return li;
-			};
-			olist.model = store;
-			olist.model.setTransport(transport);
-			olist.model.sync("blog", "blog", "foo");
+		<script>window.addEventListener("load", function onLoad() {
+			require(["Transport", "CouchDBStore", "Olives/List"], function (Transport, Store, OList) { 
+				olist = new OList;
+				olist.itemRenderer = function (item) {
+					var li = document.createElement("li");
+					li.innerHTML = "[" + item.value.date + "] " + item.value.title +"<p>" + item.value.body +"</p>";
+					return li;
+				};
+				olist.model = new Store();;
+				olist.model.setTransport(new Transport("http://"+location.host));
+				olist.model.sync("blog", "blog", "foo");
 
-			setTimeout(function () {
-				olist.action("render")
 				olist.action("place", document.body);
-			}, 1000);
 
 
 
-		});
+
+			});
+			window.removeEventListener("load", onLoad, true);
+		}, true);
+		
 		
 		</script>
 	</head>
