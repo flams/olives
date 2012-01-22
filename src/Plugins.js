@@ -30,18 +30,32 @@ function Plugins(Tools) {
 			
 		/**
 		 * Call the plugins methods, passing them the dom node
+		 * A phrase can be :
+		 * <tag data-plugin='method: param, param; method:param...'/>
+		 * the function has to call every method of the plugin
+		 * passing it the node, and the given params
 		 * @private
 		 */
 		applyPlugin = function applyPlugin(node, phrase, plugin) {
+			// Split the methods
 			phrase.split(";")
 			.forEach(function (couple) {
+				// Split the result between method and params
 				var split = couple.split(":"),
+				// Trim the name
 				method = split[0].trim(),
+				// And the params, if any
 				params = split[1] ? split[1].split(",").map(trim) : [];
 				
+				// The first param must be the dom node
 				params.unshift(node);
 
-				_plugins[plugin] && _plugins[plugin][method] && _plugins[plugin][method].apply(_plugins[plugin], params);
+				if (_plugins[plugin] && _plugins[plugin][method]) {
+					// Call the method with the following params for instance :
+					// [node, "param1", "param2" .. ]
+					_plugins[plugin][method].apply(_plugins[plugin], params);
+				}
+
 			});
 		};
 		
@@ -86,8 +100,11 @@ function Plugins(Tools) {
 		this.apply = function apply(dom) {
 			
 			if (dom instanceof HTMLElement) {
+				// Get all dom nodes
 				Tools.toArray(dom.querySelectorAll("*"))
-				.map(function (node) {
+				// and apply the plugins for all of them
+				.forEach(function (node) {
+					// Each item of the dataset is a plugin
 					Tools.loop(node.dataset, function (phrase, plugin) {
 						applyPlugin(node, phrase, plugin);
 					});
