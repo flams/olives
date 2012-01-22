@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - Text</title>
+		<title>JsDoc Reference - Plugins</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -206,7 +206,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class Text
+				Class Plugins
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -214,16 +214,19 @@ ul.inheritsList
 				
 				
 			
-				Text is a simple paragraph with a unique property that shows the way UI work.
+				Plugins is the link between the UI and your plugins.
+You can design your own plugin, declare them in your UI, and call them
+from the template, like :
+<tag data-yourPlugin="method: param"></tag>
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_Text.js.html">Text.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_Plugins.js.html">Plugins.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Text.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Plugins.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -236,7 +239,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/Text.html#constructor">Text</a></b>(OObject)
+								<b><a href="../symbols/Plugins.html#constructor">Plugins</a></b>(Tools)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -247,14 +250,17 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
+
+<!-- ============================== methods summary ======================== -->
+			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class Text.">
-					<caption>Field Summary</caption>
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Plugins.">
+					<caption>Method Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -262,10 +268,36 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/Text.html#template">template</a></b>
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#add">add</a></b>(name, plugin)
 								</div>
-								<div class="description">The UI's template that will generate the dom nodes to be placed on the application's page.</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#apply">apply</a></b>(dom)
+								</div>
+								<div class="description">Apply the plugins to a dom node</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#del">del</a></b>(name)
+								</div>
+								<div class="description">Delete a plugin from the list</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#get">get</a></b>(name)
+								</div>
+								<div class="description">Get a previously added plugin</div>
 							</td>
 						</tr>
 					
@@ -274,9 +306,6 @@ ul.inheritsList
 				
 				
 				
-			
-
-<!-- ============================== methods summary ======================== -->
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -289,7 +318,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>Text</b>(OObject)
+						<b>Plugins</b>(Tools)
 				</div>
 				
 				<div class="description">
@@ -305,7 +334,7 @@ ul.inheritsList
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								 <b>OObject</b>
+								 <b>Tools</b>
 								
 							</dt>
 								<dd></dd>
@@ -317,6 +346,20 @@ ul.inheritsList
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">Requires:</dt>
+						
+							<dd>Tools</dd>
+						
+						</dl>
+					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd>Model-Plugin for instance</dd>
+						
+						</dl>
 					
 
 			</div>
@@ -324,35 +367,191 @@ ul.inheritsList
 
 <!-- ============================== field details ========================== -->		
 			
+
+<!-- ============================== method details ========================= -->		
+			
 				<div class="sectionTitle">
-					Field Detail
+					Method Detail
 				</div>
 				
-					<a name="template"> </a>
+					<a name="add"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>template</b>
+					<b>add</b>(name, plugin)
 					
 					</div>
 					<div class="description">
-						The UI's template that will generate the dom nodes to be placed on the application's page.
+						
 						
 						
 					</div>
 					
 					
-
+					
 						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>name</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>plugin</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="apply"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>apply</b>(dom)
+					
+					</div>
+					<div class="description">
+						Apply the plugins to a dom node
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
+									
+								</dt>
+								<dd>the dom node on which to apply the plugins</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if the param is a dom node</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="del"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>del</b>(name)
+					
+					</div>
+					<div class="description">
+						Delete a plugin from the list
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>the name of the plugin</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if success</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="get"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>get</b>(name)
+					
+					</div>
+					<div class="description">
+						Get a previously added plugin
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>the name of the plugin</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> the plugin</dd>
+							
+							</dl>
 						
 						
 						
 
 					
 				
-			
-
-<!-- ============================== method details ========================= -->		
 			
 			
 <!-- ============================== event details ========================= -->		

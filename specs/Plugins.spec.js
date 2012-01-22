@@ -86,7 +86,7 @@ require(["Olives/Plugins"], function (Plugins) {
 		
 		it("should call multiple plugins on apply", function () {
 			template.innerHTML = '<span data-plugin1="method"></span><p data-plugin2="method1"></p>' +
-								'<div data-plugin1="method" data-plugin2="method1,method2"></div>';
+								'<div data-plugin1="method" data-plugin2="method1;method2"></div>';
 			
 			plugins.add("plugin1", plugin1);
 			plugins.add("plugin2", plugin2);
@@ -99,7 +99,7 @@ require(["Olives/Plugins"], function (Plugins) {
 		
 		
 		it("should call also if spaces are present between two methods", function () {
-			template.innerHTML = '<span data-plugin2="method1, method2"></span>';
+			template.innerHTML = '<span data-plugin2="method1; method2"></span>';
 			plugins.add("plugin2", plugin2);
 			plugins.apply(template);
 			expect(plugin2.method2.wasCalled).toEqual(true);
@@ -113,6 +113,18 @@ require(["Olives/Plugins"], function (Plugins) {
 			}).not.toThrow();
 			
 			expect(plugin2.method2.wasCalled);
+		});
+		
+		it("should pass parameters to the method", function () {
+			template.innerHTML = '<span data-plugin2="method1:param1, param2; method2: param1"></span>';
+			plugins.add("plugin2", plugin2);
+			plugins.apply(template);
+			expect(plugin2.method1.callCount).toEqual(1);
+			expect(plugin2.method1.mostRecentCall.args[0]).toBe(template.childNodes[0]);
+			expect(plugin2.method1.mostRecentCall.args[1]).toEqual("param1");
+			expect(plugin2.method1.mostRecentCall.args[2]).toEqual("param2");
+			expect(plugin2.method2.mostRecentCall.args[0]).toBe(template.childNodes[0]);
+			expect(plugin2.method2.mostRecentCall.args[1]).toEqual("param1");
 		});
 		
 	});
