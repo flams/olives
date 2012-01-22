@@ -76,4 +76,56 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 		
 	});
 	
+	describe("ModelPluginToList", function () {
+		var modelPlugin = null,
+			model = null,
+			dom = null;
+		
+		beforeEach(function () {
+			dom = document.createElement("ul");
+			dom.setAttribute("data-model", "toList"); 
+			dom.appendChild(document.createElement("li"));
+			model = new Store(["Olives", "is", "fun"]);
+			modelPlugin = new ModelPlugin(model);
+		});
+		
+		it("should expand the node inside", function () {
+			modelPlugin.toList(dom);
+			expect(dom.querySelectorAll("li").length).toEqual(3);
+		});
+		
+		it("should'nt do anything if no inner node declared", function () {
+			dom = document.createElement("ul");
+			expect(function () {
+				modelPlugin.toList(dom);
+			}).not.toThrow();
+		});
+		
+		it("should associate the model with the dom nodes", function () {
+			modelPlugin.toList(dom);
+			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives");
+			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("is");
+			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("fun");
+			expect(dom.querySelectorAll("li").length).toEqual(3);
+		});
+		
+		it("should update the generated dom when the model is updated", function () {
+			modelPlugin.toList(dom);
+			model.set(0, "Olives and Emily");
+			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives and Emily");
+			model.set(1, "are");
+			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("are");
+			model.alter("splice", 2, 0, "very");
+			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("very");
+			expect(dom.querySelectorAll("li")[3].innerHTML).toEqual("fun");
+			expect(dom.querySelectorAll("li").length).toEqual(4);
+		});
+		
+		it("should remove an item if it's removed from the model", function () {
+			modelPlugin.toList(dom);
+			model.alter("pop");
+			expect(dom.querySelectorAll("li")[2]).toBeUndefined();
+		});
+	});
+	
 });

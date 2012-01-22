@@ -60,7 +60,7 @@ function Plugins(Tools) {
 		};
 		
 		/**
-		 * 
+		 * Add a plugin
 		 * @param name
 		 * @param plugin
 		 * @returns

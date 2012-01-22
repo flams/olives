@@ -127,6 +127,5 @@ require(["Olives/Plugins"], function (Plugins) {
 			expect(plugin2.method2.mostRecentCall.args[1]).toEqual("param1");
 		});
 		
-	});
-	
+	});	
 });

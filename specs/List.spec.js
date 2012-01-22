@@ -1,5 +1,5 @@
 require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OObject, Store, Tools) {
-/**	
+	
 	describe("ListTest", function () {
 		
 		it("should be a constructor function", function () {
@@ -22,7 +22,7 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 		
 		it("should have the following default template", function () {
 			list.action("render");
-			expect(list.dom.querySelectorAll("ul[data-connect='root']").length).toEqual(1);
+			expect(list.dom.querySelectorAll("ul[data-model='toList']").length).toEqual(1);
 		});
 	});
 	
@@ -59,7 +59,6 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 	});
 	
 	describe("ListDisplayCustom", function () {
-		
 		var list = null,
 			array = ["Olives", "is cool", "and customizable"];
 		
@@ -69,13 +68,7 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 		
 		it("should have a cutomizable template", function () {
 			var ps;
-			list.template = "<div data-connect='root'></div>";
-			expect(list.itemRenderer).toBeInstanceOf(Function);
-			list.itemRenderer = function (item) {
-				var p = document.createElement("p");
-				p.innerHTML = item;
-				return p;
-			};
+			list.template = "<div data-model='toList'><p></p></div>";
 			list.action("render");
 			ps = list.dom.querySelectorAll("div > p");
 			expect(ps[0].innerHTML).toEqual(array[0]);
@@ -83,6 +76,7 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 			expect(ps[2].innerHTML).toEqual(array[2]);
 		});
 		
+		/**
 		it("should be able to handle db results", function () {
 			list.model.reset([{"id":"e866ed6179417a05c6c93756a7000d0d","key":"e866ed6179417a05c6c93756a7000d0d","value":{"date":"2011/05/30 17:34:23","title":"fishing","body":"Fishing was fun"}},
 			              {"id":"e866ed6179417a05c6c93756a7000d0e","key":"e866ed6179417a05c6c93756a7000d0e","value":{"date":"2011/04/06 08:10:00","title":"going to work","body":"That is fun too"}},
@@ -106,23 +100,8 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 			list.action("render");
 			expect(list.dom.querySelectorAll("div > h3 > span").length).toEqual(3);
 			expect(list.dom.querySelectorAll("div > p")[1].innerHTML).toEqual(list.model.get(1).value.body);
-		});
+		});*/
 		
-	});
-	
-	describe("ListDeclarativeTemplate", function () {
-		var list = null,
-			array = ["Olives is fun"];
-		
-		beforeEach(function () {
-			list = new List(array);
-		});
-		
-		it("should create the ui with a declarative template", function () {
-			list.template = "<ul data-connect='forEach:model'>" +
-								"<li></li>" +
-							"</ul>";
-		});
 	});
 	
 	describe("ListDisplayUpdate", function () {
@@ -194,8 +173,9 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 			expect(list.dom.querySelectorAll("li").length).toEqual(1);
 			expect(list.dom.querySelectorAll("li")[0].innerHTML).toEqual("innit!");
 			
+			list.model.alter("pop");
+			expect(list.dom.querySelectorAll("li").length).toEqual(0);
 		});
-		
 	});
-*/
+
 });

@@ -65,8 +65,33 @@ function ModelPlugin(Store, Observable) {
 		 * 
 		 * @returns
 		 */
-		this.toList = function toList() {
+		this.toList = function toList(node) {
+			var itemRenderer = node.querySelector("*"),
+				domFragment = document.createDocumentFragment();
 			
+			if (itemRenderer) {
+				_model.loop(function (value, idx) {
+					var newNode = itemRenderer.cloneNode(true);
+					setInnerHTML(newNode, value);
+					domFragment.appendChild(newNode);
+					_observable.watch(idx, function (value) {
+						setInnerHTML(newNode, value);
+					});
+				});
+				
+				_model.watch("added", function (idx, value) {
+					var newNode = itemRenderer.cloneNode(true);
+					setInnerHTML(newNode, value);
+					node.insertBefore(newNode, node.childNodes[idx]);
+				});
+				
+				_model.watch("deleted", function (idx) {
+					// The document.childNodes indexes need to be preserved,
+					// so I replace the nodes with empty ones.
+					node.replaceChild(document.createTextNode(""), node.childNodes[idx]);
+				});
+				node.replaceChild(domFragment, itemRenderer);
+			}
 		};
 		
 		/**
