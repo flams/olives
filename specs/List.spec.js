@@ -1,5 +1,5 @@
 require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OObject, Store, Tools) {
-	
+/**	
 	describe("ListTest", function () {
 		
 		it("should be a constructor function", function () {
@@ -110,6 +110,21 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 		
 	});
 	
+	describe("ListDeclarativeTemplate", function () {
+		var list = null,
+			array = ["Olives is fun"];
+		
+		beforeEach(function () {
+			list = new List(array);
+		});
+		
+		it("should create the ui with a declarative template", function () {
+			list.template = "<ul data-connect='forEach:model'>" +
+								"<li></li>" +
+							"</ul>";
+		});
+	});
+	
 	describe("ListDisplayUpdate", function () {
 		
 		var list = null,
@@ -182,5 +197,5 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 		});
 		
 	});
-
+*/
 });

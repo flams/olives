@@ -1,9 +1,7 @@
-require(["Olives/OObject", "Store", "Tools"], function (OObject, Store, Tools) {
+require(["Olives/OObject", "Tools", "Store", "Olives/Plugins"], function (OObject, Tools, Store, Plugins) {
 	
 	describe("OObjectTest", function () {
 		
-		
-		jstestdriver.console.log(OObject)
 		it("should be a constructor function", function () {
 			expect(OObject).toBeInstanceOf(Function);
 		});
@@ -13,15 +11,19 @@ require(["Olives/OObject", "Store", "Tools"], function (OObject, Store, Tools) {
 			UI.prototype = new OObject;
 			ui = new UI;
 			
-			expect(ui.model).toBeInstanceOf(Object);
-			expect(ui.model).toBeInstanceOf(Store);
-			
 			expect(ui.template).toEqual(null);
 			expect(ui.dom).toEqual(null);
 			expect(ui.onRender).toBeInstanceOf(Function);
 			expect(ui.action).toBeInstanceOf(Function);
 			expect(ui.onPlace).toBeInstanceOf(Function);
-			expect(ui.connects).toBeInstanceOf(Object);
+		});
+		
+		it("should have a model property that is a store", function () {
+			expect(ui.model).toBeInstanceOf(Store);
+		});
+		
+		it("should have a plugins property that is a Plugins aggragator", function () {
+			expect(ui.plugins).toBeInstanceOf(Plugins);
 		});
 
 	});
@@ -61,6 +63,27 @@ require(["Olives/OObject", "Store", "Tools"], function (OObject, Store, Tools) {
 		
 	});
 	
+	describe("OObjectPlugins", function () {
+		
+		var ui = null,
+		UI = function () {};
+		
+		beforeEach(function () {
+			UI.prototype = new OObject;
+			ui = new UI;
+		});
+		
+		it("should apply plugins on render", function () {
+			ui.template = "<div></div>";
+			spyOn(ui.plugins, "apply");
+			ui.action("render");
+			
+			expect(ui.plugins.apply.wasCalled).toEqual(true);	
+			expect(ui.plugins.apply.mostRecentCall.args[0]).toBe(ui.dom);
+
+		});
+
+	});
 	
 	describe("OObjectLifeCycle", function () {
 		
@@ -145,8 +168,8 @@ require(["Olives/OObject", "Store", "Tools"], function (OObject, Store, Tools) {
 			
 				ui.template = template;
 				ui.onRender = function () {
-				this.p = this.dom.querySelector("p");
-			};
+					this.p = this.dom.querySelector("p");
+				};
 			ui.action("place", place1);
 			expect(ui.p.innerHTML).toEqual(text);
 			ui.action("place", place2);
@@ -156,42 +179,6 @@ require(["Olives/OObject", "Store", "Tools"], function (OObject, Store, Tools) {
 			ui.action("render");
 			expect(place2.querySelector("p").innerHTML).toEqual(text);
 			
-		});
-	});
-	
-	
-	describe("OOBjectConnects", function () {
-		
-		var ui = null,
-			UI = function () {};
-		
-		beforeEach(function () {
-			UI.prototype = new OObject;
-			ui = new UI;
-			ui.template = "<p data-connect='content'></p>";
-		});
-
-		
-		it("should list data-connect", function () {
-			ui.action("render");
-			expect(ui.connects["content"]).toBe(ui.dom.querySelector("p[data-connect='content']"));
-		});
-		
-	});
-	
-	describe("OObjectsIsolation", function () {
-		var UI1 = function () {},
-			UI2 = function () {};
-			
-		UI1.prototype = new OObject,
-		UI2.prototype = new OObject;
-		
-		ui1 = new UI1;
-		ui2 = new UI2;
-		
-		it("should make UIs properties  isolated", function () {
-			ui1.model.set("test");
-			expect(ui2.model.has("test")).toEqual(false);
 		});
 	});
 	

@@ -1,5 +1,5 @@
 require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
-	
+/**
 	describe("TextTest", function () {
 	
 		it("should be a constructor function", function () {
@@ -13,9 +13,7 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 		it("should'nt have shared prototypes", function () {
 			var txt1 = new Text(),
 				txt2 = new Text();
-			expect(Object.getPrototypeOf(txt1) === Object.getPrototypeOf(txt2)).toEqual(false);
-			txt1.model.set("a", 5);
-			expect(txt2.model.get("a")).not.toEqual(5)
+			expect(Object.getPrototypeOf(txt1)).not.toBe(Object.getPrototypeOf(txt2));
 		});
 		
 	});
@@ -48,12 +46,12 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 		it("should pass the content at creation", function () {
 			expect(text.model.get("content")).toEqual(content);
 			text.action("render");
-			expect(text.dom.querySelector("[data-connect='content']").innerHTML).toEqual(content);
+			expect(text.dom.querySelector("[data-model='content']").innerHTML).toEqual(content);
 		});
 		
 		it("should have its p tag's innerHTML connected to the model", function () {
 			text.action("render");
-			var p = text.dom.querySelector("p[data-connect='content']");
+			var p = text.dom.querySelector("p[data-model='content']");
 			text.model.set("content", "Olives is cool!");
 			expect(p.innerHTML).toEqual("Olives is cool!");
 			text.model.set("content", "This one's just for fun!");
@@ -64,14 +62,14 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 			text.action("render");
 
 			text.model.set("content", "new text");
-			expect(text.dom.querySelector("p[data-connect='content']").innerHTML).toEqual("new text");
+			expect(text.dom.querySelector("p[data-model='content']").innerHTML).toEqual("new text");
 			
-			text.template = "<p data-connect='content2'></p>";
+			text.template = "<p data-model='content2'></p>";
 			text.action("render");
-			expect(text.dom.querySelector("p[data-connect='content2']").innerHTML).toBeFalsy();
+			expect(text.dom.querySelector("p[data-model='content2']").innerHTML).toEqual("");
 
 			text.model.set("content2", "should work");text.model.set("content2", "should work");
-			expect(text.dom.querySelector("p[data-connect='content2']").innerHTML).toEqual("should work");
+			expect(text.dom.querySelector("p[data-model='content2']").innerHTML).toEqual("should work");
 		});
 
 	});
@@ -80,8 +78,8 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 		var text = null,
 			txt1 = "text1",
 			txt2 = "text2",
-			template = "<span data-connect='txt1'></span>" +
-						"<span data-connect='txt2'></span>";
+			template = "<span data-model='txt1'></span>" +
+						"<span data-model='txt2'></span>";
 		
 		beforeEach(function () {
 			text = new Text();
@@ -92,9 +90,9 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 			text.action("render");
 			
 			text.model.set("txt1", txt1);
-			expect(text.dom.querySelector("[data-connect='txt1']").innerHTML).toEqual(txt1);
+			expect(text.dom.querySelector("[data-model='txt1']").innerHTML).toEqual(txt1);
 			text.model.set("txt2", txt2);
-			expect(text.dom.querySelector("[data-connect='txt2']").innerHTML).toEqual(txt2);
+			expect(text.dom.querySelector("[data-model='txt2']").innerHTML).toEqual(txt2);
 		});
 		
 		it("should associate the value to the new template from the beginning", function () {
@@ -106,26 +104,26 @@ require(["Olives/Text", "Olives/OObject"], function (Text, OObject) {
 			text.template = template;
 			text.action("render");
 
-			expect(text.dom.querySelector("[data-connect='txt1']").innerHTML).toEqual(txt1);
-			expect(text.dom.querySelector("[data-connect='txt2']").innerHTML).toEqual(txt2);
+			expect(text.dom.querySelector("[data-model='txt1']").innerHTML).toEqual(txt1);
+			expect(text.dom.querySelector("[data-model='txt2']").innerHTML).toEqual(txt2);
 		});
 		
 		it("should also associate the values from the template", function () {
-			text.template = "<span data-connect='txt1'>Olives</span>" +
-			"<span data-connect='txt2'>is cool!</span>";
+			text.template = "<span data-model='txt1'>Olives</span>" +
+			"<span data-model='txt2'>is cool!</span>";
 			
 
 			text.action("render");
 
-			expect(text.dom.querySelector("[data-connect='txt1']").innerHTML).toEqual("Olives");
-			expect(text.dom.querySelector("[data-connect='txt2']").innerHTML).toEqual("is cool!");
+			expect(text.dom.querySelector("[data-model='txt1']").innerHTML).toEqual("Olives");
+			expect(text.dom.querySelector("[data-model='txt2']").innerHTML).toEqual("is cool!");
 			
 			text.model.set("txt1", "isn't");
 			text.model.set("txt2", "it?");
 			
-			expect(text.dom.querySelector("[data-connect='txt1']").innerHTML).toEqual("isn't");
-			expect(text.dom.querySelector("[data-connect='txt2']").innerHTML).toEqual("it?");
+			expect(text.dom.querySelector("[data-model='txt1']").innerHTML).toEqual("isn't");
+			expect(text.dom.querySelector("[data-model='txt2']").innerHTML).toEqual("it?");
 			
 		});
-	});
+	});*/
 });

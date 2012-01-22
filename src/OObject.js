@@ -1,20 +1,17 @@
-define("Olives/OObject", ["Store", "StateMachine", "Tools"],
+define("Olives/OObject", ["StateMachine", "Store", "Olives/Plugins"],
 /** 
 * @class 
 * OObject is an abstract class that any UI can inherit from.
-* I will use UI for a piece of user interface, I've also could have called it a widget but UI's shorter.
 * It should provide code that is easy to reuse
-* @requires Store
 * @requires StateMachine
-* @requires Tools
 */
-function OObject(Store, StateMachine, Tools) {
+function OObject(StateMachine, Store, Plugins) {
 	
 	return function OObjectConstructor() {
 		
 		/**
 		 * This function creates the dom of the UI from it's template
-		 * It then queries the dom for data-connect to list them into this.connects
+		 * It then queries the dom for data-model to list them into this.connects
 		 * It can't be executed if the template is not set
 		 * @private
 		 */
@@ -36,10 +33,8 @@ function OObject(Store, StateMachine, Tools) {
 					UI.dom.appendChild(UI.template);
 				}
 				
-				// Populate the this.connects object with connect name : dom node
-				Tools.toArray(UI.dom.querySelectorAll("[data-connect]")).forEach(function (node) {
-					UI.connects[node.getAttribute("data-connect")] = node;
-				});
+				// Let's now apply the plugins
+				UI.plugins.apply(UI.dom);
 				
 				// This function is empty and can be overridden by the user.
 				// It tells him that the UI is rendered
@@ -48,7 +43,6 @@ function OObject(Store, StateMachine, Tools) {
 				// An explicit message I hope
 				throw Error("UI.template must be set prior to render");
 			}
-
 		},
 		
 		/**
@@ -99,6 +93,12 @@ function OObject(Store, StateMachine, Tools) {
 		this.model = new Store();
 		
 		/**
+		 * The module that will manage the plugins for this UI
+		 * @see Olives/Plugins' doc for more info on how it works.
+		 */
+		this.plugins = new Plugins();
+		
+		/**
 		 * Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
 		 * @type string or HTMLElement
 		 */
@@ -108,11 +108,6 @@ function OObject(Store, StateMachine, Tools) {
 		 * This will hold the dom nodes built from the template.
 		 */
 		this.dom = null;
-		
-		/**
-		 * Connects associates dom nodes with their data-connect attribute
-		 */
-		this.connects = {};
 		
 		/**
 		 * This function can be overridden. 
