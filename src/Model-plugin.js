@@ -62,11 +62,11 @@ function ModelPlugin(Store, Observable) {
 		};
 		
 		/**
-		 * 
-		 * @returns
+		 * ...
+		 * @param {HTMLElement} node the dom node to apply toList to
 		 */
 		this.toList = function toList(node) {
-			var itemRenderer = node.querySelector("*"),
+			var itemRenderer = node.childNodes[0],
 				domFragment = document.createDocumentFragment();
 			
 			if (itemRenderer) {

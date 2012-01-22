@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - OObject</title>
+		<title>JsDoc Reference - ModelPlugin</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -208,7 +208,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class OObject
+				Class ModelPlugin
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -216,17 +216,16 @@ ul.inheritsList
 				
 				
 			
-				OObject is an abstract class that any UI can inherit from.
-It should provide code that is easy to reuse
+				This plugin links dom nodes to a model
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_OObject.js.html">OObject.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_Model-plugin.js.html">Model-plugin.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class OObject.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ModelPlugin.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -239,7 +238,7 @@ It should provide code that is easy to reuse
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#constructor">OObject</a></b>(StateMachine, Store, Plugins)
+								<b><a href="../symbols/ModelPlugin.html#constructor">ModelPlugin</a></b>(Store, Observable)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -250,71 +249,12 @@ It should provide code that is easy to reuse
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class OObject.">
-					<caption>Field Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#dom">dom</a></b>
-								</div>
-								<div class="description">This will hold the dom nodes built from the template.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#model">model</a></b>
-								</div>
-								<div class="description">The UI's Store
-It has set/get/del/has/watch/unwatch methods</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#plugins">plugins</a></b>
-								</div>
-								<div class="description">The module that will manage the plugins for this UI</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#template">template</a></b>
-								</div>
-								<div class="description">Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
-			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class OObject.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class ModelPlugin.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -327,27 +267,36 @@ It has set/get/del/has/watch/unwatch methods</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#action">action</a></b>(name, params)
+								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#getModel">getModel</a></b>()
 								</div>
-								<div class="description">Action triggers a state change, such as "place" or "render.</div>
+								<div class="description">Get the store that is watched for</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#onPlace">onPlace</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#setModel">setModel</a></b>(model)
 								</div>
-								<div class="description">This function can be overridden.</div>
+								<div class="description">Define the model to watch for</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#onRender">onRender</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#toList">toList</a></b>(node)
 								</div>
-								<div class="description">This function can be overridden.</div>
+								<div class="description">..</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#toText">toText</a></b>(dom, name)
+								</div>
+								<div class="description">Attach a model's value to a dom node so it also gets updated on value's changes</div>
 							</td>
 						</tr>
 					
@@ -368,7 +317,7 @@ It has set/get/del/has/watch/unwatch methods</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>OObject</b>(StateMachine, Store, Plugins)
+						<b>ModelPlugin</b>(Store, Observable)
 				</div>
 				
 				<div class="description">
@@ -384,19 +333,13 @@ It has set/get/del/has/watch/unwatch methods</div>
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								 <b>StateMachine</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
 								 <b>Store</b>
 								
 							</dt>
 								<dd></dd>
 						
 							<dt>
-								 <b>Plugins</b>
+								 <b>Observable</b>
 								
 							</dt>
 								<dd></dd>
@@ -411,7 +354,7 @@ It has set/get/del/has/watch/unwatch methods</div>
 						<dl class="detailList">
 						<dt class="heading">Requires:</dt>
 						
-							<dd>StateMachine</dd>
+							<dd>Store, Observable</dd>
 						
 						</dl>
 					
@@ -422,114 +365,6 @@ It has set/get/del/has/watch/unwatch methods</div>
 
 <!-- ============================== field details ========================== -->		
 			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="dom"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>dom</b>
-					
-					</div>
-					<div class="description">
-						This will hold the dom nodes built from the template.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="model"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>model</b>
-					
-					</div>
-					<div class="description">
-						The UI's Store
-It has set/get/del/has/watch/unwatch methods
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-							<dd>Emily's doc for more info on how it works.</dd>
-							
-							</dl>
-						
-						
-
-					<hr />
-				
-					<a name="plugins"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>plugins</b>
-					
-					</div>
-					<div class="description">
-						The module that will manage the plugins for this UI
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-							<dd>Olives/Plugins' doc for more info on how it works.</dd>
-							
-							</dl>
-						
-						
-
-					<hr />
-				
-					<a name="template"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{string or HTMLElement}</span>
-					<b>template</b>
-					
-					</div>
-					<div class="description">
-						Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
-			
 
 <!-- ============================== method details ========================= -->		
 			
@@ -537,16 +372,47 @@ It has set/get/del/has/watch/unwatch methods
 					Method Detail
 				</div>
 				
-					<a name="action"> </a>
+					<a name="getModel"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>action</b>(name, params)
+					<b>getModel</b>()
 					
 					</div>
 					<div class="description">
-						Action triggers a state change, such as "place" or "render.
-Watch the life cycle documentation for more info.
+						Get the store that is watched for
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>the Store</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="setModel"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>setModel</b>(model)
+					
+					</div>
+					<div class="description">
+						Define the model to watch for
 						
 						
 					</div>
@@ -558,16 +424,53 @@ Watch the life cycle documentation for more info.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
+									<span class="light fixedFont">{Store}</span> <b>model</b>
 									
 								</dt>
-								<dd>the name of the action</dd>
+								<dd>the model to watch for changes</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if the model was set</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="toList"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>toList</b>(node)
+					
+					</div>
+					<div class="description">
+						...
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span> <b>params</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>node</b>
 									
 								</dt>
-								<dd>the parameters to pass to the actions</dd>
+								<dd>the dom node to apply toList to</dd>
 							
 							</dl>
 						
@@ -580,16 +483,15 @@ Watch the life cycle documentation for more info.
 
 					<hr />
 				
-					<a name="onPlace"> </a>
+					<a name="toText"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>onPlace</b>()
+					<b>toText</b>(dom, name)
 					
 					</div>
 					<div class="description">
-						This function can be overridden. 
-It's called when the placing is done.
+						Attach a model's value to a dom node so it also gets updated on value's changes
 						
 						
 					</div>
@@ -597,35 +499,33 @@ It's called when the placing is done.
 					
 					
 						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
+									
+								</dt>
+								<dd>the dom node to apply the plugin to</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>the name of the model's value to attach it to</dd>
+							
+							</dl>
 						
 						
 						
 						
 						
-						
-
-					<hr />
-				
-					<a name="onRender"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>onRender</b>()
-					
-					</div>
-					<div class="description">
-						This function can be overridden. 
-It's called when the rendering is done.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
