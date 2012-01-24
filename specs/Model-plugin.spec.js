@@ -1,4 +1,5 @@
-require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
+require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugin, Store, Plugins) {
+
 	
 	describe("ModelPluginTest", function () {
 		it("should be a constructor function", function () {
@@ -46,30 +47,36 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 	describe("ModelPluginToText", function () {
 		
 		var modelPlugin = null,
+			plugins = null,
 			model = null,
 			dom = null;
 		
 		beforeEach(function () {
 			dom = document.createElement("p");
+			
+			dom.dataset["model"] = "toText:content";
 			model =  new Store({content: "Olives is fun!"});
 			modelPlugin = new ModelPlugin(model);
+			plugins = new Plugins;
+			plugins.add("model", modelPlugin);
 		});
 		
 		it("should link the model and the dom node with toText", function () {
-			modelPlugin.toText(dom, "content");
-			
+			plugins.apply(dom);
 			expect(dom.innerHTML).toEqual("Olives is fun!");
 			model.set("content", "Olives is cool!");
 			expect(dom.innerHTML).toEqual("Olives is cool!");
 		});
 		
 		it("should not touch the dom if the value isn't set", function () {
-			modelPlugin.toText(dom, "content2");
+			dom.dataset["model"] = "toText:content2";
+			plugins.apply(dom);
 			expect(dom.innerHTML).toEqual("");
 		});
 		
 		it("should set up the dom as soon as the value is set", function () {
-			modelPlugin.toText(dom, "content2");
+			dom.dataset["model"] = "toText:content2";
+			plugins.apply(dom);
 			model.set("content2", "sup!");
 			expect(dom.innerHTML).toEqual("sup!");
 		});
@@ -79,17 +86,23 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 	describe("ModelPluginToList", function () {
 		var modelPlugin = null,
 			model = null,
-			dom = document.createElement("ul");
+			dom = null,
+			plugins = null;
 		
 		beforeEach(function () {
+			dom = document.createElement("ul");
+
 			dom.setAttribute("data-model", "toList"); 
 			dom.innerHTML = '<li data-model="item"></li>';
+
 			model = new Store(["Olives", "is", "fun"]);
 			modelPlugin = new ModelPlugin(model);
+			plugins = new Plugins;
+			plugins.add("model", modelPlugin);
 		});
 		
 		it("should expand the node inside", function () {
-			modelPlugin.toList(dom);
+			plugins.apply(dom);
 			expect(dom.querySelectorAll("li").length).toEqual(3);
 			expect(dom.querySelectorAll("li")[0].dataset["model.id"]).toEqual("0");
 			expect(dom.querySelectorAll("li")[1].dataset["model.id"]).toEqual("1");
@@ -97,17 +110,16 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 		});
 		
 		it("should'nt do anything if no inner node declared", function () {
-			dom = document.createElement("ul");
+			var dom = document.createElement("div");
+			
 			expect(function () {
-				modelPlugin.toList(dom);
+				plugins.apply(dom);
 			}).not.toThrow();
+			expect(dom.querySelectorAll("*").length).toEqual(0);
 		});
 		
 		it("should associate the model with the dom nodes", function () {
-			modelPlugin.toList(dom);
-			modelPlugin.item(dom.querySelectorAll("li")[0]);
-			modelPlugin.item(dom.querySelectorAll("li")[1]);
-			modelPlugin.item(dom.querySelectorAll("li")[2]);
+			plugins.apply(dom);
 			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives");
 			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("is");
 			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("fun");
@@ -115,23 +127,19 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 		});
 		
 		it("should update the generated dom when the model is updated", function () {
-			modelPlugin.toList(dom);
-			modelPlugin.item(dom.querySelectorAll("li")[0]);
-			modelPlugin.item(dom.querySelectorAll("li")[1]);
-			modelPlugin.item(dom.querySelectorAll("li")[2]);
+			plugins.apply(dom);
 			model.set(0, "Olives and Emily");
 			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives and Emily");
 			model.set(1, "are");
 			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("are");
 			model.alter("splice", 2, 0, "very");
 			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("very");
-			modelPlugin.item(dom.querySelectorAll("li")[3]);
 			expect(dom.querySelectorAll("li")[3].innerHTML).toEqual("fun");
 			expect(dom.querySelectorAll("li").length).toEqual(4);
 		});
 		
 		it("should remove an item if it's removed from the model", function () {
-			modelPlugin.toList(dom);
+			plugins.apply(dom);
 			model.alter("pop");
 			expect(dom.querySelectorAll("li")[2]).toBeUndefined();
 		});
@@ -141,10 +149,14 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 		
 		var modelPlugin = null,
 			model = null,
-			dataset = null,
-			dom = document.createElement("ul");
+			dataSet = null,
+			dom = null,
+			plugins = null;
 		
 		beforeEach(function () {
+			dom = document.createElement("ul");
+			dom.dataset["model"] = "toList";
+			
 			dataSet = [{value : {
 							title: "Olives is cool",
 							date: "2012/01/20",
@@ -165,7 +177,9 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 			           ];
 			model = new Store(dataSet);
 			modelPlugin = new ModelPlugin(model);
-			dom.dataset["model"] = "toList";
+			
+			plugins = new Plugins;
+			plugins.add("model", modelPlugin);
 		});
 		
 		it("should expand and fill in with a complex object's values", function () {
@@ -174,20 +188,38 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 			
 			modelPlugin.toList(dom);
 			expect(dom.querySelectorAll("li").length).toEqual(3);
-			jstestdriver.console.log(dom.innerHTML)
+			expect(dom.querySelectorAll("em")[0].innerHTML).toEqual(dataSet[0].value.date);
+			expect(dom.querySelectorAll("strong")[0].innerHTML).toEqual(dataSet[0].value.title);
+			expect(dom.querySelectorAll("span")[0].innerHTML).toEqual(dataSet[0].value.body);
 			
+			expect(dom.querySelectorAll("em")[1].innerHTML).toEqual(dataSet[1].value.date);
+			expect(dom.querySelectorAll("strong")[1].innerHTML).toEqual(dataSet[1].value.title);
+			expect(dom.querySelectorAll("span")[1].innerHTML).toEqual(dataSet[1].value.body);
+			
+			expect(dom.querySelectorAll("em")[2].innerHTML).toEqual(dataSet[2].value.date);
+			expect(dom.querySelectorAll("strong")[2].innerHTML).toEqual(dataSet[2].value.title);
+			expect(dom.querySelectorAll("span")[2].innerHTML).toEqual(dataSet[2].value.body);
 		});
 		
-		/**
-		 *  TO CONTINUE... I NEED ITEM TO HANDLE value.field.whatever 
-		 *  I NEED TO REFACTOR MODELPLUGIN SO IT USES AN ITEM RENDERER TO AVOID ALL THE DRY STUFF
-		 *  I NEED TO PASS PLUGIN.APPLY AROUND THE MODEL PLUGIN SO IT APPLIES IT ON NEW GENERATED DOM
-		 *  MAYBE THERE COULD BE SOME INHERITANCE?? DUNNO!
-		 *  
-		 *  BUT WE'VE NEVER BEEN SO CLOSE WHICH IS COOL!!
-		 * 
-		 */
+		it("should update such expanded list", function () {
+			dom.innerHTML = '<li><em data-model="item:value.date"></em><strong data-model="item:value.title"></strong>' +
+						'<span data-model="item:value.body"></span></li>';
+			
+			modelPlugin.toList(dom);
+
+			model.set(1, {
+				value: {
+					title: "Olives is fantastic",
+					date: "2012/01/24",
+					body: "innit"
+				}
+			});
+			expect(dom.querySelectorAll("em")[1].innerHTML).toEqual("2012/01/24");
+			expect(dom.querySelectorAll("strong")[1].innerHTML).toEqual("Olives is fantastic");
+			expect(dom.querySelectorAll("span")[1].innerHTML).toEqual("innit");
+		});
+
 		
 	});
-	
+
 });

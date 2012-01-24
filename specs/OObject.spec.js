@@ -74,13 +74,14 @@ require(["Olives/OObject", "Tools", "Store", "Olives/Plugins"], function (OObjec
 		});
 		
 		it("should apply plugins on render", function () {
+			var nodes;
+			
 			ui.template = "<div></div>";
 			spyOn(ui.plugins, "apply");
 			ui.action("render");
 			
 			expect(ui.plugins.apply.wasCalled).toEqual(true);	
 			expect(ui.plugins.apply.mostRecentCall.args[0]).toBe(ui.dom);
-
 		});
 
 	});

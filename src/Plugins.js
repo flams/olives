@@ -1,4 +1,4 @@
-define("Olives/Plugins", ["Tools"],
+define("Olives/Plugins", ["Tools", "Olives/DomUtils"],
 		
 /**
  * @class
@@ -9,7 +9,7 @@ define("Olives/Plugins", ["Tools"],
  * @see Model-Plugin for instance
  * @requires Tools
  */
-function Plugins(Tools) {
+function Plugins(Tools, DomUtils) {
 	
 	return function PluginsConstructor() {
 		
@@ -66,8 +66,17 @@ function Plugins(Tools) {
 		 * @returns
 		 */
 		this.add = function add(name, plugin) {
+			var that;
 			if (typeof name == "string" && typeof plugin == "object" && plugin) {
 				_plugins[name] = plugin;
+				plugin.getName = function getName () {
+					return name;
+				};
+
+				that = this;
+				plugin.apply = function apply() {
+					that.apply.apply(that, arguments);
+				};
 				return true;
 			} else {
 				return false;
@@ -93,24 +102,25 @@ function Plugins(Tools) {
 		};
 		
 		/**
-		 * Apply the plugins to a dom node
-		 * @param {HTMLElement} dom the dom node on which to apply the plugins
+		 * Apply the plugins to a NodeList
+		 * @param {HTMLElement} dom the dom nodes on which to apply the plugins
 		 * @returns {Boolean} true if the param is a dom node
 		 */
 		this.apply = function apply(dom) {
-			var i = 0, nodes;
+			
+			var nodes;
+			
 			if (dom instanceof HTMLElement) {
-				// I know this loop has a strong smell,
-				// but the loop _needs_ to be working on a live node
-				// -or a non-live node updated at every iteration-
-				// to take into account the newly generated doms
-				for (i; i<(nodes = dom.querySelectorAll("*")).length; i++) {
-					// Each item of the dataset is a plugin
-					Tools.loop(nodes[i].dataset, function (phrase, plugin) {
-						applyPlugin(nodes[i], phrase, plugin);
+				
+				nodes = DomUtils.getNodes(dom);
+				Tools.loop(Tools.toArray(nodes), function (node) {
+					Tools.loop(node.dataset, function (phrase, plugin) {
+						applyPlugin(node, phrase, plugin);
 					});
-				}
-				return dom;
+				});
+				
+				return true;
+				
 			} else {
 				return false;
 			}

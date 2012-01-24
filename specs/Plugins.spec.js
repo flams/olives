@@ -51,9 +51,17 @@ require(["Olives/Plugins"], function (Plugins) {
 		var plugins = null,
 			plugin1 = null,
 			plugin2 = null,
-			template = document.createElement("div");
+			dom = null;
 		
 		beforeEach(function () {
+			var i=3;
+			
+			dom = document.createElement("div");
+			
+			while (i--) {
+				dom.appendChild(document.createElement("p"));
+			}
+			
 			plugins = new Plugins();
 			plugin1 = {
 				method: jasmine.createSpy()
@@ -65,34 +73,31 @@ require(["Olives/Plugins"], function (Plugins) {
 			};
 		});
 		
-		it("should apply the plugins to the corresponding dom node and return it", function () {
+		it("should apply the plugins only on dom nodes", function () {
 			expect(plugins.apply()).toEqual(false);
 			expect(plugins.apply({})).toEqual(false);
-			expect(plugins.apply(template)).toBe(template);
+			expect(plugins.apply(dom)).toEqual(true);
 		});
 		
-		it("should call the plugin on apply", function () {
-			template.innerHTML = '<span data-plugin1="method"><span>';
-			
-			expect(function () {
-				plugins.apply(template);
-			}).not.toThrow();
-			
+		it("should call the plugins on apply", function () {
+			dom.dataset["plugin1"] = "method";
+			plugins.apply(dom);
 			expect(plugin1.method.wasCalled).toEqual(false);
+			
 			plugins.add("plugin1", plugin1);
-			plugins.apply(template);
+			plugins.apply(dom);
 			expect(plugin1.method.wasCalled).toEqual(true);
 			expect(plugin1.method.mostRecentCall.object).toBe(plugin1);
 		});
 		
-		it("should call multiple plugins on apply", function () {
-			template.innerHTML = '<span data-plugin1="method"></span><p data-plugin2="method1"></p>' +
+		it("should call multiple plugins on apply", function () {			
+			dom.innerHTML = '<span data-plugin1="method"></span><p data-plugin2="method1"></p>' +
 								'<div data-plugin1="method" data-plugin2="method1;method2"></div>';
-			
+
 			plugins.add("plugin1", plugin1);
 			plugins.add("plugin2", plugin2);
 			
-			plugins.apply(template);
+			plugins.apply(dom);
 			expect(plugin1.method.callCount).toEqual(2);
 			expect(plugin1.method.mostRecentCall.object).toBe(plugin1);
 			expect(plugin2.method1.callCount).toEqual(2);
@@ -104,79 +109,57 @@ require(["Olives/Plugins"], function (Plugins) {
 		
 		
 		it("should call also if spaces are present between two methods", function () {
-			template.innerHTML = '<span data-plugin2="method1; method2"></span>';
+			dom.dataset["plugin2"] = "method1; method2";
 			plugins.add("plugin2", plugin2);
-			plugins.apply(template);
+			plugins.apply(dom);
 			expect(plugin2.method2.wasCalled).toEqual(true);
 		});
 		
 		it("should'nt fail if no such method", function () {
-			template.innerHTML = '<span data-plugin2="method3"></span>';
+			dom.dataset["plugin2"] = "method3";
 			plugins.add("plugin2", plugin2);
 			expect(function () {
-				plugins.apply(template);
+				plugins.apply(dom);
 			}).not.toThrow();
 			
 			expect(plugin2.method2.wasCalled);
 		});
 		
 		it("should pass parameters to the method", function () {
-			template.innerHTML = '<span data-plugin2="method1:param1, param2; method2: param1"></span>';
+			dom.dataset["plugin2"] = "method1:param1, param2; method2: param1";
 			plugins.add("plugin2", plugin2);
-			plugins.apply(template);
+			plugins.apply(dom);
 			expect(plugin2.method1.callCount).toEqual(1);
-			expect(plugin2.method1.mostRecentCall.args[0]).toBe(template.childNodes[0]);
+			expect(plugin2.method1.mostRecentCall.args[0]).toBe(dom);
 			expect(plugin2.method1.mostRecentCall.args[1]).toEqual("param1");
 			expect(plugin2.method1.mostRecentCall.args[2]).toEqual("param2");
-			expect(plugin2.method2.mostRecentCall.args[0]).toBe(template.childNodes[0]);
+			expect(plugin2.method2.mostRecentCall.args[0]).toBe(dom);
 			expect(plugin2.method2.mostRecentCall.args[1]).toEqual("param1");
 		});
 		
 	});
 	
-	describe("PluginsCallEvolvingTemplate", function (){
-		
-		var template = document.createElement("div"),
-			plugins = null,
-			plugin1 = null,
-			plugin2 = null;
+	describe("PluginsApplyAvailableToPlugin", function (){
+						
+		var plugins = null,
+			plugin = null;
 		
 		beforeEach(function () {
-			plugin1 = {
-					expand: function (node, nb) {
-						var itemRenderer = node.childNodes[0],
-							domFrag = document.createDocumentFragment();
-						
-						while (nb--) {
-							domFrag.appendChild(itemRenderer.cloneNode(true));
-						}
-						
-						node.replaceChild(domFrag, itemRenderer);
-					}
-			};
-			
-			plugin2 = {
-					fill: jasmine.createSpy()
-			};
-			
-			plugins = new Plugins;
-			plugins.add("plugin1", plugin1);
-			plugins.add("plugin2", plugin2);
+			plugins = new Plugins();
+			plugin = {};
+			plugins.add("plugin", plugin);
 		});
 		
-		
-		it("should call plugins on expanded dom nodes", function () {
-			template.innerHTML = '<ul data-plugin1="expand:5">' +
-			'<li data-plugin2="fill"></li>' +
-			'</ul>';
-			spyOn(plugin1, "expand").andCallThrough();
-			plugins.apply(template);
-			expect(plugin1.expand.callCount).toEqual(1);
-			expect(plugin2.fill.callCount).toEqual(5);
+		it("should decorate the plugins with the following API", function () {
+			var div = document.createElement("div");
+			expect(plugin.getName).toBeInstanceOf(Function);
+			expect(plugin.getName()).toEqual("plugin");
+			expect(plugin.apply).toBeInstanceOf(Function);
+			spyOn(plugins, "apply");
+			plugin.apply(div);
+			expect(plugins.apply.wasCalled).toEqual(true);
+			expect(plugins.apply.mostRecentCall.object).toBe(plugins);
+			expect(plugins.apply.mostRecentCall.args[0]).toBe(div);
 		});
-		
-		
-						
-		
 	});
 });

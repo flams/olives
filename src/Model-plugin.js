@@ -62,12 +62,40 @@ function ModelPlugin(Store, Observable, Tools) {
 		};
 		
 		/**
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * Refactoring ongoing
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
+		
+		/**
 		 * ...
 		 * @param {HTMLElement} node the dom node to apply toList to
 		 */
 		this.toList = function toList(node) {
 			var itemRenderer = node.childNodes[0],
-            	domFragment = document.createDocumentFragment();
+            	domFragment = document.createDocumentFragment(),
+            	pluginName = this.getName();
 
 			
 			if (itemRenderer) {
@@ -76,17 +104,20 @@ function ModelPlugin(Store, Observable, Tools) {
 	                    var newNode = itemRenderer.cloneNode(true);
 	                    if (newNode.childNodes) {
 	                    	Tools.loop(newNode.childNodes, function (child) {
-	                    		if (child.dataset["model"]) {
-	                    			child.dataset["model.id"] = idx;
+	                    		if (child.dataset[pluginName]) {
+	                    			child.dataset[pluginName+".id"] = idx;
 	                    		}
 	                    	});
 	                    }
-	                    if(newNode.dataset["model"]) {
-	                    	newNode.dataset["model.id"] = idx;
+	                    if(newNode.dataset[pluginName]) {
+	                    	newNode.dataset[pluginName+".id"] = idx;
 	                    }
+	                    this.apply(newNode);
 	                    domFragment.appendChild(newNode);
-	            });
+	            }, this);
 
+               
+	            
 	            node.replaceChild(domFragment, itemRenderer);
             
 			}
@@ -95,16 +126,19 @@ function ModelPlugin(Store, Observable, Tools) {
                     var newNode = itemRenderer.cloneNode(true);
                     if (newNode.childNodes) {
                     	Tools.loop(newNode.childNodes, function (child) {
-                    		if (child.dataset["model"]) {
-                    			child.dataset["model.id"] = idx;
+                    		if (child.dataset[pluginName]) {
+                    			child.dataset[pluginName+".id"] = idx;
                     		}
                     	});
                     }
-                    if(newNode.dataset["model"]) {
-                    	newNode.dataset["model.id"] = idx;
+                    if(newNode.dataset[pluginName]) {
+                    	newNode.dataset[pluginName+".id"] = idx;
                     }
+                    
+                    this.apply(newNode);
+                    
                     node.insertBefore(newNode, node.childNodes[idx]);
-            });
+            }, this);
             
             _model.watch("deleted", function (idx) {
                     // The document.childNodes indexes need to be preserved,
@@ -132,14 +166,25 @@ function ModelPlugin(Store, Observable, Tools) {
 			});
 		};
 		
-		this.item = function item(node, value) {
-			var id = node.dataset["model.id"];
+		this.item = function item(node, prop) {
+			var id = node.dataset[this.getName()+".id"];
+
 			// Leave the dom intact of no value
 			if (_model.has(id)) {
-				setInnerHTML(node, _model.get(id));
+				if (prop) {
+					setInnerHTML(node, Tools.getObjectsProperty(_model.get(id), prop));
+				} else {
+					setInnerHTML(node, _model.get(id));
+				}
+				
 			}
-			_observable.watch(id, function (value) {
-				setInnerHTML(node, value);
+			_observable.watch(id, function (newValue) {
+				if (prop) {
+					setInnerHTML(node, Tools.getObjectsProperty(_model.get(id), prop));
+				} else {
+					setInnerHTML(node, newValue);
+				}
+
 			});
 		};
 	
