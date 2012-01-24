@@ -1,5 +1,5 @@
 require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OObject, Store, Tools) {
-	
+	/**
 	describe("ListTest", function () {
 		
 		it("should be a constructor function", function () {
@@ -101,7 +101,7 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 			expect(list.dom.querySelectorAll("div > h3 > span").length).toEqual(3);
 			expect(list.dom.querySelectorAll("div > p")[1].innerHTML).toEqual(list.model.get(1).value.body);
 		});*/
-		
+		/**
 	});
 	
 	describe("ListDisplayUpdate", function () {
@@ -176,6 +176,6 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 			list.model.alter("pop");
 			expect(list.dom.querySelectorAll("li").length).toEqual(0);
 		});
-	});
+	});*/
 
 });

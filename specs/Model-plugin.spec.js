@@ -79,12 +79,11 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 	describe("ModelPluginToList", function () {
 		var modelPlugin = null,
 			model = null,
-			dom = null;
+			dom = document.createElement("ul");
 		
 		beforeEach(function () {
-			dom = document.createElement("ul");
 			dom.setAttribute("data-model", "toList"); 
-			dom.appendChild(document.createElement("li"));
+			dom.innerHTML = '<li data-model="item"></li>';
 			model = new Store(["Olives", "is", "fun"]);
 			modelPlugin = new ModelPlugin(model);
 		});
@@ -92,6 +91,9 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 		it("should expand the node inside", function () {
 			modelPlugin.toList(dom);
 			expect(dom.querySelectorAll("li").length).toEqual(3);
+			expect(dom.querySelectorAll("li")[0].dataset["model.id"]).toEqual("0");
+			expect(dom.querySelectorAll("li")[1].dataset["model.id"]).toEqual("1");
+			expect(dom.querySelectorAll("li")[2].dataset["model.id"]).toEqual("2");
 		});
 		
 		it("should'nt do anything if no inner node declared", function () {
@@ -103,6 +105,9 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 		
 		it("should associate the model with the dom nodes", function () {
 			modelPlugin.toList(dom);
+			modelPlugin.item(dom.querySelectorAll("li")[0]);
+			modelPlugin.item(dom.querySelectorAll("li")[1]);
+			modelPlugin.item(dom.querySelectorAll("li")[2]);
 			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives");
 			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("is");
 			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("fun");
@@ -111,12 +116,16 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 		
 		it("should update the generated dom when the model is updated", function () {
 			modelPlugin.toList(dom);
+			modelPlugin.item(dom.querySelectorAll("li")[0]);
+			modelPlugin.item(dom.querySelectorAll("li")[1]);
+			modelPlugin.item(dom.querySelectorAll("li")[2]);
 			model.set(0, "Olives and Emily");
 			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives and Emily");
 			model.set(1, "are");
 			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("are");
 			model.alter("splice", 2, 0, "very");
 			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("very");
+			modelPlugin.item(dom.querySelectorAll("li")[3]);
 			expect(dom.querySelectorAll("li")[3].innerHTML).toEqual("fun");
 			expect(dom.querySelectorAll("li").length).toEqual(4);
 		});
@@ -126,6 +135,59 @@ require(["Olives/Model-plugin", "Store"], function (ModelPlugin, Store) {
 			model.alter("pop");
 			expect(dom.querySelectorAll("li")[2]).toBeUndefined();
 		});
+	});
+	
+	describe("ModelPluginToListEnhanced", function () {
+		
+		var modelPlugin = null,
+			model = null,
+			dataset = null,
+			dom = document.createElement("ul");
+		
+		beforeEach(function () {
+			dataSet = [{value : {
+							title: "Olives is cool",
+							date: "2012/01/20",
+							body: "it's very flexible"
+						}},
+						
+						{value: {
+							title: "Olives is fun",
+							date: "2012/01/21",
+							body: "you can cut its hair"
+						}},
+						
+						{value: {
+							title: "Olives is nice",
+							date: "2012/01/22",
+							body: "you ... no"
+						}}	
+			           ];
+			model = new Store(dataSet);
+			modelPlugin = new ModelPlugin(model);
+			dom.dataset["model"] = "toList";
+		});
+		
+		it("should expand and fill in with a complex object's values", function () {
+			dom.innerHTML = '<li><em data-model="item:value.date"></em><strong data-model="item:value.title"></strong>' +
+						'<span data-model="item:value.body"></span></li>';
+			
+			modelPlugin.toList(dom);
+			expect(dom.querySelectorAll("li").length).toEqual(3);
+			jstestdriver.console.log(dom.innerHTML)
+			
+		});
+		
+		/**
+		 *  TO CONTINUE... I NEED ITEM TO HANDLE value.field.whatever 
+		 *  I NEED TO REFACTOR MODELPLUGIN SO IT USES AN ITEM RENDERER TO AVOID ALL THE DRY STUFF
+		 *  I NEED TO PASS PLUGIN.APPLY AROUND THE MODEL PLUGIN SO IT APPLIES IT ON NEW GENERATED DOM
+		 *  MAYBE THERE COULD BE SOME INHERITANCE?? DUNNO!
+		 *  
+		 *  BUT WE'VE NEVER BEEN SO CLOSE WHICH IS COOL!!
+		 * 
+		 */
+		
 	});
 	
 });

@@ -1,13 +1,13 @@
 define("Olives/Model-plugin", 
 		
-["Store", "Observable"],
+["Store", "Observable", "Tools"],
 		
 /**
  * @class
  * This plugin links dom nodes to a model
  * @requires Store, Observable
  */
-function ModelPlugin(Store, Observable) {
+function ModelPlugin(Store, Observable, Tools) {
 	
 	return function ModelPluginConstructor($model) {
 		
@@ -67,47 +67,79 @@ function ModelPlugin(Store, Observable) {
 		 */
 		this.toList = function toList(node) {
 			var itemRenderer = node.childNodes[0],
-				domFragment = document.createDocumentFragment();
+            	domFragment = document.createDocumentFragment();
+
 			
 			if (itemRenderer) {
-				_model.loop(function (value, idx) {
-					var newNode = itemRenderer.cloneNode(true);
-					setInnerHTML(newNode, value);
-					domFragment.appendChild(newNode);
-					_observable.watch(idx, function (value) {
-						setInnerHTML(newNode, value);
-					});
-				});
-				
-				_model.watch("added", function (idx, value) {
-					var newNode = itemRenderer.cloneNode(true);
-					setInnerHTML(newNode, value);
-					node.insertBefore(newNode, node.childNodes[idx]);
-				});
-				
-				_model.watch("deleted", function (idx) {
-					// The document.childNodes indexes need to be preserved,
-					// so I replace the nodes with empty ones.
-					node.replaceChild(document.createTextNode(""), node.childNodes[idx]);
-				});
-				node.replaceChild(domFragment, itemRenderer);
+
+	            _model.loop(function (value, idx) {
+	                    var newNode = itemRenderer.cloneNode(true);
+	                    if (newNode.childNodes) {
+	                    	Tools.loop(newNode.childNodes, function (child) {
+	                    		if (child.dataset["model"]) {
+	                    			child.dataset["model.id"] = idx;
+	                    		}
+	                    	});
+	                    }
+	                    if(newNode.dataset["model"]) {
+	                    	newNode.dataset["model.id"] = idx;
+	                    }
+	                    domFragment.appendChild(newNode);
+	            });
+
+	            node.replaceChild(domFragment, itemRenderer);
+            
 			}
-		};
+            
+            _model.watch("added", function (idx, value) {
+                    var newNode = itemRenderer.cloneNode(true);
+                    if (newNode.childNodes) {
+                    	Tools.loop(newNode.childNodes, function (child) {
+                    		if (child.dataset["model"]) {
+                    			child.dataset["model.id"] = idx;
+                    		}
+                    	});
+                    }
+                    if(newNode.dataset["model"]) {
+                    	newNode.dataset["model.id"] = idx;
+                    }
+                    node.insertBefore(newNode, node.childNodes[idx]);
+            });
+            
+            _model.watch("deleted", function (idx) {
+                    // The document.childNodes indexes need to be preserved,
+                    // so I replace the nodes with empty ones.
+                    node.replaceChild(document.createTextNode(""), node.childNodes[idx]);
+            });
+
+         };
+		
 		
 		/**
 		 * Attach a model's value to a dom node so it also gets updated on value's changes
-		 * @param {HTMLElement} dom the dom node to apply the plugin to
+		 * @param {HTMLElement} node the dom node to apply the plugin to
 		 * @param {String} name the name of the model's value to attach it to
 		 * @returns
 		 */
-		this.toText = function toText(dom, name) {
+		this.toText = function toText(node, name) {
 			// Leave the dom intact of no value
 			if (_model.has(name)) {
-				setInnerHTML(dom, _model.get(name));
+				setInnerHTML(node, _model.get(name));
 			}
 			// Watch for modifications
 			_observable.watch(name, function (value) {
-				setInnerHTML(dom, value);
+				setInnerHTML(node, value);
+			});
+		};
+		
+		this.item = function item(node, value) {
+			var id = node.dataset["model.id"];
+			// Leave the dom intact of no value
+			if (_model.has(id)) {
+				setInnerHTML(node, _model.get(id));
+			}
+			_observable.watch(id, function (value) {
+				setInnerHTML(node, value);
 			});
 		};
 	

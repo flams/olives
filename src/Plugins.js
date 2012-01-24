@@ -98,17 +98,18 @@ function Plugins(Tools) {
 		 * @returns {Boolean} true if the param is a dom node
 		 */
 		this.apply = function apply(dom) {
-			
+			var i = 0, nodes;
 			if (dom instanceof HTMLElement) {
-				// Get all dom nodes
-				Tools.toArray(dom.querySelectorAll("*"))
-				// and apply the plugins for all of them
-				.forEach(function (node) {
+				// I know this loop has a strong smell,
+				// but the loop _needs_ to be working on a live node
+				// -or a non-live node updated at every iteration-
+				// to take into account the newly generated doms
+				for (i; i<(nodes = dom.querySelectorAll("*")).length; i++) {
 					// Each item of the dataset is a plugin
-					Tools.loop(node.dataset, function (phrase, plugin) {
-						applyPlugin(node, phrase, plugin);
+					Tools.loop(nodes[i].dataset, function (phrase, plugin) {
+						applyPlugin(nodes[i], phrase, plugin);
 					});
-				});
+				}
 				return dom;
 			} else {
 				return false;

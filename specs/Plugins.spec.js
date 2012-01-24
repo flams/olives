@@ -82,6 +82,7 @@ require(["Olives/Plugins"], function (Plugins) {
 			plugins.add("plugin1", plugin1);
 			plugins.apply(template);
 			expect(plugin1.method.wasCalled).toEqual(true);
+			expect(plugin1.method.mostRecentCall.object).toBe(plugin1);
 		});
 		
 		it("should call multiple plugins on apply", function () {
@@ -93,8 +94,12 @@ require(["Olives/Plugins"], function (Plugins) {
 			
 			plugins.apply(template);
 			expect(plugin1.method.callCount).toEqual(2);
+			expect(plugin1.method.mostRecentCall.object).toBe(plugin1);
 			expect(plugin2.method1.callCount).toEqual(2);
+			expect(plugin2.method1.mostRecentCall.object).toBe(plugin2);
 			expect(plugin2.method2.callCount).toEqual(1);
+			expect(plugin2.method2.mostRecentCall.object).toBe(plugin2);
+			
 		});
 		
 		
@@ -127,5 +132,51 @@ require(["Olives/Plugins"], function (Plugins) {
 			expect(plugin2.method2.mostRecentCall.args[1]).toEqual("param1");
 		});
 		
-	});	
+	});
+	
+	describe("PluginsCallEvolvingTemplate", function (){
+		
+		var template = document.createElement("div"),
+			plugins = null,
+			plugin1 = null,
+			plugin2 = null;
+		
+		beforeEach(function () {
+			plugin1 = {
+					expand: function (node, nb) {
+						var itemRenderer = node.childNodes[0],
+							domFrag = document.createDocumentFragment();
+						
+						while (nb--) {
+							domFrag.appendChild(itemRenderer.cloneNode(true));
+						}
+						
+						node.replaceChild(domFrag, itemRenderer);
+					}
+			};
+			
+			plugin2 = {
+					fill: jasmine.createSpy()
+			};
+			
+			plugins = new Plugins;
+			plugins.add("plugin1", plugin1);
+			plugins.add("plugin2", plugin2);
+		});
+		
+		
+		it("should call plugins on expanded dom nodes", function () {
+			template.innerHTML = '<ul data-plugin1="expand:5">' +
+			'<li data-plugin2="fill"></li>' +
+			'</ul>';
+			spyOn(plugin1, "expand").andCallThrough();
+			plugins.apply(template);
+			expect(plugin1.expand.callCount).toEqual(1);
+			expect(plugin2.fill.callCount).toEqual(5);
+		});
+		
+		
+						
+		
+	});
 });
