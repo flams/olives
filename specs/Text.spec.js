@@ -1,5 +1,5 @@
 require(["Olives/Text", "Olives/OObject", "Olives/Model-plugin"], function (Text, OObject, ModelPlugin) {
-/**
+
 	describe("TextTest", function () {
 	
 		it("should be a constructor function", function () {
@@ -135,5 +135,5 @@ require(["Olives/Text", "Olives/OObject", "Olives/Model-plugin"], function (Text
 			expect(text.dom.querySelector("[data-model='toText:txt2']").innerHTML).toEqual("it?");
 			
 		});
-	});*/
+	});
 });

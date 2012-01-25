@@ -6,7 +6,7 @@ function (OObject, ModelPlugin) {
 	
 	function ListConstructor(array) {
 		
-		this.template = "<ul data-model='toList'><li></li></ul>";
+		this.template = "<ul data-model='toList'><li data-model='toText'></li></ul>";
 
 		this.model.reset(array);
 		

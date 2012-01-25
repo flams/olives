@@ -102,6 +102,22 @@ function Plugins(Tools, DomUtils) {
 		};
 		
 		/**
+		 * Rename a plugin
+		 * @param {String} current the current plugin name
+		 * @param {String} newName the new plugin name
+		 * @returns true if renamed
+		 */
+		this.rename = function rename(current, newName) {
+			var plugin = this.get(current);
+			if (plugin) {
+				if (this.add(newName, plugin)) {
+					return this.del(current);
+				};
+			}
+			return false;
+		};
+		
+		/**
 		 * Apply the plugins to a NodeList
 		 * @param {HTMLElement} dom the dom nodes on which to apply the plugins
 		 * @returns {Boolean} true if the param is a dom node

@@ -93,7 +93,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			dom = document.createElement("ul");
 
 			dom.setAttribute("data-model", "toList"); 
-			dom.innerHTML = '<li data-model="item"></li>';
+			dom.innerHTML = '<li data-model="toText"></li>';
 
 			model = new Store(["Olives", "is", "fun"]);
 			modelPlugin = new ModelPlugin(model);
@@ -183,8 +183,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 		
 		it("should expand and fill in with a complex object's values", function () {
-			dom.innerHTML = '<li><em data-model="item:value.date"></em><strong data-model="item:value.title"></strong>' +
-						'<span data-model="item:value.body"></span></li>';
+			dom.innerHTML = '<li><em data-model="toText:value.date"></em><strong data-model="toText:value.title"></strong>' +
+						'<span data-model="toText:value.body"></span></li>';
 			
 			modelPlugin.toList(dom);
 			expect(dom.querySelectorAll("li").length).toEqual(3);
@@ -202,8 +202,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 		
 		it("should update such expanded list", function () {
-			dom.innerHTML = '<li><em data-model="item:value.date"></em><strong data-model="item:value.title"></strong>' +
-						'<span data-model="item:value.body"></span></li>';
+			dom.innerHTML = '<li><em data-model="toText:value.date"></em><strong data-model="toText:value.title"></strong>' +
+						'<span data-model="toText:value.body"></span></li>';
 			
 			modelPlugin.toList(dom);
 

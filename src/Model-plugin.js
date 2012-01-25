@@ -156,36 +156,37 @@ function ModelPlugin(Store, Observable, Tools) {
 		 * @returns
 		 */
 		this.toText = function toText(node, name) {
-			// Leave the dom intact of no value
-			if (_model.has(name)) {
-				setInnerHTML(node, _model.get(name));
-			}
-			// Watch for modifications
-			_observable.watch(name, function (value) {
-				setInnerHTML(node, value);
-			});
-		};
-		
-		this.item = function item(node, prop) {
 			var id = node.dataset[this.getName()+".id"];
 
-			// Leave the dom intact of no value
-			if (_model.has(id)) {
-				if (prop) {
-					setInnerHTML(node, Tools.getObjectsProperty(_model.get(id), prop));
-				} else {
-					setInnerHTML(node, _model.get(id));
+			if (!id) {
+				// Leave the dom intact of no value
+				if (_model.has(name)) {
+					setInnerHTML(node, _model.get(name));
 				}
-				
-			}
-			_observable.watch(id, function (newValue) {
-				if (prop) {
-					setInnerHTML(node, Tools.getObjectsProperty(_model.get(id), prop));
-				} else {
-					setInnerHTML(node, newValue);
+				// Watch for modifications
+				_observable.watch(name, function (value) {
+					setInnerHTML(node, value);
+				});
+			} else {
+				// Leave the dom intact of no value
+				if (_model.has(id)) {
+					if (name) {
+						setInnerHTML(node, Tools.getObjectsProperty(_model.get(id), name));
+					} else {
+						setInnerHTML(node, _model.get(id));
+					}
+					
 				}
+				_observable.watch(id, function (newValue) {
+					if (name) {
+						setInnerHTML(node, Tools.getObjectsProperty(_model.get(id), name));
+					} else {
+						setInnerHTML(node, newValue);
+					}
 
-			});
+				});
+			}
+			
 		};
 	
 		// Inits the model

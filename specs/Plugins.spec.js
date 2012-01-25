@@ -44,6 +44,22 @@ require(["Olives/Plugins"], function (Plugins) {
 			expect(plugins.del("test")).toEqual(true);
 		});
 		
+		it("shoud allow for renaming plugins", function () {
+			var plugin = {};
+			expect(plugins.rename).toBeInstanceOf(Function);
+			expect(plugins.rename()).toEqual(false);
+			expect(plugins.rename("name")).toEqual(false);
+			expect(plugins.rename("name", "olives")).toEqual(false);
+			
+			plugins.add("name", plugin);
+			
+			expect(plugins.rename("name")).toEqual(false);
+			expect(plugins.rename("name", "olives")).toEqual(true);
+			expect(plugins.get("olives")).toBe(plugin);
+			expect(plugins.get("name")).toBeUndefined();
+			
+		});
+		
 	});
 	
 	describe("PluginsPluginCall", function () {
@@ -150,11 +166,14 @@ require(["Olives/Plugins"], function (Plugins) {
 			plugins.add("plugin", plugin);
 		});
 		
-		it("should decorate the plugins with the following API", function () {
-			var div = document.createElement("div");
+		it("should decorate with a getName function", function () {
 			expect(plugin.getName).toBeInstanceOf(Function);
 			expect(plugin.getName()).toEqual("plugin");
 			expect(plugin.apply).toBeInstanceOf(Function);
+		});
+		
+		it("should decorate with an apply function", function () {
+			var div = document.createElement("div");
 			spyOn(plugins, "apply");
 			plugin.apply(div);
 			expect(plugins.apply.wasCalled).toEqual(true);

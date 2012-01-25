@@ -3,38 +3,31 @@
 	<head>
 		<title>test olives</title>
 		<style type="text/css">
-		* { margin: 2px; padding: 2px;}
-		li { border: 1px solid black; width: 500px; list-style-type: none;}
-		li p { background-color: #ccc;}
+		* { margin: 0; padding: 0;}
+		div { border: 1px solid black; width: 500px; list-style-type: none;}
+		div p { background-color: #ccc;}
+		div[data-model='toList'] {
+			background:orange;
+		}
 		</style>
 		<script src="/require.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/Emily.js"></script>
 		<script src="/Olives.js"></script>
 		<script>window.addEventListener("load", function onLoad() {
-			require(["Transport", "CouchDBStore", "Olives/List", "Olives/Text"], function (Transport, Store, OList, Text) { 
+			require(["Transport", "Olives/List", "CouchDBStore", "Tools"], function (Transport, List, Store, Tools) { 
+				tools = Tools;
 				transport = new Transport("http://"+location.host);
-				olist = new OList;
-				olist.itemRenderer = function (item) {
-					var li = document.createElement("li");
-					li.innerHTML = "[" + item.value.date + "] " + item.value.title +"<p>" + item.value.body +"</p>";
-					return li;
-				};
-				olist.model = new Store();;
+				olist = new List;
+				olist.model = new Store;
 				olist.model.setTransport(transport);
 				olist.model.sync("blog", "blog", "foo");
-
+				olist.plugins.get("model").setModel(olist.model);
+				olist.template = "<div data-model='toList'>" +
+				"<div><span data-model='toText:value.date'></span><span data-model='toText:value.title'></span>" +
+				"<p data-model='toText:value.body'></p></div>" +
+				"</div>";
 				olist.action("place", document.body);
-store = Store;
-				op = new Store();
-				op.setTransport(transport);
-				op.sync("db", "document1");
-				
-				otext=  new Text();
-				otext.model = op;
-				otext.template = "<div><span data-connect='title'></span><span data-connect='date'></span><p data-connect='body'></p></div>";
-				
-				otext.action("place", document.body);otext.action("render");
 			});
 			window.removeEventListener("load", onLoad, true);
 		}, true);
