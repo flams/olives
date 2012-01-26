@@ -15,14 +15,10 @@
 		<script src="/Emily.js"></script>
 		<script src="/Olives.js"></script>
 		<script>window.addEventListener("load", function onLoad() {
-			require(["Transport", "Olives/List", "CouchDBStore", "Tools"], function (Transport, List, Store, Tools) { 
-				tools = Tools;
-				transport = new Transport("http://"+location.host);
-				olist = new List;
-				olist.model = new Store;
-				olist.model.setTransport(transport);
+			require(["Transport", "Olives/List", "CouchDBStore"], function (Transport, List, Store) { 
+				olist = new List(new Store);
+				olist.model.setTransport(new Transport("http://"+location.host));
 				olist.model.sync("blog", "blog", "foo");
-				olist.plugins.get("model").setModel(olist.model);
 				olist.template = "<div data-model='toList'>" +
 				"<div><span data-model='toText:value.date'></span><span data-model='toText:value.title'></span>" +
 				"<p data-model='toText:value.body'></p></div>" +

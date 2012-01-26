@@ -4,19 +4,17 @@ define("Olives/List",
 
 function (OObject, ModelPlugin) {
 	
-	function ListConstructor(array) {
+	function ListConstructor() {
 		
 		this.template = "<ul data-model='toList'><li data-model='toText'></li></ul>";
-
-		this.model.reset(array);
 		
 		this.plugins.add("model", new ModelPlugin(this.model));
 		
 	}
 	
-	return function ListFactory(array) {
-		ListConstructor.prototype = new OObject;
-		return new ListConstructor(array);
+	return function ListFactory(store) {
+		ListConstructor.prototype = new OObject(store);
+		return new ListConstructor();
 	};
 	
 });

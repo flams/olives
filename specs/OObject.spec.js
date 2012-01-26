@@ -1,4 +1,4 @@
-require(["Olives/OObject", "Tools", "Store", "Olives/Plugins"], function (OObject, Tools, Store, Plugins) {
+require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], function (OObject, Tools, Store, CouchDBStore, Plugins) {
 	
 	describe("OObjectTest", function () {
 		
@@ -18,12 +18,34 @@ require(["Olives/OObject", "Tools", "Store", "Olives/Plugins"], function (OObjec
 			expect(ui.onPlace).toBeInstanceOf(Function);
 		});
 		
-		it("should have a model property that is a store", function () {
-			expect(ui.model).toBeInstanceOf(Store);
-		});
-		
 		it("should have a plugins property that is a Plugins aggragator", function () {
 			expect(ui.plugins).toBeInstanceOf(Plugins);
+		});
+
+	});
+	
+	describe("OObjectModel", function () {
+		
+		var oObject = null;
+		
+		beforeEach(function () {
+			oObject = null;
+		});
+		
+		it("should have a model property that is a store", function () {
+			oObject = new OObject;
+			expect(oObject.model).toBeInstanceOf(Store);
+		});
+		
+		it("should allow for changing the model at init", function () {
+			var store = new CouchDBStore;
+			oObject = new OObject(store);
+			expect(oObject.model).toBe(store);
+		});
+		
+		it("should init a basic store if the given object is not a store", function () {
+			oObject = new OObject(true);
+			expect(oObject.model).toBeInstanceOf(Store);
 		});
 
 	});

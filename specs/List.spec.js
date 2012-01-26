@@ -1,4 +1,4 @@
-require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OObject, Store, Tools) {
+require(["Olives/List", "Olives/OObject", "Store", "CouchDBStore", "Tools"], function (List, OObject, Store, CouchDBStore, Tools) {
 	
 	describe("ListTest", function () {
 		
@@ -29,11 +29,16 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 	describe("ListInit", function () {
 		
 		it("should have its store init from create", function () {
-			var array = ["Olives", "is cool!"], 
-				list = new List(array);
+			var list = new List();
 			
-			expect(list.model.get(0)).toBe(array[0]);
-			expect(list.model.get(1)).toBe(array[1]);
+			expect(list.model).toBeInstanceOf(Store);
+		});
+		
+		it("should allow for changing its store", function () {
+			var store = new CouchDBStore(),
+				list = new List(store);
+			
+			expect(list.model).toBe(store);
 		});
 		
 	});
@@ -44,7 +49,8 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 			array = ["Olives", "is cool!"];
 		
 		beforeEach(function () {
-			list = new List(array);
+			list = new List();
+			list.model.reset(array);
 		});
 		
 		it("should render a list with what's in the model", function () {
@@ -63,10 +69,11 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 			array = ["Olives", "is cool", "and customizable"];
 		
 		beforeEach(function () {
-			list = new List(array);
+			list = new List();
 		});
 		
 		it("should have a cutomizable template", function () {
+			list.model.reset(array);
 			var ps;
 			list.template = "<div data-model='toList'><p data-model='toText'></p></div>";
 			list.action("render");
@@ -102,7 +109,8 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 		resetData = ["Enjoy","it!", "pls"];
 	
 		beforeEach(function () {
-			list = new List(initialData);
+			list = new List();
+			list.model.reset(initialData);
 		});
 		
 		it("should update display when some data is updated", function () {
@@ -126,7 +134,7 @@ require(["Olives/List", "Olives/OObject", "Store", "Tools"], function (List, OOb
 		var list = null;
 		
 		beforeEach(function () {
-			list = new List(["Olives", "is cool!"]);
+			list = new List(new Store(["Olives", "is cool!"]));
 		});
 		
 		it("should add an item", function () {

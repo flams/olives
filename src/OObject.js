@@ -7,7 +7,7 @@ define("Olives/OObject", ["StateMachine", "Store", "Olives/Plugins"],
 */
 function OObject(StateMachine, Store, Plugins) {
 	
-	return function OObjectConstructor() {
+	return function OObjectConstructor(otherStore) {
 		
 		/**
 		 * This function creates the dom of the UI from it's template
@@ -90,7 +90,7 @@ function OObject(StateMachine, Store, Plugins) {
 		 * It has set/get/del/has/watch/unwatch methods
 		 * @see Emily's doc for more info on how it works.
 		 */
-		this.model = new Store();
+		this.model = otherStore instanceof Store ? otherStore : new Store;
 		
 		/**
 		 * The module that will manage the plugins for this UI
