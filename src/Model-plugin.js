@@ -21,15 +21,7 @@ function ModelPlugin(Store, Observable, Tools) {
 		 * An observable that apdapts to model's observable
 		 * @private
 		 */
-		_observable = new Observable(),
-		
-		/**
-		 * The function to put some content into a dom node
-		 * @private
-		 */
-		setInnerHTML = function setInnerHTML(dom, html) {
-			dom.innerHTML = html;
-		};
+		_observable = new Observable();
 		
 		/**
 		 * Define the model to watch for
@@ -152,40 +144,40 @@ function ModelPlugin(Store, Observable, Tools) {
 		/**
 		 * Attach a model's value to a dom node so it also gets updated on value's changes
 		 * @param {HTMLElement} node the dom node to apply the plugin to
-		 * @param {String} name the name of the model's value to attach it to
+		 * @param {String} name the name of the property to look for in the model's value
 		 * @returns
 		 */
 		this.toText = function toText(node, name) {
-			var id = node.dataset[this.getName()+".id"];
+			
+			// Name can be unset if the value of a row is plain text
+			name = name || "";
 
-			if (!id) {
-				// Leave the dom intact of no value
-				if (_model.has(name)) {
-					setInnerHTML(node, _model.get(name));
-				}
-				// Watch for modifications
-				_observable.watch(name, function (value) {
-					setInnerHTML(node, value);
-				});
-			} else {
-				// Leave the dom intact of no value
-				if (_model.has(id)) {
-					if (name) {
-						setInnerHTML(node, Tools.getObjectsProperty(_model.get(id), name));
-					} else {
-						setInnerHTML(node, _model.get(id));
-					}
-					
-				}
-				_observable.watch(id, function (newValue) {
-					if (name) {
-						setInnerHTML(node, Tools.getObjectsProperty(_model.get(id), name));
-					} else {
-						setInnerHTML(node, newValue);
-					}
-
-				});
+			// In case of an array-like model the id is the index of the model's item to look for.
+			// The .id is added by the toList function
+			var id = node.dataset[this.getName()+".id"],
+			
+			// Else, it is the first element of the following
+			split = name.split("."),
+			
+			// So the index of the model is either id or the first element of split
+			modelIdx = id || split.shift(),
+			
+			// And the name of the property to look for in the value is
+			prop = id ? name : split.join("."),
+			
+			// Get the model's value
+			get =  Tools.getObjectsProperty(_model.get(modelIdx), prop);
+			
+			// If the value is falsy, the dom shouldn't be touched
+			if (get) {
+				node.innerHTML = get;
 			}
+			
+			// Watch for changes
+			_observable.watch(modelIdx, function (value) {
+					node.innerHTML = Tools.getObjectsProperty(value, prop);
+			});
+			
 			
 		};
 	

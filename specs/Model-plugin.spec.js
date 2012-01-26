@@ -46,8 +46,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 	
 	describe("ModelPluginToText", function () {
 		
-		var modelPlugin = null,
-			plugins = null,
+		var plugins = null,
 			model = null,
 			dom = null;
 		
@@ -56,9 +55,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			
 			dom.dataset["model"] = "toText:content";
 			model =  new Store({content: "Olives is fun!"});
-			modelPlugin = new ModelPlugin(model);
 			plugins = new Plugins;
-			plugins.add("model", modelPlugin);
+			plugins.add("model", new ModelPlugin(model));
 		});
 		
 		it("should link the model and the dom node with toText", function () {
@@ -79,6 +77,47 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			plugins.apply(dom);
 			model.set("content2", "sup!");
 			expect(dom.innerHTML).toEqual("sup!");
+		});
+		
+	});
+	
+	describe("ModelPluginToTextEnhanced", function () {
+		
+		var plugins = null,
+			model = null,
+			dom = null;
+		
+		beforeEach(function () {
+			dom = document.createElement("div");
+			dom.innerHTML = "<strong data-model='toText:name'></strong>" +
+					"		<dl>" +
+					"			<dt>Mail:</dt><dd data-model='toText:contact.mail'></dd>" +
+					"			<dt>Office:</dt><dd data-model='toText:contact.office'></dd>" +
+					"			<dt>Mobile:</dt><dd data-model='toText:contact.mobile'></dd>" +
+					"		</dl>";
+			model = new Store({
+				name: "Olives",
+				contact: {
+					mail: "mailbox@domain.com",
+					office: "+1234567890"
+				}
+			});	
+			plugins = new Plugins;
+			plugins.add("model", new ModelPlugin(model));
+		});
+		
+		it("should also work with complex data", function () {
+			plugins.apply(dom);
+			expect(dom.querySelectorAll("strong")[0].innerHTML).toEqual("Olives");
+			expect(dom.querySelectorAll("dd")[0].innerHTML).toEqual("mailbox@domain.com");
+			expect(dom.querySelectorAll("dd")[1].innerHTML).toEqual("+1234567890");
+			expect(dom.querySelectorAll("dd")[2].innerHTML).toEqual("");
+		});
+		
+		it("should also be updatable", function () {
+			plugins.apply(dom);
+			model.set("contact", {office: "-0987654321"});
+			expect(dom.querySelectorAll("dd")[1].innerHTML).toEqual("-0987654321");
 		});
 		
 	});
