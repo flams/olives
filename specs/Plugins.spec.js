@@ -44,22 +44,6 @@ require(["Olives/Plugins"], function (Plugins) {
 			expect(plugins.del("test")).toEqual(true);
 		});
 		
-		it("shoud allow for renaming plugins", function () {
-			var plugin = {};
-			expect(plugins.rename).toBeInstanceOf(Function);
-			expect(plugins.rename()).toEqual(false);
-			expect(plugins.rename("name")).toEqual(false);
-			expect(plugins.rename("name", "olives")).toEqual(false);
-			
-			plugins.add("name", plugin);
-			
-			expect(plugins.rename("name")).toEqual(false);
-			expect(plugins.rename("name", "olives")).toEqual(true);
-			expect(plugins.get("olives")).toBe(plugin);
-			expect(plugins.get("name")).toBeUndefined();
-			
-		});
-		
 	});
 	
 	describe("PluginsPluginCall", function () {
@@ -92,7 +76,7 @@ require(["Olives/Plugins"], function (Plugins) {
 		it("should apply the plugins only on dom nodes", function () {
 			expect(plugins.apply()).toEqual(false);
 			expect(plugins.apply({})).toEqual(false);
-			expect(plugins.apply(dom)).toEqual(true);
+			expect(plugins.apply(dom)).toBe(dom);
 		});
 		
 		it("should call the plugins on apply", function () {
@@ -166,19 +150,29 @@ require(["Olives/Plugins"], function (Plugins) {
 			plugins.add("plugin", plugin);
 		});
 		
-		it("should decorate with a getName function", function () {
-			expect(plugin.getName).toBeInstanceOf(Function);
-			expect(plugin.getName()).toEqual("plugin");
-			expect(plugin.apply).toBeInstanceOf(Function);
+		it("should decorate with a plugins property", function () {
+			expect(plugin.plugins).toBeInstanceOf(Object);
+		});
+		
+		it("should allow for overriding the plugins property name", function () {
+			plugins.add("plugin2", plugin, "plugs");
+			expect(plugin.plugs).toBeInstanceOf(Object);
+		});
+		
+		it("should decorate with a name property that holds the plugin's name", function () {
+			expect(plugin.plugins.name).toEqual("plugin");
 		});
 		
 		it("should decorate with an apply function", function () {
-			var div = document.createElement("div");
-			spyOn(plugins, "apply");
-			plugin.apply(div);
+			var div = document.createElement("div"),
+				applied;
+			spyOn(plugins, "apply").andCallThrough();
+			applied = plugin.plugins.apply(div);
+			
 			expect(plugins.apply.wasCalled).toEqual(true);
 			expect(plugins.apply.mostRecentCall.object).toBe(plugins);
 			expect(plugins.apply.mostRecentCall.args[0]).toBe(div);
+			expect(applied).toBe(div);
 		});
 	});
 });

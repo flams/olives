@@ -61,21 +61,32 @@ function Plugins(Tools, DomUtils) {
 		
 		/**
 		 * Add a plugin
-		 * @param name
-		 * @param plugin
-		 * @returns
+		 * 
+		 * Note that once added, the function adds a "plugins" property to the plugin.
+		 * It's an object that holds a name property, with the registered name of the plugin
+		 * and an apply function, to use on new nodes that the plugin would generate
+		 * 
+		 * @param {String} name the name of the data that the plugin should look for
+		 * @param {Object} plugin the plugin that has the functions to execute
+		 * @param {String} optional override 
+		 * @returns true if plugin successfully added.
 		 */
-		this.add = function add(name, plugin) {
-			var that;
+		this.add = function add(name, plugin, override) {
+			var that = this,
+				propertyName = "plugins";
+			
 			if (typeof name == "string" && typeof plugin == "object" && plugin) {
+				if (typeof override == "string") {
+					propertyName = override;
+				}
+				
 				_plugins[name] = plugin;
-				plugin.getName = function getName () {
-					return name;
-				};
-
-				that = this;
-				plugin.apply = function apply() {
-					that.apply.apply(that, arguments);
+				
+				plugin[propertyName] = {
+						name: name,
+						apply: function apply() {
+							return that.apply.apply(that, arguments);
+						}
 				};
 				return true;
 			} else {
@@ -102,22 +113,6 @@ function Plugins(Tools, DomUtils) {
 		};
 		
 		/**
-		 * Rename a plugin
-		 * @param {String} current the current plugin name
-		 * @param {String} newName the new plugin name
-		 * @returns true if renamed
-		 */
-		this.rename = function rename(current, newName) {
-			var plugin = this.get(current);
-			if (plugin) {
-				if (this.add(newName, plugin)) {
-					return this.del(current);
-				};
-			}
-			return false;
-		};
-		
-		/**
 		 * Apply the plugins to a NodeList
 		 * @param {HTMLElement} dom the dom nodes on which to apply the plugins
 		 * @returns {Boolean} true if the param is a dom node
@@ -135,7 +130,7 @@ function Plugins(Tools, DomUtils) {
 					});
 				});
 				
-				return true;
+				return dom;
 				
 			} else {
 				return false;

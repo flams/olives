@@ -14,7 +14,7 @@
 <span class='line'>  7</span> */</span><span class="WHIT">
 <span class='line'>  8</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">OObject</span><span class="PUNC">(</span><span class="NAME">StateMachine</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Store</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Plugins</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>  9</span> </span><span class="WHIT">	
-<span class='line'> 10</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">OObjectConstructor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 10</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">OObjectConstructor</span><span class="PUNC">(</span><span class="NAME">otherStore</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 11</span> </span><span class="WHIT">		
 <span class='line'> 12</span> 		</span><span class="COMM">/**
 <span class='line'> 13</span> 		 * This function creates the dom of the UI from it's template
@@ -97,7 +97,7 @@
 <span class='line'> 90</span> 		 * It has set/get/del/has/watch/unwatch methods
 <span class='line'> 91</span> 		 * @see Emily's doc for more info on how it works.
 <span class='line'> 92</span> 		 */</span><span class="WHIT">
-<span class='line'> 93</span> </span><span class="WHIT">		</span><span class="NAME">this.model</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Store</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">		</span><span class="NAME">this.model</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">otherStore</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Store</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">otherStore</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Store</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 94</span> </span><span class="WHIT">		
 <span class='line'> 95</span> 		</span><span class="COMM">/**
 <span class='line'> 96</span> 		 * The module that will manage the plugins for this UI

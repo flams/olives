@@ -122,6 +122,71 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 	});
 	
+	describe("ModelPluginItemRenderer", function () {
+		
+		var modelPlugin = null;
+		
+		beforeEach(function () {
+			modelPlugin = new ModelPlugin();
+		});
+		
+		it("should provide an item renderer", function () {
+			expect(modelPlugin.ItemRenderer).toBeInstanceOf(Function);
+		});
+		
+		it("should have the following API", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer();
+			expect(itemRenderer.set).toBeInstanceOf(Function);
+			expect(itemRenderer.get).toBeInstanceOf(Function);
+			expect(itemRenderer.associate).toBeInstanceOf(Function);
+		});
+		
+		it("should set the node to render", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer(),
+				div = document.createElement("div");
+			
+			expect(itemRenderer.set(div)).toEqual(true);
+			expect(itemRenderer.get()).toBe(div);
+		});
+		
+		it("should associate the dom node with the model", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer(),
+				div = document.createElement("div"),
+				associated;
+
+			div.innerHTML = '<p><span>date:</span><span data-model="toText:date"></span></p>' +
+			'<p><span>title:</span><span data-model="toText:title"></span></p>';
+			itemRenderer.set(div);
+			
+			associated = itemRenderer.associate(0, "model");
+			expect(associated).toBeInstanceOf(HTMLElement);
+			expect(associated.nodeName).toEqual("DIV");
+			expect(associated.querySelectorAll("*").length).toEqual(6);
+
+			expect(associated.querySelectorAll("[data-model]")[0].dataset["model.id"]).toEqual('0');
+			expect(associated.querySelectorAll("[data-model]")[1].dataset["model.id"]).toEqual('0');
+			// This won't work : data-model.id can't be queried
+			//expect(associated.querySelectorAll("[data-model.id]").length).toEqual(2);
+		});
+		
+		it("should return a cloned node", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer(),
+				div = document.createElement("div");
+			
+			itemRenderer.set(div);
+			expect(itemRenderer.associate(0, "model").isEqualNode(div)).toEqual(true);
+		});
+		
+		it("should set the item render on init", function () {
+			var div = document.createElement("div"),
+				itemRenderer = new modelPlugin.ItemRenderer(div);
+			
+			expect(itemRenderer.get()).toBe(div);
+		});
+		
+		
+	});
+	
 	describe("ModelPluginToList", function () {
 		var modelPlugin = null,
 			model = null,

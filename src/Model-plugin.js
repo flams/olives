@@ -1,13 +1,13 @@
 define("Olives/Model-plugin", 
 		
-["Store", "Observable", "Tools"],
+["Store", "Observable", "Tools", "Olives/DomUtils"],
 		
 /**
  * @class
  * This plugin links dom nodes to a model
  * @requires Store, Observable
  */
-function ModelPlugin(Store, Observable, Tools) {
+function ModelPlugin(Store, Observable, Tools, DomUtils) {
 	
 	return function ModelPluginConstructor($model) {
 		
@@ -54,82 +54,72 @@ function ModelPlugin(Store, Observable, Tools) {
 		};
 		
 		/**
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * Refactoring ongoing
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
+		 * The item renderer defines a dom node that can be duplicated
+		 * It is made available for debugging purpose, don't use it
+		 * @private
 		 */
+		this.ItemRenderer = function ItemRenderer(item) {
+			
+			var _node = null;
+			
+			/**
+			 * Set the duplicated node
+			 * @private
+			 */
+			this.set = function set(node) {
+				_node = node;
+				return true;
+			};
+			
+			/**
+			 * @private
+			 * @returns the node that is duplicated
+			 */
+			this.get = function get() {
+				return _node;
+			};
+			
+			/**
+			 * Associate the duplicated node to an item in the model
+			 * @param id
+			 * @param pluginName
+			 * @returns the associated node
+			 */
+			this.associate = function associate(id, pluginName, hey) {
+				var newNode = _node.cloneNode(true);
+				var nodes = DomUtils.getNodes(newNode, "[data-" + pluginName + "]");
+
+				
+				Tools.loop(nodes, function (child) {
+						// Emily's Tools.loop returns me 0 on empty NodeList
+						// Must fix this in the function instead of here
+            			child && (child.dataset[pluginName+".id"] = id);
+				});
+				return newNode;
+			};
+			
+			this.set(item);			
+		};
 		
 		/**
-		 * ...
+		 * Expands the inner dom nodes of a given dom node, filling it with model's values
 		 * @param {HTMLElement} node the dom node to apply toList to
 		 */
 		this.toList = function toList(node) {
-			var itemRenderer = node.childNodes[0],
-            	domFragment = document.createDocumentFragment(),
-            	pluginName = this.getName();
+			var domFragment,
+				itemRenderer = new this.ItemRenderer(node.childNodes[0]);
 
-			
-			if (itemRenderer) {
-
-	            _model.loop(function (value, idx) {
-	                    var newNode = itemRenderer.cloneNode(true);
-	                    if (newNode.childNodes) {
-	                    	Tools.loop(newNode.childNodes, function (child) {
-	                    		if (child.dataset[pluginName]) {
-	                    			child.dataset[pluginName+".id"] = idx;
-	                    		}
-	                    	});
-	                    }
-	                    if(newNode.dataset[pluginName]) {
-	                    	newNode.dataset[pluginName+".id"] = idx;
-	                    }
-	                    this.apply(newNode);
-	                    domFragment.appendChild(newNode);
-	            }, this);
-
-               
-	            
-	            node.replaceChild(domFragment, itemRenderer);
+	
+			domFragment = document.createDocumentFragment();
+            _model.loop(function (value, idx) {
+                    domFragment.appendChild(this.plugins.apply(itemRenderer.associate(idx, this.plugins.name)));
+            }, this);
             
-			}
+
+	         node.replaceChild(domFragment, node.childNodes[0]);
             
             _model.watch("added", function (idx, value) {
-                    var newNode = itemRenderer.cloneNode(true);
-                    if (newNode.childNodes) {
-                    	Tools.loop(newNode.childNodes, function (child) {
-                    		if (child.dataset[pluginName]) {
-                    			child.dataset[pluginName+".id"] = idx;
-                    		}
-                    	});
-                    }
-                    if(newNode.dataset[pluginName]) {
-                    	newNode.dataset[pluginName+".id"] = idx;
-                    }
-                    
-                    this.apply(newNode);
-                    
-                    node.insertBefore(newNode, node.childNodes[idx]);
+                node.insertBefore(this.plugins.apply(itemRenderer.associate(idx, this.plugins.name)), node.childNodes[idx]);
             }, this);
             
             _model.watch("deleted", function (idx) {
@@ -138,8 +128,8 @@ function ModelPlugin(Store, Observable, Tools) {
                     node.replaceChild(document.createTextNode(""), node.childNodes[idx]);
             });
 
+
          };
-		
 		
 		/**
 		 * Attach a model's value to a dom node so it also gets updated on value's changes
@@ -154,7 +144,7 @@ function ModelPlugin(Store, Observable, Tools) {
 
 			// In case of an array-like model the id is the index of the model's item to look for.
 			// The .id is added by the toList function
-			var id = node.dataset[this.getName()+".id"],
+			var id = node.dataset[this.plugins.name+".id"],
 			
 			// Else, it is the first element of the following
 			split = name.split("."),
