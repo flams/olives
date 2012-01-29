@@ -154,11 +154,6 @@ require(["Olives/Plugins"], function (Plugins) {
 			expect(plugin.plugins).toBeInstanceOf(Object);
 		});
 		
-		it("should allow for overriding the plugins property name", function () {
-			plugins.add("plugin2", plugin, "plugs");
-			expect(plugin.plugs).toBeInstanceOf(Object);
-		});
-		
 		it("should decorate with a name property that holds the plugin's name", function () {
 			expect(plugin.plugins.name).toEqual("plugin");
 		});

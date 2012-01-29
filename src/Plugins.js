@@ -68,7 +68,6 @@ function Plugins(Tools, DomUtils) {
 		 * 
 		 * @param {String} name the name of the data that the plugin should look for
 		 * @param {Object} plugin the plugin that has the functions to execute
-		 * @param {String} optional override 
 		 * @returns true if plugin successfully added.
 		 */
 		this.add = function add(name, plugin, override) {
@@ -76,10 +75,6 @@ function Plugins(Tools, DomUtils) {
 				propertyName = "plugins";
 			
 			if (typeof name == "string" && typeof plugin == "object" && plugin) {
-				if (typeof override == "string") {
-					propertyName = override;
-				}
-				
 				_plugins[name] = plugin;
 				
 				plugin[propertyName] = {

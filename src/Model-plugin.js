@@ -81,6 +81,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			/**
 			 * Associate the duplicated node to an item in the model
+			 * @private
 			 * @param id
 			 * @param pluginName
 			 * @returns the associated node
