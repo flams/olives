@@ -170,6 +170,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			});
 		};
 		
+		/**
+		 * Set the node's value into the model, the name is the model's property
+		 * @param {HTMLElement} node
+		 * @returns true if the property is added
+		 */
 		this.set = function set(node) {
 			if (node instanceof HTMLElement && node.name) {
 				_model.set(node.name, node.value);
@@ -179,6 +184,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			}
 		};
 		
+		/**
+		 * Prevents the submit and set the model with all form's inputs
+		 * @param {HTMLFormElement} form
+		 * @returns true if valid form
+		 */
 		this.form = function form(form) {
 			if (form && form.nodeName == "FORM") {
 				var that = this;

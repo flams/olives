@@ -72,7 +72,7 @@
 				         '   jar: "../tools/JsTestDriver/coverage-1.3.3d.jar" \n' +
 				         '   module: "com.google.jstestdriver.coverage.CoverageModule"'
 				         ],
-				*/
+			*/	
 				timeout: 90	
 			},
 			browsers: ["/Applications/Firefox.app/Contents/MacOS/Firefox",
