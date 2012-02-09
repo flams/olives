@@ -168,8 +168,27 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			_observable.watch(modelIdx, function (value) {
 					node.innerHTML = Tools.getObjectsProperty(value, prop);
 			});
-			
-			
+		};
+		
+		this.set = function set(node) {
+			if (node instanceof HTMLElement && node.name) {
+				_model.set(node.name, node.value);
+				node.addEventListener("change", function () {
+					_model.set(node.name, node.value);
+				}, true);
+				return true;
+			} else {
+				return false;
+			}
+		};
+		
+		this.form = function form(form) {
+			if (form && form.nodeName == "FORM") {
+				Tools.loop(form.querySelectorAll("[name]"), this.set, this);
+				return true;
+			} else {
+				return false;
+			}
 		};
 	
 		// Inits the model

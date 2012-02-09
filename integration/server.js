@@ -22,17 +22,21 @@ var app = require('http').createServer(function (req, res) {
 	).listen(8000)
   , io = require('socket.io').listen(app)
   , fs = require('fs')
-  , http = require('http');
+  , http = require('http')
+  , qs = require("querystring");
 
 http.globalAgent.maxSockets = Infinity;
 
 io.sockets.on("connection", function (socket) {
 	socket.on("CouchDB", function (data) {
+		
+		var req;
+		
 		data.hostname = "127.0.0.1";
 		data.port = 5984;
 		data.auth = "couchdb:couchdb";
 
-		http.request(data, function (res) {
+		req = http.request(data, function (res) {
 			var body = "";
 			res.on('data', function (chunk) {
 				data.keptAlive && socket.emit(data.__eventId__, ""+chunk);
@@ -41,7 +45,12 @@ io.sockets.on("connection", function (socket) {
 			res.on('end', function () {
 				socket.emit(data.__eventId__, body);
 			});
-		}).end();
+		});
+		
+		if (data.data) {
+			req.write(data.data);
+		}
+		req.end();
 	});
 	
 	socket.on("FileSystem", function (data) {
