@@ -157,7 +157,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			prop = id ? name : split.join("."),
 			
 			// Get the model's value
-			get =  Tools.getObjectsProperty(_model.get(modelIdx), prop);
+			get =  Tools.getNestedProperty(_model.get(modelIdx), prop);
 			
 			// If the value is falsy, the dom shouldn't be touched
 			if (get) {
@@ -166,16 +166,13 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			// Watch for changes
 			_observable.watch(modelIdx, function (value) {
-					node.innerHTML = Tools.getObjectsProperty(value, prop);
+					node.innerHTML = Tools.getNestedProperty(value, prop);
 			});
 		};
 		
 		this.set = function set(node) {
 			if (node instanceof HTMLElement && node.name) {
 				_model.set(node.name, node.value);
-				node.addEventListener("change", function () {
-					_model.set(node.name, node.value);
-				}, true);
 				return true;
 			} else {
 				return false;
@@ -184,7 +181,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		
 		this.form = function form(form) {
 			if (form && form.nodeName == "FORM") {
-				Tools.loop(form.querySelectorAll("[name]"), this.set, this);
+				var that = this;
+				form.addEventListener("submit", function (event) {
+					Tools.loop(form.querySelectorAll("[name]"), that.set, that);
+					event.preventDefault();
+				}, true);
 				return true;
 			} else {
 				return false;

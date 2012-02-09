@@ -343,11 +343,11 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 				'<p><label>Lastname: </label><input type="text" name="lastname" value="wietrich" /></p>' +
 				'<p><label>Age: </label><input type="number" step="1" min="0" max="99" name="age" value="25" /></p>' +
 				'<p><label>Job: </label><input type="text" name="job" value="engineer" /></p>' +
-				'<p><button type="submit" value="ok"></p>';
+				'<p><button type="submit">ok</button></p>';
 			form.dataset["model"] = "form";
 		});
 		
-		it("should have a set function to link input with model", function () {
+		it("should have a set function to set the model from form values", function () {
 			var input = document.createElement("input");
 			input.type = "text"
 			input.name = "firstname";
@@ -358,26 +358,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(model.get("firstname")).toEqual("olivier");
 		});
 		
-		it("should listen to changes on the node", function () {
-			var input = document.createElement("input"),
-				func;
-			input.type = "text"
-			input.name = "firstname";
-			input.value = "olivier";
-			spyOn(input, "addEventListener").andCallThrough();
-			modelPlugin.set(input);
-			
-			expect(input.addEventListener.wasCalled).toEqual(true);
-			expect(input.addEventListener.mostRecentCall.args[0]).toEqual("change");
-			expect(input.addEventListener.mostRecentCall.args[2]).toEqual(true);
-			expect(input.addEventListener.mostRecentCall.args[1]).toBeInstanceOf(Function);
-			func = input.addEventListener.mostRecentCall.args[1];
-			
-			expect(func).toBeInstanceOf(Function);
-			input.value = "olives";
-			func();
-			expect(model.get("firstname")).toEqual("olives");
-		});
+		
 		
 		it("should have a form function", function () {
 			expect(modelPlugin.form).toBeInstanceOf(Function);
@@ -389,13 +370,35 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.form(form)).toEqual(true);
 		});
 		
-		it("should call the set function for each node", function () {
-			spyOn(modelPlugin, "form").andCallThrough();
-			spyOn(modelPlugin, "set").andCallThrough();
-			plugins.apply(form);
+		it("should make form listen to submit", function () {
+			spyOn(form, "addEventListener").andCallThrough();
+			spyOn(modelPlugin, "set");
 			
+			modelPlugin.form(form);
+			
+			expect(form.addEventListener.wasCalled).toEqual(true);
+			expect(form.addEventListener.mostRecentCall.args[0]).toEqual("submit");
+			expect(form.addEventListener.mostRecentCall.args[2]).toEqual(true);
+			
+		});
+		
+		it("should call set on submit and prevent the real submit to avoid the page to be refreshed", function () {
+			var func,
+				event = {
+					preventDefault: jasmine.createSpy()
+				};
+			spyOn(form, "addEventListener").andCallThrough();
+			spyOn(modelPlugin, "set");
+			
+			modelPlugin.form(form);
+			func = form.addEventListener.mostRecentCall.args[1];
+			
+			expect(func).toBeInstanceOf(Function);
+			func(event);
+
 			expect(modelPlugin.set.wasCalled).toEqual(true);
 			expect(modelPlugin.set.callCount).toEqual(4);
+			expect(event.preventDefault.wasCalled).toEqual(true);
 		});
 	});
 
