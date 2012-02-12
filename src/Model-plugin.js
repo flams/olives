@@ -118,12 +118,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
          };
 		
 		/**
-		 * Attach a model's value to a dom node so it also gets updated on value's changes
+		 * Both ways binding between a dom node attributes and the model
 		 * @param {HTMLElement} node the dom node to apply the plugin to
 		 * @param {String} name the name of the property to look for in the model's value
 		 * @returns
 		 */
-		this.toText = function toText(node, name) {
+		this.bind = function bind(node, property, name) {
 			
 			// Name can be unset if the value of a row is plain text
 			name = name || "";
@@ -146,12 +146,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			// If truthy but 0 is a proper value too
 			if (get || get === 0) {
-				node.innerHTML = get;
+				node[property] = get;
 			}
 			
 			// Watch for changes
 			_model.watchValue(modelIdx, function (value) {
-					node.innerHTML = Tools.getNestedProperty(value, prop);
+					node[property] = Tools.getNestedProperty(value, prop);
 			});
 		};
 		
@@ -186,19 +186,6 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				return false;
 			}
 		};
-		
-		this.fromValue = function fromValue(node) {
-			if (node && node instanceof HTMLElement) {
-				this.set(node);
-				node.addEventListener("change", function () {
-					_model.set(node.name, node.value);
-				}, true);
-				return true;
-			} else {
-				return false;
-			}
-		};
-		
 	
 		// Inits the model
 		this.setModel($model);
