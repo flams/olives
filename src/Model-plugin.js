@@ -15,13 +15,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * The model to watch
 		 * @private
 		 */
-		var _model = null,
-		
-		/**
-		 * An observable that apdapts to model's observable
-		 * @private
-		 */
-		_observable = new Observable();
+		var _model = null;
 		
 		/**
 		 * Define the model to watch for
@@ -32,13 +26,6 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			if (model instanceof Store) {
 				// Set the model
 				_model = model;
-				// Also watch for value modification
-				_model.watch("updated", function (name, value) {
-					_observable.notify(name, value);
-				});
-				_model.watch("added", function (name, value) {
-					_observable.notify(name, value);
-				});
 				return true;
 			} else {
 				return false;
@@ -88,13 +75,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 */
 			this.associate = function associate(id, pluginName, hey) {
 				var newNode = _node.cloneNode(true);
-				var nodes = DomUtils.getNodes(newNode, "[data-" + pluginName + "]");
+				var nodes = DomUtils.getNodes(newNode);
 
 				
-				Tools.loop(nodes, function (child) {
-						// Emily's Tools.loop returns me 0 on empty NodeList
-						// Must fix this in the function instead of here
-            			child && (child.dataset[pluginName+".id"] = id);
+				DomUtils.loopNodes(nodes, function (child) {
+            			child.dataset[pluginName+"_id"] = id;
 				});
 				return newNode;
 			};
@@ -144,8 +129,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			name = name || "";
 
 			// In case of an array-like model the id is the index of the model's item to look for.
-			// The .id is added by the toList function
-			var id = node.dataset[this.plugins.name+".id"],
+			// The _id is added by the toList function
+			var id = node.dataset[this.plugins.name+"_id"],
 			
 			// Else, it is the first element of the following
 			split = name.split("."),
@@ -159,13 +144,13 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			// Get the model's value
 			get =  Tools.getNestedProperty(_model.get(modelIdx), prop);
 			
-			// If the value is falsy, the dom shouldn't be touched
-			if (get) {
+			// If truthy but 0 is a proper value too
+			if (get || get === 0) {
 				node.innerHTML = get;
 			}
 			
 			// Watch for changes
-			_observable.watch(modelIdx, function (value) {
+			_model.watchValue(modelIdx, function (value) {
 					node.innerHTML = Tools.getNestedProperty(value, prop);
 			});
 		};
@@ -193,7 +178,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			if (form && form.nodeName == "FORM") {
 				var that = this;
 				form.addEventListener("submit", function (event) {
-					Tools.loop(form.querySelectorAll("[name]"), that.set, that);
+					DomUtils.loopNodes(form.querySelectorAll("[name]"), that.set, that);
 					event.preventDefault();
 				}, true);
 				return true;
@@ -201,6 +186,19 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				return false;
 			}
 		};
+		
+		this.fromValue = function fromValue(node) {
+			if (node && node instanceof HTMLElement) {
+				this.set(node);
+				node.addEventListener("change", function () {
+					_model.set(node.name, node.value);
+				}, true);
+				return true;
+			} else {
+				return false;
+			}
+		};
+		
 	
 		// Inits the model
 		this.setModel($model);

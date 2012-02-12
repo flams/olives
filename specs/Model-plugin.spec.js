@@ -163,10 +163,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(associated.nodeName).toEqual("DIV");
 			expect(associated.querySelectorAll("*").length).toEqual(6);
 
-			expect(associated.querySelectorAll("[data-model]")[0].dataset["model.id"]).toEqual('0');
-			expect(associated.querySelectorAll("[data-model]")[1].dataset["model.id"]).toEqual('0');
-			// This won't work : data-model.id can't be queried
-			//expect(associated.querySelectorAll("[data-model.id]").length).toEqual(2);
+			expect(associated.querySelectorAll("[data-model]")[0].dataset["model_id"]).toEqual('0');
+			expect(associated.querySelectorAll("[data-model]")[1].dataset["model_id"]).toEqual('0');
+			expect(associated.querySelectorAll("[data-model_id]").length).toEqual(6);
 		});
 		
 		it("should return a cloned node", function () {
@@ -174,7 +173,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 				div = document.createElement("div");
 			
 			itemRenderer.set(div);
-			expect(itemRenderer.associate(0, "model").isEqualNode(div)).toEqual(true);
+			expect(itemRenderer.associate(0, "model")).not.toBe(div);
 		});
 		
 		it("should set the item render on init", function () {
@@ -208,9 +207,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		it("should expand the node inside", function () {
 			plugins.apply(dom);
 			expect(dom.querySelectorAll("li").length).toEqual(3);
-			expect(dom.querySelectorAll("li")[0].dataset["model.id"]).toEqual("0");
-			expect(dom.querySelectorAll("li")[1].dataset["model.id"]).toEqual("1");
-			expect(dom.querySelectorAll("li")[2].dataset["model.id"]).toEqual("2");
+			expect(dom.querySelectorAll("li")[0].dataset["model_id"]).toEqual("0");
+			expect(dom.querySelectorAll("li")[1].dataset["model_id"]).toEqual("1");
+			expect(dom.querySelectorAll("li")[2].dataset["model_id"]).toEqual("2");
 		});
 		
 		it("should'nt do anything if no inner node declared", function () {
@@ -399,6 +398,50 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.set.wasCalled).toEqual(true);
 			expect(modelPlugin.set.callCount).toEqual(4);
 			expect(event.preventDefault.wasCalled).toEqual(true);
+		});
+	});
+	
+	describe("ModelFromValue", function () {
+		
+		var modelPlugin = null,
+			model = null,
+			input = null;
+		
+		beforeEach(function () {
+			model = new Store();
+			modelPlugin = new ModelPlugin(model);
+			input = document.createElement("input");
+			input.name = "input";
+			input.value = "Olives is cool!";
+		});
+		
+		it("should have a fromValue function", function () {
+			expect(modelPlugin.fromValue).toBeInstanceOf(Function);
+			expect(modelPlugin.fromValue()).toEqual(false);
+			expect(modelPlugin.fromValue(input)).toEqual(true);
+		});
+		
+		it("should to call set", function () {
+			spyOn(modelPlugin, "set");
+			modelPlugin.fromValue(input);
+			expect(modelPlugin.set.wasCalled).toEqual(true);
+			expect(modelPlugin.set.mostRecentCall.args[0]).toBe(input);
+		});
+		
+		it("should add an eventlistener on change", function () {
+			var func;
+			spyOn(input, "addEventListener");
+			modelPlugin.fromValue(input);
+			expect(input.addEventListener.wasCalled).toEqual(true);
+			expect(input.addEventListener.mostRecentCall.args[0]).toEqual("change");
+			func = input.addEventListener.mostRecentCall.args[1];
+			expect(input.addEventListener.mostRecentCall.args[2]).toEqual(true);
+			expect(func).toBeInstanceOf(Function);
+			input.value = "Olives is really cool!";
+			func();
+			expect(model.get("input")).toEqual("Olives is really cool!");
+			
+
 		});
 	});
 

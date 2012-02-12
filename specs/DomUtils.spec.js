@@ -63,6 +63,56 @@ require(["Olives/DomUtils"], function (DomUtils) {
 		
 	});
 	
+	describe("DomUtilsLoopNodes", function () {
+		
+		var ul = document.createElement("ul"),
+			li1 = document.createElement("li"),
+			li2 = document.createElement("li");
+			li3 = document.createElement("li");
+		
+		ul.appendChild(li1);
+		ul.appendChild(li2);
+		ul.appendChild(li3);
+		
+		it("should be a function", function () {
+			expect(DomUtils.loopNodes).toBeInstanceOf(Function);
+		});
+		
+		it("should only loop through nodeList", function () {
+			var nodeList = DomUtils.getNodes(ul, "li"),
+				spy = jasmine.createSpy();
+			
+			expect(DomUtils.loopNodes([], spy)).toEqual(false);
+			expect(DomUtils.loopNodes({}, spy)).toEqual(false);
+			expect(DomUtils.loopNodes()).toEqual(false);
+			expect(DomUtils.loopNodes(nodeList)).toEqual(false);
+			expect(DomUtils.loopNodes(nodeList, spy)).toEqual(true);
+		});
+		
+		it("should loop through nodeList", function () {
+			var nodeList = DomUtils.getNodes(ul, "li"),
+				spy = jasmine.createSpy();
+		
+			DomUtils.loopNodes(nodeList, spy);
+			
+			expect(spy.callCount).toEqual(3);
+			expect(spy.calls[0].args[0]).toEqual(li1);
+			expect(spy.calls[1].args[0]).toEqual(li2);
+			expect(spy.calls[2].args[0]).toEqual(li3);
+		});
+		
+		it("should loop through nodeList in scope", function () {
+			var nodeList = DomUtils.getNodes(ul, "li"),
+				spy = jasmine.createSpy(),
+				thisObj = {};
+		
+			DomUtils.loopNodes(nodeList, spy, thisObj);
+			
+			expect(spy.mostRecentCall.object).toBe(thisObj);
+		});
+		
+	});
+	
 	
 	
 });
