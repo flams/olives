@@ -79,7 +79,47 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			model.set("content2", "sup!");
 			expect(dom.innerHTML).toEqual("sup!");
 		});
+		
+		it("should also work with properties", function () {
+			var dom = document.createElement("input");
+			dom.dataset["model"] = "bind:checked,bool";
+			model.reset({bool:true});
+			plugins.apply(dom);
+			expect(dom.checked).toEqual(true);
+			model.set("bool", false);
+			expect(dom.checked).toEqual(false);
+		});
 
+	});
+	
+	describe("ModelPluginBindTheOtherWay", function () {
+		
+		var plugins = null,
+			model = null,
+			dom = null;
+		
+		beforeEach(function () {
+			dom = document.createElement("input");
+			dom.dataset["model"] = "bind:checked,bool";
+			model = new Store({bool:false});
+			plugins = new Plugins;
+			plugins.add("model", new ModelPlugin(model));
+		});
+		
+		it("should update the model on dom change", function () {
+			var func;
+			spyOn(dom, "addEventListener");
+			plugins.apply(dom);
+			expect(dom.addEventListener.wasCalled);
+			expect(dom.addEventListener.mostRecentCall.args[0]).toEqual("change");
+			expect(dom.addEventListener.mostRecentCall.args[2]).toBe(true);
+			func = dom.addEventListener.mostRecentCall.args[1];
+			expect(func).toBeInstanceOf(Function);
+			dom.checked = true;
+			func();
+			expect(model.get("bool")).toEqual(true);
+		});
+		
 	});
 
 
@@ -122,6 +162,47 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(dom.querySelectorAll("dd")[1].innerHTML).toEqual("-0987654321");
 		});
 
+	});
+	
+	describe("ModelPluginBindTheOtherWayEnhanced", function () {
+
+		var plugins = null,
+		model = null,
+		dom = null;
+
+		beforeEach(function () {
+			dom = document.createElement("ul");
+			dom.dataset["model"] = "toList";
+			dom.innerHTML = "<li><input type='checkbox' data-model='bind:checked,optin' />" +
+					"		<input type='text' data-model='bind:value,name' /></li>";
+			
+			model = new Store([{
+					optin: false,
+					name: "Emily"
+				}, {
+					optin: false,
+					name: "Olives"
+				}]);	
+			
+			plugins = new Plugins;
+			plugins.add("model", new ModelPlugin(model));
+		});
+
+		it("should bind from dom to model", function () {
+			var checkbox,
+				event = document.createEvent("UIEvent");
+			plugins.apply(dom);
+
+			event.initEvent("change", true, true, window, 0);
+			
+			checkbox = dom.querySelector("input[type='checkbox']");
+			checkbox.checked = true;
+			
+			checkbox.dispatchEvent(event);
+			
+			expect(model.get(0).optin).toEqual(true);
+		});
+		
 	});
 
 	describe("ModelPluginItemRenderer", function () {
@@ -178,7 +259,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.associate(0, "model")).not.toBe(div);
 		});
 
-		it("should set the item render on init", function () {
+		it("should set the item renderer on init", function () {
 			var div = document.createElement("div"),
 			itemRenderer = new modelPlugin.ItemRenderer(div);
 

@@ -131,7 +131,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			// In case of an array-like model the id is the index of the model's item to look for.
 			// The _id is added by the toList function
 			var id = node.dataset[this.plugins.name+"_id"],
-			
+		
 			// Else, it is the first element of the following
 			split = name.split("."),
 			
@@ -148,6 +148,16 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			if (get || get === 0) {
 				node[property] = get;
 			}
+
+			node.addEventListener("change", function (event) {
+				if (prop) {
+					var temp = _model.get(modelIdx);
+					Tools.setNestedProperty(temp, name, node[property]);
+					_model.set(modelIdx, temp);	
+				} else {
+					_model.set(modelIdx, node[property]);
+				}
+			}, true);
 			
 			// Watch for changes
 			_model.watchValue(modelIdx, function (value) {
