@@ -93,7 +93,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 */
 		this.toList = function toList(node) {
 			var domFragment,
-				itemRenderer = new this.ItemRenderer(node.childNodes[0]);
+				_rootNode = node.querySelector("*"),
+				itemRenderer = new this.ItemRenderer(_rootNode);
 
 	
 			domFragment = document.createDocumentFragment();
@@ -102,7 +103,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
             }, this);
             
 
-	         node.replaceChild(domFragment, node.childNodes[0]);
+	         node.replaceChild(domFragment, _rootNode);
             
             _model.watch("added", function (idx, value) {
                 node.insertBefore(this.plugins.apply(itemRenderer.associate(idx, this.plugins.name)), node.childNodes[idx]);

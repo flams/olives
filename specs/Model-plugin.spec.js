@@ -329,6 +329,15 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			model.alter("pop");
 			expect(dom.querySelectorAll("li")[2]).toBeUndefined();
 		});
+		
+		it("should not fail if the ItemRenderer is given a DOM that starts with a textnode", function () {
+			dom.innerHTML = " \n \t\t <li></li>";
+			spyOn(modelPlugin, "ItemRenderer").andCallThrough();
+			expect(function () {
+				plugins.apply(dom);
+			}).not.toThrow();
+			expect(dom.querySelectorAll("li").length).toEqual(3);
+		});
 	});
 
 	describe("ModelPluginToListEnhanced", function () {
