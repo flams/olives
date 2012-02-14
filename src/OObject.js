@@ -1,11 +1,11 @@
-define("Olives/OObject", ["StateMachine", "Store", "Olives/Plugins"],
+define("Olives/OObject", ["StateMachine", "Store", "Olives/Plugins", "Olives/DomUtils"],
 /** 
 * @class 
 * OObject is an abstract class that any UI can inherit from.
 * It should provide code that is easy to reuse
 * @requires StateMachine
 */
-function OObject(StateMachine, Store, Plugins) {
+function OObject(StateMachine, Store, Plugins, DomUtils) {
 	
 	return function OObjectConstructor(otherStore) {
 		
@@ -20,9 +20,6 @@ function OObject(StateMachine, Store, Plugins) {
 			
 			// If the template is set
 			if (UI.template) {
-				
-				// Here's the dom node that wraps the UI
-				UI.dom = _rootNode;
 				// In this function, the thisObject is the UI's prototype
 				// UI is the UI that has OObject as prototype
 				if (typeof UI.template == "string") {
@@ -35,7 +32,7 @@ function OObject(StateMachine, Store, Plugins) {
 				
 				// Let's now apply the plugins
 				UI.plugins.apply(UI.dom);
-				
+
 				// This function is empty and can be overridden by the user.
 				// It tells him that the UI is rendered
 				UI.onRender && UI.onRender();
@@ -52,8 +49,19 @@ function OObject(StateMachine, Store, Plugins) {
 		 */
 		place = function place(args) {
 			var UI = args.UI;
-			// Append child appends but can also detach the dom from its previous position
-			args.params && args.params.appendChild(UI.dom);
+
+			// The following was made to avoid adding unwanted nodes in the dom.
+			// Adding a parent div could have eased it but it slows down the interface
+			// (adding nodes is never a good thing) and it's unexpected by the developer.
+			if (args.params) {
+				// Get's all childNodes to append them to the new node
+				DomUtils.loopNodes(UI.dom.childNodes, function (node) {
+					args.params.appendChild(node);
+				});
+				// The new node is saved
+				UI.dom = args.params;
+			}
+			
 			UI.onPlace && UI.onPlace();
 		},
 		
@@ -65,12 +73,6 @@ function OObject(StateMachine, Store, Plugins) {
 			render(args);
 			place(args);
 		},
-
-		/**
-		 * This is the UI's wrapper.
-		 * @private HTMLElement
-		 */
-		_rootNode = document.createElement("div"),
 			
 		/**
 		 * The UI's stateMachine.
@@ -107,7 +109,7 @@ function OObject(StateMachine, Store, Plugins) {
 		/**
 		 * This will hold the dom nodes built from the template.
 		 */
-		this.dom = null;
+		this.dom = document.createElement("div");
 		
 		/**
 		 * This function can be overridden. 

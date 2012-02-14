@@ -12,7 +12,7 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 			ui = new UI;
 			
 			expect(ui.template).toEqual(null);
-			expect(ui.dom).toEqual(null);
+			expect(ui.dom.isEqualNode(document.createElement("div"))).toEqual(true);
 			expect(ui.onRender).toBeInstanceOf(Function);
 			expect(ui.action).toBeInstanceOf(Function);
 			expect(ui.onPlace).toBeInstanceOf(Function);
@@ -202,6 +202,14 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 			ui.action("render");
 			expect(place2.querySelector("p").innerHTML).toEqual(text);
 			
+		});
+		
+		it("shouldn't add unwated nodes", function () {
+			var place = document.createElement("div");
+			
+			ui.template = document.createElement("p");
+			ui.action("place", place);
+			expect(place.querySelectorAll("*").length).toEqual(1);
 		});
 	});
 	
