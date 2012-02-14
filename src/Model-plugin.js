@@ -78,7 +78,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				var nodes = DomUtils.getNodes(newNode);
 
 				
-				DomUtils.loopNodes(nodes, function (child) {
+				Tools.toArray(nodes).forEach(function (child) {
             			child.dataset[pluginName+"_id"] = id;
 				});
 				return newNode;
@@ -189,7 +189,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			if (form && form.nodeName == "FORM") {
 				var that = this;
 				form.addEventListener("submit", function (event) {
-					DomUtils.loopNodes(form.querySelectorAll("[name]"), that.set, that);
+					Tools.toArray(form.querySelectorAll("[name]")).forEach(that.set, that);
 					event.preventDefault();
 				}, true);
 				return true;

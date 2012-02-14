@@ -1,11 +1,11 @@
-define("Olives/OObject", ["StateMachine", "Store", "Olives/Plugins", "Olives/DomUtils"],
+define("Olives/OObject", ["StateMachine", "Store", "Olives/Plugins", "Olives/DomUtils", "Tools"],
 /** 
 * @class 
 * OObject is an abstract class that any UI can inherit from.
 * It should provide code that is easy to reuse
 * @requires StateMachine
 */
-function OObject(StateMachine, Store, Plugins, DomUtils) {
+function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 	
 	return function OObjectConstructor(otherStore) {
 		
@@ -55,7 +55,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils) {
 			// (adding nodes is never a good thing) and it's unexpected by the developer.
 			if (args.params) {
 				// Get's all childNodes to append them to the new node
-				DomUtils.loopNodes(UI.dom.childNodes, function (node) {
+				Tools.toArray(UI.dom.childNodes).forEach(function (node) {
 					args.params.appendChild(node);
 				});
 				// The new node is saved
