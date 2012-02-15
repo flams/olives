@@ -89,9 +89,9 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		
 		/**
 		 * Expands the inner dom nodes of a given dom node, filling it with model's values
-		 * @param {HTMLElement} node the dom node to apply toList to
+		 * @param {HTMLElement} node the dom node to apply foreach to
 		 */
-		this.toList = function toList(node) {
+		this.foreach = function foreach(node) {
 			var domFragment,
 				_rootNode = node.querySelector("*"),
 				itemRenderer = new this.ItemRenderer(_rootNode);
@@ -128,7 +128,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			name = name || "";
 
 			// In case of an array-like model the id is the index of the model's item to look for.
-			// The _id is added by the toList function
+			// The _id is added by the foreach function
 			var id = node.dataset[this.plugins.name+"_id"],
 		
 			// Else, it is the first element of the following

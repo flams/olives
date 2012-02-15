@@ -10,7 +10,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			var modelPlugin = new ModelPlugin();
 
 			expect(modelPlugin.bind).toBeInstanceOf(Function);
-			expect(modelPlugin.toList).toBeInstanceOf(Function);
+			expect(modelPlugin.foreach).toBeInstanceOf(Function);
 			expect(modelPlugin.setModel).toBeInstanceOf(Function);
 			expect(modelPlugin.getModel).toBeInstanceOf(Function);
 			expect(modelPlugin.form).toBeInstanceOf(Function);
@@ -172,7 +172,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		beforeEach(function () {
 			dom = document.createElement("ul");
-			dom.dataset["model"] = "toList";
+			dom.dataset["model"] = "foreach";
 			dom.innerHTML = "<li><input type='checkbox' data-model='bind:checked,optin' />" +
 					"		<input type='text' data-model='bind:value,name' /></li>";
 			
@@ -278,7 +278,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		beforeEach(function () {
 			dom = document.createElement("ul");
 
-			dom.setAttribute("data-model", "toList"); 
+			dom.setAttribute("data-model", "foreach"); 
 			dom.innerHTML = '<li data-model="bind:innerHTML"></li>';
 
 			model = new Store(["Olives", "is", "fun"]);
@@ -350,7 +350,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		beforeEach(function () {
 			dom = document.createElement("ul");
-			dom.dataset["model"] = "toList";
+			dom.dataset["model"] = "foreach";
 
 			dataSet = [{value : {
 				title: "Olives is cool",
@@ -381,7 +381,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			dom.innerHTML = '<li><em data-model="bind:innerHTML,value.date"></em><strong data-model="bind:innerHTML,value.title"></strong>' +
 			'<span data-model="bind:innerHTML,value.body"></span></li>';
 
-			modelPlugin.toList(dom);
+			modelPlugin.foreach(dom);
 			expect(dom.querySelectorAll("li").length).toEqual(3);
 			expect(dom.querySelectorAll("em")[0].innerHTML).toEqual(dataSet[0].value.date);
 			expect(dom.querySelectorAll("strong")[0].innerHTML).toEqual(dataSet[0].value.title);
@@ -400,7 +400,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			dom.innerHTML = '<li><em data-model="bind:innerHTML,value.date"></em><strong data-model="bind:innerHTML,value.title"></strong>' +
 			'<span data-model="bind:innerHTML,value.body"></span></li>';
 
-			modelPlugin.toList(dom);
+			modelPlugin.foreach(dom);
 
 			model.set(1, {
 				value: {
