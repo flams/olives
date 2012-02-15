@@ -17,6 +17,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 */
 		var _model = null;
 		
+		/**
+		 * The observers handlers
+		 * for debugging only
+		 * @private
+		 */
 		this.observers = {};
 		
 		/**
@@ -36,6 +41,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		
 		/**
 		 * Get the store that is watched for
+		 * for debugging only
+		 * @private
 		 * @returns the Store
 		 */
 		this.getModel = function getModel() {
