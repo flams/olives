@@ -10,6 +10,7 @@ require(["Olives/Plugins"], function (Plugins) {
 			var plugins = new Plugins();
 			
 			expect(plugins.add).toBeInstanceOf(Function);
+			expect(plugins.addAll).toBeInstanceOf(Function);
 			expect(plugins.get).toBeInstanceOf(Function);
 			expect(plugins.del).toBeInstanceOf(Function);
 			expect(plugins.apply).toBeInstanceOf(Function);
@@ -42,6 +43,25 @@ require(["Olives/Plugins"], function (Plugins) {
 			expect(plugins.del("test")).toEqual(true);
 			expect(plugins.get("test")).toBeUndefined();
 			expect(plugins.del("test")).toEqual(true);
+		});
+		
+		it("should allow for adding multiple plugins at once", function () {
+			var plugin1 = {},
+				plugin2 = {};
+			
+			spyOn(plugins, "add").andCallThrough();
+			
+			expect(plugins.addAll({
+				"plugin1": plugin1,
+				"plugin2": plugin2
+			})).toEqual(true);
+			
+			
+			expect(plugins.add.wasCalled).toEqual(true);
+			expect(plugins.add.callCount).toEqual(2);
+
+			expect(plugins.get("plugin1")).toBe(plugin1);
+			expect(plugins.get("plugin2")).toBe(plugin2);
 		});
 		
 	});

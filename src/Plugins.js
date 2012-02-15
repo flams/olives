@@ -70,7 +70,7 @@ function Plugins(Tools, DomUtils) {
 		 * @param {Object} plugin the plugin that has the functions to execute
 		 * @returns true if plugin successfully added.
 		 */
-		this.add = function add(name, plugin, override) {
+		this.add = function add(name, plugin) {
 			var that = this,
 				propertyName = "plugins";
 			
@@ -87,6 +87,17 @@ function Plugins(Tools, DomUtils) {
 			} else {
 				return false;
 			}
+		};
+		
+		/**
+		 * Add multiple plugins at once
+		 * @param {Object} list key is the plugin name and value is the plugin
+		 * @returns true if correct param
+		 */
+		this.addAll = function addAll(list) {
+			return Tools.loop(list, function (plugin, name) {
+				this.add(name, plugin); 
+			}, this);
 		};
 		
 		/**
