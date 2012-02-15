@@ -17,6 +17,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 */
 		var _model = null;
 		
+		this.observers = {};
+		
 		/**
 		 * Define the model to watch for
 		 * @param {Store} model the model to watch for changes
@@ -111,7 +113,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
             
             _model.watch("deleted", function (idx) {
                 node.removeChild(node.childNodes[idx]);
-            });
+                this.observers[idx].forEach(function (handler) {
+                	_model.unwatchValue(handler);
+                }, this);
+                delete this.observers[idx];
+            },this);
          };
 		
 		/**
@@ -157,9 +163,10 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			}, true);
 			
 			// Watch for changes
-			_model.watchValue(modelIdx, function (value) {
-					node[property] = Tools.getNestedProperty(value, prop);
-			});
+			this.observers[modelIdx] = this.observers[modelIdx] || [];
+			this.observers[modelIdx].push(_model.watchValue(modelIdx, function (value) {
+				node[property] = Tools.getNestedProperty(value, prop);
+			}));
 		};
 		
 		/**

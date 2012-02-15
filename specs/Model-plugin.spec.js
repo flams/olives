@@ -14,6 +14,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.setModel).toBeInstanceOf(Function);
 			expect(modelPlugin.getModel).toBeInstanceOf(Function);
 			expect(modelPlugin.form).toBeInstanceOf(Function);
+			expect(modelPlugin.observers).toBeInstanceOf(Object);
 		});
 
 	});
@@ -49,7 +50,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		var plugins = null,
 		model = null,
-		dom = null;
+		dom = null,
+		modelPlugin = null;
 
 		beforeEach(function () {
 			dom = document.createElement("p");
@@ -57,7 +59,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			dom.dataset["model"] = "bind:innerHTML,content";
 			model =  new Store({content: "Olives is fun!"});
 			plugins = new Plugins;
-			plugins.add("model", new ModelPlugin(model));
+			modelPlugin =  new ModelPlugin(model);
+			plugins.add("model", modelPlugin);
 		});
 
 		it("should link the model and the dom node with bind", function () {
@@ -65,6 +68,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(dom.innerHTML).toEqual("Olives is fun!");
 			model.set("content", "Olives is cool!");
 			expect(dom.innerHTML).toEqual("Olives is cool!");
+			expect(modelPlugin.observers["content"]).toBeInstanceOf(Array);
+			expect(model.getValueObservable().hasObserver(modelPlugin.observers["content"][0])).toEqual(true);
 		});
 
 		it("should not touch the dom if the value isn't set", function () {
@@ -329,6 +334,16 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			model.alter("pop");
 			expect(dom.querySelectorAll("li")[2]).toBeUndefined();
 		});
+		
+		it("should remove the observers of the removed item", function () {
+			var handler;
+			plugins.apply(dom);
+			handler = modelPlugin.observers[2][0];
+			model.alter("pop");
+			expect(model.getValueObservable().hasObserver(handler)).toEqual(false);
+			expect(modelPlugin.observers[2]).toBeUndefined();
+		});
+		
 		
 		it("should not fail if the ItemRenderer is given a DOM that starts with a textnode", function () {
 			dom.innerHTML = " \n \t\t <li></li>";
