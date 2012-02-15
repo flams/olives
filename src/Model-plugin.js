@@ -99,7 +99,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 	
 			domFragment = document.createDocumentFragment();
             _model.loop(function (value, idx) {
-                    domFragment.appendChild(this.plugins.apply(itemRenderer.associate(idx, this.plugins.name)));
+                domFragment.appendChild(this.plugins.apply(itemRenderer.associate(idx, this.plugins.name)));
             }, this);
             
 
@@ -110,12 +110,10 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
             }, this);
             
             _model.watch("deleted", function (idx) {
-                    // The document.childNodes indexes need to be preserved,
-                    // so I replace the nodes with empty ones.
-                    node.replaceChild(document.createTextNode(""), node.childNodes[idx]);
+                // The document.childNodes indexes need to be preserved,
+                // so I replace the nodes with empty ones.
+                node.replaceChild(document.createTextNode(""), node.childNodes[idx]);
             });
-
-
          };
 		
 		/**

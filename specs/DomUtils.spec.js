@@ -22,13 +22,12 @@ require(["Olives/DomUtils"], function (DomUtils) {
 			ul.appendChild(document.createElement("li"));
 			ul.appendChild(document.createElement("li"));
 			
-			nodes = DomUtils.getNodes(dom);
-			expect(nodes.length).toEqual(5);
-			expect(nodes[0]).toBeInstanceOf(HTMLDivElement);
-			expect(nodes[1]).toBeInstanceOf(HTMLParagraphElement);
-			expect(nodes[2]).toBeInstanceOf(HTMLUListElement);
+			nodes = DomUtils.getNodes(ul);
+			expect(nodes.length).toEqual(4);
+			expect(nodes[0]).toBeInstanceOf(HTMLParagraphElement);
+			expect(nodes[1]).toBeInstanceOf(HTMLUListElement);
+			expect(nodes[2]).toBeInstanceOf(HTMLLIElement);
 			expect(nodes[3]).toBeInstanceOf(HTMLLIElement);
-			expect(nodes[4]).toBeInstanceOf(HTMLLIElement);
 		});
 		
 		it("should allow for specifying a query string", function () {
