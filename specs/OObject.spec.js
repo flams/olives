@@ -16,6 +16,7 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 			expect(ui.onRender).toBeInstanceOf(Function);
 			expect(ui.action).toBeInstanceOf(Function);
 			expect(ui.onPlace).toBeInstanceOf(Function);
+			expect(ui.alive).toBeInstanceOf(Function);
 		});
 		
 		it("should have a plugins property that is a Plugins aggragator", function () {
@@ -48,6 +49,49 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 			expect(oObject.model).toBeInstanceOf(Store);
 		});
 
+	});
+	
+	describe("OObjectSetTemplateFromDom", function () {
+		
+		var oObject = null,
+			dom = document.createElement("div");
+		
+		beforeEach(function () {
+			oObject = new OObject;
+			dom.innerHTML = "<p><span>Olives</span></p>";
+		});
+		
+		it("should set template from the dom and remove the pattern", function () {
+			expect(oObject.setTemplateFromDom()).toEqual(false);
+			expect(oObject.setTemplateFromDom({})).toEqual(false);
+			expect(oObject.setTemplateFromDom(dom)).toEqual(true);
+			expect(oObject.template).toEqual("<p><span>Olives</span></p>");
+			expect(dom.innerHTML).toEqual("");
+		});
+		
+	});
+	
+	describe("OObjectAlive", function () {
+		
+		var oObject = null,
+		dom = document.createElement("div");
+	
+		beforeEach(function () {
+			oObject = new OObject;
+			dom.innerHTML = "<p><span>Olives</span></p>";
+		});
+		
+		it("should set template from the dom and remove the pattern", function () {
+			spyOn(oObject, "setTemplateFromDom").andCallThrough();
+			spyOn(oObject, "action").andCallThrough();
+			oObject.alive(dom);
+			expect(oObject.setTemplateFromDom.wasCalled).toEqual(true);
+			expect(oObject.setTemplateFromDom.mostRecentCall.args[0]).toEqual(dom);
+			expect(oObject.action.wasCalled).toEqual(true);
+			expect(oObject.action.mostRecentCall.args[0]).toEqual("place");
+			expect(oObject.action.mostRecentCall.args[1]).toBe(dom);
+		});
+		
 	});
 	
 	describe("OObjectTemplating", function () {

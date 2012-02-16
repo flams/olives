@@ -507,4 +507,67 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(event.preventDefault.wasCalled).toEqual(true);
 		});
 	});
+	
+	describe("ModelPluginPlugins", function () {
+		
+		var modelPlugin = null,
+			model = null,
+			newBindings = null,
+			dom = null;
+		
+		beforeEach(function () {
+			model = new Store({"property": false});
+			newBindings = {
+				toggleClass: jasmine.createSpy()
+			};
+			modelPlugin = new ModelPlugin(model);
+			modelPlugin.plugins = {}; modelPlugin.plugins.name = "model";
+			dom = document.createElement("div");
+		});
+		
+		it("should have the following methods", function () {
+			expect(modelPlugin.addBindings).toBeInstanceOf(Function);
+			expect(modelPlugin.getBinding).toBeInstanceOf(Function);
+			expect(modelPlugin.addBinding).toBeInstanceOf(Function);
+		});
+		
+		it("should add a new binding", function () {
+			expect(modelPlugin.addBinding("")).toEqual(false);
+			expect(modelPlugin.addBinding("", {})).toEqual(false);
+			expect(modelPlugin.addBinding("", function () {})).toEqual(false);
+			expect(modelPlugin.addBinding("toggleClass", newBindings.toggleClass)).toEqual(true);
+			expect(modelPlugin.getBinding("toggleClass")).toBe(newBindings.toggleClass);
+		});
+		
+		it("should add multiple bindings at once", function () {
+			spyOn(modelPlugin, "addBinding").andCallThrough();
+			expect(modelPlugin.addBindings(newBindings)).toEqual(true);
+			expect(modelPlugin.addBinding.wasCalled).toEqual(true);
+			expect(modelPlugin.addBinding.mostRecentCall.args[0]).toEqual("toggleClass");
+			expect(modelPlugin.addBinding.mostRecentCall.args[1]).toBe(newBindings.toggleClass);
+		});
+		
+		it("should execute new bindings", function () {
+			modelPlugin.addBindings(newBindings);
+			modelPlugin.bind(dom, "toggleClass","property");
+			expect(newBindings.toggleClass.mostRecentCall.args[0]).toEqual(false);
+			model.set("property", true);
+			expect(newBindings.toggleClass.mostRecentCall.args[0]).toEqual(true);
+			expect(newBindings.toggleClass.mostRecentCall.object).toBe(dom);
+		});
+		
+		it("should not double way bind the plugins", function () {
+			modelPlugin.addBindings(newBindings);
+			spyOn(dom, "addEventListener");
+			modelPlugin.bind(dom, "toggleClass", "proprietary");
+			expect(dom.addEventListener.wasCalled).toEqual(false);
+		});
+		
+		it("should add bindings at ModelPlugin init", function () {
+			var modelPlugin = new ModelPlugin(model, newBindings);
+			
+			expect(modelPlugin.getBinding("toggleClass")).toBe(newBindings.toggleClass);
+		});
+		
+	});
 });

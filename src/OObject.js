@@ -107,6 +107,21 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		this.template = null;
 		
 		/**
+		 * Takes a dom node's innerHTML to set up template and emptie the dom's innerHTML
+		 * @param {HTMLElement} dom the dom node to take the template from
+		 * @returns true if dom is an HTMLElement
+		 */
+		this.setTemplateFromDom = function setTemplateFromDom(dom) {
+			if (dom instanceof HTMLElement) {
+				this.template = dom.innerHTML;
+				dom.innerHTML = "";
+				return true;
+			} else {
+				return false;
+			}
+		};
+		
+		/**
 		 * This will hold the dom nodes built from the template.
 		 */
 		this.dom = document.createElement("div");
@@ -136,6 +151,18 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 */
 		this.onPlace = function onPlace() {
 			
+		};
+		
+		/**
+		 * This is the funny function.
+		 * It takes a dom node's innerHTML to set the OObject's template
+		 * And then renders and places the OObject into it.
+		 * It kind of makes the nodes alive!
+		 * @param {HTMLElement} dom the dom node to give life to
+		 */
+		this.alive = function alive(dom) {
+			this.setTemplateFromDom(dom);
+			this.action("place", dom);
 		};
 		
 	};

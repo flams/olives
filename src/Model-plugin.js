@@ -9,13 +9,15 @@ define("Olives/Model-plugin",
  */
 function ModelPlugin(Store, Observable, Tools, DomUtils) {
 	
-	return function ModelPluginConstructor($model) {
+	return function ModelPluginConstructor($model, $bindings) {
 		
 		/**
 		 * The model to watch
 		 * @private
 		 */
-		var _model = null;
+		var _model = null,
+		
+		_bindings = {};
 		
 		/**
 		 * The observers handlers
@@ -153,26 +155,39 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			// Get the model's value
 			get =  Tools.getNestedProperty(_model.get(modelIdx), prop);
-			
+			/**
+			 * NEED SOME REFACTORING FROM HERE TO THE END OF THE FUNC
+			 */
 			// If truthy but 0 is a proper value too
-			if (get || get === 0) {
-				node[property] = get;
-			}
-
-			node.addEventListener("change", function (event) {
-				if (prop) {
-					var temp = _model.get(modelIdx);
-					Tools.setNestedProperty(temp, name, node[property]);
-					_model.set(modelIdx, temp);	
+			if (get || get === 0 || get === false) {
+				if (_bindings[property]) {
+					_bindings[property].call(node, get);
 				} else {
-					_model.set(modelIdx, node[property]);
+					node[property] = get;
+					
+					// The test for the code placed here is not written
+					// its : shouldn't double way data bind with plugins
+					node.addEventListener("change", function (event) {
+						if (prop) {
+							var temp = _model.get(modelIdx);
+							Tools.setNestedProperty(temp, name, node[property]);
+							_model.set(modelIdx, temp);	
+						} else {
+							_model.set(modelIdx, node[property]);
+						}
+					}, true);
 				}
-			}, true);
+			}
 			
 			// Watch for changes
 			this.observers[modelIdx] = this.observers[modelIdx] || [];
 			this.observers[modelIdx].push(_model.watchValue(modelIdx, function (value) {
-				node[property] = Tools.getNestedProperty(value, prop);
+				if (_bindings[property]) {
+					_bindings[property].call(node, Tools.getNestedProperty(value, prop));
+				} else {
+					node[property] = Tools.getNestedProperty(value, prop);
+				}
+
 			}));
 		};
 		
@@ -207,9 +222,29 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				return false;
 			}
 		};
+		
+		this.addBinding = function addBinding(name, binding) {
+			if (name && typeof name == "string" && typeof binding == "function") {
+				_bindings[name] = binding;
+				return true;
+			} else {
+				return false;
+			}
+		};
+		
+		this.getBinding = function getBinding(name) {
+			return _bindings[name];
+		};
+		
+		this.addBindings = function addBindings(list) {
+			return Tools.loop(list, function (binding, name) {
+				this.addBinding(name, binding);
+			}, this);
+		};
 	
 		// Inits the model
 		this.setModel($model);
+		this.addBindings($bindings);
 		
 		
 	};
