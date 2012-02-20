@@ -8,13 +8,13 @@
  * A tool that allows you to create real time UIs using native HTML/CSS/JS, or the library of your choice
  * A light library that you can extend with your own plugins, written the way you want, with the library of your choice
 
-###What Olives isn't
+##What Olives isn't
 
  * A graphical library with nice effects
  * A graphical library with predefined styles or UIs
  * A tool that hides the way browsers technologies work
 
-###What can I do with Olives?
+##What can I do with Olives?
 
  * HTML Lists that reflect databases in real time where you just describe how you want each item to look like
  * Forms to update your databases with as few JavaScript? as telling what to update
