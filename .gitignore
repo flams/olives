@@ -1,6 +1,5 @@
 # Eclipse IDE files
 .settings/
 .project
-build/temp
 */.DS_Store
 ./jsTestDriver.conf

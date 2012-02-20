@@ -1,3 +1,9 @@
+/**
+ * Olives
+ * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * MIT Licensed
+ */
+
 require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugin, Store, Plugins) {
 
 

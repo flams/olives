@@ -1,3 +1,10 @@
+/**
+ * Olives
+ * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * MIT Licensed
+ */
+
+
 var requirejs = require("requirejs"),
 	jasmine = require("jasmine-node"),
 	fs = require("fs"),
@@ -78,7 +85,7 @@ namespace("build", function () {
 	
 	task("concat", ["build:clean"], function () {
 		var files = _getFiles(PROJECT_SRC_DIR),
-			concat = "";
+			concat = fs.readFileSync(LICENSE,"utf8");
 		
 		files.forEach(function (file) {
 			concat += fs.readFileSync(PROJECT_SRC_DIR + "/" + file,"utf8");

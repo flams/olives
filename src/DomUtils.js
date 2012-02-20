@@ -1,3 +1,9 @@
+/**
+ * Olives
+ * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * MIT Licensed
+ */
+
 define("Olives/DomUtils", ["Tools"], function (Tools) {
 
 	return {

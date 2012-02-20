@@ -1,3 +1,24 @@
+/*
+ Olives
+
+ The MIT License (MIT)
+
+ Copyright (c) 2012 Olivier Scherrer - Olivier Wietrich
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
+ documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+ the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
+ and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies or substantial 
+ portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ IN THE SOFTWARE.
+*/
 define("Olives/DomUtils",["Tools"],function(){return{getNodes:function(c,f){return c instanceof HTMLElement?(c.parentNode||document.createDocumentFragment().appendChild(c),c.parentNode.querySelectorAll(f||"*")):false}}});define("Olives/Event-plugin",function(){return function(c){this.listen=function(f,e,g,i){f.addEventListener(e,function(a){c[g].call(c,a,f)},i=="true")}}});
 define("Olives/Model-plugin",["Store","Observable","Tools","Olives/DomUtils"],function(c,f,e,g){return function(i,a){var d=null,h={};this.observers={};this.setModel=function(a){return a instanceof c?(d=a,true):false};this.getModel=function(){return d};this.ItemRenderer=function(a){var b=null;this.set=function(a){b=a;return true};this.get=function(){return b};this.associate=function(a,d){var k=b.cloneNode(true),h=g.getNodes(k);e.toArray(h).forEach(function(b){b.dataset[d+"_id"]=a});return k};this.set(a)};
 this.foreach=function(a){var b,h=a.querySelector("*"),e=new this.ItemRenderer(h);b=document.createDocumentFragment();d.loop(function(a,d){b.appendChild(this.plugins.apply(e.associate(d,this.plugins.name)))},this);a.replaceChild(b,h);d.watch("added",function(b){a.insertBefore(this.plugins.apply(e.associate(b,this.plugins.name)),a.childNodes[b])},this);d.watch("deleted",function(b){a.removeChild(a.childNodes[b]);this.observers[b].forEach(function(b){d.unwatchValue(b)},this);delete this.observers[b]},

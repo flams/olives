@@ -1,3 +1,9 @@
+/**
+ * Olives
+ * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * MIT Licensed
+ */
+
 require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], function (OObject, Tools, Store, CouchDBStore, Plugins) {
 	
 	describe("OObjectTest", function () {
