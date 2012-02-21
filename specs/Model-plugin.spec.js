@@ -80,8 +80,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		it("should not touch the dom if the value isn't set", function () {
 			dom.dataset["model"] = "bind:innerHTML,content2";
+			dom.innerHTML = "hey";
 			plugins.apply(dom);
-			expect(dom.innerHTML).toEqual("");
+			expect(dom.innerHTML).toEqual("hey");
 		});
 
 		it("should set up the dom as soon as the value is set", function () {
@@ -535,6 +536,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.addBindings).toBeInstanceOf(Function);
 			expect(modelPlugin.getBinding).toBeInstanceOf(Function);
 			expect(modelPlugin.addBinding).toBeInstanceOf(Function);
+			expect(modelPlugin.hasBinding).toBeInstanceOf(Function);
+			expect(modelPlugin.execBinding).toBeInstanceOf(Function);
 		});
 		
 		it("should add a new binding", function () {
@@ -553,19 +556,34 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.addBinding.mostRecentCall.args[1]).toBe(newBindings.toggleClass);
 		});
 		
+		it("should tell if binding exists", function () {
+			modelPlugin.addBindings(newBindings);
+			expect(modelPlugin.hasBinding("toggleClass")).toEqual(true);
+			expect(modelPlugin.hasBinding("valueOf")).toEqual(false);
+		});
+		
+		it("should execute binding", function () {
+			modelPlugin.addBindings(newBindings);
+			expect(modelPlugin.execBinding(dom, "toggleClass", false));
+			expect(newBindings.toggleClass.mostRecentCall.args[0]).toEqual(false);
+			expect(newBindings.toggleClass.mostRecentCall.object).toBe(dom);
+		});
+		
 		it("should execute new bindings", function () {
 			modelPlugin.addBindings(newBindings);
+			spyOn(modelPlugin, "execBinding");
 			modelPlugin.bind(dom, "toggleClass","property");
-			expect(newBindings.toggleClass.mostRecentCall.args[0]).toEqual(false);
 			model.set("property", true);
-			expect(newBindings.toggleClass.mostRecentCall.args[0]).toEqual(true);
-			expect(newBindings.toggleClass.mostRecentCall.object).toBe(dom);
+			expect(modelPlugin.execBinding.wasCalled).toEqual(true);
+			expect(modelPlugin.execBinding.mostRecentCall.args[0]).toBe(dom);
+			expect(modelPlugin.execBinding.mostRecentCall.args[1]).toBe("toggleClass");
+			expect(modelPlugin.execBinding.mostRecentCall.args[2]).toEqual(true);
 		});
 		
 		it("should not double way bind the plugins", function () {
 			modelPlugin.addBindings(newBindings);
-			spyOn(dom, "addEventListener");
-			modelPlugin.bind(dom, "toggleClass", "proprietary");
+			spyOn(dom, "addEventListener").andCallThrough();
+			modelPlugin.bind(dom, "toggleClass","property");
 			expect(dom.addEventListener.wasCalled).toEqual(false);
 		});
 		

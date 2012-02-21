@@ -142,7 +142,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * @returns
 		 */
 		this.bind = function bind(node, property, name) {
-			
+
 			// Name can be unset if the value of a row is plain text
 			name = name || "";
 
@@ -161,40 +161,39 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			// Get the model's value
 			get =  Tools.getNestedProperty(_model.get(modelIdx), prop);
-			/**
-			 * NEED SOME REFACTORING FROM HERE TO THE END OF THE FUNC
-			 */
-			// If truthy but 0 is a proper value too
+
+			// 0 and false are acceptable falsy values
 			if (get || get === 0 || get === false) {
-				if (_bindings[property]) {
-					_bindings[property].call(node, get);
+				if (this.hasBinding(property)) {
+					this.execBinding(node, property, get);
 				} else {
 					node[property] = get;
-					
-					// The test for the code placed here is not written
-					// its : shouldn't double way data bind with plugins
-					node.addEventListener("change", function (event) {
-						if (prop) {
-							var temp = _model.get(modelIdx);
-							Tools.setNestedProperty(temp, name, node[property]);
-							_model.set(modelIdx, temp);	
-						} else {
-							_model.set(modelIdx, node[property]);
-						}
-					}, true);
 				}
+			}
+			
+			if (!this.hasBinding(property)) {
+				node.addEventListener("change", function (event) {
+					if (prop) {
+						var temp = _model.get(modelIdx);
+						Tools.setNestedProperty(temp, name, node[property]);
+						_model.set(modelIdx, temp);	
+					} else {
+						_model.set(modelIdx, node[property]);
+					}
+				}, true);
+
 			}
 			
 			// Watch for changes
 			this.observers[modelIdx] = this.observers[modelIdx] || [];
 			this.observers[modelIdx].push(_model.watchValue(modelIdx, function (value) {
-				if (_bindings[property]) {
-					_bindings[property].call(node, Tools.getNestedProperty(value, prop));
+				if (this.hasBinding(property)) {
+					this.execBinding(node, property, Tools.getNestedProperty(value, prop));
 				} else {
 					node[property] = Tools.getNestedProperty(value, prop);
 				}
+			}, this));
 
-			}));
 		};
 		
 		/**
@@ -236,6 +235,14 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			} else {
 				return false;
 			}
+		};
+		
+		this.execBinding = function execBinding(node, property, value) {
+			_bindings[property].call(node, value);
+		};
+		
+		this.hasBinding = function hasBinding(name) {
+			return _bindings.hasOwnProperty(name);
 		};
 		
 		this.getBinding = function getBinding(name) {
