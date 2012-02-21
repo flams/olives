@@ -93,6 +93,16 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				return _pluginName;
 			};
 			
+			this.items = [];
+			
+			this.addItem = function addItem() {
+				
+			};
+			
+			this.removeItem = function removeItem() {
+				
+			};
+			
 			/**
 			 * create a new node
 			 * @private

@@ -236,6 +236,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.create).toBeInstanceOf(Function);
 			expect(itemRenderer.setPluginName).toBeInstanceOf(Function);
 			expect(itemRenderer.getPluginName).toBeInstanceOf(Function);
+			expect(itemRenderer.addItem).toBeInstanceOf(Function);
+			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
+			expect(itemRenderer.items).toBeInstanceOf(Array);
 		});
 
 		it("should set the node to render", function () {
@@ -292,6 +295,18 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			itemRenderer = new modelPlugin.ItemRenderer(div, "model");
 			
 			expect(itemRenderer.getPluginName()).toEqual("model");
+		});
+		
+		it("should have a property to store previously created nodes", function () {
+			
+		});
+		
+		it("should have a function to add a dom node", function () {
+			
+		});
+		
+		it("should have a function to remove a dom node", function () {
+			
 		});
 
 
