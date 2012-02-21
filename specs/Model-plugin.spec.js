@@ -219,10 +219,15 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 	describe("ModelPluginItemRenderer", function () {
 
-		var modelPlugin = null;
+		var modelPlugin = null,
+			plugins = null;
 
 		beforeEach(function () {
-			modelPlugin = new ModelPlugin();
+			modelPlugin = new ModelPlugin(new Store([0, 1, 2, 3, 4, 5]));
+			plugins = {
+				name: "model",
+				apply: jasmine.createSpy()
+			};
 		});
 
 		it("should provide an item renderer", function () {
@@ -233,11 +238,16 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			var itemRenderer = new modelPlugin.ItemRenderer();
 			expect(itemRenderer.setRenderer).toBeInstanceOf(Function);
 			expect(itemRenderer.getRenderer).toBeInstanceOf(Function);
+			expect(itemRenderer.setRootNode).toBeInstanceOf(Function);
+			expect(itemRenderer.getRootNode).toBeInstanceOf(Function);
 			expect(itemRenderer.create).toBeInstanceOf(Function);
+			expect(itemRenderer.remove).toBeInstanceOf(Function);
 			expect(itemRenderer.setPlugins).toBeInstanceOf(Function);
 			expect(itemRenderer.getPlugins).toBeInstanceOf(Function);
-			expect(itemRenderer.addItem).toBeInstanceOf(Function);
-			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
+			expect(itemRenderer.pushItems).toBeInstanceOf(Function);
+			expect(itemRenderer.popItems).toBeInstanceOf(Function);
+			expect(itemRenderer.unshiftItems).toBeInstanceOf(Function);
+			expect(itemRenderer.shiftItems).toBeInstanceOf(Function);
 			expect(itemRenderer.items).toBeInstanceOf(Store);
 		});
 
@@ -249,14 +259,22 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.getRenderer()).toBe(div);
 		});
 		
+		it("should set the root node where to attach created nodes", function () {
+			var rootNode = document.createElement("div");
+			itemRenderer = new modelPlugin.ItemRenderer();
+			expect(itemRenderer.setRootNode()).toEqual(false);
+			expect(itemRenderer.setRootNode({})).toEqual(false);
+			expect(itemRenderer.setRootNode(rootNode)).toEqual(true);
+			expect(itemRenderer.getRootNode()).toBe(rootNode);
+		});
+		
 		it("should set plugins", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer(),
-				plugins = {};
+			var itemRenderer = new modelPlugin.ItemRenderer();
 			expect(itemRenderer.setPlugins(plugins)).toEqual(true);
 			expect(itemRenderer.getPlugins()).toEqual(plugins);
 		});
 
-		it("should associate the dom node with the model", function () {
+		it("should have a function to create items", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer(),
 			div = document.createElement("div"),
 			node;
@@ -285,34 +303,68 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.create(0)).not.toBe(div);
 		});
 
-		it("should set the item renderer on init", function () {
+		it("should set the item renderer at init", function () {
 			var div = document.createElement("div"),
 			itemRenderer = new modelPlugin.ItemRenderer(div);
 
 			expect(itemRenderer.getRenderer()).toBe(div);
 		});
 		
-		it("should set plugins on init", function () {
-			var div = document.createElement("div"),
-			plugins = {},
+		it("should set plugins at init", function () {
+			var div = document.createElement("div");
 			itemRenderer = new modelPlugin.ItemRenderer(div, plugins);
 			
 			expect(itemRenderer.getPlugins()).toEqual(plugins);
 		});
+		
+		it("should set rootnode at init", function () {
+			var ul = document.createElement("ul"),
+				div = document.createElement("div");
+			
+			itemRenderer = new modelPlugin.ItemRenderer(ul, plugins, div);
+			expect(itemRenderer.getRootNode()).toBe(div);
+		});
 				
 		it("should have a store to store items", function () {
 			var dom = document.createElement("ul"),
-				plugins = {name: "model", apply: jasmine.createSpy()},
 				itemRenderer = new modelPlugin.ItemRenderer(dom, plugins);
 			expect(itemRenderer.items.toJSON()).toEqual("[]");
-		})
+		});
 		
-		it("should have a function to add a dom node", function () {
+		it("should store created items in the store", function () {
+			var ul = document.createElement("ul"),
+				item;
+			itemRenderer = new modelPlugin.ItemRenderer(ul, plugins);
 			
+			item = itemRenderer.create(0);
+			expect(itemRenderer.items.get(0)).toEqual(item);
+		});
+		
+		it("should have a function to push items", function () {
+			var dom = document.createElement("ul"),
+				itemRenderer = new modelPlugin.ItemRenderer(dom, plugins);
+			
+			spyOn(itemRenderer, "create").andCallThrough();
+			expect(itemRenderer.pushItems(3)).toEqual(true);
+			expect(itemRenderer.create.callCount).toEqual(3);
+			expect(itemRenderer.create.calls[0].args[0]).toEqual(0);
+			expect(itemRenderer.create.calls[1].args[0]).toEqual(1);
+			expect(itemRenderer.create.calls[2].args[0]).toEqual(2);
 		});
 		
 		it("should have a function to remove a dom node", function () {
 			
+		});
+		
+		it("shouldn't create an item if it doesn't exist in the model", function () {
+			var ul = document.createElement("ul"),
+				item;
+			
+			itemRenderer = new modelPlugin.ItemRenderer(ul, plugins);
+			
+			item = itemRenderer.create(10);
+			expect(item).toBeUndefined();
+			expect(itemRenderer.items.has(10)).toEqual(false);
 		});
 
 

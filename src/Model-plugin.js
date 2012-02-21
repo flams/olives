@@ -62,10 +62,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * It is made available for debugging purpose, don't use it
 		 * @private
 		 */
-		this.ItemRenderer = function ItemRenderer($item, $plugins) {
+		this.ItemRenderer = function ItemRenderer($item, $plugins, $rootNode) {
 			
 			var _node = null,
-			_plugins = null;
+			_plugins = null,
+			_rootNode = null;
 			
 			/**
 			 * Set the duplicated node
@@ -84,6 +85,19 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				return _node;
 			};
 			
+			this.setRootNode = function setRootNode(rootNode) {
+				if (rootNode instanceof HTMLElement) {
+					_rootNode = rootNode;
+					return true;
+				} else {
+					return false;
+				}
+			};
+			
+			this.getRootNode = function getRootNode() {
+				return _rootNode;
+			};
+			
 			this.setPlugins = function setPlugins(plugins) {
 				_plugins = plugins;
 				return true;
@@ -95,11 +109,22 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			this.items = new Store([]);
 			
-			this.addItem = function addItem() {
+			this.pushItems = function pushItems(nb) {
+				for (var i=0; i<nb; i++) {
+					this.create(i);
+				}
+				return true;
+			};
+			
+			this.popItems = function popItems() {
 				
 			};
 			
-			this.removeItem = function removeItem() {
+			this.shiftItems = function shiftItems() {
+				
+			};
+			
+			this.unshiftItems = function shiftItems() {
 				
 			};
 			
@@ -111,19 +136,26 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns the associated node
 			 */
 			this.create = function create(id) {
-				var newNode = _node.cloneNode(true),
+				if (_model.has(id)) {
+					var newNode = _node.cloneNode(true),
 					nodes = DomUtils.getNodes(newNode);
 
-				Tools.toArray(nodes).forEach(function (child) {
-            		child.dataset[_plugins.name+"_id"] = id;
-				});
+					Tools.toArray(nodes).forEach(function (child) {
+	            		child.dataset[_plugins.name+"_id"] = id;
+					});
+					
+					this.items.set(id, newNode);
+					return newNode;
+				}
+			};
+			
+			this.remove = function remove() {
 				
-				
-				return newNode;
 			};
 			
 			this.setRenderer($item);
 			this.setPlugins($plugins);
+			this.setRootNode($rootNode);
 		};
 		
 		/**
