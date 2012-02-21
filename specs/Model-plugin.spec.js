@@ -563,8 +563,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 		
 		it("should execute binding", function () {
+			expect(modelPlugin.execBinding(dom, "nop", false)).toEqual(false);
 			modelPlugin.addBindings(newBindings);
-			expect(modelPlugin.execBinding(dom, "toggleClass", false));
+			expect(modelPlugin.execBinding(dom, "toggleClass", false)).toEqual(true);
 			expect(newBindings.toggleClass.mostRecentCall.args[0]).toEqual(false);
 			expect(newBindings.toggleClass.mostRecentCall.object).toBe(dom);
 		});

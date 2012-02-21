@@ -164,9 +164,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 
 			// 0 and false are acceptable falsy values
 			if (get || get === 0 || get === false) {
-				if (this.hasBinding(property)) {
-					this.execBinding(node, property, get);
-				} else {
+				if (!this.execBinding(node, property, get)) {
 					node[property] = get;
 				}
 			}
@@ -187,9 +185,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			// Watch for changes
 			this.observers[modelIdx] = this.observers[modelIdx] || [];
 			this.observers[modelIdx].push(_model.watchValue(modelIdx, function (value) {
-				if (this.hasBinding(property)) {
-					this.execBinding(node, property, Tools.getNestedProperty(value, prop));
-				} else {
+				if (!this.execBinding(node, property, Tools.getNestedProperty(value, prop))) {
 					node[property] = Tools.getNestedProperty(value, prop);
 				}
 			}, this));
@@ -198,6 +194,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		
 		/**
 		 * Set the node's value into the model, the name is the model's property
+		 * @private
 		 * @param {HTMLElement} node
 		 * @returns true if the property is added
 		 */
@@ -228,6 +225,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			}
 		};
 		
+		/**
+		 * 
+		 * @param name
+		 * @param binding
+		 * @returns
+		 */
 		this.addBinding = function addBinding(name, binding) {
 			if (name && typeof name == "string" && typeof binding == "function") {
 				_bindings[name] = binding;
@@ -237,18 +240,48 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			}
 		};
 		
+		/**
+		 * 
+		 * @private
+		 * @param node
+		 * @param property
+		 * @param value
+		 * @returns
+		 */
 		this.execBinding = function execBinding(node, property, value) {
-			_bindings[property].call(node, value);
+			if (this.hasBinding(property)) {
+				_bindings[property].call(node, value);
+				return true;
+			} else {
+				return false;
+			}
 		};
 		
+		/**
+		 * 
+		 * @private
+		 * @param name
+		 * @returns
+		 */
 		this.hasBinding = function hasBinding(name) {
 			return _bindings.hasOwnProperty(name);
 		};
 		
+		/**
+		 * 
+		 * @private
+		 * @param name
+		 * @returns
+		 */
 		this.getBinding = function getBinding(name) {
 			return _bindings[name];
 		};
 		
+		/**
+		 * 
+		 * @param list
+		 * @returns
+		 */
 		this.addBindings = function addBindings(list) {
 			return Tools.loop(list, function (binding, name) {
 				this.addBinding(name, binding);
