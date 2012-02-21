@@ -93,6 +93,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				return _plugins;
 			};
 			
+			this.items = new Store([]);
+			
 			this.addItem = function addItem() {
 				
 			};
@@ -130,8 +132,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 */
 		this.foreach = function foreach(node) {
 			var domFragment,
-				_rootNode = node.querySelector("*"),
-				itemRenderer = new this.ItemRenderer(_rootNode, this.plugins);
+				_renderer = node.querySelector("*"),
+				itemRenderer = new this.ItemRenderer(_renderer, this.plugins);
 
 	
 			domFragment = document.createDocumentFragment();
@@ -140,7 +142,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
             }, this);
             
 
-	         node.replaceChild(domFragment, _rootNode);
+	         node.replaceChild(domFragment, _renderer);
             
             _model.watch("added", function (idx, value) {
                 node.insertBefore(this.plugins.apply(itemRenderer.create(idx)), node.childNodes[idx]);

@@ -238,6 +238,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.getPlugins).toBeInstanceOf(Function);
 			expect(itemRenderer.addItem).toBeInstanceOf(Function);
 			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
+			expect(itemRenderer.items).toBeInstanceOf(Store);
 		});
 
 		it("should set the node to render", function () {
@@ -299,6 +300,13 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.getPlugins()).toEqual(plugins);
 		});
 				
+		it("should have a store to store items", function () {
+			var dom = document.createElement("ul"),
+				plugins = {name: "model", apply: jasmine.createSpy();},
+				itemRenderer = new modelPlugin.ItemRenderer(div, plugins);
+			expect(itemRenderer.items.toJSON()).toEqual("[]");
+		})
+		
 		it("should have a function to add a dom node", function () {
 			
 		});
