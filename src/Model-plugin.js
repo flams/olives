@@ -164,11 +164,15 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 
 			// 0 and false are acceptable falsy values
 			if (get || get === 0 || get === false) {
+				// If the binding hasn't been overriden
 				if (!this.execBinding(node, property, get)) {
+					// Execute the default one which is a simple assignation
 					node[property] = get;
 				}
 			}
 			
+			// Only watch for changes (double way data binding) if the binding
+			// has not been redefined
 			if (!this.hasBinding(property)) {
 				node.addEventListener("change", function (event) {
 					if (prop) {
