@@ -62,16 +62,16 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * It is made available for debugging purpose, don't use it
 		 * @private
 		 */
-		this.ItemRenderer = function ItemRenderer($item, $pluginName) {
+		this.ItemRenderer = function ItemRenderer($item, $plugins) {
 			
 			var _node = null,
-				_pluginName = null;
+			_plugins = null;
 			
 			/**
 			 * Set the duplicated node
 			 * @private
 			 */
-			this.setNode = function setNode(node) {
+			this.setRenderer = function setRenderer(node) {
 				_node = node;
 				return true;
 			};
@@ -80,20 +80,18 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * @private
 			 * @returns the node that is duplicated
 			 */
-			this.getNode = function getNode() {
+			this.getRenderer = function getRenderer() {
 				return _node;
 			};
 			
-			this.setPluginName = function setPluginName(pluginName) {
-				_pluginName = pluginName;
+			this.setPlugins = function setPlugins(plugins) {
+				_plugins = plugins;
 				return true;
 			};
 			
-			this.getPluginName = function getPluginName() {
-				return _pluginName;
+			this.getPlugins = function getPlugins() {
+				return _plugins;
 			};
-			
-			this.items = [];
 			
 			this.addItem = function addItem() {
 				
@@ -111,18 +109,19 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns the associated node
 			 */
 			this.create = function create(id) {
-				var newNode = _node.cloneNode(true);
-				var nodes = DomUtils.getNodes(newNode);
+				var newNode = _node.cloneNode(true),
+					nodes = DomUtils.getNodes(newNode);
 
-				
 				Tools.toArray(nodes).forEach(function (child) {
-            			child.dataset[_pluginName+"_id"] = id;
+            		child.dataset[_plugins.name+"_id"] = id;
 				});
+				
+				
 				return newNode;
 			};
 			
-			this.setNode($item);
-			this.setPluginName($pluginName);
+			this.setRenderer($item);
+			this.setPlugins($plugins);
 		};
 		
 		/**
@@ -132,7 +131,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		this.foreach = function foreach(node) {
 			var domFragment,
 				_rootNode = node.querySelector("*"),
-				itemRenderer = new this.ItemRenderer(_rootNode, this.plugins.name);
+				itemRenderer = new this.ItemRenderer(_rootNode, this.plugins);
 
 	
 			domFragment = document.createDocumentFragment();

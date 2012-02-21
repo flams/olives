@@ -231,28 +231,28 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		it("should have the following API", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer();
-			expect(itemRenderer.setNode).toBeInstanceOf(Function);
-			expect(itemRenderer.getNode).toBeInstanceOf(Function);
+			expect(itemRenderer.setRenderer).toBeInstanceOf(Function);
+			expect(itemRenderer.getRenderer).toBeInstanceOf(Function);
 			expect(itemRenderer.create).toBeInstanceOf(Function);
-			expect(itemRenderer.setPluginName).toBeInstanceOf(Function);
-			expect(itemRenderer.getPluginName).toBeInstanceOf(Function);
+			expect(itemRenderer.setPlugins).toBeInstanceOf(Function);
+			expect(itemRenderer.getPlugins).toBeInstanceOf(Function);
 			expect(itemRenderer.addItem).toBeInstanceOf(Function);
 			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
-			expect(itemRenderer.items).toBeInstanceOf(Array);
 		});
 
 		it("should set the node to render", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer(),
 			div = document.createElement("div");
 
-			expect(itemRenderer.setNode(div)).toEqual(true);
-			expect(itemRenderer.getNode()).toBe(div);
+			expect(itemRenderer.setRenderer(div)).toEqual(true);
+			expect(itemRenderer.getRenderer()).toBe(div);
 		});
 		
-		it("should set the name of the plugin to set the property in the dom", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer();
-			expect(itemRenderer.setPluginName("model")).toEqual(true);
-			expect(itemRenderer.getPluginName()).toEqual("model");
+		it("should set plugins", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer(),
+				plugins = {};
+			expect(itemRenderer.setPlugins(plugins)).toEqual(true);
+			expect(itemRenderer.getPlugins()).toEqual(plugins);
 		});
 
 		it("should associate the dom node with the model", function () {
@@ -262,8 +262,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 			div.innerHTML = '<p><span>date:</span><span data-model="bind:innerHTML,date"></span></p>' +
 			'<p><span>title:</span><span data-model="bind:innerHTML,title"></span></p>';
-			itemRenderer.setNode(div);
-			itemRenderer.setPluginName("model");
+			itemRenderer.setRenderer(div);
+			itemRenderer.setPlugins({name:"model"});
 
 			node = itemRenderer.create(0);
 			expect(node).toBeInstanceOf(HTMLElement);
@@ -279,28 +279,26 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			var itemRenderer = new modelPlugin.ItemRenderer(),
 			div = document.createElement("div");
 
-			itemRenderer.setNode(div);
-			expect(itemRenderer.create(0, "model")).not.toBe(div);
+			itemRenderer.setRenderer(div);
+			itemRenderer.setPlugins({name:"model"});
+			expect(itemRenderer.create(0)).not.toBe(div);
 		});
 
 		it("should set the item renderer on init", function () {
 			var div = document.createElement("div"),
 			itemRenderer = new modelPlugin.ItemRenderer(div);
 
-			expect(itemRenderer.getNode()).toBe(div);
+			expect(itemRenderer.getRenderer()).toBe(div);
 		});
 		
-		it("should set the pluginname on init", function () {
+		it("should set plugins on init", function () {
 			var div = document.createElement("div"),
-			itemRenderer = new modelPlugin.ItemRenderer(div, "model");
+			plugins = {},
+			itemRenderer = new modelPlugin.ItemRenderer(div, plugins);
 			
-			expect(itemRenderer.getPluginName()).toEqual("model");
+			expect(itemRenderer.getPlugins()).toEqual(plugins);
 		});
-		
-		it("should have a property to store previously created nodes", function () {
-			
-		});
-		
+				
 		it("should have a function to add a dom node", function () {
 			
 		});
