@@ -62,15 +62,16 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * It is made available for debugging purpose, don't use it
 		 * @private
 		 */
-		this.ItemRenderer = function ItemRenderer(item) {
+		this.ItemRenderer = function ItemRenderer($item, $pluginName) {
 			
-			var _node = null;
+			var _node = null,
+				_pluginName = null;
 			
 			/**
 			 * Set the duplicated node
 			 * @private
 			 */
-			this.set = function set(node) {
+			this.setNode = function setNode(node) {
 				_node = node;
 				return true;
 			};
@@ -79,29 +80,39 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * @private
 			 * @returns the node that is duplicated
 			 */
-			this.get = function get() {
+			this.getNode = function getNode() {
 				return _node;
 			};
 			
+			this.setPluginName = function setPluginName(pluginName) {
+				_pluginName = pluginName;
+				return true;
+			};
+			
+			this.getPluginName = function getPluginName() {
+				return _pluginName;
+			};
+			
 			/**
-			 * Associate the duplicated node to an item in the model
+			 * create a new node
 			 * @private
 			 * @param id
 			 * @param pluginName
 			 * @returns the associated node
 			 */
-			this.associate = function associate(id, pluginName, hey) {
+			this.create = function create(id) {
 				var newNode = _node.cloneNode(true);
 				var nodes = DomUtils.getNodes(newNode);
 
 				
 				Tools.toArray(nodes).forEach(function (child) {
-            			child.dataset[pluginName+"_id"] = id;
+            			child.dataset[_pluginName+"_id"] = id;
 				});
 				return newNode;
 			};
 			
-			this.set(item);			
+			this.setNode($item);
+			this.setPluginName($pluginName);
 		};
 		
 		/**
@@ -111,19 +122,19 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		this.foreach = function foreach(node) {
 			var domFragment,
 				_rootNode = node.querySelector("*"),
-				itemRenderer = new this.ItemRenderer(_rootNode);
+				itemRenderer = new this.ItemRenderer(_rootNode, this.plugins.name);
 
 	
 			domFragment = document.createDocumentFragment();
-            _model.loop(function (value, idx) {
-                domFragment.appendChild(this.plugins.apply(itemRenderer.associate(idx, this.plugins.name)));
+           _model.loop(function (value, idx) {
+                domFragment.appendChild(this.plugins.apply(itemRenderer.create(idx)));
             }, this);
             
 
 	         node.replaceChild(domFragment, _rootNode);
             
             _model.watch("added", function (idx, value) {
-                node.insertBefore(this.plugins.apply(itemRenderer.associate(idx, this.plugins.name)), node.childNodes[idx]);
+                node.insertBefore(this.plugins.apply(itemRenderer.create(idx)), node.childNodes[idx]);
             }, this);
             
             _model.watch("deleted", function (idx) {

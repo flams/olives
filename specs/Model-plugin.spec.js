@@ -231,57 +231,73 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		it("should have the following API", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer();
-			expect(itemRenderer.set).toBeInstanceOf(Function);
-			expect(itemRenderer.get).toBeInstanceOf(Function);
-			expect(itemRenderer.associate).toBeInstanceOf(Function);
+			expect(itemRenderer.setNode).toBeInstanceOf(Function);
+			expect(itemRenderer.getNode).toBeInstanceOf(Function);
+			expect(itemRenderer.create).toBeInstanceOf(Function);
+			expect(itemRenderer.setPluginName).toBeInstanceOf(Function);
+			expect(itemRenderer.getPluginName).toBeInstanceOf(Function);
 		});
 
 		it("should set the node to render", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer(),
 			div = document.createElement("div");
 
-			expect(itemRenderer.set(div)).toEqual(true);
-			expect(itemRenderer.get()).toBe(div);
+			expect(itemRenderer.setNode(div)).toEqual(true);
+			expect(itemRenderer.getNode()).toBe(div);
+		});
+		
+		it("should set the name of the plugin to set the property in the dom", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer();
+			expect(itemRenderer.setPluginName("model")).toEqual(true);
+			expect(itemRenderer.getPluginName()).toEqual("model");
 		});
 
 		it("should associate the dom node with the model", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer(),
 			div = document.createElement("div"),
-			associated;
+			node;
 
 			div.innerHTML = '<p><span>date:</span><span data-model="bind:innerHTML,date"></span></p>' +
 			'<p><span>title:</span><span data-model="bind:innerHTML,title"></span></p>';
-			itemRenderer.set(div);
+			itemRenderer.setNode(div);
+			itemRenderer.setPluginName("model");
 
-			associated = itemRenderer.associate(0, "model");
-			expect(associated).toBeInstanceOf(HTMLElement);
-			expect(associated.nodeName).toEqual("DIV");
-			expect(associated.querySelectorAll("*").length).toEqual(6);
+			node = itemRenderer.create(0);
+			expect(node).toBeInstanceOf(HTMLElement);
+			expect(node.nodeName).toEqual("DIV");
+			expect(node.querySelectorAll("*").length).toEqual(6);
 
-			expect(associated.querySelectorAll("[data-model]")[0].dataset["model_id"]).toEqual('0');
-			expect(associated.querySelectorAll("[data-model]")[1].dataset["model_id"]).toEqual('0');
-			expect(associated.querySelectorAll("[data-model_id]").length).toEqual(6);
+			expect(node.querySelectorAll("[data-model]")[0].dataset["model_id"]).toEqual('0');
+			expect(node.querySelectorAll("[data-model]")[1].dataset["model_id"]).toEqual('0');
+			expect(node.querySelectorAll("[data-model_id]").length).toEqual(6);
 		});
 
 		it("should return a cloned node", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer(),
 			div = document.createElement("div");
 
-			itemRenderer.set(div);
-			expect(itemRenderer.associate(0, "model")).not.toBe(div);
+			itemRenderer.setNode(div);
+			expect(itemRenderer.create(0, "model")).not.toBe(div);
 		});
 
 		it("should set the item renderer on init", function () {
 			var div = document.createElement("div"),
 			itemRenderer = new modelPlugin.ItemRenderer(div);
 
-			expect(itemRenderer.get()).toBe(div);
+			expect(itemRenderer.getNode()).toBe(div);
+		});
+		
+		it("should set the pluginname on init", function () {
+			var div = document.createElement("div"),
+			itemRenderer = new modelPlugin.ItemRenderer(div, "model");
+			
+			expect(itemRenderer.getPluginName()).toEqual("model");
 		});
 
 
 	});
 
-	describe("ModelPluginToList", function () {
+	describe("ModelPluginForeach", function () {
 		var modelPlugin = null,
 		model = null,
 		dom = null,
@@ -362,7 +378,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 	});
 
-	describe("ModelPluginToListEnhanced", function () {
+	describe("ModelPluginForeachEnhanced", function () {
 
 		var modelPlugin = null,
 		model = null,
@@ -438,6 +454,34 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 
 	});
+	/**
+	describe("ModelPluginForeachLimits", function () {
+		
+		var modelPlugin = null,
+			model = null,
+			dataSet = null,
+			dom = null,
+			plugins = null;
+
+		beforeEach(function () {
+			dom = document.createElement("ul");
+			dom.innerHTML = "<ul><li></li></ul>";
+			dom.dataset["model"] = "foreach:id, 0,3";
+
+			dataSet = ["Olives", "is", "cool", "it handles", "pagination", "for me"];
+			model = new Store(dataSet);
+			modelPlugin = new ModelPlugin(model);
+
+			plugins = new Plugins;
+			plugins.add("model", modelPlugin);
+		});
+		
+		it("should limit the list length to the given params", function () {
+			modelPlugin.foreach(dom);
+			expect(dom.querySelectorAll("li").length).toEqual(3);
+		});
+		
+	});*/
 
 	describe("ModelForm", function () {
 
