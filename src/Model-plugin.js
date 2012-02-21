@@ -254,8 +254,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * @returns
 		 */
 		this.execBinding = function execBinding(node, name, value) {
-			if (this.hasBinding(property)) {
-				_bindings[property].call(node, value);
+			if (this.hasBinding(name)) {
+				_bindings[name].call(node, value);
 				return true;
 			} else {
 				return false;
