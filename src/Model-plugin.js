@@ -226,9 +226,9 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		};
 		
 		/**
-		 * 
-		 * @param name
-		 * @param binding
+		 * Add a new way to handle a binding
+		 * @param {String} name of the binding
+		 * @param {Function} binding the function to handle the binding
 		 * @returns
 		 */
 		this.addBinding = function addBinding(name, binding) {
@@ -241,14 +241,15 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		};
 		
 		/**
-		 * 
+		 * Execute a binding
+		 * Only used by the plugin
 		 * @private
-		 * @param node
-		 * @param property
-		 * @param value
+		 * @param {HTMLElement} node the dom node on which to execute the binding
+		 * @param {String} name the name of the binding
+		 * @param {Any type} value the value to pass to the function
 		 * @returns
 		 */
-		this.execBinding = function execBinding(node, property, value) {
+		this.execBinding = function execBinding(node, name, value) {
 			if (this.hasBinding(property)) {
 				_bindings[property].call(node, value);
 				return true;
@@ -258,9 +259,9 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		};
 		
 		/**
-		 * 
+		 * Check if the binding exists
 		 * @private
-		 * @param name
+		 * @param {String} name the name of the binding
 		 * @returns
 		 */
 		this.hasBinding = function hasBinding(name) {
@@ -268,9 +269,10 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		};
 		
 		/**
-		 * 
+		 * Get a binding
+		 * For debugging only
 		 * @private
-		 * @param name
+		 * @param {String} name the name of the binding
 		 * @returns
 		 */
 		this.getBinding = function getBinding(name) {
@@ -278,8 +280,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		};
 		
 		/**
-		 * 
-		 * @param list
+		 * Add multiple binding at once
+		 * @param {Object} list the list of bindings to add
 		 * @returns
 		 */
 		this.addBindings = function addBindings(list) {
@@ -290,6 +292,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 	
 		// Inits the model
 		this.setModel($model);
+		// Inits bindings
 		this.addBindings($bindings);
 		
 		
