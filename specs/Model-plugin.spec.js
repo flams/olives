@@ -275,14 +275,12 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 
 		it("should have a function to create items", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer(),
-			div = document.createElement("div"),
-			node;
+			var div = document.createElement("div"),
+				itemRenderer = new modelPlugin.ItemRenderer(div, plugins),	
+				node;
 
 			div.innerHTML = '<p><span>date:</span><span data-model="bind:innerHTML,date"></span></p>' +
 			'<p><span>title:</span><span data-model="bind:innerHTML,title"></span></p>';
-			itemRenderer.setRenderer(div);
-			itemRenderer.setPlugins({name:"model"});
 
 			node = itemRenderer.create(0);
 			expect(node).toBeInstanceOf(HTMLElement);
@@ -293,13 +291,23 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(node.querySelectorAll("[data-model]")[1].dataset["model_id"]).toEqual('0');
 			expect(node.querySelectorAll("[data-model_id]").length).toEqual(6);
 		});
+		
+		it("should call plugins.apply on item create", function () {
+			var div = document.createElement("div"),
+				ul = document.createElement("ul"),
+				itemRenderer = new modelPlugin.ItemRenderer(ul, plugins, div),
+				item;
+			
+			item = itemRenderer.create(0);
+			expect(plugins.apply.wasCalled).toEqual(true);
+			expect(plugins.apply.mostRecentCall.args[0]).toBe(item);
+			
+		});
 
 		it("should return a cloned node", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer(),
-			div = document.createElement("div");
+			var div = document.createElement("div"),
+				itemRenderer = new modelPlugin.ItemRenderer(div, plugins);	
 
-			itemRenderer.setRenderer(div);
-			itemRenderer.setPlugins({name:"model"});
 			expect(itemRenderer.create(0)).not.toBe(div);
 		});
 
@@ -342,15 +350,22 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 		it("should have a function to push items", function () {
 			var dom = document.createElement("ul"),
-				itemRenderer = new modelPlugin.ItemRenderer(dom, plugins);
+				rootNode = document.createElement("div"),
+				itemRenderer = new modelPlugin.ItemRenderer(dom, plugins, rootNode);
 			
 			spyOn(itemRenderer, "create").andCallThrough();
+			spyOn(rootNode, "appendChild").andCallThrough();
+			
 			expect(itemRenderer.pushItems(3)).toEqual(true);
 			expect(itemRenderer.create.callCount).toEqual(3);
 			expect(itemRenderer.create.calls[0].args[0]).toEqual(0);
 			expect(itemRenderer.create.calls[1].args[0]).toEqual(1);
 			expect(itemRenderer.create.calls[2].args[0]).toEqual(2);
+			
+			expect(rootNode.appendChild.callCount).toEqual(3);
+			expect(rootNode.appendChild.calls[2].args[0]).toBe(itemRenderer.items.get(2));
 		});
+		
 		
 		it("should have a function to remove a dom node", function () {
 			
