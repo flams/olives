@@ -302,8 +302,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 				
 		it("should have a store to store items", function () {
 			var dom = document.createElement("ul"),
-				plugins = {name: "model", apply: jasmine.createSpy();},
-				itemRenderer = new modelPlugin.ItemRenderer(div, plugins);
+				plugins = {name: "model", apply: jasmine.createSpy()},
+				itemRenderer = new modelPlugin.ItemRenderer(dom, plugins);
 			expect(itemRenderer.items.toJSON()).toEqual("[]");
 		})
 		
