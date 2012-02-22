@@ -62,7 +62,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * It is made available for debugging purpose, don't use it
 		 * @private
 		 */
-		this.ItemRenderer = function ItemRenderer($item, $plugins, $rootNode) {
+		this.ItemRenderer = function ItemRenderer($plugins, $rootNode) {
 			
 			var _node = null,
 			_plugins = null,
@@ -86,8 +86,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			};
 			
 			this.setRootNode = function setRootNode(rootNode) {
+				var renderer;
 				if (rootNode instanceof HTMLElement) {
 					_rootNode = rootNode;
+					renderer = _rootNode.querySelector("*");
+					this.setRenderer(renderer);
+					_rootNode.removeChild(renderer);
 					return true;
 				} else {
 					return false;
@@ -154,7 +158,6 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				
 			};
 			
-			this.setRenderer($item);
 			this.setPlugins($plugins);
 			this.setRootNode($rootNode);
 		};
@@ -164,18 +167,9 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * @param {HTMLElement} node the dom node to apply foreach to
 		 */
 		this.foreach = function foreach(node) {
-			var domFragment,
-				_renderer = node.querySelector("*"),
-				itemRenderer = new this.ItemRenderer(_renderer, this.plugins, node);
-
-	
-			domFragment = document.createDocumentFragment();
-           _model.loop(function (value, idx) {
-                domFragment.appendChild(this.plugins.apply(itemRenderer.create(idx)));
-            }, this);
-            
-
-	         node.replaceChild(domFragment, _renderer);
+			var itemRenderer = new this.ItemRenderer(this.plugins, node);
+			
+			itemRenderer.pushItems(_model.getNbItems());
             
             _model.watch("added", function (idx, value) {
                 node.insertBefore(this.plugins.apply(itemRenderer.create(idx)), node.childNodes[idx]);

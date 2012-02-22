@@ -220,7 +220,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 	describe("ModelPluginItemRenderer", function () {
 
 		var modelPlugin = null,
-			plugins = null;
+			plugins = null,
+			rootNode = document.createElement("div");
 
 		beforeEach(function () {
 			modelPlugin = new ModelPlugin(new Store([0, 1, 2, 3, 4, 5]));
@@ -253,19 +254,34 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		it("should set the node to render", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer(),
-			div = document.createElement("div");
+				div = document.createElement("div");
 
 			expect(itemRenderer.setRenderer(div)).toEqual(true);
 			expect(itemRenderer.getRenderer()).toBe(div);
 		});
 		
-		it("should set the root node where to attach created nodes", function () {
-			var rootNode = document.createElement("div");
+		it("should set the root node where to attach created nodes and set item renderer", function () {
+			var rootNode = document.createElement("div"),
+				p = document.createElement("p"),
+				itemRenderer;
+			
+			rootNode.appendChild(p);
+			spyOn(rootNode, "removeChild").andCallThrough();
 			itemRenderer = new modelPlugin.ItemRenderer();
 			expect(itemRenderer.setRootNode()).toEqual(false);
 			expect(itemRenderer.setRootNode({})).toEqual(false);
+			
+			spyOn(itemRenderer, "setRenderer").andCallThrough();
+			
 			expect(itemRenderer.setRootNode(rootNode)).toEqual(true);
 			expect(itemRenderer.getRootNode()).toBe(rootNode);
+			
+			expect(itemRenderer.setRenderer.wasCalled).toEqual(true);
+			expect(itemRenderer.setRenderer.mostRecentCall.args[0]).toBe(p);
+			
+			expect(rootNode.removeChild.wasCalled).toEqual(true);
+			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(p);
+			
 		});
 		
 		it("should set plugins", function () {
@@ -276,8 +292,11 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		it("should have a function to create items", function () {
 			var div = document.createElement("div"),
-				itemRenderer = new modelPlugin.ItemRenderer(div, plugins),	
+				itemRenderer,
 				node;
+			
+			rootNode.appendChild(div);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 
 			div.innerHTML = '<p><span>date:</span><span data-model="bind:innerHTML,date"></span></p>' +
 			'<p><span>title:</span><span data-model="bind:innerHTML,title"></span></p>';
@@ -293,11 +312,13 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 		
 		it("should call plugins.apply on item create", function () {
-			var div = document.createElement("div"),
-				ul = document.createElement("ul"),
-				itemRenderer = new modelPlugin.ItemRenderer(ul, plugins, div),
+			var ul = document.createElement("ul"),
+				itemRenderer,
 				item;
 			
+			rootNode.appendChild(ul);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode),
+
 			item = itemRenderer.create(0);
 			expect(plugins.apply.wasCalled).toEqual(true);
 			expect(plugins.apply.mostRecentCall.args[0]).toBe(item);
@@ -306,43 +327,59 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		it("should return a cloned node", function () {
 			var div = document.createElement("div"),
-				itemRenderer = new modelPlugin.ItemRenderer(div, plugins);	
+				itemRenderer;
+			
+			rootNode.appendChild(div);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);	
 
 			expect(itemRenderer.create(0)).not.toBe(div);
 		});
 
 		it("should set the item renderer at init", function () {
 			var div = document.createElement("div"),
-			itemRenderer = new modelPlugin.ItemRenderer(div);
+				itemRenderer;
+			
+			rootNode.appendChild(div);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 
 			expect(itemRenderer.getRenderer()).toBe(div);
 		});
 		
 		it("should set plugins at init", function () {
-			var div = document.createElement("div");
-			itemRenderer = new modelPlugin.ItemRenderer(div, plugins);
+			var div = document.createElement("div"),
+				itemRenderer;
+			
+			rootNode.appendChild(div);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			
 			expect(itemRenderer.getPlugins()).toEqual(plugins);
 		});
 		
 		it("should set rootnode at init", function () {
-			var ul = document.createElement("ul"),
-				div = document.createElement("div");
+			var div = document.createElement("div"),
+				itemRenderer;
 			
-			itemRenderer = new modelPlugin.ItemRenderer(ul, plugins, div);
-			expect(itemRenderer.getRootNode()).toBe(div);
+			rootNode.appendChild(div);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			expect(itemRenderer.getRootNode()).toBe(rootNode);
 		});
 				
 		it("should have a store to store items", function () {
 			var dom = document.createElement("ul"),
-				itemRenderer = new modelPlugin.ItemRenderer(dom, plugins);
+				itemRenderer;
+			
+			rootNode.appendChild(dom);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			expect(itemRenderer.items.toJSON()).toEqual("[]");
 		});
 		
 		it("should store created items in the store", function () {
 			var ul = document.createElement("ul"),
-				item;
-			itemRenderer = new modelPlugin.ItemRenderer(ul, plugins);
+				item,
+				itemRenderer;
+			
+			rootNode.appendChild(ul);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			
 			item = itemRenderer.create(0);
 			expect(itemRenderer.items.get(0)).toEqual(item);
@@ -350,8 +387,10 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 		it("should have a function to push items", function () {
 			var dom = document.createElement("ul"),
-				rootNode = document.createElement("div"),
-				itemRenderer = new modelPlugin.ItemRenderer(dom, plugins, rootNode);
+				itemRenderer;
+			
+			rootNode.appendChild(dom);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			
 			spyOn(itemRenderer, "create").andCallThrough();
 			spyOn(rootNode, "appendChild").andCallThrough();
@@ -373,9 +412,11 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 		it("shouldn't create an item if it doesn't exist in the model", function () {
 			var ul = document.createElement("ul"),
-				item;
+				item,
+				itemRenderer;
 			
-			itemRenderer = new modelPlugin.ItemRenderer(ul, plugins);
+			rootNode.appendChild(ul);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			
 			item = itemRenderer.create(10);
 			expect(item).toBeUndefined();
