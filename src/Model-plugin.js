@@ -125,6 +125,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			this.removeItem = function removeItem(id) {
 				if (this.items.has(id)) {
 					_rootNode.removeChild(this.items.get(id));
+					this.items.del(id);
 					return true;
 				} else {
 					return false;
@@ -175,6 +176,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
             _model.watch("deleted", function (idx) {
                 itemRenderer.removeItem(idx);
+                // Also remove all observers
                 this.observers[idx].forEach(function (handler) {
                 	_model.unwatchValue(handler);
                 }, this);

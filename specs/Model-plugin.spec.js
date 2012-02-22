@@ -405,20 +405,28 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 		it("should have a function to remove an item", function () {
 			var dom = document.createElement("p"),
-				itemRenderer;
+				itemRenderer,
+				item;
 			
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			spyOn(rootNode, "removeChild").andCallThrough();
+			spyOn(itemRenderer.items, "del").andCallThrough();
 			
 			expect(itemRenderer.removeItem()).toEqual(false);
 			expect(itemRenderer.removeItem({})).toEqual(false);
 			expect(itemRenderer.removeItem(1)).toEqual(false);
 			
 			itemRenderer.addItem(1);
+			
+			item = itemRenderer.items.get(1);
+			
 			expect(itemRenderer.removeItem(1)).toEqual(true);
 			expect(rootNode.removeChild.wasCalled).toEqual(true);
-			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
+			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(item);
+			
+			expect(itemRenderer.items.del.wasCalled).toEqual(true);
+			expect(itemRenderer.items.del.mostRecentCall.args[0]).toEqual(1);
 		});
 	
 		it("shouldn't create an item if it doesn't exist in the model", function () {
