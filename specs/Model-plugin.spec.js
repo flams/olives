@@ -242,14 +242,11 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.setRootNode).toBeInstanceOf(Function);
 			expect(itemRenderer.getRootNode).toBeInstanceOf(Function);
 			expect(itemRenderer.create).toBeInstanceOf(Function);
-			expect(itemRenderer.remove).toBeInstanceOf(Function);
 			expect(itemRenderer.setPlugins).toBeInstanceOf(Function);
 			expect(itemRenderer.getPlugins).toBeInstanceOf(Function);
-			expect(itemRenderer.pushItems).toBeInstanceOf(Function);
-			expect(itemRenderer.popItems).toBeInstanceOf(Function);
-			expect(itemRenderer.unshiftItems).toBeInstanceOf(Function);
-			expect(itemRenderer.shiftItems).toBeInstanceOf(Function);
 			expect(itemRenderer.items).toBeInstanceOf(Store);
+			expect(itemRenderer.addItem).toBeInstanceOf(Function);
+			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
 		});
 
 		it("should set the node to render", function () {
@@ -385,31 +382,45 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.items.get(0)).toEqual(item);
 		});
 		
-		it("should have a function to push items", function () {
-			var dom = document.createElement("ul"),
+		it("should have a function to add an item", function () {
+			var dom = document.createElement("p"),
 				itemRenderer;
 			
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			
+			spyOn(rootNode, "insertBefore").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
-			spyOn(rootNode, "appendChild").andCallThrough();
 			
-			expect(itemRenderer.pushItems(3)).toEqual(true);
-			expect(itemRenderer.create.callCount).toEqual(3);
-			expect(itemRenderer.create.calls[0].args[0]).toEqual(0);
-			expect(itemRenderer.create.calls[1].args[0]).toEqual(1);
-			expect(itemRenderer.create.calls[2].args[0]).toEqual(2);
+			expect(itemRenderer.addItem()).toEqual(false);
+			expect(itemRenderer.addItem({})).toEqual(false);
+			expect(itemRenderer.addItem(1)).toEqual(true);
 			
-			expect(rootNode.appendChild.callCount).toEqual(3);
-			expect(rootNode.appendChild.calls[2].args[0]).toBe(itemRenderer.items.get(2));
+			expect(itemRenderer.create.wasCalled).toEqual(true);
+			expect(itemRenderer.create.mostRecentCall.args[0]).toEqual(1);
+			
+			expect(rootNode.insertBefore.wasCalled).toEqual(true);
+			expect(rootNode.insertBefore.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
+			expect(rootNode.insertBefore.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
 		});
 		
-		
-		it("should have a function to remove a dom node", function () {
+		it("should have a function to remove an item", function () {
+			var dom = document.createElement("p"),
+				itemRenderer;
 			
+			rootNode.appendChild(dom);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			spyOn(rootNode, "removeChild").andCallThrough();
+			
+			expect(itemRenderer.removeItem()).toEqual(false);
+			expect(itemRenderer.removeItem({})).toEqual(false);
+			expect(itemRenderer.removeItem(1)).toEqual(false);
+			
+			itemRenderer.addItem(1);
+			expect(itemRenderer.removeItem(1)).toEqual(true);
+			expect(rootNode.removeChild.wasCalled).toEqual(true);
+			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
 		});
-		
+	
 		it("shouldn't create an item if it doesn't exist in the model", function () {
 			var ul = document.createElement("ul"),
 				item,

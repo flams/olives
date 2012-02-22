@@ -113,23 +113,22 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			this.items = new Store([]);
 			
-			this.pushItems = function pushItems(nb) {
-				for (var i=0; i<nb; i++) {
-					_rootNode.appendChild(this.create(i));
+			this.addItem = function addItem(id) {
+				if (typeof id == "number") {
+					_rootNode.insertBefore(this.create(id), this.items.get(id+1));
+					return true;
+				} else {
+					return false;
 				}
-				return true;
 			};
 			
-			this.popItems = function popItems() {
-				
-			};
-			
-			this.shiftItems = function shiftItems() {
-				
-			};
-			
-			this.unshiftItems = function shiftItems() {
-				
+			this.removeItem = function removeItem(id) {
+				if (this.items.has(id)) {
+					_rootNode.removeChild(this.items.get(id));
+					return true;
+				} else {
+					return false;
+				}
 			};
 			
 			/**
@@ -154,10 +153,6 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				}
 			};
 			
-			this.remove = function remove() {
-				
-			};
-			
 			this.setPlugins($plugins);
 			this.setRootNode($rootNode);
 		};
@@ -169,14 +164,17 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		this.foreach = function foreach(node) {
 			var itemRenderer = new this.ItemRenderer(this.plugins, node);
 			
-			itemRenderer.pushItems(_model.getNbItems());
-            
-            _model.watch("added", function (idx, value) {
-                node.insertBefore(this.plugins.apply(itemRenderer.create(idx)), node.childNodes[idx]);
+            for (var i=0, l=_model.getNbItems(); i<l; i++) {
+            	itemRenderer.addItem(i);
+            }
+			
+            _model.watch("added", function (idx) {
+                itemRenderer.addItem(idx);
             }, this);
             
+			
             _model.watch("deleted", function (idx) {
-                node.removeChild(node.childNodes[idx]);
+                itemRenderer.removeItem(idx);
                 this.observers[idx].forEach(function (handler) {
                 	_model.unwatchValue(handler);
                 }, this);
