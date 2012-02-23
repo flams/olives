@@ -64,8 +64,21 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 */
 		this.ItemRenderer = function ItemRenderer($plugins, $rootNode) {
 			
+			/**
+			 * The node that will be cloned
+			 * @private
+			 */
 			var _node = null,
+			
+			/**
+			 * The object that contains plugins.name and plugins.apply
+			 * @private
+			 */
 			_plugins = null,
+			
+			/**
+			 * The _rootNode where to append the created items
+			 */
 			_rootNode = null;
 			
 			/**
@@ -85,6 +98,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				return _node;
 			};
 			
+			/**
+			 * Sets the rootNode and gets the node to copy
+			 * @param {HTMLElement} rootNode
+			 * @returns
+			 */
 			this.setRootNode = function setRootNode(rootNode) {
 				var renderer;
 				if (rootNode instanceof HTMLElement) {
@@ -98,30 +116,68 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				}
 			};
 			
+			/**
+			 * Gets the rootNode
+			 * @private
+			 * @returns _rootNode
+			 */
 			this.getRootNode = function getRootNode() {
 				return _rootNode;
 			};
 			
+			/**
+			 * Set the plugins objet that contains the name and the apply function
+			 * @private
+			 * @param plugins
+			 * @returns true
+			 */
 			this.setPlugins = function setPlugins(plugins) {
 				_plugins = plugins;
 				return true;
 			};
 			
+			/**
+			 * Get the plugins object
+			 * @private
+			 * @returns the plugins object
+			 */
 			this.getPlugins = function getPlugins() {
 				return _plugins;
 			};
 			
+			/**
+			 * The nodes created from the items are stored here
+			 * @private
+			 */
 			this.items = new Store([]);
 			
+			/**
+			 * Adds a new item and adds it in the items list
+			 * @private
+			 * @param {Number} id the id of the item
+			 * @returns
+			 */
 			this.addItem = function addItem(id) {
+				var node;
 				if (typeof id == "number") {
-					_rootNode.insertBefore(this.create(id), this.items.get(id+1));
-					return true;
+					node = this.create(id);
+					if (node) {
+						_rootNode.insertBefore(this.create(id), this.items.get(id+1));
+						return true;
+					} else {
+						return false;
+					}
 				} else {
 					return false;
 				}
 			};
 			
+			/**
+			 * Remove an item from the dom and the items list
+			 * @private
+			 * @param {Number} id the id of the item to remove
+			 * @returns
+			 */
 			this.removeItem = function removeItem(id) {
 				if (this.items.has(id)) {
 					_rootNode.removeChild(this.items.get(id));
@@ -133,7 +189,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			};
 			
 			/**
-			 * create a new node
+			 * create a new node. Actually makes a clone of the initial one
+			 * and adds pluginname_id to each node, then calls plugins.apply to apply all plugins
 			 * @private
 			 * @param id
 			 * @param pluginName
@@ -162,18 +219,25 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * Expands the inner dom nodes of a given dom node, filling it with model's values
 		 * @param {HTMLElement} node the dom node to apply foreach to
 		 */
-		this.foreach = function foreach(node) {
+		this.foreach = function foreach(node, id, start, nb) {
 			var itemRenderer = new this.ItemRenderer(this.plugins, node);
-			
-            for (var i=0, l=_model.getNbItems(); i<l; i++) {
-            	itemRenderer.addItem(i);
-            }
-			
+
+			// Defines the boundaries
+			start = start || 0;
+			nb = nb || _model.getNbItems();
+			var l = nb + start;
+
+			// Adds the items according to the boundaries
+			for (var i=start; i<l; i++) {
+				itemRenderer.addItem(i);
+			}
+
+			// Add the newly created item
             _model.watch("added", function (idx) {
                 itemRenderer.addItem(idx);
             }, this);
             
-			
+			// If an item is deleted
             _model.watch("deleted", function (idx) {
                 itemRenderer.removeItem(idx);
                 // Also remove all observers

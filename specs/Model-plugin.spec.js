@@ -403,6 +403,20 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(rootNode.insertBefore.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
 		});
 		
+		it("should'nt try to add an item that doesn't exist", function () {
+			var dom = document.createElement("p"),
+			itemRenderer;
+			
+			rootNode.appendChild(dom);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			
+			expect(function () {
+				itemRenderer.addItem(-1);
+			}).not.toThrow();
+			
+			expect(itemRenderer.addItem(-1)).toEqual(false);
+		});
+		
 		it("should have a function to remove an item", function () {
 			var dom = document.createElement("p"),
 				itemRenderer,
@@ -602,7 +616,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 
 	});
-	/**
+	
+	
 	describe("ModelPluginForeachLimits", function () {
 		
 		var modelPlugin = null,
@@ -613,8 +628,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		beforeEach(function () {
 			dom = document.createElement("ul");
-			dom.innerHTML = "<ul><li></li></ul>";
-			dom.dataset["model"] = "foreach:id, 0,3";
+			dom.innerHTML = "<li data-model='bind:innerHTML'></li>";
 
 			dataSet = ["Olives", "is", "cool", "it handles", "pagination", "for me"];
 			model = new Store(dataSet);
@@ -625,11 +639,22 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 		
 		it("should limit the list length to the given params", function () {
-			modelPlugin.foreach(dom);
+			modelPlugin.foreach(dom, "id", 1, 3);
 			expect(dom.querySelectorAll("li").length).toEqual(3);
+			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("is");
+			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("cool");
+			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("it handles");
 		});
 		
-	});*/
+		it("should not fail with outbounds values", function () {
+			modelPlugin.foreach(dom, "id", -1, 7);
+			expect(dom.querySelectorAll("li").length).toEqual(6);
+			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives");
+			expect(dom.querySelectorAll("li")[5].innerHTML).toEqual("for me");
+
+		});
+		
+	});
 
 	describe("ModelForm", function () {
 
