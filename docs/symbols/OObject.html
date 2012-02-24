@@ -325,45 +325,29 @@ It has set/get/del/has/watch/unwatch methods</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#action">action</a></b>(name, params)
+								<div class="fixedFont"><b><a href="../symbols/OObject.html#alive">alive</a></b>(node)
 								</div>
-								<div class="description">Action triggers a state change, such as "place" or "render.</div>
+								<div class="description">Applies this UI's plugins to the given dom node,
+kind of making it 'alive'</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#alive">alive</a></b>(dom)
+								<div class="fixedFont"><b><a href="../symbols/OObject.html#place">place</a></b>(node)
 								</div>
-								<div class="description">This is the funny function.</div>
+								<div class="description">Place the UI in a given dom node</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#onPlace">onPlace</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/OObject.html#render">render</a></b>()
 								</div>
-								<div class="description">This function can be overridden.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#onRender">onRender</a></b>()
-								</div>
-								<div class="description">This function can be overridden.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#setTemplateFromDom">setTemplateFromDom</a></b>(dom)
-								</div>
-								<div class="description">Takes a dom node's innerHTML to set up template and emptie the dom's innerHTML</div>
+								<div class="description">Renders the template to dom nodes and applies the plugins on it
+It requires the template to be set first</div>
 							</td>
 						</tr>
 					
@@ -565,61 +549,16 @@ It has set/get/del/has/watch/unwatch methods
 					Method Detail
 				</div>
 				
-					<a name="action"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>action</b>(name, params)
-					
-					</div>
-					<div class="description">
-						Action triggers a state change, such as "place" or "render.
-Watch the life cycle documentation for more info.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
-									
-								</dt>
-								<dd>the name of the action</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>params</b>
-									
-								</dt>
-								<dd>the parameters to pass to the actions</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="alive"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>alive</b>(dom)
+					<b>alive</b>(node)
 					
 					</div>
 					<div class="description">
-						This is the funny function.
-It takes a dom node's innerHTML to set the OObject's template
-And then renders and places the OObject into it.
-It kind of makes the nodes alive!
+						Applies this UI's plugins to the given dom node,
+kind of making it 'alive'
 						
 						
 					</div>
@@ -631,98 +570,10 @@ It kind of makes the nodes alive!
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>node</b>
 									
 								</dt>
-								<dd>the dom node to give life to</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="onPlace"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>onPlace</b>()
-					
-					</div>
-					<div class="description">
-						This function can be overridden. 
-It's called when the placing is done.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="onRender"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>onRender</b>()
-					
-					</div>
-					<div class="description">
-						This function can be overridden. 
-It's called when the rendering is done.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setTemplateFromDom"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setTemplateFromDom</b>(dom)
-					
-					</div>
-					<div class="description">
-						Takes a dom node's innerHTML to set up template and emptie the dom's innerHTML
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
-									
-								</dt>
-								<dd>the dom node to take the template from</dd>
+								<dd>the dom to apply the plugins to</dd>
 							
 							</dl>
 						
@@ -733,9 +584,71 @@ It's called when the rendering is done.
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if dom is an HTMLElement</dd>
+								<dd>false if wrong param</dd>
 							
 							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="place"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>place</b>(node)
+					
+					</div>
+					<div class="description">
+						Place the UI in a given dom node
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{HTMLElement}</span> <b>node</b>
+									
+								</dt>
+								<dd>the node on which to append the UI</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="render"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>render</b>()
+					
+					</div>
+					<div class="description">
+						Renders the template to dom nodes and applies the plugins on it
+It requires the template to be set first
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
 						
 						
 						
@@ -754,7 +667,7 @@ It's called when the rendering is done.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Thu Feb 23 2012 16:28:30 GMT+0100 (CET)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Feb 24 2012 11:20:49 GMT+0100 (CET)
 		</div>
 	</body>
 </html>
