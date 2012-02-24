@@ -59,7 +59,7 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 	describe("OObjectAlive", function () {
 		
 		var oObject = null,
-		dom = document.createElement("div");
+			dom = document.createElement("div");
 	
 		beforeEach(function () {
 			oObject = new OObject;
@@ -68,6 +68,12 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 		
 		it("should make the node's children 'alive'", function () {
 			expect(oObject.alive).toBeInstanceOf(Function);
+			spyOn(oObject.plugins, "apply");
+			
+			expect(oObject.alive({})).toEqual(false);
+			expect(oObject.alive(dom)).toEqual(true);
+			expect(oObject.plugins.apply.wasCalled).toEqual(true);
+			expect(oObject.plugins.apply.mostRecentCall.args[0]).toBe(dom);
 		});
 		
 	});
@@ -161,7 +167,7 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 		});
 		
 		
-		it("should not render if template is not set", function () {
+		it("should throw error if template is not set", function () {
 			expect(function () { ui.render(); }).toThrow();
 		});
 		
@@ -231,19 +237,19 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 		});
 		
 		it("should not break bindings while moving from a place to another", function () {
-			var template = "<div><p>Olives is cool!</p></div>";
+			var template = "<div><p>Olives is cool!</p></div>",
+				p;
 			
-				ui.template = template;
-				
+			ui.template = template;	
 			ui.place(place1);
-			expect(ui.dom.innerHTML).toEqual("Olives is cool!");
+			
+			// Wherever the UI is placed, p shouldn't change
+			p = ui.dom.querySelector("p");
+			
 			ui.place(place2);
-			ui.dom.innerHTML = "test";
-			expect(place2.querySelector("p").innerHTML).toEqual("test");
-			
-			ui.render();
-			expect(place2.querySelector("p").innerHTML).toEqual("Olives is cool!");
-			
+
+			expect(place2.querySelector("p")).toBe(p);
+
 		});
 		
 		it("shouldn't add unwated nodes", function () {

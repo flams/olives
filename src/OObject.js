@@ -22,7 +22,11 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 * @private
 		 */
 		var render = function render(UI) {
-			var convertNode = document.createElement("div");
+			
+			// The place where the template will be created
+			// is either the currentPlace where the node is placed
+			// or a temporary div
+			var baseNode = _currentPlace || document.createElement("div");
 			
 			// If the template is set
 			if (UI.template) {
@@ -30,24 +34,24 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 				// UI is the UI that has OObject as prototype
 				if (typeof UI.template == "string") {
 					// Let the browser do the parsing, can't be faster & easier.
-					convertNode.innerHTML = UI.template.trim();
+					baseNode.innerHTML = UI.template.trim();
 				} else if (UI.template instanceof HTMLElement) {
 					// If it's already an HTML element
-					convertNode.appendChild(UI.template);
+					baseNode.appendChild(UI.template);
 				}
 				
-				if (convertNode.childNodes.length > 1) {
+				// The UI must be placed in a unique dom node
+				// If not, there can't be multiple UIs placed in the same parentNode
+				// as it wouldn't be possible to know which node would belong to which UI
+				// This is probably a DOM limitation.
+				if (baseNode.childNodes.length > 1) {
 					throw Error("UI.template should have only one parent node");
 				} else {
-					UI.dom = convertNode.childNodes[0];
+					UI.dom = baseNode.childNodes[0];
 				}
 				
-				// Let's now apply the plugins
-				UI.plugins.apply(UI.dom);
+				UI.alive(UI.dom);
 
-				// This function is empty and can be overridden by the user.
-				// It tells him that the UI is rendered
-				UI.onRender && UI.onRender();
 			} else {
 				// An explicit message I hope
 				throw Error("UI.template must be set prior to render");
@@ -62,6 +66,9 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		place = function place(UI, place) {
 			if (place) {
 				place.appendChild(UI.dom);
+				// Also save the new place, so next renderings
+				// will be made inside it
+				_currentPlace = place;
 			}
 		},
 		
@@ -73,6 +80,14 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 			render(UI);
 			place(UI, dom);
 		},
+		
+		/**
+		 * This stores the current place
+		 * If this is set, this is the place where new templates
+		 * will be appended
+		 * @private
+		 */
+		_currentPlace = null, 
 		
 		/**
 		 * The UI's stateMachine.
@@ -111,19 +126,36 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 */
 		this.dom = null;
 		
+		/**
+		 * Place the UI in a given dom node
+		 * @param {HTMLElement} node the node on which to append the UI
+		 */
 		this.place = function place(node) {
 			_stateMachine.event("place", this, node);
 		};
 		
+		/**
+		 * Renders the template to dom nodes and applies the plugins on it
+		 * It requires the template to be set first
+		 */
 		this.render = function render() {
 			_stateMachine.event("render", this);
 		};
 		
 		/**
-
+		 * Applies this UI's plugins to the given dom node,
+		 * kind of making it 'alive'
+		 * @param {HTMLElement} node the dom to apply the plugins to
+		 * @returns false if wrong param
 		 */
 		this.alive = function alive(dom) {
-
+			if (dom instanceof HTMLElement) {
+				this.plugins.apply(dom);
+				return true;
+			} else {
+				return false;
+			}
+			
 		};
 		
 	};
