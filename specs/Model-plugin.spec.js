@@ -508,6 +508,24 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.removeItem.wasCalled).toEqual(true);
 			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toEqual(1);
 		});
+		
+		it("should correctly prepend an item if it has no direct sibling", function () {
+			var item = document.createElement("p"),
+				itemRenderer;
+			
+			item.dataset["model"] = "bind:innerHTML";
+			rootNode.appendchild(item);
+			
+			itemRenderer = new modelPlugin.ItemRenderer(plugins.rootNode);
+			itemRenderer.nb = 3;
+			itemRenderer.start = 2;
+			itemRenderer.render();
+			
+			itemRenderer.start = 0;
+			itemRenderer.render();
+			
+			expect(rootNode.querySelectorAll("p")[0].innerHTML).toEqual("Olives");
+		});
 
 
 	});
