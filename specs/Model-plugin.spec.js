@@ -249,6 +249,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.addItem).toBeInstanceOf(Function);
 			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
 			expect(itemRenderer.render).toBeInstanceOf(Function);
+			expect(itemRenderer.getNextItem).toBeInstanceOf(Function);
 			expect(itemRenderer.start).toEqual(null);
 			expect(itemRenderer.nb).toEqual(null);
 		});
@@ -414,6 +415,33 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(rootNode.insertBefore.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
 		});
 		
+		it("should have a function to get the next item", function () {
+			var dom = document.createElement("p"),
+				itemRenderer;
+			
+			rootNode.appendChild(dom);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			
+			expect(itemRenderer.getNextItem(0)).toBeUndefined();
+			itemRenderer.addItem(3);
+			expect(itemRenderer.getNextItem(0)).toEqual(itemRenderer.items.get(3));
+			expect(itemRenderer.getNextItem(2)).toEqual(itemRenderer.items.get(3));
+			expect(itemRenderer.getNextItem(3)).toBeUndefined();
+		});
+		
+		it("should add an item at the correct position even if it's not directly followed by an other one", function () {
+			var dom = document.createElement("p"),
+				itemRenderer;
+			
+			rootNode.appendChild(dom);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			
+			itemRenderer.addItem(2);
+			itemRenderer.addItem(0);
+			expect(rootNode.querySelectorAll("p")[0].dataset["model_id"]).toEqual("0");
+			expect(rootNode.querySelectorAll("p")[1].dataset["model_id"]).toEqual("2");
+		});
+		
 		it("should'nt try to add an item that doesn't exist", function () {
 			var dom = document.createElement("p"),
 			itemRenderer;
@@ -506,25 +534,10 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.addItem.wasCalled).toEqual(true);
 			expect(itemRenderer.addItem.mostRecentCall.args[0]).toEqual(4);
 			expect(itemRenderer.removeItem.wasCalled).toEqual(true);
-			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toEqual(1);
-		});
-		
-		it("should correctly prepend an item if it has no direct sibling", function () {
-			var item = document.createElement("p"),
-				itemRenderer;
-			
-			item.dataset["model"] = "bind:innerHTML";
-			rootNode.appendchild(item);
-			
-			itemRenderer = new modelPlugin.ItemRenderer(plugins.rootNode);
-			itemRenderer.nb = 3;
-			itemRenderer.start = 2;
-			itemRenderer.render();
-			
-			itemRenderer.start = 0;
-			itemRenderer.render();
-			
-			expect(rootNode.querySelectorAll("p")[0].innerHTML).toEqual("Olives");
+			// The items must be removed from the highest id to the lowest
+			// so the ids don't change during the removal process
+			expect(itemRenderer.removeItem.calls[0].args[0]).toEqual(1);
+			expect(itemRenderer.removeItem.calls[1].args[0]).toEqual(0);
 		});
 
 

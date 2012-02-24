@@ -178,7 +178,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				if (typeof id == "number") {
 					node = this.create(id);
 					if (node) {
-						_rootNode.insertBefore(this.create(id), this.items.get(id+1));
+						_rootNode.insertBefore(this.create(id), this.getNextItem(id));
 						return true;
 					} else {
 						return false;
@@ -186,6 +186,14 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				} else {
 					return false;
 				}
+			};
+			
+			this.getNextItem = function getNextItem(id) {
+				return this.items.alter("slice", id+1).filter(function (value) {
+					if (value instanceof HTMLElement) {
+						return true;
+					}
+				})[0];
 			};
 			
 			/**
@@ -229,12 +237,14 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			this.render = function render() {
 				var _tmpNb = this.nb == "*" ? _model.getNbItems() : this.nb;
+				var marked = [];
 				if (this.nb !== null && this.start !== null) {
 					this.items.loop(function (value, idx) {
 						if (idx < this.start || idx >= (this.start + _tmpNb)) {
-							this.removeItem(idx);
+							marked.push(idx);
 						}
 					}, this);
+					marked.sort().reverse().forEach(this.removeItem, this);
 					for (var i=this.start, l=_tmpNb+this.start; i<l; i++) {
 						if (!this.items.has(i)) {
 							this.addItem(i);
