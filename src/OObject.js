@@ -21,9 +21,8 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 * It can't be executed if the template is not set
 		 * @private
 		 */
-		var render = function render(args) {
-			var UI = args.UI,
-				convertNode = document.createElement("div");
+		var render = function render(UI) {
+			var convertNode = document.createElement("div");
 			
 			// If the template is set
 			if (UI.template) {
@@ -60,14 +59,10 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 * This dom node should be somewhere in the dom of the application
 		 * @private
 		 */
-		place = function place(args) {
-			var UI = args.UI;
-
-			if (args.params) {
-				args.params.appendChild(UI.dom);
+		place = function place(UI, place) {
+			if (place) {
+				place.appendChild(UI.dom);
 			}
-			
-			UI.onPlace && UI.onPlace();
 		},
 		
 		/**
@@ -117,11 +112,11 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		this.dom = null;
 		
 		this.place = function place(params) {
-			_stateMachine.event("place", {UI:this, params: params});
+			_stateMachine.event("place", this, node);
 		};
 		
-		this.render = function render(params) {
-			_stateMachine.event("render", {UI:this, params: params});
+		this.render = function render() {
+			_stateMachine.event("render", this);
 		};
 		
 		/**
