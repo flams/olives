@@ -244,9 +244,17 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			};
 			
 			this.render = function render() {
+				var _tmpNb = _nb == "*" ? _model.getNbItems() : _nb;
 				if (_nb !== null && _start !== null) {
-					for (var i=_start, l=_nb+_start; i<l; i++) {
-						this.addItem(i);
+					this.items.loop(function (value, idx) {
+						if (idx < _start || idx >= (_start + _tmpNb)) {
+							this.removeItem(idx);
+						}
+					}, this);
+					for (var i=_start, l=_tmpNb+_start; i<l; i++) {
+						if (!this.items.has(i)) {
+							this.addItem(i);
+						}
 					}
 					return true;
 				} else {
@@ -265,6 +273,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * @param {ItemRenderer} itemRenderer an itemRenderer object
 		 */
 		this.setItemRenderer = function setItemRenderer(id, itemRenderer) {
+			id = id || "default";
 			_itemRenderers[id] = itemRenderer;
 		};
 		
@@ -285,32 +294,17 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		this.foreach = function foreach(node, idItemRenderer, start, nb) {
 			var itemRenderer = new this.ItemRenderer(this.plugins, node);
 
-			/*
-			// Defines the boundaries
-			start = start || 0;
-			nb = nb || _model.getNbItems();
-			var l = nb + start;
-
-			// Adds the items according to the boundaries
-			for (var i=start; i<l; i++) {
-				itemRenderer.addItem(i);
-			}*/
-			
 			itemRenderer.setStart(start || 0);
-			itemRenderer.setNb(nb || _model.getNbItems());
+			itemRenderer.setNb(nb || "*");
 			
 			itemRenderer.render();
 
 			// Add the newly created item
-            _model.watch("added", function (idx) {
-            	if (idx >= itemRenderer.getStart() && (idx <= (itemRenderer.getStart() + itemRenderer.getNb()))) {
-                    itemRenderer.addItem(idx);	
-            	}
-            }, this);
+            _model.watch("added", itemRenderer.render, itemRenderer);
             
 			// If an item is deleted
             _model.watch("deleted", function (idx) {
-                itemRenderer.removeItem(idx);
+            	itemRenderer.render();
                 // Also remove all observers
                 this.observers[idx] && this.observers[idx].forEach(function (handler) {
                 	_model.unwatchValue(handler);
@@ -318,7 +312,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
                 delete this.observers[idx];
             },this);
             
-            idItemRenderer && this.setItemRenderer(idItemRenderer, itemRenderer);
+            this.setItemRenderer(idItemRenderer, itemRenderer);
          };
          
          this.updateStart = function updateStart(id, start) {

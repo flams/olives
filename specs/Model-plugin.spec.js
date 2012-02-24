@@ -470,13 +470,13 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 		
 		it("should have functions to get/set start", function () {
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new modelPlugin.ItemRenderer();
 			expect(itemRenderer.setStart(3)).toEqual(3);
 			expect(itemRenderer.getStart()).toEqual(3);
 		});
 		
 		it("should have functions to get/set nb", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			var itemRenderer = new modelPlugin.ItemRenderer();
 			expect(itemRenderer.setNb(2)).toEqual(2);
 			expect(itemRenderer.getNb()).toEqual(2);
 		});
@@ -493,14 +493,34 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			
 			expect(itemRenderer.render()).toEqual(false);
 			itemRenderer.setNb(3);
-			itemRenderer.setStart(0);
+			itemRenderer.setStart(1);
 			expect(itemRenderer.render()).toEqual(true);
 			
 			expect(itemRenderer.addItem.callCount).toEqual(3);
+			expect(itemRenderer.addItem.calls[0].args[0]).toEqual(1);
 			expect(rootNode.querySelectorAll("p").length).toEqual(3);
+		});
+		
+		it("should update rendering when the limits change", function () {
+			var item = document.createElement("p"),
+				itemRenderer;
 			
+			rootNode.appendChild(item);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer.setNb(3);
+			itemRenderer.setStart(1);
+			itemRenderer.render();
 			
+			spyOn(itemRenderer, "addItem").andCallThrough();
+			spyOn(itemRenderer, "removeItem").andCallThrough();
 			
+			itemRenderer.setStart(2);
+			itemRenderer.render();
+			
+			expect(itemRenderer.addItem.wasCalled).toEqual(true);
+			expect(itemRenderer.addItem.mostRecentCall.args[0]).toEqual(4);
+			expect(itemRenderer.removeItem.wasCalled).toEqual(true);
+			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toEqual(1);
 		});
 
 
@@ -725,6 +745,15 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer).toBeInstanceOf(modelPlugin.ItemRenderer);
 			expect(modelPlugin.getItemRenderer).toBeInstanceOf(Function);
 			expect(modelPlugin.getItemRenderer("id")).toBe(itemRenderer);
+		});
+		
+		it("should save the store as default if no id is given", function () {
+			var itemRenderer;
+			spyOn(modelPlugin, "setItemRenderer").andCallThrough();
+			
+			modelPlugin.foreach(dom);
+			itemRenderer = modelPlugin.setItemRenderer.mostRecentCall.args[1];
+			expect(modelPlugin.getItemRenderer("default")).toBe(itemRenderer);
 		});
 		
 		it("should allow for multiple foreaches", function () {
