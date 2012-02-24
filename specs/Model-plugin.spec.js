@@ -481,14 +481,26 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.getNb()).toEqual(2);
 		});
 		
-		it("should have a function to render the items", function () {
+		it("should allow for populating the rootNode with items on render", function () {
 			var item = document.createElement("p"),
 				itemRenderer;
 			
 			rootNode.appendChild(item);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			
-			expect(itemRenderer.render).toBeInstanceOf(Function);
+			spyOn(itemRenderer, "addItem").andCallThrough();
+			spyOn(itemRenderer, "removeItem");
+			
+			expect(itemRenderer.render()).toEqual(false);
+			itemRenderer.setNb(3);
+			itemRenderer.setStart(0);
+			expect(itemRenderer.render()).toEqual(true);
+			
+			expect(itemRenderer.addItem.callCount).toEqual(3);
+			expect(rootNode.querySelectorAll("p").length).toEqual(3);
+			
+			
+			
 		});
 
 

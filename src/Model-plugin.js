@@ -244,7 +244,14 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			};
 			
 			this.render = function render() {
-				
+				if (_nb !== null && _start !== null) {
+					for (var i=_start, l=_nb+_start; i<l; i++) {
+						this.addItem(i);
+					}
+					return true;
+				} else {
+					return false;
+				}
 			};
 			
 			this.setPlugins($plugins);
@@ -278,6 +285,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		this.foreach = function foreach(node, idItemRenderer, start, nb) {
 			var itemRenderer = new this.ItemRenderer(this.plugins, node);
 
+			/*
 			// Defines the boundaries
 			start = start || 0;
 			nb = nb || _model.getNbItems();
@@ -286,11 +294,16 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			// Adds the items according to the boundaries
 			for (var i=start; i<l; i++) {
 				itemRenderer.addItem(i);
-			}
+			}*/
+			
+			itemRenderer.setStart(start || 0);
+			itemRenderer.setNb(nb || _model.getNbItems());
+			
+			itemRenderer.render();
 
 			// Add the newly created item
             _model.watch("added", function (idx) {
-            	if (idx >= start && (idx <= (start + nb))) {
+            	if (idx >= itemRenderer.getStart() && (idx <= (itemRenderer.getStart() + itemRenderer.getNb()))) {
                     itemRenderer.addItem(idx);	
             	}
             }, this);
