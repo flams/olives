@@ -89,11 +89,10 @@ require(["Olives/Type-plugin", "Olives/Plugins", "Olives/OObject"], function (Ty
 		});
 		
 		it("should call the place method of an ui", function () {
-			spyOn(myUI, "action");
+			spyOn(myUI, "place");
 			typePlugin.place(node, "myUI");
-			expect(myUI.action.wasCalled).toEqual(true);
-			expect(myUI.action.mostRecentCall.args[0]).toEqual("place");
-			expect(myUI.action.mostRecentCall.args[1]).toBe(node);
+			expect(myUI.place.wasCalled).toEqual(true);
+			expect(myUI.place.mostRecentCall.args[0]).toBe(node);
 		});
 		
 		it("should throw an exception if the ui is not registered", function () {

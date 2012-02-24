@@ -16,7 +16,7 @@ function (OObject, Tools) {
 		
 		this.place = function place(node, name) {
 			if (_uis[name] instanceof OObject) {
-				_uis[name].action("place", node);
+				_uis[name].place(node);
 			} else {
 				throw new Error(name + " is not an OObject UI in place:"+name);
 			}

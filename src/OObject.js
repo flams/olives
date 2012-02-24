@@ -22,7 +22,8 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 * @private
 		 */
 		var render = function render(args) {
-			var UI = args.UI;
+			var UI = args.UI,
+				convertNode = document.createElement("div");
 			
 			// If the template is set
 			if (UI.template) {
@@ -30,10 +31,16 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 				// UI is the UI that has OObject as prototype
 				if (typeof UI.template == "string") {
 					// Let the browser do the parsing, can't be faster & easier.
-					UI.dom.innerHTML = UI.template;
+					convertNode.innerHTML = UI.template.trim();
 				} else if (UI.template instanceof HTMLElement) {
 					// If it's already an HTML element
-					UI.dom.appendChild(UI.template);
+					convertNode.appendChild(UI.template);
+				}
+				
+				if (convertNode.childNodes.length > 1) {
+					throw Error("UI.template should have only one parent node");
+				} else {
+					UI.dom = convertNode.childNodes[0];
 				}
 				
 				// Let's now apply the plugins
@@ -56,16 +63,8 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		place = function place(args) {
 			var UI = args.UI;
 
-			// The following was made to avoid adding unwanted nodes in the dom.
-			// Adding a parent div could have eased it but it slows down the interface
-			// (adding nodes is never a good thing) and it's unexpected by the developer.
 			if (args.params) {
-				// Get's all childNodes to append them to the new node
-				Tools.toArray(UI.dom.childNodes).forEach(function (node) {
-					args.params.appendChild(node);
-				});
-				// The new node is saved
-				UI.dom = args.params;
+				args.params.appendChild(UI.dom);
 			}
 			
 			UI.onPlace && UI.onPlace();
@@ -79,7 +78,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 			render(args);
 			place(args);
 		},
-			
+		
 		/**
 		 * The UI's stateMachine.
 		 * Much better than if(stuff) do(stuff) else if (!stuff and stuff but not stouff) do (otherstuff)
@@ -113,62 +112,23 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		this.template = null;
 		
 		/**
-		 * Takes a dom node's innerHTML to set up template and emptie the dom's innerHTML
-		 * @param {HTMLElement} dom the dom node to take the template from
-		 * @returns true if dom is an HTMLElement
-		 */
-		this.setTemplateFromDom = function setTemplateFromDom(dom) {
-			if (dom instanceof HTMLElement) {
-				this.template = dom.innerHTML;
-				dom.innerHTML = "";
-				return true;
-			} else {
-				return false;
-			}
-		};
-		
-		/**
 		 * This will hold the dom nodes built from the template.
 		 */
-		this.dom = document.createElement("div");
+		this.dom = null;
 		
-		/**
-		 * This function can be overridden. 
-		 * It's called when the rendering is done.
-		 */
-		this.onRender = function onRender() {
-			
+		this.place = function place(params) {
+			_stateMachine.event("place", {UI:this, params: params});
 		};
-			
-		/**
-		 * Action triggers a state change, such as "place" or "render.
-		 * Watch the life cycle documentation for more info.
-		 * @param {String} name the name of the action
-		 * @param {Object} params the parameters to pass to the actions
-		 */
-		this.action = function action(name, params) {
-			_stateMachine.event(name, {UI: this,
-				params: params});
+		
+		this.render = function render(params) {
+			_stateMachine.event("render", {UI:this, params: params});
 		};
 		
 		/**
-		 * This function can be overridden. 
-		 * It's called when the placing is done.
-		 */
-		this.onPlace = function onPlace() {
-			
-		};
-		
-		/**
-		 * This is the funny function.
-		 * It takes a dom node's innerHTML to set the OObject's template
-		 * And then renders and places the OObject into it.
-		 * It kind of makes the nodes alive!
-		 * @param {HTMLElement} dom the dom node to give life to
+
 		 */
 		this.alive = function alive(dom) {
-			this.setTemplateFromDom(dom);
-			this.action("place", dom);
+
 		};
 		
 	};
