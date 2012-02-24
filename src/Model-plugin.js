@@ -91,11 +91,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * The _rootNode where to append the created items
 			 * @private
 			 */
-			_rootNode = null,
+			_rootNode = null;
 			
-			_start = null,
+			this.start = null,
 			
-			_nb = null;
+			this.nb = null;
 			
 			/**
 			 * Set the duplicated node
@@ -227,31 +227,15 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				}
 			};
 			
-			this.setStart = function setStart(start) {
-				return _start = start;
-			};
-			
-			this.getStart = function getStart() {
-				return _start;
-			};
-			
-			this.setNb = function setNb(nb) {
-				return _nb = nb;
-			};
-			
-			this.getNb = function getNb() {
-				return _nb;
-			};
-			
 			this.render = function render() {
-				var _tmpNb = _nb == "*" ? _model.getNbItems() : _nb;
-				if (_nb !== null && _start !== null) {
+				var _tmpNb = this.nb == "*" ? _model.getNbItems() : this.nb;
+				if (this.nb !== null && this.start !== null) {
 					this.items.loop(function (value, idx) {
-						if (idx < _start || idx >= (_start + _tmpNb)) {
+						if (idx < this.start || idx >= (this.start + _tmpNb)) {
 							this.removeItem(idx);
 						}
 					}, this);
-					for (var i=_start, l=_tmpNb+_start; i<l; i++) {
+					for (var i=this.start, l=_tmpNb+this.start; i<l; i++) {
 						if (!this.items.has(i)) {
 							this.addItem(i);
 						}
@@ -294,8 +278,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		this.foreach = function foreach(node, idItemRenderer, start, nb) {
 			var itemRenderer = new this.ItemRenderer(this.plugins, node);
 
-			itemRenderer.setStart(start || 0);
-			itemRenderer.setNb(nb || "*");
+			itemRenderer.start = start || 0;
+			itemRenderer.nb = nb || "*";
 			
 			itemRenderer.render();
 
@@ -318,7 +302,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
          this.updateStart = function updateStart(id, start) {
         	 var itemRenderer = this.getItemRenderer(id);
         	 if (itemRenderer) {
-        		 itemRenderer.setStart(start);
+        		 itemRenderer.start = start;
         		 return true;
         	 } else {
         		 return false;
@@ -328,7 +312,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
          this.updateNb = function updateNb(id, nb) {
         	 var itemRenderer = this.getItemRenderer(id);
         	 if (itemRenderer) {
-        		 itemRenderer.setNb(nb);
+        		 itemRenderer.nb = nb;
         		 return true;
         	 } else {
         		 return false;

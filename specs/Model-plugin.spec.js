@@ -248,11 +248,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.items).toBeInstanceOf(Store);
 			expect(itemRenderer.addItem).toBeInstanceOf(Function);
 			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
-			expect(itemRenderer.setNb).toBeInstanceOf(Function);
-			expect(itemRenderer.getNb).toBeInstanceOf(Function);
-			expect(itemRenderer.setStart).toBeInstanceOf(Function);
-			expect(itemRenderer.getStart).toBeInstanceOf(Function);
 			expect(itemRenderer.render).toBeInstanceOf(Function);
+			expect(itemRenderer.start).toEqual(null);
+			expect(itemRenderer.nb).toEqual(null);
 		});
 
 		it("should set the node to render", function () {
@@ -469,18 +467,6 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.items.has(10)).toEqual(false);
 		});
 		
-		it("should have functions to get/set start", function () {
-			itemRenderer = new modelPlugin.ItemRenderer();
-			expect(itemRenderer.setStart(3)).toEqual(3);
-			expect(itemRenderer.getStart()).toEqual(3);
-		});
-		
-		it("should have functions to get/set nb", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer();
-			expect(itemRenderer.setNb(2)).toEqual(2);
-			expect(itemRenderer.getNb()).toEqual(2);
-		});
-		
 		it("should allow for populating the rootNode with items on render", function () {
 			var item = document.createElement("p"),
 				itemRenderer;
@@ -492,8 +478,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			spyOn(itemRenderer, "removeItem");
 			
 			expect(itemRenderer.render()).toEqual(false);
-			itemRenderer.setNb(3);
-			itemRenderer.setStart(1);
+			itemRenderer.nb = 3;
+			itemRenderer.start = 1;
 			expect(itemRenderer.render()).toEqual(true);
 			
 			expect(itemRenderer.addItem.callCount).toEqual(3);
@@ -507,14 +493,14 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			
 			rootNode.appendChild(item);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			itemRenderer.setNb(3);
-			itemRenderer.setStart(1);
+			itemRenderer.nb = 3;
+			itemRenderer.start = 1;
 			itemRenderer.render();
 			
 			spyOn(itemRenderer, "addItem").andCallThrough();
 			spyOn(itemRenderer, "removeItem").andCallThrough();
 			
-			itemRenderer.setStart(2);
+			itemRenderer.start = 2;
 			itemRenderer.render();
 			
 			expect(itemRenderer.addItem.wasCalled).toEqual(true);
@@ -771,11 +757,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.updateStart).toBeInstanceOf(Function);
 			modelPlugin.foreach(dom, "id", 1, 3);
 			itemRenderer = modelPlugin.getItemRenderer("id");
-			spyOn(itemRenderer, "setStart");
 			expect(modelPlugin.updateStart("fakeId")).toEqual(false);
 			expect(modelPlugin.updateStart("id", 2)).toEqual(true);
-			expect(itemRenderer.setStart.wasCalled);
-			expect(itemRenderer.setStart.mostRecentCall.args[0]).toEqual(2);
+			expect(itemRenderer.start).toEqual(2);
 		});
 		
 		it("should update the nb of items displayed by foreach", function () {
@@ -783,11 +767,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.updateNb).toBeInstanceOf(Function);
 			modelPlugin.foreach(dom, "id", 1, 3);
 			itemRenderer = modelPlugin.getItemRenderer("id");
-			spyOn(itemRenderer, "setNb");
 			expect(modelPlugin.updateNb("fakeId")).toEqual(false);
 			expect(modelPlugin.updateNb("id", 2)).toEqual(true);
-			expect(itemRenderer.setNb.wasCalled);
-			expect(itemRenderer.setNb.mostRecentCall.args[0]).toEqual(2);
+			expect(itemRenderer.nb).toEqual(2);
 		});
 	});
 
