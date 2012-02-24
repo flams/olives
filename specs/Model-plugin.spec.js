@@ -247,6 +247,11 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.items).toBeInstanceOf(Store);
 			expect(itemRenderer.addItem).toBeInstanceOf(Function);
 			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
+			expect(itemRenderer.setNb).toBeInstanceOf(Function);
+			expect(itemRenderer.getNb).toBeInstanceOf(Function);
+			expect(itemRenderer.setStart).toBeInstanceOf(Function);
+			expect(itemRenderer.getStart).toBeInstanceOf(Function);
+			expect(itemRenderer.render).toBeInstanceOf(Function);
 		});
 
 		it("should set the node to render", function () {
@@ -456,16 +461,23 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.items.has(10)).toEqual(false);
 		});
 		
-		it("should have functions to get/set start and nb of items", function () {
+		it("should have functions to get/set start", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			expect(itemRenderer.setNb).toBeInstanceOf(Function);
-			expect(itemRenderer.getNb).toBeInstanceOf(Function);
-			expect(itemRenderer.setStart).toBeInstanceOf(Function);
-			expect(itemRenderer.getStart).toBeInstanceOf(Function);
-			expect(itemRenderer.setNb(2)).toEqual(2);
-			expect(itemRenderer.getNb()).toEqual(2);
 			expect(itemRenderer.setStart(3)).toEqual(3);
 			expect(itemRenderer.getStart()).toEqual(3);
+		});
+		
+		it("should have functions to get/set nb", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			expect(itemRenderer.setNb(2)).toEqual(2);
+			expect(itemRenderer.getNb()).toEqual(2);
+		});
+		
+		it("should have a function to render the items", function () {
+			var item = document.createElement("p"),
+				itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			
+			expect(itemRenderer.render).toBeInstanceOf(Function);
 		});
 
 

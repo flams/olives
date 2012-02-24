@@ -91,7 +91,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * The _rootNode where to append the created items
 			 * @private
 			 */
-			_rootNode = null;
+			_rootNode = null,
+			
+			_start = null,
+			
+			_nb = null;
 			
 			/**
 			 * Set the duplicated node
@@ -237,6 +241,10 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			this.getNb = function getNb() {
 				return _nb;
+			};
+			
+			this.render = function render() {
+				
 			};
 			
 			this.setPlugins($plugins);
