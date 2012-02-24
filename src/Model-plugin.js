@@ -93,8 +93,16 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 */
 			_rootNode = null;
 			
+			/**
+			 * The lower boundary
+			 * @private
+			 */
 			this.start = null,
 			
+			/**
+			 * The number of item to display
+			 * @private
+			 */
 			this.nb = null;
 			
 			/**
@@ -107,6 +115,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			};
 			
 			/**
+			 * Returns the node that is going to be used for rendering
 			 * @private
 			 * @returns the node that is duplicated
 			 */
@@ -116,6 +125,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			/**
 			 * Sets the rootNode and gets the node to copy
+			 * @private
 			 * @param {HTMLElement} rootNode
 			 * @returns
 			 */
@@ -188,6 +198,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				}
 			};
 			
+			/**
+			 * Get the next item in the item store given an id.
+			 * @private
+			 * @param {Number} id the id to start from
+			 * @returns
+			 */
 			this.getNextItem = function getNextItem(id) {
 				return this.items.alter("slice", id+1).filter(function (value) {
 					if (value instanceof HTMLElement) {
@@ -235,17 +251,41 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				}
 			};
 			
+			/**
+			 * Renders the dom tree, adds nodes that are in the boundaries
+			 * and removes the others
+			 * @private
+			 * @returns true boundaries are set
+			 */
 			this.render = function render() {
+				// If the number of items to render is all (*)
+				// Then get the number of items
 				var _tmpNb = this.nb == "*" ? _model.getNbItems() : this.nb;
+				
+				// This will store the items to remove
 				var marked = [];
+				
+				// Render only if boundaries have been set
 				if (this.nb !== null && this.start !== null) {
+					
+					// Loop through the existing items
 					this.items.loop(function (value, idx) {
+						// If an item is out of the boundary
 						if (idx < this.start || idx >= (this.start + _tmpNb)) {
+							// Mark it
 							marked.push(idx);
 						}
 					}, this);
+					
+					// Remove the marked item from the hight id to the lowest
+					// Doing this will avoid the id change during removal
+					// (removing id 2 will make id 3 becoming 2)
 					marked.sort().reverse().forEach(this.removeItem, this);
+					
+					// Now that we have removed the old nodes
+					// Add the missing one 
 					for (var i=this.start, l=_tmpNb+this.start; i<l; i++) {
+						// Of course only if it's not in the dom already
 						if (!this.items.has(i)) {
 							this.addItem(i);
 						}
@@ -309,6 +349,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
             this.setItemRenderer(idItemRenderer, itemRenderer);
          };
          
+         /**
+          * Update the lower boundary of a foreach
+          * @param {String} id the id of the foreach to update
+          * @param {Number} start the new value
+          * @returns true if the foreach exists
+          */
          this.updateStart = function updateStart(id, start) {
         	 var itemRenderer = this.getItemRenderer(id);
         	 if (itemRenderer) {
@@ -319,6 +365,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
         	 }
          };
          
+         /**
+          * Update the number of item to display in a foreach
+          * @param {String} id the id of the foreach to update
+          * @param {Number} nb the number of items to display
+          * @returns true if the foreach exists
+          */
          this.updateNb = function updateNb(id, nb) {
         	 var itemRenderer = this.getItemRenderer(id);
         	 if (itemRenderer) {
