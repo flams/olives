@@ -455,6 +455,18 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(item).toBeUndefined();
 			expect(itemRenderer.items.has(10)).toEqual(false);
 		});
+		
+		it("should have functions to get/set start and nb of items", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			expect(itemRenderer.setNb).toBeInstanceOf(Function);
+			expect(itemRenderer.getNb).toBeInstanceOf(Function);
+			expect(itemRenderer.setStart).toBeInstanceOf(Function);
+			expect(itemRenderer.getStart).toBeInstanceOf(Function);
+			expect(itemRenderer.setNb(2)).toEqual(2);
+			expect(itemRenderer.getNb()).toEqual(2);
+			expect(itemRenderer.setStart(3)).toEqual(3);
+			expect(itemRenderer.getStart()).toEqual(3);
+		});
 
 
 	});
@@ -651,9 +663,68 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(dom.querySelectorAll("li").length).toEqual(6);
 			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives");
 			expect(dom.querySelectorAll("li")[5].innerHTML).toEqual("for me");
-
 		});
 		
+		it("should not add a new item if it's out of the limits", function () {
+			modelPlugin.foreach(dom, "id", 2, 3);
+			model.alter("push", "new item out of the limits");
+			expect(dom.querySelectorAll("li").length).toEqual(3);
+		});
+		
+		it("should not fail if an item is removed", function() {
+			modelPlugin.foreach(dom, "id", 2, 3);
+			model.alter("push", "new item out of the limits");
+			model.alter("pop");
+			expect(dom.querySelectorAll("li").length).toEqual(3);
+			model.del(2);
+			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("it handles");
+		});
+		
+		it("should store the item renderers according to their id", function () {
+			var itemRenderer;
+			spyOn(modelPlugin, "setItemRenderer").andCallThrough();
+			
+			modelPlugin.foreach(dom, "id", 2, 3);
+			expect(modelPlugin.setItemRenderer.mostRecentCall.args[0]).toEqual("id");
+			itemRenderer = modelPlugin.setItemRenderer.mostRecentCall.args[1];
+			expect(itemRenderer).toBeInstanceOf(modelPlugin.ItemRenderer);
+			expect(modelPlugin.getItemRenderer).toBeInstanceOf(Function);
+			expect(modelPlugin.getItemRenderer("id")).toBe(itemRenderer);
+		});
+		
+		it("should allow for multiple foreaches", function () {
+			var dom2 = dom.cloneNode(true);
+			modelPlugin.foreach(dom, "id", 1, 3);
+			modelPlugin.foreach(dom2, "id2", 3, 3);
+			
+			expect(dom2.querySelectorAll("li").length).toEqual(3);
+			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("is");
+			expect(dom2.querySelectorAll("li")[0].innerHTML).toEqual("it handles");
+		});
+		
+		it("should update the foreach start", function () {
+			var itemRenderer;
+			expect(modelPlugin.updateStart).toBeInstanceOf(Function);
+			modelPlugin.foreach(dom, "id", 1, 3);
+			itemRenderer = modelPlugin.getItemRenderer("id");
+			spyOn(itemRenderer, "setStart");
+			expect(modelPlugin.updateStart("fakeId")).toEqual(false);
+			expect(modelPlugin.updateStart("id", 2)).toEqual(true);
+			expect(itemRenderer.setStart.wasCalled);
+			expect(itemRenderer.setStart.mostRecentCall.args[0]).toEqual(2);
+		});
+		
+		it("should update the nb of items displayed by foreach", function () {
+			var itemRenderer;
+			expect(modelPlugin.updateNb).toBeInstanceOf(Function);
+			modelPlugin.foreach(dom, "id", 1, 3);
+			itemRenderer = modelPlugin.getItemRenderer("id");
+			spyOn(itemRenderer, "setNb");
+			expect(modelPlugin.updateNb("fakeId")).toEqual(false);
+			expect(modelPlugin.updateNb("id", 2)).toEqual(true);
+			expect(itemRenderer.setNb.wasCalled);
+			expect(itemRenderer.setNb.mostRecentCall.args[0]).toEqual(2);
+		});
 	});
 
 	describe("ModelForm", function () {
@@ -687,8 +758,6 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.set(input)).toEqual(true);
 			expect(model.get("firstname")).toEqual("olivier");
 		});
-
-
 
 		it("should have a form function", function () {
 			expect(modelPlugin.form).toBeInstanceOf(Function);

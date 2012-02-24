@@ -23,7 +23,18 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 */
 		var _model = null,
 		
-		_bindings = {};
+		/**
+		 * The list of custom bindings
+		 * @private
+		 */
+		_bindings = {},
+		
+		/**
+		 * The list of itemRenderers
+		 * each foreach has its itemRenderer
+		 * @private
+		 */
+		_itemRenderers = {};
 		
 		/**
 		 * The observers handlers
@@ -78,6 +89,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			
 			/**
 			 * The _rootNode where to append the created items
+			 * @private
 			 */
 			_rootNode = null;
 			
@@ -211,15 +223,51 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 				}
 			};
 			
+			this.setStart = function setStart(start) {
+				return _start = start;
+			};
+			
+			this.getStart = function getStart() {
+				return _start;
+			};
+			
+			this.setNb = function setNb(nb) {
+				return _nb = nb;
+			};
+			
+			this.getNb = function getNb() {
+				return _nb;
+			};
+			
 			this.setPlugins($plugins);
 			this.setRootNode($rootNode);
+		};
+		
+		/**
+		 * Save an itemRenderer according to its id
+		 * @private
+		 * @param {String} id the id of the itemRenderer
+		 * @param {ItemRenderer} itemRenderer an itemRenderer object
+		 */
+		this.setItemRenderer = function setItemRenderer(id, itemRenderer) {
+			_itemRenderers[id] = itemRenderer;
+		};
+		
+		/**
+		 * Get an itemRenderer
+		 * @private
+		 * @param {String} id the name of the itemRenderer
+		 * @returns the itemRenderer
+		 */
+		this.getItemRenderer = function getItemRenderer(id) {
+			return _itemRenderers[id];
 		};
 		
 		/**
 		 * Expands the inner dom nodes of a given dom node, filling it with model's values
 		 * @param {HTMLElement} node the dom node to apply foreach to
 		 */
-		this.foreach = function foreach(node, id, start, nb) {
+		this.foreach = function foreach(node, idItemRenderer, start, nb) {
 			var itemRenderer = new this.ItemRenderer(this.plugins, node);
 
 			// Defines the boundaries
@@ -234,18 +282,42 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 
 			// Add the newly created item
             _model.watch("added", function (idx) {
-                itemRenderer.addItem(idx);
+            	if (idx >= start && (idx <= (start + nb))) {
+                    itemRenderer.addItem(idx);	
+            	}
             }, this);
             
 			// If an item is deleted
             _model.watch("deleted", function (idx) {
                 itemRenderer.removeItem(idx);
                 // Also remove all observers
-                this.observers[idx].forEach(function (handler) {
+                this.observers[idx] && this.observers[idx].forEach(function (handler) {
                 	_model.unwatchValue(handler);
                 }, this);
                 delete this.observers[idx];
             },this);
+            
+            idItemRenderer && this.setItemRenderer(idItemRenderer, itemRenderer);
+         };
+         
+         this.updateStart = function updateStart(id, start) {
+        	 var itemRenderer = this.getItemRenderer(id);
+        	 if (itemRenderer) {
+        		 itemRenderer.setStart(start);
+        		 return true;
+        	 } else {
+        		 return false;
+        	 }
+         };
+         
+         this.updateNb = function updateNb(id, nb) {
+        	 var itemRenderer = this.getItemRenderer(id);
+        	 if (itemRenderer) {
+        		 itemRenderer.setNb(nb);
+        		 return true;
+        	 } else {
+        		 return false;
+        	 }
          };
 		
 		/**
