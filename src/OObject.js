@@ -69,9 +69,9 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 * Does rendering & placing in one function
 		 * @private
 		 */
-		renderNPlace = function renderNPlace(args) {
-			render(args);
-			place(args);
+		renderNPlace = function renderNPlace(UI, dom) {
+			render(UI);
+			place(UI, dom);
 		},
 		
 		/**
@@ -111,7 +111,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 */
 		this.dom = null;
 		
-		this.place = function place(params) {
+		this.place = function place(node) {
 			_stateMachine.event("place", this, node);
 		};
 		

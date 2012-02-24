@@ -190,7 +190,7 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 		});
 		
 		it("should render&place the dom node at the given place", function () {
-			ui.place( place1);
+			ui.place(place1);
 			
 			expect(place1.querySelectorAll("p").length).toEqual(1);
 		});
