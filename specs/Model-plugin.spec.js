@@ -221,7 +221,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		var modelPlugin = null,
 			plugins = null,
-			rootNode = document.createElement("div");
+			rootNode = null;
 
 		beforeEach(function () {
 			modelPlugin = new ModelPlugin(new Store([0, 1, 2, 3, 4, 5]));
@@ -229,6 +229,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 				name: "model",
 				apply: jasmine.createSpy()
 			};
+			rootNode = document.createElement("div");
 		});
 
 		it("should provide an item renderer", function () {
@@ -284,6 +285,13 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(rootNode.removeChild.wasCalled).toEqual(true);
 			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(p);
 			
+		});
+		
+		it("shouldn't fail if rootNode has no children", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer();
+			expect(function () {
+				itemRenderer.setRootNode(rootNode);
+			}).not.toThrow();
 		});
 		
 		it("should set plugins", function () {
@@ -462,7 +470,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 		
 		it("should have functions to get/set start", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			expect(itemRenderer.setStart(3)).toEqual(3);
 			expect(itemRenderer.getStart()).toEqual(3);
 		});
@@ -475,7 +483,10 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 		it("should have a function to render the items", function () {
 			var item = document.createElement("p"),
-				itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+				itemRenderer;
+			
+			rootNode.appendChild(item);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			
 			expect(itemRenderer.render).toBeInstanceOf(Function);
 		});

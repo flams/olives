@@ -125,7 +125,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					_rootNode = rootNode;
 					renderer = _rootNode.querySelector("*");
 					this.setRenderer(renderer);
-					_rootNode.removeChild(renderer);
+					renderer && _rootNode.removeChild(renderer);
 					return true;
 				} else {
 					return false;
