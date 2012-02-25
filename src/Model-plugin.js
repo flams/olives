@@ -201,10 +201,10 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 */
 			this.addItem = function addItem(id) {
 				var node;
-				if (typeof id == "number") {
+				if (typeof id == "number" && !this.items.has(id)) {
 					node = this.create(id);
 					if (node) {
-						_rootNode.insertBefore(this.create(id), this.getNextItem(id));
+						_rootNode.insertBefore(node, this.getNextItem(id));
 						return true;
 					} else {
 						return false;
@@ -301,10 +301,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					// Now that we have removed the old nodes
 					// Add the missing one 
 					for (var i=_start, l=_tmpNb+_start; i<l; i++) {
-						// Of course only if it's not in the dom already
-						if (!this.items.has(i)) {
-							this.addItem(i);
-						}
+						this.addItem(i);
 					}
 					return true;
 				} else {
@@ -398,19 +395,18 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
          };
 		
          /**
-          * 
-          * 
-          * @param id
-          * @returns
+          * Refresh a foreach after having modified its limits
+          * @param {String} id the id of the foreach to refresh
+          * @returns true if the foreach exists
           */
          this.refresh = function refresh(id) {
-        	// var itemRenderer = this.getItemRenderer(id);
-        	 // if (itemRenderer) {
-        	 // itemRenderer.render();
-        	 // return true;
-         	//} else {
-        	//  return false;
-        	 // }
+        	var itemRenderer = this.getItemRenderer(id);
+    	 	if (itemRenderer) {
+    	 		itemRenderer.render();
+    	 		return true;
+    	 	} else {
+    	 		return false;
+    	 	}
          };
          
 		/**

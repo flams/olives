@@ -436,6 +436,26 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(rootNode.insertBefore.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
 		});
 		
+		it("should not add an item that is already created", function () {
+			var dom = document.createElement("p"),
+				itemRenderer;
+			
+			rootNode.appendChild(dom);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			spyOn(itemRenderer.items, "has").andCallThrough();
+			spyOn(itemRenderer, "create").andCallThrough();
+
+			expect(itemRenderer.addItem(1)).toEqual(true);
+			expect(itemRenderer.create.callCount).toEqual(1);
+			
+			expect(itemRenderer.items.has.wasCalled).toEqual(true);
+			expect(itemRenderer.items.has.mostRecentCall.args[0]).toEqual(1);
+			
+			expect(itemRenderer.addItem(1)).toEqual(false);
+			expect(itemRenderer.create.callCount).toEqual(1);
+			
+		});
+		
 		it("should have a function to get the next item", function () {
 			var dom = document.createElement("p"),
 				itemRenderer;
@@ -855,6 +875,17 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.updateNb("fakeId")).toEqual(false);
 			expect(modelPlugin.updateNb("id", 2)).toEqual(true);
 			expect(itemRenderer.getNb()).toEqual(2);
+		});
+		
+		it("should have a function to call itemRenderer's render", function () {
+			var itemRenderer;
+			modelPlugin.foreach(dom, "id", 1, 3);
+			itemRenderer = modelPlugin.getItemRenderer("id");
+			spyOn(itemRenderer, "render");
+			
+			expect(modelPlugin.refresh("fakeid")).toEqual(false);
+			expect(modelPlugin.refresh("id")).toEqual(true);
+			expect(itemRenderer.render.wasCalled).toEqual(true);
 		});
 
 	});

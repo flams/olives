@@ -292,7 +292,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#foreach">foreach</a></b>(node, id, start, nb)
+								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#foreach">foreach</a></b>(node, idItemRenderer, start, nb)
 								</div>
 								<div class="description">Expands the inner dom nodes of a given dom node, filling it with model's values</div>
 							</td>
@@ -310,6 +310,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#refresh">refresh</a></b>(id)
+								</div>
+								<div class="description">Refresh a foreach after having modified its limits</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#setModel">setModel</a></b>(model)
 								</div>
 								<div class="description">Define the model to watch for</div>
@@ -319,9 +328,18 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#setRootNode">setRootNode</a></b>(rootNode)
+								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#updateNb">updateNb</a></b>(id, nb)
 								</div>
-								<div class="description">Sets the rootNode and gets the node to copy</div>
+								<div class="description">Update the number of item to display in a foreach</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#updateStart">updateStart</a></b>(id, start)
+								</div>
+								<div class="description">Update the lower boundary of a foreach</div>
 							</td>
 						</tr>
 					
@@ -560,7 +578,7 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>foreach</b>(node, id, start, nb)
+					<b>foreach</b>(node, idItemRenderer, start, nb)
 					
 					</div>
 					<div class="description">
@@ -582,7 +600,7 @@ ul.inheritsList
 								<dd>the dom node to apply foreach to</dd>
 							
 								<dt>
-									<b>id</b>
+									<b>idItemRenderer</b>
 									
 								</dt>
 								<dd></dd>
@@ -653,6 +671,49 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="refresh"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>refresh</b>(id)
+					
+					</div>
+					<div class="description">
+						Refresh a foreach after having modified its limits
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>id</b>
+									
+								</dt>
+								<dd>the id of the foreach to refresh</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>true if the foreach exists</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="setModel"> </a>
 					<div class="fixedFont">
 					
@@ -696,15 +757,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="setRootNode"> </a>
+					<a name="updateNb"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>setRootNode</b>(rootNode)
+					<b>updateNb</b>(id, nb)
 					
 					</div>
 					<div class="description">
-						Sets the rootNode and gets the node to copy
+						Update the number of item to display in a foreach
 						
 						
 					</div>
@@ -716,10 +777,16 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement}</span> <b>rootNode</b>
+									<span class="light fixedFont">{String}</span> <b>id</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>the id of the foreach to update</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>nb</b>
+									
+								</dt>
+								<dd>the number of items to display</dd>
 							
 							</dl>
 						
@@ -730,7 +797,56 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd></dd>
+								<dd>true if the foreach exists</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="updateStart"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>updateStart</b>(id, start)
+					
+					</div>
+					<div class="description">
+						Update the lower boundary of a foreach
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>id</b>
+									
+								</dt>
+								<dd>the id of the foreach to update</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>start</b>
+									
+								</dt>
+								<dd>the new value</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>true if the foreach exists</dd>
 							
 							</dl>
 						
@@ -751,7 +867,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Feb 24 2012 11:20:49 GMT+0100 (CET)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sat Feb 25 2012 13:57:46 GMT+0100 (CET)
 		</div>
 	</body>
 </html>
