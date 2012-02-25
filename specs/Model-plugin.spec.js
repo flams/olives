@@ -21,6 +21,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(modelPlugin.getModel).toBeInstanceOf(Function);
 			expect(modelPlugin.form).toBeInstanceOf(Function);
 			expect(modelPlugin.observers).toBeInstanceOf(Object);
+			expect(modelPlugin.updateStart).toBeInstanceOf(Function);
+			expect(modelPlugin.updateNb).toBeInstanceOf(Function);
+			expect(modelPlugin.refresh).toBeInstanceOf(Function);
 		});
 
 	});
@@ -557,8 +560,43 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.removeItem.calls[0].args[0]).toEqual(1);
 			expect(itemRenderer.removeItem.calls[1].args[0]).toEqual(0);
 		});
-
-
+		
+		it("should update rendering when an item is removed", function () {
+			var item = document.createElement("p"),
+				itemRenderer;
+			
+			rootNode.appendChild(item);
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			
+			itemRenderer.setNb("*");
+			itemRenderer.setStart(0);
+			spyOn(itemRenderer, "removeItem").andCallThrough();
+			// First rendering with the 6 elements
+			itemRenderer.render();
+			// Remove the first one
+			modelPlugin.getModel().del(0);
+			// And the rendering should be updated
+			itemRenderer.render();
+			// There are now 5 items
+			expect(rootNode.querySelectorAll("p").length).toEqual(5);
+			// Because removeItem was called once
+			expect(itemRenderer.removeItem.callCount).toEqual(1);
+			// to remove item with index 5.
+			// 5?? yes! the items from 0 to 4 are updated, the 5 is deleted!
+			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toEqual(5);
+			
+			// Deletes item 0, 1, 2
+			modelPlugin.getModel().alter("splice", 0, 3);
+			// which should remove 3 dom nodes : the 5th, 
+			itemRenderer.render();
+			
+			expect(itemRenderer.removeItem.callCount).toEqual(4);
+			expect(itemRenderer.removeItem.calls[3].args[0]).toEqual(2);
+			expect(itemRenderer.removeItem.calls[2].args[0]).toEqual(3);
+			expect(itemRenderer.removeItem.calls[1].args[0]).toEqual(4);
+			// Only items 0 and 1 remain
+			
+		});
 	});
 
 	describe("ModelPluginForeach", function () {
@@ -803,7 +841,6 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 		it("should update the foreach start", function () {
 			var itemRenderer;
-			expect(modelPlugin.updateStart).toBeInstanceOf(Function);
 			modelPlugin.foreach(dom, "id", 1, 3);
 			itemRenderer = modelPlugin.getItemRenderer("id");
 			expect(modelPlugin.updateStart("fakeId")).toEqual(false);
@@ -813,13 +850,13 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 		it("should update the nb of items displayed by foreach", function () {
 			var itemRenderer;
-			expect(modelPlugin.updateNb).toBeInstanceOf(Function);
 			modelPlugin.foreach(dom, "id", 1, 3);
 			itemRenderer = modelPlugin.getItemRenderer("id");
 			expect(modelPlugin.updateNb("fakeId")).toEqual(false);
 			expect(modelPlugin.updateNb("id", 2)).toEqual(true);
 			expect(itemRenderer.getNb()).toEqual(2);
 		});
+
 	});
 
 	describe("ModelForm", function () {

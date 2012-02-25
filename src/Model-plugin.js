@@ -287,7 +287,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					// Loop through the existing items
 					this.items.loop(function (value, idx) {
 						// If an item is out of the boundary
-						if (idx < _start || idx >= (_start + _tmpNb)) {
+						if (idx < _start || idx >= (_start + _tmpNb) || !_model.has(idx)) {
 							// Mark it
 							marked.push(idx);
 						}
@@ -397,6 +397,22 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
         	 }
          };
 		
+         /**
+          * 
+          * 
+          * @param id
+          * @returns
+          */
+         this.refresh = function refresh(id) {
+        	// var itemRenderer = this.getItemRenderer(id);
+        	 // if (itemRenderer) {
+        	 // itemRenderer.render();
+        	 // return true;
+         	//} else {
+        	//  return false;
+        	 // }
+         };
+         
 		/**
 		 * Both ways binding between a dom node attributes and the model
 		 * @param {HTMLElement} node the dom node to apply the plugin to
