@@ -374,7 +374,23 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			expect(itemRenderer.getRootNode()).toBe(rootNode);
 		});
-				
+		
+		it("should have a function to get/set start", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer();
+			expect(itemRenderer.setStart(0)).toEqual(0);
+			expect(itemRenderer.setStart("5")).toEqual(5);
+			expect(itemRenderer.getStart()).toEqual(5);
+		});
+		
+		it("should have a function to get/set nb", function () {
+			var itemRenderer = new modelPlugin.ItemRenderer();
+			expect(itemRenderer.setNb(0)).toEqual(0);
+			expect(itemRenderer.setNb("5")).toEqual(5);
+			expect(itemRenderer.getNb()).toEqual(5);
+			expect(itemRenderer.setNb("*")).toEqual("*");
+			expect(itemRenderer.getNb()).toEqual("*");
+		});
+			
 		it("should have a store to store items", function () {
 			var dom = document.createElement("ul"),
 				itemRenderer;

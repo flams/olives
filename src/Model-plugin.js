@@ -178,7 +178,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			this.items = new Store([]);
 			
 			this.setStart = function setStart(start) {
-				return _start = start;
+				return _start = parseInt(start, 10);
 			};
 			
 			this.getStart = function getStart() {
@@ -186,7 +186,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			};
 			
 			this.setNb = function setNb(nb) {
-				return _nb = nb;
+				return _nb = nb == "*" ? nb : parseInt(nb, 10);
 			};
 			
 			this.getNb = function getNb() {
