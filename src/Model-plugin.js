@@ -177,18 +177,40 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 */
 			this.items = new Store([]);
 			
+			/**
+			 * Set the start limit
+			 * @private
+			 * @param {Number} start the value to start rendering the items from
+			 * @returns the value
+			 */
 			this.setStart = function setStart(start) {
 				return _start = parseInt(start, 10);
 			};
 			
+			/**
+			 * Get the start value
+			 * @private
+			 * @returns the start value
+			 */
 			this.getStart = function getStart() {
 				return _start;
 			};
 			
+			/**
+			 * Set the number of item to display
+			 * @private
+			 * @param {Number/String} nb the number of item to display or "*" for all
+			 * @returns the value
+			 */
 			this.setNb = function setNb(nb) {
 				return _nb = nb == "*" ? nb : parseInt(nb, 10);
 			};
 			
+			/**
+			 * Get the number of item to display
+			 * @private
+			 * @returns the value
+			 */
 			this.getNb = function getNb() {
 				return _nb;
 			};
