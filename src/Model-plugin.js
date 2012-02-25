@@ -91,19 +91,19 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * The _rootNode where to append the created items
 			 * @private
 			 */
-			_rootNode = null;
+			_rootNode = null,
 			
 			/**
 			 * The lower boundary
 			 * @private
 			 */
-			this.start = null,
+			_start = null,
 			
 			/**
 			 * The number of item to display
 			 * @private
 			 */
-			this.nb = null;
+			_nb = null;
 			
 			/**
 			 * Set the duplicated node
@@ -176,6 +176,22 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * @private
 			 */
 			this.items = new Store([]);
+			
+			this.setStart = function setStart(start) {
+				return _start = start;
+			};
+			
+			this.getStart = function getStart() {
+				return _start;
+			};
+			
+			this.setNb = function setNb(nb) {
+				return _nb = nb;
+			};
+			
+			this.getNb = function getNb() {
+				return _nb;
+			};
 			
 			/**
 			 * Adds a new item and adds it in the items list
@@ -260,18 +276,18 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			this.render = function render() {
 				// If the number of items to render is all (*)
 				// Then get the number of items
-				var _tmpNb = this.nb == "*" ? _model.getNbItems() : this.nb;
+				var _tmpNb = _nb == "*" ? _model.getNbItems() : _nb;
 				
 				// This will store the items to remove
 				var marked = [];
 				
 				// Render only if boundaries have been set
-				if (this.nb !== null && this.start !== null) {
+				if (_nb !== null && _start !== null) {
 					
 					// Loop through the existing items
 					this.items.loop(function (value, idx) {
 						// If an item is out of the boundary
-						if (idx < this.start || idx >= (this.start + _tmpNb)) {
+						if (idx < _start || idx >= (_start + _tmpNb)) {
 							// Mark it
 							marked.push(idx);
 						}
@@ -284,7 +300,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					
 					// Now that we have removed the old nodes
 					// Add the missing one 
-					for (var i=this.start, l=_tmpNb+this.start; i<l; i++) {
+					for (var i=_start, l=_tmpNb+_start; i<l; i++) {
 						// Of course only if it's not in the dom already
 						if (!this.items.has(i)) {
 							this.addItem(i);
@@ -328,8 +344,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		this.foreach = function foreach(node, idItemRenderer, start, nb) {
 			var itemRenderer = new this.ItemRenderer(this.plugins, node);
 
-			itemRenderer.start = start || 0;
-			itemRenderer.nb = nb || "*";
+			itemRenderer.setStart(start || 0);
+			itemRenderer.setNb(nb || "*");
 			
 			itemRenderer.render();
 
@@ -358,7 +374,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
          this.updateStart = function updateStart(id, start) {
         	 var itemRenderer = this.getItemRenderer(id);
         	 if (itemRenderer) {
-        		 itemRenderer.start = start;
+        		 itemRenderer.setStart(start);
         		 return true;
         	 } else {
         		 return false;
@@ -374,7 +390,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
          this.updateNb = function updateNb(id, nb) {
         	 var itemRenderer = this.getItemRenderer(id);
         	 if (itemRenderer) {
-        		 itemRenderer.nb = nb;
+        		 itemRenderer.setNb(nb);
         		 return true;
         	 } else {
         		 return false;

@@ -250,8 +250,10 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
 			expect(itemRenderer.render).toBeInstanceOf(Function);
 			expect(itemRenderer.getNextItem).toBeInstanceOf(Function);
-			expect(itemRenderer.start).toEqual(null);
-			expect(itemRenderer.nb).toEqual(null);
+			expect(itemRenderer.getStart).toBeInstanceOf(Function);
+			expect(itemRenderer.getNb).toBeInstanceOf(Function);
+			expect(itemRenderer.setNb).toBeInstanceOf(Function);
+			expect(itemRenderer.setStart).toBeInstanceOf(Function);
 		});
 
 		it("should set the node to render", function () {
@@ -506,8 +508,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			spyOn(itemRenderer, "removeItem");
 			
 			expect(itemRenderer.render()).toEqual(false);
-			itemRenderer.nb = 3;
-			itemRenderer.start = 1;
+			itemRenderer.setNb(3);
+			itemRenderer.setStart(1);
 			expect(itemRenderer.render()).toEqual(true);
 			
 			expect(itemRenderer.addItem.callCount).toEqual(3);
@@ -521,14 +523,14 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			
 			rootNode.appendChild(item);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			itemRenderer.nb = 3;
-			itemRenderer.start = 1;
+			itemRenderer.setNb(3);
+			itemRenderer.setStart(1);
 			itemRenderer.render();
 			
 			spyOn(itemRenderer, "addItem").andCallThrough();
 			spyOn(itemRenderer, "removeItem").andCallThrough();
 			
-			itemRenderer.start = 2;
+			itemRenderer.setStart(2);
 			itemRenderer.render();
 			
 			expect(itemRenderer.addItem.wasCalled).toEqual(true);
@@ -790,7 +792,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			itemRenderer = modelPlugin.getItemRenderer("id");
 			expect(modelPlugin.updateStart("fakeId")).toEqual(false);
 			expect(modelPlugin.updateStart("id", 2)).toEqual(true);
-			expect(itemRenderer.start).toEqual(2);
+			expect(itemRenderer.getStart()).toEqual(2);
 		});
 		
 		it("should update the nb of items displayed by foreach", function () {
@@ -800,7 +802,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			itemRenderer = modelPlugin.getItemRenderer("id");
 			expect(modelPlugin.updateNb("fakeId")).toEqual(false);
 			expect(modelPlugin.updateNb("id", 2)).toEqual(true);
-			expect(itemRenderer.nb).toEqual(2);
+			expect(itemRenderer.getNb()).toEqual(2);
 		});
 	});
 
