@@ -4,9 +4,9 @@
  * MIT Licensed
  */
 
+var PROJECT_NAME = "Olives";
 
 var requirejs = require("requirejs"),
-	jasmine = require("jasmine-node"),
 	fs = require("fs"),
 	cp = require("child_process"),
 	
@@ -49,11 +49,9 @@ var requirejs = require("requirejs"),
 			    }
 			});
 	};
-
-
-	requirejs("./Jakeconfig.js");
+	
 	requirejs.config({
-		baseUrl: PROJECT_SRC_DIR,
+		baseUrl: "src",
 		nodeRequire: require
 	});
 
@@ -64,12 +62,11 @@ namespace("docs", function () {
 	
 	desc("Generate " + PROJECT_NAME + "'s documentation");
 	task("generate", ["docs:clean"], function () {
-		var cmd = "java -jar " + JSDOC + " " +
-				JSDOC_DIR + "/app/run.js " + 
-				PROJECT_SRC_DIR +
+		var cmd = "java -jar tools/JsDoc/jsrun.jar " +
+				"tools/JsDoc/app/run.js src" +
 				" -r=2" +
-				" -d=" + DOCS_DIR +
-				" -t=" + JSDOC_DIR + "/templates/jsdoc";
+				" -d=docs" +
+				" -t=tools/JsDoc/templates/jsdoc";
 
 		_execCommand(cmd);
 	});
@@ -78,20 +75,20 @@ namespace("docs", function () {
 namespace("build", function () {
 	task("clean", [], function () {
 		// Delete previous files first.
-		fs.unlink(BUILD_DIR + "/" + PROJECT_NAME + ".js");
-		fs.unlink(BUILD_DIR + "/" + PROJECT_NAME + "-map.js");
-		fs.unlink(TEMP_DIR + "/concat.js");
+		fs.unlink("build/" + PROJECT_NAME + ".js");
+		fs.unlink("build/" + PROJECT_NAME + "-map.js");
+		fs.unlink("build/temp/concat.js");
 	});
 	
 	task("concat", ["build:clean"], function () {
-		var files = _getFiles(PROJECT_SRC_DIR),
-			concat = fs.readFileSync(LICENSE,"utf8");
+		var files = _getFiles("src"),
+			concat = fs.readFileSync("LICENSE","utf8");
 		
 		files.forEach(function (file) {
-			concat += fs.readFileSync(PROJECT_SRC_DIR + "/" + file,"utf8");
+			concat += fs.readFileSync("src/" + file,"utf8");
 		});
 		
-		fs.writeFile(TEMP_DIR + "/concat.js", concat, function (err) {
+		fs.writeFile("build/temp/concat.js", concat, function (err) {
 			if (err) {
 				throw err;
 			}
@@ -99,50 +96,21 @@ namespace("build", function () {
 	});
 	
 	task("minify", ["build:concat"], function () {
-		var cmd = "java -jar " + GCOMPILER +
-				" --js " + TEMP_DIR + "/concat.js" +
-				" --js_output_file " + BUILD_DIR + "/" + PROJECT_NAME + ".js" +
-				" --create_source_map " + BUILD_DIR + "/" + PROJECT_NAME + "-map";
+		var cmd = "java -jar tools/GoogleCompiler/compiler.jar" +
+				" --js build/temp/concat.js" +
+				" --js_output_file build/" + PROJECT_NAME + ".js" +
+				" --create_source_map build/" + PROJECT_NAME + "-map";
 		
 		_execCommand(cmd);
 	});
 });
 
 namespace("tests", function () {
-	task("jstd_conf", [], function () {
-		var conf = "",
-			prop,
-			file = JSTD_CONFIG.configFile;
-		
-		for (prop in file) {
-			if (file.hasOwnProperty(prop)) {
-				conf += prop + ": ";
-				if (["number", "string"].indexOf(typeof file[prop]) >= 0) {
-					conf += file[prop] + "\n"; 
-				} else if (file[prop].forEach) {
-					conf += "\n";
-					file[prop].forEach(function (line) {
-						conf += " - " + line + "\n";
-					});
-				}
-				conf += "\n";
-			}
-		}
-		
-		fs.writeFile("jsTestDriver.conf", conf, function (err) {
-			if (err) {
-				throw err;
-			}
-		});
-		
-	});
 	
-	task("jstd", ["tests:jstd_conf"], function () {
-		var cmd = "java -jar " + JSTD +
-				" --port " + JSTD_PORT +
-				" --browser " + JSTD_CONFIG.browsers.join() +
+	task("jstd", function () {
+		var cmd = "java -jar tools/JsTestDriver/JsTestDriver-1.3.4-a.jar " +
 				" --tests all" +
-				" --testOutput " + REPORTS_DIR;
+				" --testOutput reports/";
 		
 		_execCommand(cmd);
 		

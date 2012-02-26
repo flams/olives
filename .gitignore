@@ -2,4 +2,3 @@
 .settings/
 .project
 */.DS_Store
-./jsTestDriver.conf
