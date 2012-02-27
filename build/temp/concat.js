@@ -290,7 +290,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 */
 			this.addItem = function addItem(id) {
 				var node;
-				if (typeof id == "number" && !this.items.has(id)) {
+				if (typeof id == "number" && !this.items.get(id)) {
 					node = this.create(id);
 					if (node) {
 						_rootNode.insertBefore(node, this.getNextItem(id));
@@ -324,9 +324,10 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns
 			 */
 			this.removeItem = function removeItem(id) {
-				if (this.items.has(id)) {
-					_rootNode.removeChild(this.items.get(id));
-					this.items.del(id);
+				var item = this.items.get(id);
+				if (item) {
+					_rootNode.removeChild(item);
+					this.items.set(id);
 					return true;
 				} else {
 					return false;

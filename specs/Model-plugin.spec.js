@@ -442,14 +442,14 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			spyOn(itemRenderer.items, "has").andCallThrough();
+			spyOn(itemRenderer.items, "get").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
 
 			expect(itemRenderer.addItem(1)).toEqual(true);
 			expect(itemRenderer.create.callCount).toEqual(1);
 			
-			expect(itemRenderer.items.has.wasCalled).toEqual(true);
-			expect(itemRenderer.items.has.mostRecentCall.args[0]).toEqual(1);
+			expect(itemRenderer.items.get.wasCalled).toEqual(true);
+			expect(itemRenderer.items.get.mostRecentCall.args[0]).toEqual(1);
 			
 			expect(itemRenderer.addItem(1)).toEqual(false);
 			expect(itemRenderer.create.callCount).toEqual(1);
@@ -505,7 +505,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			spyOn(rootNode, "removeChild").andCallThrough();
-			spyOn(itemRenderer.items, "del").andCallThrough();
+			spyOn(itemRenderer.items, "set").andCallThrough();
 			
 			expect(itemRenderer.removeItem()).toEqual(false);
 			expect(itemRenderer.removeItem({})).toEqual(false);
@@ -519,8 +519,11 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(rootNode.removeChild.wasCalled).toEqual(true);
 			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(item);
 			
-			expect(itemRenderer.items.del.wasCalled).toEqual(true);
-			expect(itemRenderer.items.del.mostRecentCall.args[0]).toEqual(1);
+			// We don't delete the item but set it to undefined
+			// so we keep the indexes in line with the model's indexes
+			expect(itemRenderer.items.set.wasCalled).toEqual(true);
+			expect(itemRenderer.items.set.mostRecentCall.args[0]).toEqual(1);
+			expect(itemRenderer.items.set.mostRecentCall.args[1]).toBeUndefined();
 		});
 	
 		it("shouldn't create an item if it doesn't exist in the model", function () {
@@ -610,12 +613,11 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			// which should remove 3 dom nodes : the 5th, 
 			itemRenderer.render();
 			
-			expect(itemRenderer.removeItem.callCount).toEqual(4);
-			expect(itemRenderer.removeItem.calls[3].args[0]).toEqual(2);
-			expect(itemRenderer.removeItem.calls[2].args[0]).toEqual(3);
-			expect(itemRenderer.removeItem.calls[1].args[0]).toEqual(4);
-			// Only items 0 and 1 remain
-			
+			expect(itemRenderer.removeItem.callCount).toEqual(5);
+			expect(itemRenderer.removeItem.calls[3].args[0]).toEqual(3);
+			expect(itemRenderer.removeItem.calls[2].args[0]).toEqual(4);
+			expect(itemRenderer.removeItem.calls[1].args[0]).toEqual(5);
+
 		});
 	});
 
