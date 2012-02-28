@@ -1,1 +1,269 @@
-Olives
+<!doctype html>
+<html>
+<head>
+<title>Olives - real time UI made easy</title>
+<style type="text/css">
+html {
+	font-family: "verdana";
+}
+
+body {
+	width: 1000px;
+	margin: 0px;
+	padding-left: 200px;
+	background-color: #fafafa;
+	color: #4b3a16;
+	margin-bottom: 100px;
+}
+
+h1,h2,h3 {
+	margin: 0;
+	padding: 2px;
+	padding-left: 10px;
+	color: #0b7430;
+	text-shadow: -1px -1px -1px #4b3a16;
+	box-shadow: 1px 1px 1px #4b3a16;
+}
+
+header h1 {
+	font-size: 48px;
+	margin-bottom: 5px;
+	text-shadow: 1px 1px 1px #4b3a16;
+	box-shadow: none;
+}
+
+header span {
+	font-weight: bold;
+}
+
+nav a,footer a {
+	color: #0b7430;
+	text-decoration: none;
+}
+
+nav a:hover,footer a:hover {
+	text-decoration: underline;
+}
+
+header,nav,section section, footer {
+	padding: 10px 0px 10px 0px;
+	border-bottom: 1px solid white;
+	box-shadow: 0px 2px 5px #aaa;
+	margin: 5px 0 0 0;
+	padding: 10px;
+	border-radius: 3px;
+	background-color: white;
+	font-size: 12px;
+}
+nav {
+	font-size: 16px;
+	width:150px;
+	position:fixed;
+	left: 20px;
+}
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul > li a {
+ color: white;
+}
+
+nav li {
+ margin-top: 4px;
+ margin-bottom: 4px;
+}
+
+nav ul ul {
+ margin-left: 5px;
+ font-size: 14px;
+}
+nav ul ul li a {
+	color: #0b7430;
+}
+ a {
+	color: #4b3a16;
+	text-decoration: none;
+}
+
+ a:hover {
+	text-decoration: underline;
+}
+
+.menu a strong {
+	color: #0b7430;
+}
+
+header a {
+	background-color: #0b7430;
+	color: white;
+	border-radius: 10px;
+	display: block;
+	padding: 10px;
+	float: right;
+	text-shadow: -1px -1px 1px black;
+	text-decoration: none;
+	box-shadow: 1px 1px 1px black;
+}
+
+header a:hover {
+	box-shadow: 0 0 0;
+}
+
+p {
+	margin-left: 20px;
+}
+
+h2 {
+	background-color: #0b7430;
+	border-radius: 3px;
+	color: white;
+	font-size: 16px;
+}
+
+h3 {
+	background-color: #4b3a16;
+	border-radius: 2px;
+	color: white;
+	font-weight: normal;
+	font-size: 12px;
+	margin-left: 20px;
+}
+
+.example pre {
+	border: 0px;
+	margin-left: 20px;
+}
+</style>
+<link href="prettify.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="prettify.js"></script>
+<script>
+	window.addEventListener("load", function(event, menu, nav) {
+		prettyPrint();
+
+		// Created an arg called menu to avoid polluting the global namespace
+		menu = document.querySelector(".menu");
+		nav = document.querySelector("nav ul ul");
+
+		// For each h2 in my examples
+		Array.prototype.slice.call(document.querySelectorAll(".example > h2"),0).forEach(function(node) {
+
+							// Create an li node
+							var liNav = document.createElement("li"),
+								liMenu = document.createElement("li"),
+								split = node.innerHTML.split(":");
+
+							// split[0] is the name of the Module
+							node.setAttribute("id", split[0]);
+
+							liNav.innerHTML = '<a href="#' + split[0] + '">' + split[0] + '</a>'
+							// That is appended to the menu. It's a link to the chapter now.
+							liMenu.innerHTML = '<a href="#'+ split[0] +'"><strong>'
+									+ split.shift()
+									+ '</strong>:'
+									+ split.join(":") + '</a>';
+							menu.appendChild(liMenu);
+							nav.appendChild(liNav);
+						});
+
+	}, true);
+</script>
+</head>
+<body>
+	<section>
+
+	<header>
+		<a href="https://github.com/flams/olives/blob/master/build/Olives.js">Download Olives Alpha</a>
+		<h1>Olives</h1>
+		<span>Real time web applications made easy</span>
+	</header>
+	
+		<nav>
+		<ul>
+			<li><h2><a href="#presentation">What is Olives?</a></h2></li>
+			<li><h2><a href="#install">Installation</a></h2></li>
+			<li><h2><a href="#examples">Documentation</a></h2>
+				<ul>
+				</ul>
+			</li>
+			<li><h2><a href="#philosophy">Philosophy</a></h2></li>
+		</ul> 
+	</nav>
+
+	<section id="presentation">
+		<h2>What is Olives?</h2>
+		<p>
+
+		</p>
+		<p>The tools are:</p>
+		<ul class="menu"></ul>
+	</section>
+
+	<section id="install">
+
+		<h2>Installing Olives</h2>
+		<p>Olives requires an AMD compatible loader like requirejs to work.<br />
+			It's based on Emily.js
+		</p>
+		<h3>In a browser</h3>
+		<pre>
+	&lt;script src="./require.js"&gt;&lt;/script&gt;
+	&lt;script src="./Emily.js"&gt;&lt;/script&gt;
+	&lt;script src="./Olives.js"&gt;&lt;/script&gt;
+			</pre>
+		<pre class="prettyprint">
+	require(["Module"], function (Module) {
+		// Do what you want with Module
+	});
+			</pre>
+
+	</section>
+
+	<section id="examples">
+		<div class="example">
+			<h2>OObject: your UI.</h2>
+			<p>
+				
+			</p>
+			<h3>Create an OObject</h3>
+			<pre class="prettyprint">
+ 
+</pre>
+	</section>
+	
+	<section id="philosophy">
+		<h2>Philosophy: what's Olive's DNA?</h2>
+		<p>
+			
+		</p>
+		
+		<h3>Olive's development's principles</h3>
+		<ul>
+			<li><a href="http://en.wikipedia.org/wiki/DRY">DRY</a></li>
+			<li><a href="http://en.wikipedia.org/wiki/Solid_(object-oriented_design)">SOLID</a></li>
+			<li>TDD/BDD with 100% coverage with <a href="http://pivotal.github.com/jasmine/">Jasmine BDD</a></li>
+			<li>JS runtime agnostic, also works in node.js</li>
+			<li>Avoid proprietary technologies</li>
+		</ul>
+	
+	</section>
+
+	<footer>
+		<a href="https://github.com/flams/olives">Olives</a> by <a
+			href="https://github.com/podefr">Olivier Scherrer</a> &amp; <a
+			href="https://github.com/bredele">Olivier Wietrich</a>. Copyright 2012
+		- MIT licensed
+	</footer>
+	
+		
+	</section>
+	
+		<a href="http://github.com/flams/emily"> <img
+		alt="Fork me on GitHub"
+		src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
+		style="position: fixed; top: 0; right: 0; border: 0;"> </a>
+</body>
+
+</html>
