@@ -117,4 +117,13 @@ require(["Store", "Olives/LocalStore"], function (Store, LocalStore) {
 		
 	});
 	
+	describe("LocalStoreInit", function () {
+		
+		it("should pass the init params to Store", function () {
+			localStore = new LocalStore([]);
+			expect(localStore.toJSON()).toEqual("[]");
+		});
+		
+	});
+	
 });

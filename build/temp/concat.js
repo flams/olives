@@ -130,8 +130,8 @@ function LocalStore(Store, Tools) {
 		
 	}
 	
-	return function LocalStoreFactory() {
-		LocalStoreConstructor.prototype = new Store;
+	return function LocalStoreFactory(init) {
+		LocalStoreConstructor.prototype = new Store(init);
 		return new LocalStoreConstructor;
 	};
 	
