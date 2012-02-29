@@ -72,6 +72,22 @@ require(["Store", "Olives/LocalStore"], function (Store, LocalStore) {
 			expect(json.c).toEqual(30);
 		});
 		
+		it("should work with array-like store too", function () {
+			var json;
+			localStore.reset([0, 1, 2, 3]);
+			localStore.sync("store");
+			
+			localStore.set(0, 15);
+			localStore.del(3);
+			
+			json = JSON.parse(localStorage.store);
+			
+			expect(json[0]).toEqual(15);
+			expect(json[1]).toEqual(1);
+			expect(json[2]).toEqual(2);
+			expect(json[3]).toBeUndefined();
+		});
+		
 	});
 	
 	describe("LocalStoreSyncMix", function () {

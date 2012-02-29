@@ -106,9 +106,12 @@ function LocalStore(Store, Tools) {
 		 * @returns {Boolean} true if the param is a string
 		 */
 		this.sync = function sync(name) {
+			var json;
 			if (typeof name == "string") {
 				_name = name;
-				Tools.loop(JSON.parse(localStorage.getItem(name)), function (value, idx) {
+				json = JSON.parse(localStorage.getItem(name));
+				
+				Tools.loop(json, function (value, idx) {
 					if (!this.has(idx)) {
 						this.set(idx, value);
 					}
