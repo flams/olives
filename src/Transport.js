@@ -17,10 +17,11 @@ function Transport(Observable) {
 	/**
 	 * Defines the Transport
 	 * @private
+	 * @param {Object} $io socket.io's object
 	 * @param {url} $url the url to connect Transport to
 	 * @returns
 	 */
-	return function TransportConstructor($url) {
+	return function TransportConstructor($io, $url) {
 		
 		/**
 		 * @private
@@ -32,7 +33,7 @@ function Transport(Observable) {
 		 * @private
 		 * The socket.io globally defined module
 		 */
-		_io = io,
+		_io = null,
 		
 		/**
 		 * @private
@@ -41,12 +42,40 @@ function Transport(Observable) {
 		_observable = new Observable();
 		
 		/**
+		 * Set the io handler (socket.io)
+		 * @param {Object} io the socket.io object
+		 * @returns true if it seems to be socket.io
+		 */
+		this.setIO = function setIO(io) {
+			if (io && typeof io.connect == "function") {
+				_io = io;
+				return true;
+			} else {
+				return false;
+			}
+		};
+		
+		/**
+		 * Get socket.io, for debugging purpose
+		 * @private
+		 * @param 
+		 * @returns the handler
+		 */
+		this.getIO = function getIO() {
+			return _io;
+		};
+		
+		/**
 		 * Connect Transport to an url
 		 * @param {Url} url the url to connect Transport to
 		 */
 		this.connect = function connect(url) {
-			_socket = _io.connect(url);
-			return !!_socket;
+			if (typeof url == "string") {
+				_socket = _io.connect(url);
+				return true;	
+			} else {
+				return false;
+			}
 		},
 		
 		/**
@@ -162,6 +191,7 @@ function Transport(Observable) {
 		/**
 		 * Initializes the transport to the given url.
 		 */
+		this.setIO($io);
 		this.connect($url);
 	};
 });
