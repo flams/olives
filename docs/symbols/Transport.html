@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - OObject</title>
+		<title>JsDoc Reference - Transport</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -210,7 +210,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class OObject
+				Class Transport
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -218,17 +218,17 @@ ul.inheritsList
 				
 				
 			
-				OObject is an abstract class that any UI can inherit from.
-It should provide code that is easy to reuse
+				Transport allows for client-server eventing.
+It's based on socket.io.
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_OObject.js.html">OObject.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_Transport.js.html">Transport.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class OObject.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Transport.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -241,7 +241,7 @@ It should provide code that is easy to reuse
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#constructor">OObject</a></b>(StateMachine, Store, Plugins, DomUtils, Tools)
+								<b><a href="../symbols/Transport.html#constructor">Transport</a></b>(Observable)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -252,71 +252,12 @@ It should provide code that is easy to reuse
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class OObject.">
-					<caption>Field Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#dom">dom</a></b>
-								</div>
-								<div class="description">This will hold the dom nodes built from the template.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#model">model</a></b>
-								</div>
-								<div class="description">The UI's Store
-It has set/get/del/has/watch/unwatch methods</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#plugins">plugins</a></b>
-								</div>
-								<div class="description">The module that will manage the plugins for this UI</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#template">template</a></b>
-								</div>
-								<div class="description">Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
-			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class OObject.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Transport.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -329,29 +270,72 @@ It has set/get/del/has/watch/unwatch methods</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#alive">alive</a></b>(node)
+								<div class="fixedFont"><b><a href="../symbols/Transport.html#connect">connect</a></b>(url)
 								</div>
-								<div class="description">Applies this UI's plugins to the given dom node,
-kind of making it 'alive'</div>
+								<div class="description">Connect Transport to an url</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#place">place</a></b>(node)
+								<div class="fixedFont"><b><a href="../symbols/Transport.html#emit">emit</a></b>(event, data, callback)
 								</div>
-								<div class="description">Place the UI in a given dom node</div>
+								<div class="description">Publish an event on the socket</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#render">render</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/Transport.html#getListenObservable">getListenObservable</a></b>()
 								</div>
-								<div class="description">Renders the template to dom nodes and applies the plugins on it
-It requires the template to be set first</div>
+								<div class="description">This function is for debugging only</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Transport.html#getSocket">getSocket</a></b>()
+								</div>
+								<div class="description">Get the socket, for debugging purpose</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Transport.html#listen">listen</a></b>(channel, path, func, scope)
+								</div>
+								<div class="description">Listen to an url and get notified on new data</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Transport.html#on">on</a></b>(event, func)
+								</div>
+								<div class="description">Subscribe to a socket event</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Transport.html#once">once</a></b>(event, func)
+								</div>
+								<div class="description">Subscribe to a socket event but disconnect as soon as it fires.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Transport.html#request">request</a></b>(channel, requestData, func, scope)
+								</div>
+								<div class="description">Make a request on the node server</div>
 							</td>
 						</tr>
 					
@@ -372,7 +356,7 @@ It requires the template to be set first</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>OObject</b>(StateMachine, Store, Plugins, DomUtils, Tools)
+						<b>Transport</b>(Observable)
 				</div>
 				
 				<div class="description">
@@ -388,31 +372,7 @@ It requires the template to be set first</div>
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								 <b>StateMachine</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Store</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Plugins</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>DomUtils</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Tools</b>
+								 <b>Observable</b>
 								
 							</dt>
 								<dd></dd>
@@ -423,13 +383,6 @@ It requires the template to be set first</div>
 					
 					
 					
-					
-						<dl class="detailList">
-						<dt class="heading">Requires:</dt>
-						
-							<dd>StateMachine</dd>
-						
-						</dl>
 					
 					
 
@@ -438,114 +391,6 @@ It requires the template to be set first</div>
 
 <!-- ============================== field details ========================== -->		
 			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="dom"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>dom</b>
-					
-					</div>
-					<div class="description">
-						This will hold the dom nodes built from the template.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="model"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>model</b>
-					
-					</div>
-					<div class="description">
-						The UI's Store
-It has set/get/del/has/watch/unwatch methods
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-							<dd>Emily's doc for more info on how it works.</dd>
-							
-							</dl>
-						
-						
-
-					<hr />
-				
-					<a name="plugins"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>plugins</b>
-					
-					</div>
-					<div class="description">
-						The module that will manage the plugins for this UI
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-							<dd>Olives/Plugins' doc for more info on how it works.</dd>
-							
-							</dl>
-						
-						
-
-					<hr />
-				
-					<a name="template"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{string or HTMLElement}</span>
-					<b>template</b>
-					
-					</div>
-					<div class="description">
-						Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
-			
 
 <!-- ============================== method details ========================= -->		
 			
@@ -553,16 +398,15 @@ It has set/get/del/has/watch/unwatch methods
 					Method Detail
 				</div>
 				
-					<a name="alive"> </a>
+					<a name="connect"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>alive</b>(node)
+					<b>connect</b>(url)
 					
 					</div>
 					<div class="description">
-						Applies this UI's plugins to the given dom node,
-kind of making it 'alive'
+						Connect Transport to an url
 						
 						
 					</div>
@@ -574,10 +418,176 @@ kind of making it 'alive'
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement}</span> <b>node</b>
+									<span class="light fixedFont">{Url}</span> <b>url</b>
 									
 								</dt>
-								<dd>the dom to apply the plugins to</dd>
+								<dd>the url to connect Transport to</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="emit"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>emit</b>(event, data, callback)
+					
+					</div>
+					<div class="description">
+						Publish an event on the socket
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>event</b>
+									
+								</dt>
+								<dd>the event to publish</dd>
+							
+								<dt>
+									<b>data</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{Function}</span> <b>callback</b>
+									
+								</dt>
+								<dd>is the function to be called for ack</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getListenObservable"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Observable}</span>
+					<b>getListenObservable</b>()
+					
+					</div>
+					<div class="description">
+						This function is for debugging only
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Observable}</span> </dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getSocket"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getSocket</b>()
+					
+					</div>
+					<div class="description">
+						Get the socket, for debugging purpose
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> the socket</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="listen"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>listen</b>(channel, path, func, scope)
+					
+					</div>
+					<div class="description">
+						Listen to an url and get notified on new data
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>channel</b>
+									
+								</dt>
+								<dd>watch the server's documentation to see available channels</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>path</b>
+									
+								</dt>
+								<dd>the url on which to get new data</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Function}</span> <b>func</b>
+									
+								</dt>
+								<dd>the callback that will get the data</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>scope</b>
+									
+								</dt>
+								<dd>the scope in which to execute the callback</dd>
 							
 							</dl>
 						
@@ -588,7 +598,7 @@ kind of making it 'alive'
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>false if wrong param</dd>
+								<dd></dd>
 							
 							</dl>
 						
@@ -597,15 +607,15 @@ kind of making it 'alive'
 
 					<hr />
 				
-					<a name="place"> </a>
+					<a name="on"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>place</b>(node)
+					<b>on</b>(event, func)
 					
 					</div>
 					<div class="description">
-						Place the UI in a given dom node
+						Subscribe to a socket event
 						
 						
 					</div>
@@ -617,10 +627,16 @@ kind of making it 'alive'
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement}</span> <b>node</b>
+									<span class="light fixedFont">{String}</span> <b>event</b>
 									
 								</dt>
-								<dd>the node on which to append the UI</dd>
+								<dd>the name of the event</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Function}</span> <b>func</b>
+									
+								</dt>
+								<dd>the function to execute when the event fires</dd>
 							
 							</dl>
 						
@@ -633,22 +649,92 @@ kind of making it 'alive'
 
 					<hr />
 				
-					<a name="render"> </a>
+					<a name="once"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>render</b>()
+					<b>once</b>(event, func)
 					
 					</div>
 					<div class="description">
-						Renders the template to dom nodes and applies the plugins on it
-It requires the template to be set first
+						Subscribe to a socket event but disconnect as soon as it fires.
 						
 						
 					</div>
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>event</b>
+									
+								</dt>
+								<dd>the name of the event</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Function}</span> <b>func</b>
+									
+								</dt>
+								<dd>the function to execute when the event fires</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="request"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>request</b>(channel, requestData, func, scope)
+					
+					</div>
+					<div class="description">
+						Make a request on the node server
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>channel</b>
+									
+								</dt>
+								<dd>watch the server's documentation to see available channels</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>requestData</b>
+									
+								</dt>
+								<dd>the JSON that details the request</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Function}</span> <b>func</b>
+									
+								</dt>
+								<dd>the callback that will get the response.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>scope</b>
+									
+								</dt>
+								<dd>the scope in which to execute the callback</dd>
+							
+							</dl>
 						
 						
 						
