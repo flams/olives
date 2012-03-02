@@ -58,3 +58,18 @@ io.sockets.on("connection", function (socket) {
 	});
 
 });
+
+/**
+//Et lˆ on s'abonne aux events socket.io pour les reqs qui viennent de la pres
+io.sockets.on("connection", function (socket) {
+	Tools.loop(handlers, function (func, handler) {
+		socket.on(handler, function (reqDdata) {
+			func(reqDdata, function onEnd(body) {
+				socket.emit(reqDdata.__eventId__, body);
+			}, function onData(chunk) {
+				reqDdata.keptAlive && socket.emit(reqDdata.__eventId__, ""+chunk);
+			});
+		});
+	});
+});
+	*/

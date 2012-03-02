@@ -56,7 +56,7 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 		});
 		
 		it("should set the io handler (socket.io)", function () {
-			expect(transport.getIO()).toEqual(null);
+			expect(transport.getIO()).toBeNull();
 			expect(transport.setIO()).toEqual(false);
 			expect(transport.setIO({})).toEqual(false);
 			expect(transport.setIO(io)).toEqual(true);
