@@ -364,14 +364,14 @@ require(["Olives/ModelPlugin", "Olives/OObject"], function (ModelPlugin, OObject
 			
 			<h3>When are the plugins applied?</h3>
 			<pre class="prettyprint">
-	// We have the following template
-	UI.template = '&lt;p data-model="bind: innerHTML, Hello"&gt;&lt;/p&gt;'
-	
-	// And the following model
-	UI.model.get("Hello"); // world!
-	
-	// plugins are applied on render
-	UI.render(); // this will turn the template into <p>world!</p>
+// We have the following template
+UI.template = '&lt;p data-model="bind: innerHTML, Hello"&gt;&lt;/p&gt;'
+
+// And the following model
+UI.model.get("Hello"); // world!
+
+// plugins are applied on render
+UI.render(); // this will turn the template into &lt;p&gt;world!&lt;/p&gt;
 			</pre>
 			
 			<h3>OObject's life cycle</h3>
@@ -380,23 +380,157 @@ require(["Olives/ModelPlugin", "Olives/OObject"], function (ModelPlugin, OObject
 			</p>
 			
 			<pre class="prettyprint">
-	 // You have set up a new UI.template
-	 UI.render(); // Will apply the plugins and generate the dom. It's not placed
-	 
-	 // You want to place the UI.
-	 UI.place(); // Place will also render() the UI if you haven't done so before
-	 
-	 // Your template comes from an existing dom
-	 UI.alive("existing dom");
-	 
-	 // You have placed your UI, but you have changed the template.
-	 UI.render(); //you can render again
-	 
-	 // You have placed your UI somewhere, but you want to place it somewhere else
-	 UI.place(newDOM);
+ // You have set up a new UI.template
+ UI.render(); // Will apply the plugins and generate the dom. It's not placed
+ 
+ // You want to place the UI.
+ UI.place(); // Place will also render() the UI if you haven't done so before
+ 
+ // Your template comes from an existing dom
+ UI.alive("existing dom");
+ 
+ // You have placed your UI, but you have changed the template.
+ UI.render(); //you can render again
+ 
+ // You have placed your UI somewhere, but you want to place it somewhere else
+ UI.place(newDOM);
 			</pre>
 		</div>
 	</section>
+	
+	<section>
+		<div class="example">
+		<h2>ModelPlugin: a built-plugin that synchronizes your View with the Model</h2>
+		<p>
+			This is one of the most interesting part of Olives.<br />
+			It removes all the burden of adding/modifying/deleting dom nodes to reflect the UI's Model<br />
+			As long as the model is a subtype of Emily's store (CouchDBStore, LocalStore...), it will do the dom manipulations for you.
+		</p>
+		
+		<h3>Connect the plugin to the model and add it to the UI plugins list</h3>
+		<pre class="prettyprint">
+// This will make the plugin available through the name model in your dom
+UI.plugins.add("model", new ModelPlugin(UI.model));
+		</pre>
+		
+		<p>Say this is your model</p>
+		<pre class="prettyprint">
+UI.model.reset({
+	"firstname": "Olivier",
+	"contacts": {
+		"mail": "pode.fr  AT  gmail.com",
+		"mobile": "+336123456"
+	}
+});
+		</pre>
+	
+		<p>This view will display the data</p>
+		<pre class="prettyprint">
+&lt;div&gt;
+	&lt;p data-model="bind:innerHTML, firstname"&gt;&lt;/p&gt;
+	&lt;p&gt;Contacts : &lt;br /&gt;
+		Mail: &lt;span data-model="bind:innerHTML: contacts.mail"&gt;&lt;/span&gt;
+		Mobile: &lt;span data-model="bind:innerHTML: contacts.mobile"&gt;&lt;/span&gt;
+	&lt;/p&gt;
+&lt;/div&gt;
+		</pre>
+		
+		<p>How do I update the generated View?</p>
+		<pre class="prettyprint">
+// The view will always reflect the model, Olives does the plumbing for you
+UI.model.set("contacts", {
+	"mail": "pode.fr AT gmail.com",
+	"mobile": "+654321633"
+});
+		</pre>
+		
+		<h3>ModelPlugin and Lists</h3>
+		<p>
+			The ModelPlugin can also render lists.
+		</p>
+		<pre class="prettyprint">
+UI.model.reset([
+	{
+		firstname: "Olivier",
+		lastname: "Scherrer"
+	},
+	
+	{
+		firstname: "Olivier",
+		lastname: "Scherrer"
+	}
+]);
+		</pre>
+		
+		<p>
+		 
+		</p>
+		<pre class="prettyprint">
+&lt;!--  foreach will repeat the li for each value of the model --&gt;
+&lt;ul data-model="foreach"&gt;
+	&lt;li&gt;
+		&lt;span data-model="bind:innerHTML, firstname"&gt;&lt;/span&gt;
+		&lt;span data-model="bind:innerHTML, lastname"&gt;&lt;/span&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+		</pre>
+
+	</section>
+	
+	<section>
+		<div class="example">
+		<h2>EventPlugin: make your dom listen to events</h2>
+		<p>
+		 Under redaction!<br />
+		</p>
+		</div>
+	</section>
+
+	<section>
+		<div class="example">
+		<h2>TypePlugin: compose UIs with multiple UIs</h2>
+		<p>
+		 Under redaction!<br />
+		</p>
+		</div>
+	</section>
+	
+	<section>
+		<div class="example">
+		<h2>Your plugin: write your own plugin</h2>
+		<p>
+		 Under redaction!<br />
+		</p>
+		</div>
+	</section>
+	
+	<section>
+		<div class="example">
+		<h2>Transport: connect your UI with a node.js server using socket.io</h2>
+		<p>
+		 Under redaction!<br />
+		</p>
+		</div>
+	</section>
+
+	<section>
+		<div class="example">
+		<h2>LocalStore: A subtype of Emily's Store for saving your model into localStorage</h2>
+		<p>
+		 Under redaction!<br />
+		</p>
+		</div>
+	</section>
+
+	<section>
+		<div class="example">
+		<h2>CouchDBStore: Emily's CouchDBStore through Transport. Where everything shines!</h2>
+		<p>
+		 Under redaction!<br />
+		</p>
+		</div>
+	</section>
+
 	
 	<section id="philosophy">
 		<h2>Philosophy: what's Olive's DNA?</h2>
