@@ -177,17 +177,18 @@ h3 {
 	<header>
 		<a href="https://github.com/flams/olives/blob/master/build/Olives.js">Download Olives Alpha</a>
 		<h1>Olives</h1>
-		<span>Real time web applications made easy</span>
+		<span>Realtime UIs based on emily</span>
 	</header>
 	
 		<nav>
 		<ul>
 			<li><h2><a href="#presentation">What is Olives?</a></h2></li>
 			<li><h2><a href="#install">Installation</a></h2></li>
-			<li><h2><a href="#examples">Documentation</a></h2>
+			<li><h2><a href="#documentation">Documentation</a></h2>
 				<ul>
 				</ul>
 			</li>
+			<li><h2><a href="todo/index.html">Live Example</a></h2>
 			<li><h2><a href="#philosophy">Philosophy</a></h2></li>
 		</ul> 
 	</nav>
@@ -195,7 +196,12 @@ h3 {
 	<section id="presentation">
 		<h2>What is Olives?</h2>
 		<p>
-
+			Olives is a JavaScript framework that offers convenient tools for building realtime UIs.<br />
+			Unlike most JS MVC frameworks, it removes all the burden of plumbing. <br />
+			Declaring Views, Controllers and Models, then plumbing them all together is done by Olives.<br />
+			You can simply focus on features.<br /> 
+			It's based on emily and socket.io.<br />
+			It also provides a basic set of tools that you can, and should, extend to fit your exact needs.
 		</p>
 		<p>The tools are:</p>
 		<ul class="menu"></ul>
@@ -217,8 +223,19 @@ h3 {
 	require(["Module"], function (Module) {
 		// Do what you want with Module
 	});
-			</pre>
-
+	
+	require(["Olives/Module"], function (Module) {
+		// Olives modules are prefixed with Olives
+	});
+				</pre>
+	<h3>If you're application is based on node and you want the realtime part of Olives</h3>
+	<pre class="prettyprint">
+	// after #npm install olives
+	var olives = require("olives");
+	
+	// Register your instance of socket.io
+	olives.registerSocketIO(io);
+	</pre>
 	</section>
 
 	<section id="examples">
@@ -244,7 +261,7 @@ h3 {
 			<li><a href="http://en.wikipedia.org/wiki/DRY">DRY</a></li>
 			<li><a href="http://en.wikipedia.org/wiki/Solid_(object-oriented_design)">SOLID</a></li>
 			<li>TDD/BDD with 100% coverage with <a href="http://pivotal.github.com/jasmine/">Jasmine BDD</a></li>
-			<li>JS runtime agnostic, also works in node.js</li>
+			<li>Remove all the plumbing and focus on features</li>
 			<li>Avoid proprietary technologies</li>
 		</ul>
 	
