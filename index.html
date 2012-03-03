@@ -220,21 +220,21 @@ h3 {
 	&lt;script src="./Olives.js"&gt;&lt;/script&gt;
 			</pre>
 		<pre class="prettyprint">
-	require(["Module"], function (Module) {
-		// Do what you want with Module
-	});
-	
-	require(["Olives/Module"], function (Module) {
-		// Olives modules are prefixed with Olives
-	});
+require(["Module"], function (Module) {
+	// Do what you want with Module
+});
+
+require(["Olives/Module"], function (Module) {
+	// Olives modules are prefixed with Olives
+});
 				</pre>
-	<h3>If you're application is based on node and you want the realtime part of Olives</h3>
+	<h3>If your application is based on node and you want the realtime part of Olives</h3>
 	<pre class="prettyprint">
-	// after #npm install olives
-	var olives = require("olives");
-	
-	// Register your instance of socket.io
-	olives.registerSocketIO(io);
+// after #npm install olives
+var olives = require("olives");
+
+// Register your instance of socket.io
+olives.registerSocketIO(io);
 	</pre>
 	</section>
 
@@ -242,12 +242,160 @@ h3 {
 		<div class="example">
 			<h2>OObject: the spine of your UI.</h2>
 			<p>
-				
+				The OObject is the spine of your UI. From its creation, it will handle the plumbing with the model and the view.<br />
+				Consider the OObject as the Controller of your UI.<br />
+				The Model is the Store it references.<br />
+				The View is your HTML code.<br />
+				We'll see later on how to save your Model's data into some persistent place. 
 			</p>
+			
 			<h3>Create an OObject</h3>
 			<pre class="prettyprint">
- 
-</pre>
+require(["Olives/OObject"], function (OObject) {
+		
+	var UI = new OObject;
+		
+});
+			</pre>
+			
+			<h3>Add it a template</h3>
+			<pre class="prettyprint">
+var UI = new OObject;
+UI.template = "&lt;p&gt;Hello world!&lt;/p&gt;"
+			</pre>
+
+		
+			<h3>Place it in the DOM</h3>
+			<pre calss="prettyprint">
+UI.place(document.body);
+			</pre>
+
+		
+			<h3>You can create a reusable UI</h3>
+			<pre class="prettyprint">
+define("MyUI", ["Olives/OObject"], function (OObject) {
+	
+	function myUIConstructor() {
+		this.template = "&lt;p&gt;Hello world!&lt;/p&gt;";
+	}
+	
+	return function myUIFactory() {
+		myUIConstructor.prototype = new OObject;
+		return new myUIConstructor;
+	}
+	
+});
+
+require(["MyUI"], function (MyUI) {
+	var myUI = new MyUI;
+	myUI.place(document.body);
+});
+			</pre>
+			
+						<h3>Any OObject has a simple model</h3>
+			<pre class="prettyprint">
+var UI = new OObject;
+// The model property is an Emily Store
+UI.model.set("Hello", "world!");
+UI.model.get("Hello"); // world!
+			</pre>
+			
+			<h3>The model can be replaced with a subtype of Emily's Store</h3>
+			<pre class="prettyprint">
+// Olives LocalStore that stores data in the localStorage (see the live example)
+var UI = new OObject(new LocalStore({"Hello": "world!"}));
+
+// Synchronize it with localStorage
+UI.model.sync("myLocalStore");
+// Reload the page
+UI.model.get("Hello"); // world!
+			</pre>
+			
+			<h3>Olives can make some part of your dom alive!</h3>
+			<p>Assume your have an index.html such as</p>
+			<pre class="prettyprint">
+&lt;div class="page"&gt;
+	&lt;p&gt;Hello world!&lt;/p&gt;
+&lt;/div&gt;
+			</pre>
+			<p>
+				You can then turn it into an UI
+			</p>
+			<pre class="prettyprint">
+var UI = new OObject;
+
+// Alive will simply use the DOM to create a UI.
+UI.alive(".page p"); // Alive uses document.querySelector so you can use any CSS3 selector
+
+UI.template; // &lt;p&gt;Hello world!&lt;/p&gt;
+			</pre>
+
+	</div>
+	</section>
+	<section>
+		<div class="example">
+			<h2>Plugins: extend Olives functionalities with the ones you need.</h2>
+			<p>
+				The plugins are what make the difference! <br />
+				Olives comes up with a few plugins, but you can create your own.
+			</p>
+			<h3>Calling a plugin</h3>
+			<pre class="prettyprint">
+// This will call the method 'bind' of the plugin 'model' with the params : 'innerHTML' and 'Hello'
+UI.template = '&lt;p data-model="bind: innerHTML, Hello"&gt;&lt;/p&gt;'
+			</pre>
+			
+			<h3>Declaring a plugin</h3>
+			<pre class="prettyprint">
+require(["Olives/ModelPlugin", "Olives/OObject"], function (ModelPlugin, OObject) {
+	
+	var UI = new OObject;
+	
+	// Create the plugin. The plugin needs to know on which model to connect
+	var modelPlugin = new ModelPlugin(UI.model);
+	
+	// OObjects have a plugins property to manage plugins.
+	// The name following data- in the template, is actually the first param here
+	// The second param is the plugin
+	UI.plugins.add("model", modelPlugin);
+	
+});
+			</pre>
+			
+			<h3>When are the plugins applied?</h3>
+			<pre class="prettyprint">
+	// We have the following template
+	UI.template = '&lt;p data-model="bind: innerHTML, Hello"&gt;&lt;/p&gt;'
+	
+	// And the following model
+	UI.model.get("Hello"); // world!
+	
+	// plugins are applied on render
+	UI.render(); // this will turn the template into <p>world!</p>
+			</pre>
+			
+			<h3>OObject's life cycle</h3>
+			<p>
+			When to use render, place and alive?<br />
+			</p>
+			
+			<pre class="prettyprint">
+	 // You have set up a new UI.template
+	 UI.render(); // Will apply the plugins and generate the dom. It's not placed
+	 
+	 // You want to place the UI.
+	 UI.place(); // Place will also render() the UI if you haven't done so before
+	 
+	 // Your template comes from an existing dom
+	 UI.alive("existing dom");
+	 
+	 // You have placed your UI, but you have changed the template.
+	 UI.render(); //you can render again
+	 
+	 // You have placed your UI somewhere, but you want to place it somewhere else
+	 UI.place(newDOM);
+			</pre>
+		</div>
 	</section>
 	
 	<section id="philosophy">
@@ -262,7 +410,7 @@ h3 {
 			<li><a href="http://en.wikipedia.org/wiki/Solid_(object-oriented_design)">SOLID</a></li>
 			<li>TDD/BDD with 100% coverage with <a href="http://pivotal.github.com/jasmine/">Jasmine BDD</a></li>
 			<li>Remove all the plumbing and focus on features</li>
-			<li>Avoid proprietary technologies</li>
+			<li>If you know HTML5, you know Olives. You don't even need to learn a new way of describing your templates, its HTML.</li>
 		</ul>
 	
 	</section>
