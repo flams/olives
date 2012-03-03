@@ -1,0 +1,41 @@
+{
+ "name": "olives",
+ "description": "a framework to create realtime UIs, based on emily",
+ "version": "1.0.0alpha",
+ "homepage": "http://flams.github.com/olives/",
+ "licenses": [{
+  "type":"MIT",
+  "url":"https://raw.github.com/flams/olives/master/LICENSE"
+ }],
+ "files": [
+ 	"./build",
+ 	"./LICENSE",
+ 	"./olives-server.js"
+ ],
+ "author": "Olivier Scherrer <pode.fr@gmail.com>",
+ "contributors": [
+ 	"Olivier Scherrer <pode.fr@gmail.com>",
+ 	"Olivier Wietrich <olivier.wietrich@gmail.com"
+ ],
+ "dependencies": {
+  "requirejs": ">=1.0.7",
+  "emily": ">=1.0.3alpha",
+  "socket.io": ">=0.9.0"
+  },
+ "keywords": ["framework", "web", "realtime", "UI", "CouchDB", "AMD/commonJS", "requirejs"],
+ "repository": {
+  "type": "git",
+  "url": "git@github.com:flams/olives.git"
+ },
+ "bugs": {
+  "url": "https://github.com/flams/olives/issues"
+ },
+ "main":"olives-server.js",
+ "engines": { 
+ 	"node":">= 0.6.0"
+ }, 
+ "scripts": {
+ 	"test": "jake tests:all"
+ }
+
+}

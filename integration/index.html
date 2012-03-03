@@ -15,34 +15,19 @@
 		<script src="/Emily.js"></script>
 		<script src="/Olives.js"></script>
 		<script>window.addEventListener("load", function onLoad() {
-			require(["Transport", "Olives/List", "CouchDBStore", "Olives/OObject", "Olives/Model-plugin"], function (Transport, List, Store, OObject, ModelPlugin) { 
-				/**olist = new List(new Store);
-				olist.model.setTransport(new Transport("http://"+location.host));
-				olist.model.sync("blog", "blog", "foo");
-				olist.template = "<div data-model='toList'>" +
-				"<div><span data-model='toText:value.date'></span><span data-model='toText:value.title'></span>" +
-				"<p data-model='toText:value.body'></p></div>" +
-				"</div>";
-				olist.action("place", document.body);*/
+			require(["Olives/Transport", "CouchDBStore"], function (Transport, Store) { 
 
-				transport = new Transport("http://localhost:8000");
+				var transport = new Transport(io, "http://localhost:8000");
 				store = new Store;
 				store.setTransport(transport);
-				store.sync("db", "document3");
-				oobject = new OObject();
-
-				oobject.plugins.add("model", new ModelPlugin(store));
-				
-				oobject.template = '<form data-model="form">' +
-				'<p><label>Firstname: </label><input type="text" name="firstname" value="olivier" /></p>' +
-				'<p><label>Lastname: </label><input type="text" name="lastname" value="wietrich" /></p>' +
-				'<p><label>Age: </label><input type="number" step="1" min="0" max="99" name="age" value="25" /></p>' +
-				'<p><label>Job: </label><input type="text" name="job" value="engineer" /></p>' +
-				'<p><button type="submit">yes</button></p>' +
-				'<button>hey</button></form>';
-
-				oobject.action("place", document.body);
+				store.sync("db", "document2").then(function () {
+					this.watchValue("hey", function (value) {
+						document.body.innerHTML = value;
+					});
+				}, store);
 			});
+			
+			
 			window.removeEventListener("load", onLoad, true);
 		}, true);
 		

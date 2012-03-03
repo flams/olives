@@ -1,0 +1,4 @@
+# Eclipse IDE files
+.settings/
+.project
+*/.DS_Store
