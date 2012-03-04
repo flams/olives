@@ -208,7 +208,7 @@ h3 {
 	</section>
 
 	<section id="install">
-
+	<div class="example">
 		<h2>Installing Olives</h2>
 		<p>Olives requires an AMD compatible loader like requirejs to work.<br />
 			It's based on Emily.js
@@ -236,6 +236,7 @@ var olives = require("olives");
 // Register your instance of socket.io
 olives.registerSocketIO(io);
 	</pre>
+	</div>
 	</section>
 
 	<section id="examples">
@@ -424,7 +425,10 @@ UI.model.reset({
 });
 		</pre>
 	
-		<p>This view will display the data</p>
+		<p>This view will display the data.<br />
+			bind actually triggers the innerHTML property of the dom node.<br />
+			Any other property works too.
+		</p>
 		<pre class="prettyprint">
 &lt;div&gt;
 	&lt;p data-model="bind:innerHTML, firstname"&gt;&lt;/p&gt;
@@ -444,7 +448,27 @@ UI.model.set("contacts", {
 });
 		</pre>
 		
-		<h3>ModelPlugin and Lists</h3>
+				
+		<h3>What if you want to do stuff a little bit more complex than just setting a property?</h3>
+		<p>
+		You can use bind for toggling a dom node's class!<br />
+		This example is extracted from the live example
+		</p>
+		
+	<pre class="prettyprint">
+// You can add new bindings when you instanciate the ModelPlugin
+var modelPlugin = new ModelPlugin(UI.model, {
+ toggleClass: function (value) {
+ // value comes from the model, the this object is the dom node
+  value ? this.classList.add("completed") : this.classList.remove("completed");
+ }
+});
+
+&lt;li data-model="bind:toggleClass,completed"&gt;&lt;/li&gt;
+	</pre>
+		
+		
+		<h3>Generate lists with foreach</h3>
 		<p>
 			The ModelPlugin can also render lists.
 		</p>
@@ -463,7 +487,7 @@ UI.model.reset([
 		</pre>
 		
 		<p>
-		 
+		foreach is the method that you need here
 		</p>
 		<pre class="prettyprint">
 &lt;!--  foreach will repeat the li for each value of the model --&gt;
@@ -474,15 +498,59 @@ UI.model.reset([
 	&lt;/li&gt;
 &lt;/ul&gt;
 		</pre>
+		
+		<h3>Limit the number of items displayed by foreach</h3>
+			<p>
+		If your model has more items than what you want to display, you can set limits
+		</p>
+		<pre class="prettyprint">
+&lt;!--  This will display 10 items, starting from the first one, to the foreach called "people" --&gt;
+&lt;ul data-model="foreach:people,0,10"&gt;
+	&lt;li&gt;
+		&lt;span data-model="bind:innerHTML, firstname"&gt;&lt;/span&gt;
+		&lt;span data-model="bind:innerHTML, lastname"&gt;&lt;/span&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+		</pre>	
+		
+		<p>And if you want to change the number of displayed items, and display the 10 next items:</p>
+		<pre class="prettyprint">
+// this is the plugin that you have declared in UI.plugins
+modelPlugin.updateStart("people", 10); // this will display the items from the 11th
+modelPlugin.updateNb("people", 5); // this will reduce the number of displayed item to 5
 
+// When you're happy with the settings
+modelPlugin.refresh("people");
+		</pre>
+
+</div>
 	</section>
 	
 	<section>
 		<div class="example">
 		<h2>EventPlugin: make your dom listen to events</h2>
 		<p>
-		 Under redaction!<br />
+		 The event plugin adds listeners to a dom node to call a function in the OObject.
 		</p>
+		<pre class="prettyprint">
+// The event plugin takes the OObject as parameter.
+// You can pass any other object too.
+var eventPlugin = new EventPlugin(UI);
+// We use the name "event" to call it from the dom
+UI.plugins.add("event", eventPlugin);
+
+// When called by the EventPlugin, addTask will receive the event and the corresponding dom node
+UI.addTask = function (event, node) {
+ // The this object is the one passed to new EventPlugin (UI)
+ this.model.push({
+ 	name: node.name,
+ 	completed: false
+ })
+}
+
+&lt;!--  And in the dom --&gt;	
+&lt;input type="text" placeholder="What needs to be done?" data-event="listen:keydown,addTask;" /&gt;		
+		</pre>
 		</div>
 	</section>
 
@@ -490,8 +558,16 @@ UI.model.reset([
 		<div class="example">
 		<h2>TypePlugin: compose UIs with multiple UIs</h2>
 		<p>
-		 Under redaction!<br />
+		 TypePlugin is a helper. It does nothing else than placing a previously initialized UI.<br />
+		 Its name will probably be changed until the final release
 		</p>
+		<pre class="prettyprint">
+// myUI should be an instance of an OObject
+var typePlugin = new TypePlugin("myUI", myUI);
+
+&lt;!--  And in the dom, myUI will be placed here --&gt;
+&lt;div data-type="place: myUI"&gt;&lt;/div&gt;
+		</pre>
 		</div>
 	</section>
 	
@@ -499,26 +575,88 @@ UI.model.reset([
 		<div class="example">
 		<h2>Your plugin: write your own plugin</h2>
 		<p>
-		 Under redaction!<br />
+		 Olives comes with built-in plugins. But you can extend Olives funcitonalities by creating your own.<br />
+		 Actually, a plugin is just an object. Any object can be a plugin, there are only two things to know:
 		</p>
+		
+		<pre class="prettyprint">
+// A plugin is an object. You can literally create it {}, use Object.create, or a constructor function.
+var myPlugin = {
+ // This method will be available through a data- call
+ // The first parameter will be the dom node. (1st thing to know)
+ myMethod : function (node, param) {
+ 	// The this object will always be the plugin (2nd thing to know)
+ 	this.log(node.innerHTML + " " + param);
+ },
+ 
+ log: function (txt) {
+ 	console.log(txt);
+ }
+}
+
+&lt;!-- When the UI will be rendered, it will console.log Hello world --&gt;
+&lt;button data-myPlugin="myMethod:world"&gt;Hello&lt;/button&gt;
+		</pre>
 		</div>
 	</section>
 	
 	<section>
 		<div class="example">
-		<h2>Transport: connect your UI with a node.js server using socket.io</h2>
+		<h2>Transport: connect your UI with a node.js server using socket.io. This is the realtime part of Olives</h2>
 		<p>
-		 Under redaction!<br />
+		You need to npm install olives to be able to use it. See the installation chapter.<br />
+		Transport wraps socket.io to simulate two ways of doing requests to your node.js server.
 		</p>
+		
+		<h3>How to use Transport</h3>
+		<pre class="prettyprint">
+// This assumes you have loaded socket.io in your web browser. <a href="http://socket.io/">See socket.io's documentation.</a>
+// io is an instance of socket.io
+var transport = new Transport(io);
+		</pre>
+		
+		<p>
+ When transport is created you can make requets.<br />
+It works exactly the same way as with Emily <br />
+
+<a href="http://flams.github.com/emily/#Transport">http://flams.github.com/emily/#Transport</a>
+
+		</p>
+		<pre>
+// The requests handlers are available through olives if you have previously required it.
+var olives = require("olives");
+
+// Notice that an API is coming to help you manager your handlers.
+// At the moment, the handlers have to be added before socket.io is registered
+olives.handlers.addYouHandlerHere = function () {};
+
+// i.e. here
+olives.registerSocketIO(io);
+		</pre>
 		</div>
 	</section>
 
 	<section>
 		<div class="example">
-		<h2>LocalStore: A subtype of Emily's Store for saving your model into localStorage</h2>
+		<h2>LocalStore: A subtype of Emily Store for saving your model into localStorage</h2>
 		<p>
-		 Under redaction!<br />
+		The LocalStore is an Emily Store that can be synchronized with a localStorage for data persistence.
 		</p>
+		
+		<h3>Create a LocalStore</h3>
+		<pre class="prettyprint">
+// A LocalStore is a subtype of an Emily Store, following liskov substitution princple.
+var localStore = new LocalStore(["default", "values"]);
+
+// But it adds a new sync function.
+// On sync, values already existing in localStorage.store will be mixed in the Store
+// And on changes, localStorage will be updated
+localStore.sync("store");
+
+// Notice though that if localStorage is modified from somewhere else, the Store won't be updated.
+// There's no notification on localStorage changes.
+		
+		</pre>
 		</div>
 	</section>
 
@@ -526,8 +664,27 @@ UI.model.reset([
 		<div class="example">
 		<h2>CouchDBStore: Emily's CouchDBStore through Transport. Where everything shines!</h2>
 		<p>
-		 Under redaction!<br />
+		 We have seen how to link a dom with a Store. We have a Transport tool to communicate with the server.<br />
+		 What if we could synchronize with a database and have our dom updated on changes?<br />
+		 CouchDBStore does just that.
 		</p>
+		
+		<h3>Creating a CouchDBStore</h3>
+		<p>
+		A CouchDBStore is a subtype of an Emily Store too. It works the same way.
+		</p>
+		<pre class="prettyprint">
+// Create it like any Store
+var couchDBStore = new CouchDBStore();
+
+// Specify the transport to use. A same transport can be used multiple times.
+couchDBStore.setTransport(transport);
+</pre>
+
+<h3>Playing with the couchDBStore</h3>
+<p>
+ Once created, you can play with the CouchDBStore like described here : <a href="http://flams.github.com/emily/#CouchDBStore">http://flams.github.com/emily/#CouchDBStore</a>
+</p>
 		</div>
 	</section>
 
