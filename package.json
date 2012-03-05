@@ -1,16 +1,16 @@
 {
  "name": "olives",
  "description": "a framework to create realtime UIs, based on emily",
- "version": "1.0.1alpha",
+ "version": "1.0.2alpha",
  "homepage": "http://flams.github.com/olives/",
  "licenses": [{
   "type":"MIT",
   "url":"https://raw.github.com/flams/olives/master/LICENSE"
  }],
  "files": [
- 	"./build",
- 	"./LICENSE",
- 	"./olives-server.js"
+   "LICENSE",
+   "olives-server.js",
+   "build"
  ],
  "author": "Olivier Scherrer <pode.fr@gmail.com>",
  "contributors": [
