@@ -17,7 +17,7 @@
 ##What can I do with Olives?
 
  * HTML Lists that reflect databases in real time where you just describe how you want each item to look like
- * Forms to update your databases with as few JavaScript? as telling what to update
+ * Forms to update your databases with as few JavaScript as telling what to update
  * Define bits of UIs that you can easily reuse, assemble, or share using AMD commonJS
 
-Olives is based on Emily http://code.google.com/p/emily/
+Olives is based on Emily <a href="https://github.com/flams/emily">https://github.com/flams/emily</a>
