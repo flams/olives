@@ -453,7 +453,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 						}
 					}, this);
 					
-					// Remove the marked item from the hight id to the lowest
+					// Remove the marked item from the highest id to the lowest
 					// Doing this will avoid the id change during removal
 					// (removing id 2 will make id 3 becoming 2)
 					marked.sort().reverse().forEach(this.removeItem, this);
@@ -594,12 +594,18 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			prop = id ? name : split.join("."),
 			
 			// Get the model's value
-			get =  Tools.getNestedProperty(_model.get(modelIdx), prop);
+			get =  Tools.getNestedProperty(_model.get(modelIdx), prop),
+			
+			// When calling bind like bind:newBinding,param1, param2... we need to get them
+			extraParam = Tools.toArray(arguments).slice(3);
 
 			// 0 and false are acceptable falsy values
 			if (get || get === 0 || get === false) {
 				// If the binding hasn't been overriden
-				if (!this.execBinding(node, property, get)) {
+				if (!this.execBinding.apply(this, 
+						[node, property, get]
+					// Extra params are passed to the new binding too
+						.concat(extraParam))) {
 					// Execute the default one which is a simple assignation
 					node[property] = get;
 				}
@@ -623,7 +629,10 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			// Watch for changes
 			this.observers[modelIdx] = this.observers[modelIdx] || [];
 			this.observers[modelIdx].push(_model.watchValue(modelIdx, function (value) {
-				if (!this.execBinding(node, property, Tools.getNestedProperty(value, prop))) {
+				if (!this.execBinding.apply(this, 
+						[node, property, Tools.getNestedProperty(value, prop)]
+						// passing extra params too
+						.concat(extraParam))) {
 					node[property] = Tools.getNestedProperty(value, prop);
 				}
 			}, this));
@@ -687,9 +696,9 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		 * @param {Any type} value the value to pass to the function
 		 * @returns
 		 */
-		this.execBinding = function execBinding(node, name, value) {
+		this.execBinding = function execBinding(node, name) {
 			if (this.hasBinding(name)) {
-				_bindings[name].call(node, value);
+				_bindings[name].apply(node, Array.prototype.slice.call(arguments, 2));
 				return true;
 			} else {
 				return false;
