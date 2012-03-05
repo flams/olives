@@ -470,7 +470,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.getNextItem(3)).toBeUndefined();
 		});
 		
-		it("should add an item at the correct position even if it's not directly followed by an other one", function () {
+		it("should add an item at the correct position even if it's not directly followed by another one", function () {
 			var dom = document.createElement("p"),
 				itemRenderer;
 			
@@ -777,6 +777,42 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 
 
+	});
+	
+	describe("ModelPluginNestedForeach", function () {
+		
+		var modelPlugin = null,
+		model = null,
+		dom = null,
+		plugins = null;
+
+		beforeEach(function () {
+			dom = document.createElement("ul");
+			dom.innerHTML = '<li>' +
+								'<span data-model="bind:innerHTML,name"></span>' +
+								'<ul data-model="foreach:plugins">' + 
+								 	'<li data-model_id="plugins" data-model="bind:innerHTML"></li>' +
+								'</ul>' +
+							'</li>';
+
+			model = new Store([{
+				name:"emily", 
+				plugins: ["Store", "Observable", "StateMachine"]
+			}, {
+				name:"olives",
+				plugins: ["OObject", "ModelPlugin", "Plugins"]
+			}]);
+			modelPlugin = new ModelPlugin(model);
+			plugins = new Plugins;
+			plugins.add("model", modelPlugin);
+		});
+		
+		it("should render nested foreach", function () {
+			modelPlugin.foreach(dom, "fwks");
+			// Nested for each are not supported yet. Should be done by April
+		});
+		
+		
 	});
 	
 	
