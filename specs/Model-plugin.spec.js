@@ -1052,20 +1052,22 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		it("should execute binding", function () {
 			expect(modelPlugin.execBinding(dom, "nop", false)).toEqual(false);
 			modelPlugin.addBindings(newBindings);
-			expect(modelPlugin.execBinding(dom, "toggleClass", false)).toEqual(true);
+			expect(modelPlugin.execBinding(dom, "toggleClass", false, "otherParam")).toEqual(true);
 			expect(newBindings.toggleClass.mostRecentCall.args[0]).toEqual(false);
+			expect(newBindings.toggleClass.mostRecentCall.args[1]).toEqual("otherParam");
 			expect(newBindings.toggleClass.mostRecentCall.object).toBe(dom);
 		});
 		
 		it("should execute new bindings", function () {
 			modelPlugin.addBindings(newBindings);
 			spyOn(modelPlugin, "execBinding");
-			modelPlugin.bind(dom, "toggleClass","property");
+			modelPlugin.bind(dom, "toggleClass","property", "otherParam");
 			model.set("property", true);
 			expect(modelPlugin.execBinding.wasCalled).toEqual(true);
 			expect(modelPlugin.execBinding.mostRecentCall.args[0]).toBe(dom);
 			expect(modelPlugin.execBinding.mostRecentCall.args[1]).toBe("toggleClass");
 			expect(modelPlugin.execBinding.mostRecentCall.args[2]).toEqual(true);
+			expect(modelPlugin.execBinding.mostRecentCall.args[3]).toEqual("otherParam");
 		});
 		
 		it("should not double way bind the plugins", function () {
