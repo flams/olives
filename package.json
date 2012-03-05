@@ -1,7 +1,7 @@
 {
  "name": "olives",
  "description": "a framework to create realtime UIs, based on emily",
- "version": "1.0.2alpha",
+ "version": "1.0.3alpha",
  "homepage": "http://flams.github.com/olives/",
  "licenses": [{
   "type":"MIT",
