@@ -1,7 +1,7 @@
 {
  "name": "olives",
  "description": "a framework to create realtime UIs, based on emily",
- "version": "1.0.3alpha",
+ "version": "1.0.4alpha",
  "homepage": "http://flams.github.com/olives/",
  "licenses": [{
   "type":"MIT",
@@ -19,7 +19,7 @@
  ],
  "dependencies": {
   "requirejs": ">=1.0.7",
-  "emily": ">=1.0.3alpha",
+  "emily": ">=1.0.6alpha",
   "socket.io": ">=0.9.0"
   },
  "keywords": ["framework", "web", "realtime", "UI", "CouchDB", "AMD/commonJS", "requirejs"],
