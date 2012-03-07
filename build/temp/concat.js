@@ -456,7 +456,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					// Remove the marked item from the highest id to the lowest
 					// Doing this will avoid the id change during removal
 					// (removing id 2 will make id 3 becoming 2)
-					marked.sort().reverse().forEach(this.removeItem, this);
+					marked.sort(Tools.compareNumbers).reverse().forEach(this.removeItem, this);
 					
 					// Now that we have removed the old nodes
 					// Add the missing one 
