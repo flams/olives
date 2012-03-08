@@ -195,24 +195,26 @@ h3 {
 
 	<section id="presentation">
 		<h2>What is Olives?</h2>
-		<p>
-			Olives is a JavaScript framework that offers convenient tools for building realtime UIs.<br />
-			Unlike most JS MVC frameworks, it removes all the burden of plumbing. <br />
-			Declaring Views, Controllers and Models, then plumbing them all together is done by Olives.<br />
-			You can simply focus on features.<br /> 
-			It's based on emily and socket.io.<br />
-			It also provides a basic set of tools that you can, and should, extend to fit your exact needs.
-		</p>
+		<ul>
+			<li>Olives is a JS MVC framework that helps you create realtime UIs.</li>
+			<li>It's a set of AMD/commonJS modules that you can extend with little to no effort.</li>
+			<li>It offers a high level of abstraction that greatly reduces boilerplate.</li>
+			<li>It can seamlessly integrate with graphical libraries.</li>
+			<li>It doesn't require you to learn a custom templating language.</li>
+			<li>It's based on Emily and socket.io to provide a simple and powerful way of communicating with a node.js server.</li>
+		</ul>
+
 		<p>The tools are:</p>
 		<ul class="menu"></ul>
 	</section>
 
 	<section id="install">
-	<div class="example">
+
 		<h2>Installing Olives</h2>
 		<p>Olives requires an AMD compatible loader like requirejs to work.<br />
 			It's based on Emily.js
 		</p>
+			<div class="example">
 		<h3>In a browser</h3>
 		<pre>
 	&lt;script src="./require.js"&gt;&lt;/script&gt;
@@ -401,7 +403,7 @@ UI.render(); // this will turn the template into &lt;p&gt;world!&lt;/p&gt;
 	
 	<section>
 		<div class="example">
-		<h2>ModelPlugin: a built-plugin that synchronizes your View with the Model</h2>
+		<h2>ModelPlugin: a built-in plugin that synchronizes your View with the Model</h2>
 		<p>
 			This is one of the most interesting part of Olives.<br />
 			It removes all the burden of adding/modifying/deleting dom nodes to reflect the UI's Model<br />
