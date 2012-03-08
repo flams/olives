@@ -19,6 +19,7 @@
  * CouchDBStore: A subtype of Emily Store for saving your model into a CouchDB database.
 
 Olives is based on Emily: https://github.com/flams/emily
+
 The documentation for each module can be found here: http://flams.github.com/emily/ 
 
 ###How do I install it?
@@ -41,7 +42,12 @@ require(["Olives/Module"], function (Module) {
 });
 ```
 				
-If your application is based on node and you want the realtime part of Olives:
+If your application is based on node and you want the realtime part of Olives, on the server side, do:
+
+```
+npm install requirejs
+npm install olives
+``` 
 
 ```js
 var olives = require("olives");
@@ -57,7 +63,9 @@ The todo application: http://flams.github.com/olives/todo/index.html
 ###There are already so many frameworks out there, why would I choose Olives?
 
 Olives is only a set of AMD/commonJS modules. You can pick up the parts that you need, or like, and build stuff around them.
+
 If you decide to go for all Olive's modules, then you have a set of powerful tools to create MVC applications.
+
 Olives lets you decide what piece of software best suites you and your projects.
 
 ###Contributing to Olives
