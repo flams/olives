@@ -175,7 +175,7 @@ h3 {
 	<section>
 
 	<header>
-		<a href="https://github.com/flams/olives/blob/master/build/Olives.js">Download Olives Alpha</a>
+		<a href="https://github.com/flams/olives/tags">Download Olives Alpha</a>
 		<h1>Olives</h1>
 		<span>Realtime UIs based on emily</span>
 	</header>
@@ -624,13 +624,12 @@ It works exactly the same way as with Emily <br />
 <a href="http://flams.github.com/emily/#Transport">http://flams.github.com/emily/#Transport</a>
 
 		</p>
-		<pre>
+		<pre class="prettyprint">
 // The requests handlers are available through olives if you have previously required it.
 var olives = require("olives");
 
-// Notice that an API is coming to help you manager your handlers.
-// At the moment, the handlers have to be added before socket.io is registered
-olives.handlers.addYouHandlerHere = function () {};
+// Add you own handlers. <a href="http://flams.github.com/emily/#Transport">You can find more info about handlers in Emily's documentation</a>
+olives.handlers.set("addYouHandlerHere", function () {});
 
 // i.e. here
 olives.registerSocketIO(io);
