@@ -22,6 +22,7 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 			expect(ui.render).toBeInstanceOf(Function);
 			expect(ui.place).toBeInstanceOf(Function);
 			expect(ui.alive).toBeInstanceOf(Function);
+			expect(ui.setTemplateFromDom).toBeInstanceOf(Function);
 		});
 		
 		it("should have a plugins property that is a Plugins aggragator", function () {
@@ -63,17 +64,23 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 	
 		beforeEach(function () {
 			oObject = new OObject;
-			dom.innerHTML = "<p><span>Olives</span></p>";
+			dom.innerHTML = "<p><span>Olives</span></p><p><span>Emily</span></p>";
 		});
 		
-		it("should make the node's children 'alive'", function () {
+		it("should transform a dom node into a UI", function () {
 			expect(oObject.alive).toBeInstanceOf(Function);
-			spyOn(oObject.plugins, "apply");
+			spyOn(oObject, "setTemplateFromDom");
+			spyOn(oObject, "place");
 			
 			expect(oObject.alive({})).toEqual(false);
-			expect(oObject.alive(dom)).toEqual(true);
-			expect(oObject.plugins.apply.wasCalled).toEqual(true);
-			expect(oObject.plugins.apply.mostRecentCall.args[0]).toBe(dom);
+			expect(oObject.alive(dom.querySelector("p"))).toEqual(true);
+			
+			expect(oObject.setTemplateFromDom.wasCalled).toEqual(true);
+			expect(oObject.setTemplateFromDom.mostRecentCall.args[0]).toBe(dom.querySelector("p"));
+			
+			expect(oObject.place.wasCalled).toEqual(true);
+			expect(oObject.place.mostRecentCall.args[0]).toEqual(dom);
+			expect(oObject.place.mostRecentCall.args[1]).toEqual(dom.querySelectorAll("p")[1]);
 		});
 		
 	});
@@ -131,6 +138,14 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 			expect(ui.render());
 			
 			expect(place2.querySelectorAll("span").length).toEqual(1);
+		});
+		
+		it("should get the template from a DOM node", function () {
+			var domNode = document.createElement("div");
+			expect(ui.setTemplateFromDom()).toEqual(false);
+			expect(ui.setTemplateFromDom({})).toEqual(false);
+			expect(ui.setTemplateFromDom(domNode)).toEqual(true);
+			expect(ui.template).toBe(domNode);
 		});
 		
 	});
@@ -201,12 +216,27 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 			expect(place1.querySelectorAll("p").length).toEqual(1);
 		});
 		
-		it("can take the UI from the DOM and place it somewhere else", function () {
+		it("should take the UI from the DOM and place it somewhere else", function () {
 			ui.place( place1);
 			
 			ui.place( place2);
 			expect(place2.querySelectorAll("p").length).toEqual(1);
 			expect(place1.querySelectorAll("p").length).toEqual(0);
+		});
+		
+		it("should place a UI between two dom nodes", function () {
+			var place3 = document.createElement("div"),
+				place4 = document.createElement("div");
+			
+			place2.appendChild(place3);
+			place2.appendChild(place4);
+			
+			ui.place(place2, place4);
+			
+			expect(place2.childNodes[0]).toBe(place3);
+			expect(place2.childNodes[1]).toBe(ui.dom);
+			expect(place2.childNodes[2]).toBe(place4);
+			
 		});
 		
 		
@@ -226,10 +256,10 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 			expect(place2.querySelector("p").innerHTML).toEqual("Emily");
 			expect(place1.querySelector("p").innerHTML).toEqual("Olives");
 			
-			ui.place( place2);
+			ui.place(place2);
 			expect(place1.querySelectorAll("p").length).toEqual(0);
 			
-			ui.place( place1);
+			ui.place(place1);
 			
 			expect(place2.querySelector("p").innerHTML).toEqual("Emily");
 			expect(place1.querySelector("p").innerHTML).toEqual("Olives");

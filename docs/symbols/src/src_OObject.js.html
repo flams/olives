@@ -57,7 +57,7 @@
 <span class='line'> 50</span> </span><span class="WHIT">					</span><span class="NAME">UI.dom</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">baseNode.childNodes</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 51</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 52</span> </span><span class="WHIT">				
-<span class='line'> 53</span> 				</span><span class="NAME">UI.alive</span><span class="PUNC">(</span><span class="NAME">UI.dom</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 53</span> 				</span><span class="NAME">UI.plugins.apply</span><span class="PUNC">(</span><span class="NAME">UI.dom</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 54</span> 
 <span class='line'> 55</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 56</span> </span><span class="WHIT">				</span><span class="COMM">// An explicit message I hope</span><span class="WHIT">
@@ -70,9 +70,9 @@
 <span class='line'> 63</span> 		 * This dom node should be somewhere in the dom of the application
 <span class='line'> 64</span> 		 * @private
 <span class='line'> 65</span> 		 */</span><span class="WHIT">
-<span class='line'> 66</span> </span><span class="WHIT">		</span><span class="NAME">place</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">place</span><span class="PUNC">(</span><span class="NAME">UI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">place</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">		</span><span class="NAME">place</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">place</span><span class="PUNC">(</span><span class="NAME">UI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">place</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">beforeNode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 67</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">place</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 68</span> </span><span class="WHIT">				</span><span class="NAME">place.appendChild</span><span class="PUNC">(</span><span class="NAME">UI.dom</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">				</span><span class="NAME">place.insertBefore</span><span class="PUNC">(</span><span class="NAME">UI.dom</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">beforeNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 69</span> </span><span class="WHIT">				</span><span class="COMM">// Also save the new place, so next renderings</span><span class="WHIT">
 <span class='line'> 70</span> </span><span class="WHIT">				</span><span class="COMM">// will be made inside it</span><span class="WHIT">
 <span class='line'> 71</span> </span><span class="WHIT">				</span><span class="NAME">_currentPlace</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">place</span><span class="PUNC">;</span><span class="WHIT">
@@ -85,7 +85,7 @@
 <span class='line'> 78</span> 		 */</span><span class="WHIT">
 <span class='line'> 79</span> </span><span class="WHIT">		</span><span class="NAME">renderNPlace</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">renderNPlace</span><span class="PUNC">(</span><span class="NAME">UI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dom</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 80</span> </span><span class="WHIT">			</span><span class="NAME">render</span><span class="PUNC">(</span><span class="NAME">UI</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 81</span> </span><span class="WHIT">			</span><span class="NAME">place</span><span class="PUNC">(</span><span class="NAME">UI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dom</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="WHIT">			</span><span class="NAME">place.apply</span><span class="PUNC">(</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Tools.toArray</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 82</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 83</span> </span><span class="WHIT">		
 <span class='line'> 84</span> 		</span><span class="COMM">/**
@@ -136,35 +136,52 @@
 <span class='line'>129</span> 		</span><span class="COMM">/**
 <span class='line'>130</span> 		 * Place the UI in a given dom node
 <span class='line'>131</span> 		 * @param {HTMLElement} node the node on which to append the UI
-<span class='line'>132</span> 		 */</span><span class="WHIT">
-<span class='line'>133</span> </span><span class="WHIT">		</span><span class="NAME">this.place</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">place</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>134</span> </span><span class="WHIT">			</span><span class="NAME">_stateMachine.event</span><span class="PUNC">(</span><span class="STRN">"place"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>135</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>136</span> </span><span class="WHIT">		
-<span class='line'>137</span> 		</span><span class="COMM">/**
-<span class='line'>138</span> 		 * Renders the template to dom nodes and applies the plugins on it
-<span class='line'>139</span> 		 * It requires the template to be set first
-<span class='line'>140</span> 		 */</span><span class="WHIT">
-<span class='line'>141</span> </span><span class="WHIT">		</span><span class="NAME">this.render</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">render</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>142</span> </span><span class="WHIT">			</span><span class="NAME">_stateMachine.event</span><span class="PUNC">(</span><span class="STRN">"render"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>143</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>144</span> </span><span class="WHIT">		
-<span class='line'>145</span> 		</span><span class="COMM">/**
-<span class='line'>146</span> 		 * Applies this UI's plugins to the given dom node,
-<span class='line'>147</span> 		 * kind of making it 'alive'
-<span class='line'>148</span> 		 * @param {HTMLElement} node the dom to apply the plugins to
-<span class='line'>149</span> 		 * @returns false if wrong param
+<span class='line'>132</span> 		 * @param {HTMLElement} beforeNode the dom before which to append the UI  
+<span class='line'>133</span> 		 */</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">		</span><span class="NAME">this.place</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">place</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">beforeNode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">			</span><span class="NAME">_stateMachine.event</span><span class="PUNC">(</span><span class="STRN">"place"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">beforeNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">		
+<span class='line'>138</span> 		</span><span class="COMM">/**
+<span class='line'>139</span> 		 * Renders the template to dom nodes and applies the plugins on it
+<span class='line'>140</span> 		 * It requires the template to be set first
+<span class='line'>141</span> 		 */</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">		</span><span class="NAME">this.render</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">render</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">			</span><span class="NAME">_stateMachine.event</span><span class="PUNC">(</span><span class="STRN">"render"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="WHIT">		
+<span class='line'>146</span> 		</span><span class="COMM">/**
+<span class='line'>147</span> 		 * Set the UI's template from a DOM element
+<span class='line'>148</span> 		 * @param {HTMLElement} dom the dom element that'll become the template of the UI
+<span class='line'>149</span> 		 * @returns true if dom is an HTMLElement
 <span class='line'>150</span> 		 */</span><span class="WHIT">
-<span class='line'>151</span> </span><span class="WHIT">		</span><span class="NAME">this.alive</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">alive</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">		</span><span class="NAME">this.setTemplateFromDom</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">setTemplateFromDom</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>152</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">dom</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HTMLElement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>153</span> </span><span class="WHIT">				</span><span class="NAME">this.plugins.apply</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">				</span><span class="NAME">this.template</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">dom</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>154</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>155</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>156</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>157</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>158</span> </span><span class="WHIT">			
-<span class='line'>159</span> 		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>160</span> </span><span class="WHIT">		
-<span class='line'>161</span> 	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>162</span> </span><span class="WHIT">	
-<span class='line'>163</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
+<span class='line'>158</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">		
+<span class='line'>160</span> 		</span><span class="COMM">/**
+<span class='line'>161</span> 		 * Transforms dom nodes into a UI.
+<span class='line'>162</span> 		 * It basically does a setTemplateFromDOM, then a place
+<span class='line'>163</span> 		 * It's a helper function
+<span class='line'>164</span> 		 * @param {HTMLElement} node the dom to transform to a UI
+<span class='line'>165</span> 		 * @returns true if dom is an HTMLElement
+<span class='line'>166</span> 		 */</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="WHIT">		</span><span class="NAME">this.alive</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">alive</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">dom</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HTMLElement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="WHIT">				</span><span class="NAME">this.setTemplateFromDom</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="WHIT">				</span><span class="NAME">this.place</span><span class="PUNC">(</span><span class="NAME">dom.parentNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dom.nextElementSibling</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">			
+<span class='line'>176</span> 		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="WHIT">		
+<span class='line'>178</span> 	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">	
+<span class='line'>180</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>

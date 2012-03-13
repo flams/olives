@@ -50,7 +50,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 					UI.dom = baseNode.childNodes[0];
 				}
 				
-				UI.alive(UI.dom);
+				UI.plugins.apply(UI.dom);
 
 			} else {
 				// An explicit message I hope
@@ -63,9 +63,9 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 * This dom node should be somewhere in the dom of the application
 		 * @private
 		 */
-		place = function place(UI, place) {
+		place = function place(UI, place, beforeNode) {
 			if (place) {
-				place.appendChild(UI.dom);
+				place.insertBefore(UI.dom, beforeNode);
 				// Also save the new place, so next renderings
 				// will be made inside it
 				_currentPlace = place;
@@ -78,7 +78,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 */
 		renderNPlace = function renderNPlace(UI, dom) {
 			render(UI);
-			place(UI, dom);
+			place.apply(null, Tools.toArray(arguments));
 		},
 		
 		/**
@@ -129,9 +129,10 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		/**
 		 * Place the UI in a given dom node
 		 * @param {HTMLElement} node the node on which to append the UI
+		 * @param {HTMLElement} beforeNode the dom before which to append the UI  
 		 */
-		this.place = function place(node) {
-			_stateMachine.event("place", this, node);
+		this.place = function place(node, beforeNode) {
+			_stateMachine.event("place", this, node, beforeNode);
 		};
 		
 		/**
@@ -143,14 +144,30 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		};
 		
 		/**
-		 * Applies this UI's plugins to the given dom node,
-		 * kind of making it 'alive'
-		 * @param {HTMLElement} node the dom to apply the plugins to
-		 * @returns false if wrong param
+		 * Set the UI's template from a DOM element
+		 * @param {HTMLElement} dom the dom element that'll become the template of the UI
+		 * @returns true if dom is an HTMLElement
+		 */
+		this.setTemplateFromDom = function setTemplateFromDom(dom) {
+			if (dom instanceof HTMLElement) {
+				this.template = dom;
+				return true;
+			} else {
+				return false;
+			}
+		};
+		
+		/**
+		 * Transforms dom nodes into a UI.
+		 * It basically does a setTemplateFromDOM, then a place
+		 * It's a helper function
+		 * @param {HTMLElement} node the dom to transform to a UI
+		 * @returns true if dom is an HTMLElement
 		 */
 		this.alive = function alive(dom) {
 			if (dom instanceof HTMLElement) {
-				this.plugins.apply(dom);
+				this.setTemplateFromDom(dom);
+				this.place(dom.parentNode, dom.nextElementSibling);
 				return true;
 			} else {
 				return false;
