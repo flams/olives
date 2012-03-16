@@ -1210,7 +1210,8 @@ function Transport(Observable) {
 			_socket.emit(channel, requestData);
 			if (requestData.keptAlive) {
 				return function stop() {
-						_socket.removeListener(eventId, boundCallback);
+					_socket.emit("disconnect-" + eventId);
+					_socket.removeListener(eventId, boundCallback);
 				};
 			}
 		};

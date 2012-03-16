@@ -22,18 +22,26 @@ exports.registerSocketIO = function (io) {
 			
 			var connectHandler = function (func, handler) {
 				// When a handler is called
-				socket.on(handler, function (reqDdata) {
+				socket.on(handler, function (reqData) {
 					// pass it the requests data
-					func(reqDdata, 
+					var stop = func(reqData, 
 						// The function to handle the result
 						function onEnd(body) {
-							socket.emit(reqDdata.__eventId__, body);
+							socket.emit(reqData.__eventId__, body);
 						}, 
 						// The function to handle chunks for a kept alive socket
 						function onData(chunk) {
-							reqDdata.keptAlive && socket.emit(reqDdata.__eventId__, ""+chunk);
+							reqData.keptAlive && socket.emit(reqData.__eventId__, ""+chunk);
 						});
+					
+					// If func returned a stop function
+					if (typeof stop == "function") {
+						// Subscribe to disconnect-eventId event
+						socket.on("disconnect-"+reqData.__eventId__, stop);
+					}
+
 				});
+
 			};
 			
 			// for each handler, described in Emily as they can be used from node.js as well

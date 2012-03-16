@@ -225,9 +225,10 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 
 			eventId = socket.on.mostRecentCall.args[0];
 			expect(eventId).toBeTruthy();
-
+			
 			stop();
 
+			expect(socket.emit.mostRecentCall.args[0]).toEqual("disconnect-" + eventId);
 			expect(socket.removeListener.mostRecentCall.args[0]).toEqual(eventId);
 			expect(socket.removeListener.mostRecentCall.args[1]).toBeInstanceOf(Function);
 			expect(transport.request.wasCalled).toEqual(true);
