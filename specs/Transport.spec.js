@@ -217,16 +217,16 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 			expect(transport.listen).toBeInstanceOf(Function);
 
 			spyOn(transport, "request").andCallThrough();
-			listen = transport.listen(channel, path, callback);
-			expect(listen).toBeInstanceOf(Object);
-			expect(listen.stop).toBeInstanceOf(Function);
+			stop = transport.listen(channel, path, callback);
+
+			expect(stop).toBeInstanceOf(Function);
 
 			expect(socket.on.wasCalled).toEqual(true);
 
 			eventId = socket.on.mostRecentCall.args[0];
 			expect(eventId).toBeTruthy();
 
-			listen.stop();
+			stop();
 
 			expect(socket.removeListener.mostRecentCall.args[0]).toEqual(eventId);
 			expect(socket.removeListener.mostRecentCall.args[1]).toBeInstanceOf(Function);
@@ -246,11 +246,11 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 
 			spyOn(observable, "watch").andCallThrough();
 			spyOn(observable, "unwatch").andCallThrough();
-			listen = transport.listen(channel, path, function () {});
+			stop = transport.listen(channel, path, function () {});
 			expect(observable.watch.wasCalled).toEqual(true);
 			expect(observable.watch.mostRecentCall.args[0]).toEqual(channel + "/" + path);
 
-			listen.stop();
+			stop();
 
 			expect(observable.unwatch.wasCalled).toEqual(true);
 			expect(observable.unwatch.mostRecentCall.args[0]).toBeInstanceOf(Array);

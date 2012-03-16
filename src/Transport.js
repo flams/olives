@@ -167,16 +167,13 @@ function Transport(Observable) {
 			// Add the observer
 			handler = _observable.watch(topic, func, scope);
 
-			return {
-				// If the observer is not interested anymore, unwatch
-				stop: function () {
+			return function () {
 					_observable.unwatch(handler);
 					// If no more observers
 					if (!_observable.hasTopic(topic)) {
 						// stop listening
 						stop();
 					}
-				}
 			};
 		};
 		
