@@ -174,31 +174,28 @@
 <span class='line'>167</span> 			</span><span class="COMM">// Add the observer</span><span class="WHIT">
 <span class='line'>168</span> </span><span class="WHIT">			</span><span class="NAME">handler</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_observable.watch</span><span class="PUNC">(</span><span class="NAME">topic</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">func</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scope</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>169</span> 
-<span class='line'>170</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>171</span> </span><span class="WHIT">				</span><span class="COMM">// If the observer is not interested anymore, unwatch</span><span class="WHIT">
-<span class='line'>172</span> </span><span class="WHIT">				</span><span class="NAME">stop</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>173</span> </span><span class="WHIT">					</span><span class="NAME">_observable.unwatch</span><span class="PUNC">(</span><span class="NAME">handler</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>174</span> </span><span class="WHIT">					</span><span class="COMM">// If no more observers</span><span class="WHIT">
-<span class='line'>175</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">_observable.hasTopic</span><span class="PUNC">(</span><span class="NAME">topic</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>176</span> </span><span class="WHIT">						</span><span class="COMM">// stop listening</span><span class="WHIT">
-<span class='line'>177</span> </span><span class="WHIT">						</span><span class="NAME">stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>178</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>179</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>180</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>181</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>182</span> </span><span class="WHIT">		
-<span class='line'>183</span> 		</span><span class="COMM">/**
-<span class='line'>184</span> 		 * This function is for debugging only
-<span class='line'>185</span> 		 * @returns {Observable}
-<span class='line'>186</span> 		 */</span><span class="WHIT">
-<span class='line'>187</span> </span><span class="WHIT">		</span><span class="NAME">this.getListenObservable</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">getListenObservable</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>188</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_observable</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>189</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>190</span> </span><span class="WHIT">		
-<span class='line'>191</span> 		</span><span class="COMM">/**
-<span class='line'>192</span> 		 * Initializes the transport to the given url.
-<span class='line'>193</span> 		 */</span><span class="WHIT">
-<span class='line'>194</span> </span><span class="WHIT">		</span><span class="NAME">this.setIO</span><span class="PUNC">(</span><span class="NAME">$io</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>195</span> </span><span class="WHIT">		</span><span class="NAME">this.connect</span><span class="PUNC">(</span><span class="NAME">$url</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>196</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>197</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
+<span class='line'>170</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">					</span><span class="NAME">_observable.unwatch</span><span class="PUNC">(</span><span class="NAME">handler</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">					</span><span class="COMM">// If no more observers</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">_observable.hasTopic</span><span class="PUNC">(</span><span class="NAME">topic</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">						</span><span class="COMM">// stop listening</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">						</span><span class="NAME">stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">		
+<span class='line'>180</span> 		</span><span class="COMM">/**
+<span class='line'>181</span> 		 * This function is for debugging only
+<span class='line'>182</span> 		 * @returns {Observable}
+<span class='line'>183</span> 		 */</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">		</span><span class="NAME">this.getListenObservable</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">getListenObservable</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_observable</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="WHIT">		
+<span class='line'>188</span> 		</span><span class="COMM">/**
+<span class='line'>189</span> 		 * Initializes the transport to the given url.
+<span class='line'>190</span> 		 */</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">		</span><span class="NAME">this.setIO</span><span class="PUNC">(</span><span class="NAME">$io</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="WHIT">		</span><span class="NAME">this.connect</span><span class="PUNC">(</span><span class="NAME">$url</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
