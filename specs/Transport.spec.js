@@ -204,7 +204,7 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 
 		it("should also listen on a kept-alive socket", function () {
 			var channel = "File",
-			path = "image.jpg",
+			url = "image.jpg",
 			callback = jasmine.createSpy(),
 			listen,
 			eventId;
@@ -217,7 +217,7 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 			expect(transport.listen).toBeInstanceOf(Function);
 
 			spyOn(transport, "request").andCallThrough();
-			stop = transport.listen(channel, path, callback);
+			stop = transport.listen(channel, {path: url}, callback);
 
 			expect(stop).toBeInstanceOf(Function);
 
@@ -233,12 +233,14 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 			expect(socket.removeListener.mostRecentCall.args[1]).toBeInstanceOf(Function);
 			expect(transport.request.wasCalled).toEqual(true);
 			expect(transport.request.mostRecentCall.args[1].keptAlive).toEqual(true);
+			expect(transport.request.mostRecentCall.args[1].method).toEqual("GET");
+			expect(transport.request.mostRecentCall.args[1].path).toEqual(url);
 
 		});
 
 		it("should implement an observable for the listen func", function () {
 			var channel = "DB",
-			path = "changes",
+			url = "changes",
 			observable, listen;
 
 			expect(transport.getListenObservable).toBeInstanceOf(Function);
@@ -247,9 +249,9 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 
 			spyOn(observable, "watch").andCallThrough();
 			spyOn(observable, "unwatch").andCallThrough();
-			stop = transport.listen(channel, path, function () {});
+			stop = transport.listen(channel, {path: url}, function () {});
 			expect(observable.watch.wasCalled).toEqual(true);
-			expect(observable.watch.mostRecentCall.args[0]).toEqual(channel + "/" + path);
+			expect(observable.watch.mostRecentCall.args[0]).toEqual(channel+"/"+url);
 
 			stop();
 
@@ -257,18 +259,35 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 			expect(observable.unwatch.mostRecentCall.args[0]).toBeInstanceOf(Array);
 
 		});
+		
+		it("should let query strings pass", function () {
+			var channel = "DB",
+				reqData = {
+					path: "/",
+					query: {
+						param1: true,
+						hello: "world"
+					}
+				};
+			
+			spyOn(transport, "request");
+			
+			transport.listen(channel, reqData, function () {});
+			expect(transport.request.mostRecentCall.args[1].query).toBe(reqData.query);
+		});
+			
 
 		it("should listen to the same path only once", function () {
 			var channel = "DB",
-			path = "changes",
+			url = "changes",
 			callback = jasmine.createSpy();
 
 			spyOn(transport, "request");
 
-			transport.listen(channel, path, callback);
-			transport.listen(channel, path, callback);
+			transport.listen(channel, {path: url}, callback);
+			transport.listen(channel, {path: url}, callback);
 			expect(transport.request.callCount).toEqual(1);
-			transport.listen(channel, "otherpath", callback);
+			transport.listen(channel, {path: "otherpath"}, callback);
 			expect(transport.request.callCount).toEqual(2);
 		});
 

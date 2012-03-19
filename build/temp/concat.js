@@ -1084,13 +1084,13 @@ function Plugins(Tools, DomUtils) {
 
 define("Olives/Transport",
 		
-["Observable"],
+["Observable", "Tools"],
 /** 
  * @class
  * Transport allows for client-server eventing.
  * It's based on socket.io.
  */
-function Transport(Observable) {
+function Transport(Observable, Tools) {
 
 	/**
 	 * Defines the Transport
@@ -1219,26 +1219,28 @@ function Transport(Observable) {
 		/**
 		 * Listen to an url and get notified on new data
 		 * @param {String} channel watch the server's documentation to see available channels
-		 * @param {String} path the url on which to get new data
+		 * @param {Object} reqData the request data: path should indicate the url, query can add up query strings to the url
 		 * @param {Function} func the callback that will get the data
 		 * @param {Object} scope the scope in which to execute the callback
 		 * @returns
 		 */
-		this.listen = function listen(channel, path, func, scope) {
+		this.listen = function listen(channel, reqData, func, scope) {
 			
-			var topic = channel + "/" + path,
+			var topic = channel + "/" + reqData.path,
 				handler,
 				stop;
 			
 			// If no such topic
 			if (!_observable.hasTopic(topic)) {
-				// Listen to changes on this topic (an url actually)
-				stop = this.request(channel, {
-					path: path,
+				Tools.mixin({
 					method: "GET",
 					keptAlive: true
-				// Notify when new data arrives
-				}, function (data) {
+				}, reqData);
+				
+				// Listen to changes on this topic (an url actually)
+				stop = this.request(channel, reqData, 
+						// Notify when new data arrives
+						function (data) {
 					_observable.notify(topic, data);
 				}, this);
 			}
