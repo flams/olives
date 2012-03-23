@@ -77,18 +77,18 @@ namespace("build", function () {
 		// Delete previous files first.
 		fs.unlink("build/" + PROJECT_NAME + ".js");
 		fs.unlink("build/" + PROJECT_NAME + "-map.js");
-		fs.unlink("build/temp/concat.js");
+		fs.unlink("build/uncompressed/concat.js");
 	});
 	
 	task("concat", ["build:clean"], function () {
 		var files = _getFiles("src"),
-			concat = fs.readFileSync("LICENSE","utf8");
+			concat = fs.readFileSync("LICENSE-MINI","utf8");
 		
 		files.forEach(function (file) {
 			concat += fs.readFileSync("src/" + file,"utf8");
 		});
 		
-		fs.writeFile("build/temp/concat.js", concat, function (err) {
+		fs.writeFile("build/uncompressed/concat.js", concat, function (err) {
 			if (err) {
 				throw err;
 			}
@@ -97,11 +97,15 @@ namespace("build", function () {
 	
 	task("minify", ["build:concat"], function () {
 		var cmd = "java -jar tools/GoogleCompiler/compiler.jar" +
-				" --js build/temp/concat.js" +
+				" --js build/uncompressed/concat.js" +
 				" --js_output_file build/" + PROJECT_NAME + ".js" +
 				" --create_source_map build/" + PROJECT_NAME + "-map";
 		
 		_execCommand(cmd);
+	});
+	
+	task("copyLicense", function () {
+		_execCommand("cp LICENSE build/");
 	});
 });
 
@@ -120,6 +124,6 @@ namespace("tests", function () {
 });
 
 desc("This is the default task");
-task("default", ["tests:all", "docs:generate", "build:minify"], function () {
+task("default", ["tests:all", "docs:generate", "build:minify", "build:copyLicense"], function () {
 	console.log(arguments);
 });

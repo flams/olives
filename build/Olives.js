@@ -2,22 +2,6 @@
  Olives
 
  The MIT License (MIT)
-
- Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
-
- Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
- documentation files (the "Software"), to deal in the Software without restriction, including without limitation
- the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
- and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all copies or substantial 
- portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
- CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- IN THE SOFTWARE.
 */
 define("Olives/DomUtils",["Tools"],function(){return{getNodes:function(f,i){return f instanceof HTMLElement?(f.parentNode||document.createDocumentFragment().appendChild(f),f.parentNode.querySelectorAll(i||"*")):false}}});define("Olives/Event-plugin",function(){return function(f){this.listen=function(i,g,j,c){i.addEventListener(g,function(a){f[j].call(f,a,i)},c=="true")}}});
 define("Olives/LocalStore",["Store","Tools"],function(f,i){function g(){var g=null,c=function(){localStorage.setItem(g,this.toJSON())};this.sync=function(a){return typeof a=="string"?(g=a,a=JSON.parse(localStorage.getItem(a)),i.loop(a,function(a,d){this.has(d)||this.set(d,a)},this),c.call(this),true):false};this.watch("added",c,this);this.watch("updated",c,this);this.watch("deleted",c,this)}return function(i){g.prototype=new f(i);return new g}});
