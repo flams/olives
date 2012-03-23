@@ -1,3 +1,5 @@
+Extensive documentation, along with unit tests and JsDoc can be found here: https://github.com/flams/olives
+
 ###What is Olives?
 
  * Olives is a JS MVC framework that helps you create realtime UIs.
