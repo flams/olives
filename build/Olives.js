@@ -2,6 +2,8 @@
  Olives
 
  The MIT License (MIT)
+
+ Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
 */
 define("Olives/DomUtils",["Tools"],function(){return{getNodes:function(f,i){return f instanceof HTMLElement?(f.parentNode||document.createDocumentFragment().appendChild(f),f.parentNode.querySelectorAll(i||"*")):false}}});define("Olives/Event-plugin",function(){return function(f){this.listen=function(i,g,j,c){i.addEventListener(g,function(a){f[j].call(f,a,i)},c=="true")}}});
 define("Olives/LocalStore",["Store","Tools"],function(f,i){function g(){var g=null,c=function(){localStorage.setItem(g,this.toJSON())};this.sync=function(a){return typeof a=="string"?(g=a,a=JSON.parse(localStorage.getItem(a)),i.loop(a,function(a,d){this.has(d)||this.set(d,a)},this),c.call(this),true):false};this.watch("added",c,this);this.watch("updated",c,this);this.watch("deleted",c,this)}return function(i){g.prototype=new f(i);return new g}});

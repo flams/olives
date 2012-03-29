@@ -9,7 +9,7 @@ git checkout master docs
 git checkout master specs
 
 #update tests
-git checkout master tools/Jasmine-runner
+git checkout master tools/Jasmine
 git checkout master tests.html
 
 #update libs
