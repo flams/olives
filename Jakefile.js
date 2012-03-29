@@ -112,7 +112,7 @@ namespace("build", function () {
 namespace("tests", function () {
 	
 	task("jstd", function () {
-		var cmd = "java -jar tools/JsTestDriver/JsTestDriver-1.3.4-a.jar " +
+		var cmd = "java -jar tools/JsTestDriver/JsTestDriver-1.3.4.b.jar " +
 				" --tests all";
 				//" --testOutput reports/";
 		

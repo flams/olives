@@ -3,9 +3,9 @@
 <head>
   <title>Jasmine Spec Runner</title>
 
-  <link rel="stylesheet" type="text/css" href="tools/Jasmine-runner/jasmine.css">
-  <script type="text/javascript" src="tools/Jasmine-runner/jasmine.js"></script>
-  <script type="text/javascript" src="tools/Jasmine-runner/jasmine-html.js"></script>
+  <link rel="stylesheet" type="text/css" href="tools/Jasmine/jasmine.css">
+  <script type="text/javascript" src="tools/Jasmine/jasmine.js"></script>
+  <script type="text/javascript" src="tools/Jasmine/jasmine-html.js"></script>
   <script type="text/javascript" src="lib/require.js"></script>
   <script type="text/javascript" src="lib/Emily.js"></script>
 
@@ -32,7 +32,7 @@
   	jasmineEnv.addReporter(reporter);
 	setTimeout(function () {
 		jasmineEnv.execute();
-	}, 500);
+	}, 10);
     window.removeEventListener("load", onLoad, true);
   
   }, true);
