@@ -1,96 +1,119 @@
-var Options = require('options');
-require('should');
+var Options = require('options')
+  , expect = require('expect.js');
 
 describe('Options', function() {
   describe('#ctor', function() {
     it('initializes options', function() {
-      var option = new Options({a: true, b: false}); 
-      option.value.a.should.be.ok;
-      option.value.b.should.not.be.ok;
+      var option = new Options({a: true, b: false});
+      expect(option.value.a).to.equal(true);
+      expect(option.value.b).to.equal(false);
     })
   })
+
   describe('#merge', function() {
     it('merges options from another object', function() {
-      var option = new Options({a: true, b: false}); 
+      var option = new Options({a: true, b: false});
       option.merge({b: true});
-      option.value.a.should.be.ok;
-      option.value.b.should.be.ok;
+      expect(option.value.a).to.equal(true);
+      expect(option.value.b).to.equal(true);
     })
     it('does nothing when arguments are undefined', function() {
-      var option = new Options({a: true, b: false}); 
+      var option = new Options({a: true, b: false});
       option.merge(undefined);
-      option.value.a.should.be.ok;
-      option.value.b.should.not.be.ok;
+      expect(option.value.a).to.equal(true);
+      expect(option.value.b).to.equal(false);
     })
     it('cannot set values that werent already there', function() {
-      var option = new Options({a: true, b: false}); 
+      var option = new Options({a: true, b: false});
       option.merge({c: true});
-      (typeof option.value.c).should.eql('undefined');
+      expect(typeof option.value.c).to.equal('undefined');
     })
     it('can require certain options to be defined', function() {
-      var option = new Options({a: true, b: false, c: 3}); 
+      var option = new Options({a: true, b: false, c: 3});
       var caughtException = false;
       try {
-        option.merge({}, ['a', 'b', 'c']); 
+        option.merge({}, ['a', 'b', 'c']);
       }
       catch (e) {
-        caughtException = e.toString() == 'Error: options a, b and c must be defined'; 
+        caughtException = e.toString() == 'Error: options a, b and c must be defined';
       }
-      caughtException.should.be.ok;
+      expect(caughtException).to.equal(true);
     })
     it('can require certain options to be defined, when options are undefined', function() {
-      var option = new Options({a: true, b: false, c: 3}); 
+      var option = new Options({a: true, b: false, c: 3});
       var caughtException = false;
       try {
-        option.merge(undefined, ['a', 'b', 'c']); 
+        option.merge(undefined, ['a', 'b', 'c']);
       }
       catch (e) {
-        caughtException = e.toString() == 'Error: options a, b and c must be defined'; 
+        caughtException = e.toString() == 'Error: options a, b and c must be defined';
       }
-      caughtException.should.be.ok;
+      expect(caughtException).to.equal(true);
     })
     it('returns "this"', function() {
-      var option = new Options({a: true, b: false, c: 3}); 
-      option.merge().should.eql(option);
+      var option = new Options({a: true, b: false, c: 3});
+      expect(option.merge()).to.equal(option);
     })
   })
+
   describe('#copy', function() {
     it('returns a new object with the indicated options', function() {
-      var option = new Options({a: true, b: false, c: 3}); 
-      var obj = option.copy(['a', 'c']); 
-      obj.a.should.be.ok;
-      obj.c.should.eql(3);
-      (typeof obj.b).should.eql('undefined');
+      var option = new Options({a: true, b: false, c: 3});
+      var obj = option.copy(['a', 'c']);
+      expect(obj.a).to.equal(true);
+      expect(obj.c).to.equal(3);
+      expect(typeof obj.b).to.equal('undefined');
     })
   })
+
   describe('#value', function() {
     it('can be enumerated', function() {
-      var option = new Options({a: true, b: false}); 
-      Object.keys(option.value).length.should.eql(2);
+      var option = new Options({a: true, b: false});
+      expect(Object.keys(option.value).length).to.equal(2);
     })
     it('can not be used to set values', function() {
-      var option = new Options({a: true, b: false}); 
+      var option = new Options({a: true, b: false});
       option.value.b = true;
-      option.value.b.should.not.be.ok;
+      expect(option.value.b).to.equal(false);
     })
     it('can not be used to add values', function() {
-      var option = new Options({a: true, b: false}); 
+      var option = new Options({a: true, b: false});
       option.value.c = 3;
-      (typeof option.value.c).should.eql('undefined');
+      expect(typeof option.value.c).to.equal('undefined');
     })
   })
+
+  describe('#read', function() {
+    it('reads and merges config from a file', function() {
+      var option = new Options({a: true, b: true});
+      option.read(__dirname + '/fixtures/test.conf');
+      expect(option.value.a).to.equal('foobar');
+      expect(option.value.b).to.equal(false);
+    })
+
+    it('asynchronously reads and merges config from a file when a callback is passed', function(done) {
+      var option = new Options({a: true, b: true});
+      option.read(__dirname + '/fixtures/test.conf', function(error) {
+        expect(option.value.a).to.equal('foobar');
+        expect(option.value.b).to.equal(false);
+        done();
+      });
+    })
+  })
+
   describe('#reset', function() {
     it('resets options to defaults', function() {
-      var option = new Options({a: true, b: false}); 
+      var option = new Options({a: true, b: false});
       option.merge({b: true});
-      option.value.b.should.be.ok;
+      expect(option.value.b).to.equal(true);
       option.reset();
-      option.value.b.should.not.be.ok;
+      expect(option.value.b).to.equal(false);
     })
   })
+
   it('is immutable', function() {
-    var option = new Options({a: true, b: false}); 
+    var option = new Options({a: true, b: false});
     option.foo = 2;
-    (typeof option.foo).should.eql('undefined');
+    expect(typeof option.foo).to.equal('undefined');
   })
 })
