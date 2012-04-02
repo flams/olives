@@ -113,6 +113,7 @@ require(["Olives/Plugins"], function (Plugins) {
 			plugins.add("plugin1", plugin1);
 			plugins.apply(dom);
 			expect(plugin1.method.wasCalled).toEqual(true);
+			expect(plugin1.method.callCount).toEqual(1);
 			expect(plugin1.method.mostRecentCall.object).toBe(plugin1);
 		});
 		
