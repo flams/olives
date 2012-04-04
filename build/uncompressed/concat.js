@@ -1264,13 +1264,13 @@ function Transport(Observable, Tools) {
  * MIT Licensed
  */
 
-define("Olives/Type-plugin", 
+define("Olives/UI-Plugin", 
 		
 ["Olives/OObject", "Tools"],
 		
 function (OObject, Tools) {
 	
-	return function TypePluginConstructor($uis) {
+	return function UIPluginConstructor($uis) {
 	
 		var _uis = {};
 		
