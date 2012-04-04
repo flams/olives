@@ -1,0 +1,742 @@
+<!doctype html>
+<html>
+<head>
+<title>Olives - real time UI made easy</title>
+<style type="text/css">
+html {
+	font-family: "verdana";
+}
+
+body {
+	width: 1000px;
+	margin: 0px;
+	padding-left: 200px;
+	background-color: #fafafa;
+	color: #4b3a16;
+	margin-bottom: 100px;
+}
+
+h1,h2,h3 {
+	margin: 0;
+	padding: 2px;
+	padding-left: 10px;
+	color: #0b7430;
+	text-shadow: -1px -1px -1px #4b3a16;
+	box-shadow: 1px 1px 1px #4b3a16;
+}
+
+header h1 {
+	font-size: 48px;
+	margin-bottom: 5px;
+	text-shadow: 1px 1px 1px #4b3a16;
+	box-shadow: none;
+}
+
+header span {
+	font-weight: bold;
+}
+
+nav a,footer a {
+	color: #0b7430;
+	text-decoration: none;
+}
+
+nav a:hover,footer a:hover {
+	text-decoration: underline;
+}
+
+header,nav,section section, footer {
+	padding: 10px 0px 10px 0px;
+	border-bottom: 1px solid white;
+	box-shadow: 0px 2px 5px #aaa;
+	margin: 5px 0 0 0;
+	padding: 10px;
+	border-radius: 3px;
+	background-color: white;
+	font-size: 12px;
+}
+nav {
+	font-size: 16px;
+	width:150px;
+	position:fixed;
+	left: 20px;
+}
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul > li a {
+ color: white;
+}
+
+nav li {
+ margin-top: 4px;
+ margin-bottom: 4px;
+}
+
+nav ul ul {
+ margin-left: 5px;
+ font-size: 14px;
+}
+nav ul ul li a {
+	color: #0b7430;
+}
+ a {
+	color: #4b3a16;
+	text-decoration: none;
+}
+
+ a:hover {
+	text-decoration: underline;
+}
+
+.menu a strong {
+	color: #0b7430;
+}
+
+header a {
+	background-color: #0b7430;
+	color: white;
+	border-radius: 10px;
+	display: block;
+	padding: 10px;
+	float: right;
+	text-shadow: -1px -1px 1px black;
+	text-decoration: none;
+	box-shadow: 1px 1px 1px black;
+}
+
+header a:hover {
+	box-shadow: 0 0 0;
+}
+
+p {
+	margin-left: 20px;
+}
+
+h2 {
+	background-color: #0b7430;
+	border-radius: 3px;
+	color: white;
+	font-size: 16px;
+}
+
+h3 {
+	background-color: #4b3a16;
+	border-radius: 2px;
+	color: white;
+	font-weight: normal;
+	font-size: 12px;
+	margin-left: 20px;
+}
+
+.example pre {
+	border: 0px;
+	margin-left: 20px;
+}
+</style>
+<link href="tools/prettify/prettify.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="tools/prettify/prettify.js"></script>
+<script>
+	window.addEventListener("load", function(event, menu, nav) {
+		prettyPrint();
+
+		// Created an arg called menu to avoid polluting the global namespace
+		menu = document.querySelector(".menu");
+		nav = document.querySelector("nav ul ul");
+
+		// For each h2 in my examples
+		Array.prototype.slice.call(document.querySelectorAll(".example > h2"),0).forEach(function(node) {
+
+							// Create an li node
+							var liNav = document.createElement("li"),
+								liMenu = document.createElement("li"),
+								split = node.innerHTML.split(":");
+
+							// split[0] is the name of the Module
+							node.setAttribute("id", split[0]);
+
+							liNav.innerHTML = '<a href="#' + split[0] + '">' + split[0] + '</a>'
+							// That is appended to the menu. It's a link to the chapter now.
+							liMenu.innerHTML = '<a href="#'+ split[0] +'"><strong>'
+									+ split.shift()
+									+ '</strong>:'
+									+ split.join(":") + '</a>';
+							menu.appendChild(liMenu);
+							nav.appendChild(liNav);
+						});
+
+	}, true);
+</script>
+</head>
+<body>
+	<section>
+
+	<header>
+		<a href="Olives.tgz">Download Olives</a>
+		<h1>Olives</h1>
+		<span>Realtime UIs based on emily</span>
+	</header>
+	
+		<nav>
+		<ul>
+			<li><h2><a href="#presentation">What is Olives?</a></h2></li>
+			<li><h2><a href="#install">Installation</a></h2></li>
+			<li><h2><a href="#documentation">Documentation</a></h2>
+				<ul>
+				</ul>
+			</li>
+			<li><h2><a href="todo/index.html">Live Example</a></h2>
+			<li><h2><a href="docs/index.html">JsDoc</a></h2></li>
+			<li><h2><a href="tests.html">Unit tests</a></h2></li>
+			<li><h2><a href="#philosophy">Philosophy</a></h2></li>
+		</ul> 
+	</nav>
+
+	<section id="presentation">
+		<h2>What is Olives?</h2>
+		<ul>
+			<li>Olives is a JS MVC framework that helps you create realtime UIs.</li>
+			<li>It's a set of AMD/commonJS modules that you can extend with little to no effort.</li>
+			<li>It offers a high level of abstraction that greatly reduces boilerplate.</li>
+			<li>It can seamlessly integrate with graphical libraries.</li>
+			<li>It doesn't require you to learn a custom templating language.</li>
+			<li>It's based on Emily and socket.io to provide a simple and powerful way of communicating with a node.js server.</li>
+		</ul>
+
+		<p>The tools are:</p>
+		<ul class="menu"></ul>
+	</section>
+
+	<section id="install">
+
+		<h2>Installing Olives</h2>
+		<p>Olives requires an AMD compatible loader like requirejs to work.<br />
+			It's based on Emily.js
+		</p>
+			<div class="example">
+		<h3>In a browser</h3>
+		<pre>
+	&lt;script src="./require.js"&gt;&lt;/script&gt;
+	&lt;script src="./Emily.js"&gt;&lt;/script&gt;
+	&lt;script src="./Olives.js"&gt;&lt;/script&gt;
+			</pre>
+		<pre class="prettyprint linenums">
+require(["Module"], function (Module) {
+	// Do what you want with Module
+});
+
+require(["Olives/Module"], function (Module) {
+	// Olives modules are prefixed with Olives
+});
+				</pre>
+	<h3>If your application is based on node and you want the realtime part of Olives</h3>
+	<pre class="prettyprint linenums">
+// after #npm install olives
+var olives = require("olives");
+
+// Register your instance of socket.io
+olives.registerSocketIO(io);
+	</pre>
+	</div>
+	</section>
+
+	<section id="examples">
+		<div class="example">
+			<h2>OObject: the spine of your UI.</h2>
+			<p>
+				The OObject is the spine of your UI. From its creation, it will handle the plumbing with the model and the view.<br />
+				Consider the OObject as the Controller of your UI.<br />
+				The Model is the Store it references.<br />
+				The View is your HTML code.<br />
+				We'll see later on how to save your Model's data into some persistent place. 
+			</p>
+			
+			<h3>Create an OObject</h3>
+			<pre class="prettyprint linenums">
+require(["Olives/OObject"], function (OObject) {
+		
+	var UI = new OObject;
+		
+});
+			</pre>
+			
+			<h3>Add it a template</h3>
+			<pre class="prettyprint linenums">
+var UI = new OObject;
+UI.template = "&lt;p&gt;Hello world!&lt;/p&gt;"
+			</pre>
+
+		
+			<h3>Place it in the DOM</h3>
+			<pre calss="prettyprint linenums">
+UI.place(document.body);
+			</pre>
+
+		
+			<h3>You can create a reusable UI</h3>
+			<pre class="prettyprint linenums">
+define("MyUI", ["Olives/OObject"], function (OObject) {
+	
+	function myUIConstructor() {
+		this.template = "&lt;p&gt;Hello world!&lt;/p&gt;";
+	}
+	
+	return function myUIFactory() {
+		myUIConstructor.prototype = new OObject;
+		return new myUIConstructor;
+	}
+	
+});
+
+require(["MyUI"], function (MyUI) {
+	var myUI = new MyUI;
+	myUI.place(document.body);
+});
+			</pre>
+			
+						<h3>Any OObject has a simple model</h3>
+			<pre class="prettyprint linenums">
+var UI = new OObject;
+// The model property is an Emily Store
+UI.model.set("Hello", "world!");
+UI.model.get("Hello"); // world!
+			</pre>
+			
+			<h3>The model can be replaced with a subtype of Emily's Store</h3>
+			<pre class="prettyprint linenums">
+// Olives LocalStore that stores data in the localStorage (see the live example)
+var UI = new OObject(new LocalStore({"Hello": "world!"}));
+
+// Synchronize it with localStorage
+UI.model.sync("myLocalStore");
+// Reload the page
+UI.model.get("Hello"); // world!
+			</pre>
+			
+			<h3>Olives can make some part of your dom alive!</h3>
+			<p>Assume your have an index.html such as</p>
+			<pre class="prettyprint linenums">
+&lt;div class="page"&gt;
+	&lt;p&gt;Hello world!&lt;/p&gt;
+&lt;/div&gt;
+			</pre>
+			<p>
+				You can then turn it into an UI
+			</p>
+			<pre class="prettyprint linenums">
+var UI = new OObject;
+
+// Alive will simply use the DOM to create a UI.
+UI.alive(".page p"); // Alive uses document.querySelector so you can use any CSS3 selector
+
+UI.template; // &lt;p&gt;Hello world!&lt;/p&gt;
+			</pre>
+
+	</div>
+	</section>
+	<section>
+		<div class="example">
+			<h2>Plugins: extend Olives functionalities with the ones you need.</h2>
+			<p>
+				The plugins are what make the difference! <br />
+				Olives comes up with a few plugins, but you can create your own.
+			</p>
+			<h3>Calling a plugin</h3>
+			<pre class="prettyprint linenums">
+// This will call the method 'bind' of the plugin 'model' with the params : 'innerHTML' and 'Hello'
+UI.template = '&lt;p data-model="bind: innerHTML, Hello"&gt;&lt;/p&gt;'
+			</pre>
+			
+			<h3>Declaring a plugin</h3>
+			<pre class="prettyprint linenums">
+require(["Olives/ModelPlugin", "Olives/OObject"], function (ModelPlugin, OObject) {
+	
+	var UI = new OObject;
+	
+	// Create the plugin. The plugin needs to know on which model to connect
+	var modelPlugin = new ModelPlugin(UI.model);
+	
+	// OObjects have a plugins property to manage plugins.
+	// The name following data- in the template, is actually the first param here
+	// The second param is the plugin
+	UI.plugins.add("model", modelPlugin);
+	
+});
+			</pre>
+			
+			<h3>When are the plugins applied?</h3>
+			<pre class="prettyprint linenums">
+// We have the following template
+UI.template = '&lt;p data-model="bind: innerHTML, Hello"&gt;&lt;/p&gt;'
+
+// And the following model
+UI.model.get("Hello"); // world!
+
+// plugins are applied on render
+UI.render(); // this will turn the template into &lt;p&gt;world!&lt;/p&gt;
+			</pre>
+			
+			<h3>OObject's life cycle</h3>
+			<p>
+			When to use render, place and alive?<br />
+			</p>
+			
+			<pre class="prettyprint linenums">
+ // You have set up a new UI.template
+ UI.render(); // Will apply the plugins and generate the dom. It's not placed
+ 
+ // You want to place the UI.
+ UI.place(); // Place will also render() the UI if you haven't done so before
+ 
+ // Your template comes from an existing dom
+ UI.alive("existing dom");
+ 
+ // You have placed your UI, but you have changed the template.
+ UI.render(); //you can render again
+ 
+ // You have placed your UI somewhere, but you want to place it somewhere else
+ UI.place(newDOM);
+			</pre>
+		</div>
+	</section>
+	
+	<section>
+		<div class="example">
+		<h2>ModelPlugin: a built-in plugin that synchronizes your View with the Model</h2>
+		<p>
+			This is one of the most interesting part of Olives.<br />
+			It removes all the burden of adding/modifying/deleting dom nodes to reflect the UI's Model<br />
+			As long as the model is a subtype of Emily's store (CouchDBStore, LocalStore...), it will do the dom manipulations for you.
+		</p>
+		
+		<h3>Connect the plugin to the model and add it to the UI plugins list</h3>
+		<pre class="prettyprint linenums">
+// This will make the plugin available through the name model in your dom
+UI.plugins.add("model", new ModelPlugin(UI.model));
+		</pre>
+		
+		<p>Say this is your model</p>
+		<pre class="prettyprint linenums">
+UI.model.reset({
+	"firstname": "Olivier",
+	"contacts": {
+		"mail": "pode.fr  AT  gmail.com",
+		"mobile": "+336123456"
+	}
+});
+		</pre>
+	
+		<p>This view will display the data.<br />
+			bind actually triggers the innerHTML property of the dom node.<br />
+			Any other property works too.
+		</p>
+		<pre class="prettyprint linenums">
+&lt;div&gt;
+	&lt;p data-model="bind:innerHTML, firstname"&gt;&lt;/p&gt;
+	&lt;p&gt;Contacts : &lt;br /&gt;
+		Mail: &lt;span data-model="bind:innerHTML: contacts.mail"&gt;&lt;/span&gt;
+		Mobile: &lt;span data-model="bind:innerHTML: contacts.mobile"&gt;&lt;/span&gt;
+	&lt;/p&gt;
+&lt;/div&gt;
+		</pre>
+		
+		<p>How do I update the generated View?</p>
+		<pre class="prettyprint linenums">
+// The view will always reflect the model, Olives does the plumbing for you
+UI.model.set("contacts", {
+	"mail": "pode.fr AT gmail.com",
+	"mobile": "+654321633"
+});
+		</pre>
+		
+				
+		<h3>What if you want to do stuff a little bit more complex than just setting a property?</h3>
+		<p>
+		You can use bind for toggling a dom node's class!<br />
+		This example is extracted from the live example
+		</p>
+		
+	<pre class="prettyprint linenums">
+// You can add new bindings when you instanciate the ModelPlugin
+var modelPlugin = new ModelPlugin(UI.model, {
+ toggleClass: function (value) {
+ // value comes from the model, the this object is the dom node
+  value ? this.classList.add("completed") : this.classList.remove("completed");
+ }
+});
+
+&lt;li data-model="bind:toggleClass,completed"&gt;&lt;/li&gt;
+	</pre>
+		
+		
+		<h3>Generate lists with foreach</h3>
+		<p>
+			The ModelPlugin can also render lists.
+		</p>
+		<pre class="prettyprint linenums">
+UI.model.reset([
+	{
+		firstname: "Olivier",
+		lastname: "Scherrer"
+	},
+	
+	{
+		firstname: "Olivier",
+		lastname: "Scherrer"
+	}
+]);
+		</pre>
+		
+		<p>
+		foreach is the method that you need here
+		</p>
+		<pre class="prettyprint linenums">
+&lt;!--  foreach will repeat the li for each value of the model --&gt;
+&lt;ul data-model="foreach"&gt;
+	&lt;li&gt;
+		&lt;span data-model="bind:innerHTML, firstname"&gt;&lt;/span&gt;
+		&lt;span data-model="bind:innerHTML, lastname"&gt;&lt;/span&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+		</pre>
+		
+		<h3>Limit the number of items displayed by foreach</h3>
+			<p>
+		If your model has more items than what you want to display, you can set limits
+		</p>
+		<pre class="prettyprint linenums">
+&lt;!--  This will display 10 items, starting from the first one, to the foreach called "people" --&gt;
+&lt;ul data-model="foreach:people,0,10"&gt;
+	&lt;li&gt;
+		&lt;span data-model="bind:innerHTML, firstname"&gt;&lt;/span&gt;
+		&lt;span data-model="bind:innerHTML, lastname"&gt;&lt;/span&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+		</pre>	
+		
+		<p>And if you want to change the number of displayed items, and display the 10 next items:</p>
+		<pre class="prettyprint linenums">
+// this is the plugin that you have declared in UI.plugins
+modelPlugin.updateStart("people", 10); // this will display the items from the 11th
+modelPlugin.updateNb("people", 5); // this will reduce the number of displayed item to 5
+
+// When you're happy with the settings
+modelPlugin.refresh("people");
+		</pre>
+
+</div>
+	</section>
+	
+	<section>
+		<div class="example">
+		<h2>EventPlugin: make your dom listen to events</h2>
+		<p>
+		 The event plugin adds listeners to a dom node to call a function in the OObject.
+		</p>
+		<pre class="prettyprint linenums">
+// The event plugin takes the OObject as parameter.
+// You can pass any other object too.
+var eventPlugin = new EventPlugin(UI);
+// We use the name "event" to call it from the dom
+UI.plugins.add("event", eventPlugin);
+
+// When called by the EventPlugin, addTask will receive the event and the corresponding dom node
+UI.addTask = function (event, node) {
+ // The this object is the one passed to new EventPlugin (UI)
+ this.model.push({
+ 	name: node.name,
+ 	completed: false
+ })
+}
+
+&lt;!--  And in the dom --&gt;	
+&lt;input type="text" placeholder="What needs to be done?" data-event="listen:keydown,addTask;" /&gt;		
+		</pre>
+		</div>
+	</section>
+
+	<section>
+		<div class="example">
+		<h2>TypePlugin: compose UIs with multiple UIs</h2>
+		<p>
+		 TypePlugin is a helper. It does nothing else than placing a previously initialized UI.<br />
+		 Its name will probably be changed until the final release
+		</p>
+		<pre class="prettyprint linenums">
+// myUI should be an instance of an OObject
+var typePlugin = new TypePlugin("myUI", myUI);
+
+&lt;!--  And in the dom, myUI will be placed here --&gt;
+&lt;div data-type="place: myUI"&gt;&lt;/div&gt;
+		</pre>
+		</div>
+	</section>
+	
+	<section>
+		<div class="example">
+		<h2>Your plugin: write your own plugin</h2>
+		<p>
+		 Olives comes with built-in plugins. But you can extend Olives funcitonalities by creating your own.<br />
+		 Actually, a plugin is just an object. Any object can be a plugin, there are only two things to know:
+		</p>
+		
+		<pre class="prettyprint linenums">
+// A plugin is an object. You can literally create it {}, use Object.create, or a constructor function.
+var myPlugin = {
+ // This method will be available through a data- call
+ // The first parameter will be the dom node. (1st thing to know)
+ myMethod : function (node, param) {
+ 	// The this object will always be the plugin (2nd thing to know)
+ 	this.log(node.innerHTML + " " + param);
+ },
+ 
+ log: function (txt) {
+ 	console.log(txt);
+ }
+}
+
+&lt;!-- When the UI will be rendered, it will console.log Hello world --&gt;
+&lt;button data-myPlugin="myMethod:world"&gt;Hello&lt;/button&gt;
+		</pre>
+		</div>
+	</section>
+	
+	<section>
+		<div class="example">
+		<h2>Transport: connect your UI with a node.js server using socket.io. This is the realtime part of Olives</h2>
+		<p>
+		You need to npm install olives to be able to use it. See the installation chapter.<br />
+		Transport wraps socket.io to simulate two ways of doing requests to your node.js server.
+		</p>
+		
+		<h3>How to use Transport</h3>
+		<pre class="prettyprint linenums">
+// This assumes you have loaded socket.io in your web browser. <a href="http://socket.io/">See socket.io's documentation.</a>
+// io is an instance of socket.io
+var transport = new Transport(io);
+		</pre>
+		
+		<p>
+ When transport is created you can make requets.<br />
+It works exactly the same way as with Emily <br />
+
+<a href="http://flams.github.com/emily/#Transport">http://flams.github.com/emily/#Transport</a>
+
+		</p>
+		<pre class="prettyprint">
+// The requests handlers are available through olives if you have previously required it.
+var olives = require("olives");
+
+// Add you own handlers. <a href="http://flams.github.com/emily/#Transport">You can find more info about handlers in Emily's documentation</a>
+olives.handlers.set("addYouHandlerHere", function () {});
+
+// i.e. here
+olives.registerSocketIO(io);
+		</pre>
+		</div>
+	</section>
+
+	<section>
+		<div class="example">
+		<h2>LocalStore: A subtype of Emily Store for saving your model into localStorage</h2>
+		<p>
+		The LocalStore is an Emily Store that can be synchronized with a localStorage for data persistence.
+		</p>
+		
+		<h3>Create a LocalStore</h3>
+		<pre class="prettyprint linenums">
+// A LocalStore is a subtype of an Emily Store, following liskov substitution princple.
+var localStore = new LocalStore(["default", "values"]);
+
+// But it adds a new sync function.
+// On sync, values already existing in localStorage.store will be mixed in the Store
+// And on changes, localStorage will be updated
+localStore.sync("store");
+
+// Notice though that if localStorage is modified from somewhere else, the Store won't be updated.
+// There's no notification on localStorage changes.
+		
+		</pre>
+		</div>
+	</section>
+
+	<section>
+		<div class="example">
+		<h2>CouchDBStore: Emily's CouchDBStore through Transport. Where everything shines!</h2>
+		<p>
+		 We have seen how to link a dom with a Store. We have a Transport tool to communicate with the server.<br />
+		 What if we could synchronize with a database and have our dom updated on changes?<br />
+		 CouchDBStore does just that.
+		</p>
+		
+		<h3>Creating a CouchDBStore</h3>
+		<p>
+		A CouchDBStore is a subtype of an Emily Store too. It works the same way.
+		</p>
+		<pre class="prettyprint linenums">
+// Create it like any Store
+var couchDBStore = new CouchDBStore();
+
+// Specify the transport to use. A same transport can be used multiple times.
+couchDBStore.setTransport(transport);
+</pre>
+
+<h3>Playing with the couchDBStore</h3>
+<p>
+ Once created, you can play with the CouchDBStore like described here : <a href="http://flams.github.com/emily/#CouchDBStore">http://flams.github.com/emily/#CouchDBStore</a>
+</p>
+		</div>
+	</section>
+
+	
+	<section id="philosophy">
+		<h2>Philosophy: what's Olive's DNA?</h2>
+		<p>
+			
+		</p>
+		
+		<h3>Olive's development's principles</h3>
+		<ul>
+			<li><a href="http://en.wikipedia.org/wiki/DRY">DRY</a></li>
+			<li><a href="http://en.wikipedia.org/wiki/Solid_(object-oriented_design)">SOLID</a></li>
+			<li>TDD/BDD with 100% coverage with <a href="http://pivotal.github.com/jasmine/">Jasmine BDD</a></li>
+			<li>Remove all the plumbing and focus on features</li>
+			<li>If you know HTML5, you know Olives. You don't even need to learn a new way of describing your templates, its HTML.</li>
+		</ul>
+	
+	</section>
+
+	<footer>
+		<a href="https://github.com/flams/olives">Olives</a> by <a
+			href="https://github.com/podefr">Olivier Scherrer</a> &amp; <a
+			href="https://github.com/bredele">Olivier Wietrich</a>. Copyright 2012
+		- MIT licensed
+	</footer>
+	
+		
+	</section>
+	
+<a href="http://github.com/flams/olives"> <img
+alt="Fork me on GitHub"
+src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
+style="position: fixed; top: 0; right: 0; border: 0;"> </a>
+		
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30035429-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+</html>

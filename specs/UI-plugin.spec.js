@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-require(["Olives/UI-Plugin", "Olives/Plugins", "Olives/OObject"], function (UIPlugin, Plugins, OObject) {
+require(["Olives/UI-plugin", "Olives/Plugins", "Olives/OObject"], function (UIPlugin, Plugins, OObject) {
 	
 	describe("UIPluginTest", function () {
 		
