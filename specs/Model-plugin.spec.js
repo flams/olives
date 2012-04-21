@@ -421,7 +421,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			spyOn(rootNode, "insertBefore").andCallThrough();
+			spyOn(rootNode, "appendChild").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
 			
 			expect(itemRenderer.addItem()).toEqual(false);
@@ -431,9 +431,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.create.wasCalled).toEqual(true);
 			expect(itemRenderer.create.mostRecentCall.args[0]).toEqual(1);
 			
-			expect(rootNode.insertBefore.wasCalled).toEqual(true);
-			expect(rootNode.insertBefore.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
-			expect(rootNode.insertBefore.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
+			expect(rootNode.appendChild.wasCalled).toEqual(true);
+			expect(rootNode.appendChild.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
+			expect(rootNode.appendChild.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
 		});
 		
 		it("should not add an item that is already created", function () {

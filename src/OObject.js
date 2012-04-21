@@ -65,7 +65,8 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 */
 		place = function place(UI, place, beforeNode) {
 			if (place) {
-				place.insertBefore(UI.dom, beforeNode);
+				// IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
+				beforeNode ? place.insertBefore(UI.dom, beforeNode) : place.appendChild(UI.dom);
 				// Also save the new place, so next renderings
 				// will be made inside it
 				_currentPlace = place;
