@@ -34,7 +34,7 @@ define("Olives/DomUtils", ["Tools"], function (Tools) {
 				join;
 			
 			if (dom instanceof HTMLElement) {
-				for (i, l=dom.attributes.length;i<l;i++) {
+				for (l=dom.attributes.length;i<l;i++) {
 					split = dom.attributes[i].name.split("-");
 					if (split.shift() == "data") {
 						dataset[join = split.join("-")] = dom.getAttribute("data-"+join);
