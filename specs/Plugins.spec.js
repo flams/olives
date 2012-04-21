@@ -106,7 +106,7 @@ require(["Olives/Plugins"], function (Plugins) {
 		});
 		
 		it("should call the plugins on apply", function () {
-			dom.dataset["plugin1"] = "method";
+			dom.setAttribute("data-plugin1", "method");
 			plugins.apply(dom);
 			expect(plugin1.method.wasCalled).toEqual(false);
 			
@@ -136,14 +136,14 @@ require(["Olives/Plugins"], function (Plugins) {
 		
 		
 		it("should call also if spaces are present between two methods", function () {
-			dom.dataset["plugin2"] = "method1; method2";
+			dom.setAttribute("data-plugin2", "method1; method2");
 			plugins.add("plugin2", plugin2);
 			plugins.apply(dom);
 			expect(plugin2.method2.wasCalled).toEqual(true);
 		});
 		
 		it("should'nt fail if no such method", function () {
-			dom.dataset["plugin2"] = "method3";
+			dom.setAttribute("data-plugin2", "method3");
 			plugins.add("plugin2", plugin2);
 			expect(function () {
 				plugins.apply(dom);
@@ -153,7 +153,7 @@ require(["Olives/Plugins"], function (Plugins) {
 		});
 		
 		it("should pass parameters to the method", function () {
-			dom.dataset["plugin2"] = "method1:param1, param2; method2: param1";
+			dom.setAttribute("data-plugin2", "method1:param1, param2; method2: param1");
 			plugins.add("plugin2", plugin2);
 			plugins.apply(dom);
 			expect(plugin2.method1.callCount).toEqual(1);

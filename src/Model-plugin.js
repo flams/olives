@@ -281,7 +281,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					nodes = DomUtils.getNodes(newNode);
 
 					Tools.toArray(nodes).forEach(function (child) {
-	            		child.dataset[_plugins.name+"_id"] = id;
+	            		child.setAttribute("data-" + _plugins.name+"_id", id);
 					});
 					
 					this.items.set(id, newNode);
@@ -445,7 +445,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 
 			// In case of an array-like model the id is the index of the model's item to look for.
 			// The _id is added by the foreach function
-			var id = node.dataset[this.plugins.name+"_id"],
+			var id = node.getAttribute("data-" + this.plugins.name+"_id"),
 		
 			// Else, it is the first element of the following
 			split = name.split("."),

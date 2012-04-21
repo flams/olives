@@ -137,7 +137,7 @@ function Plugins(Tools, DomUtils) {
 				
 				nodes = DomUtils.getNodes(dom);
 				Tools.loop(Tools.toArray(nodes), function (node) {
-					Tools.loop(node.dataset, function (phrase, plugin) {
+					Tools.loop(DomUtils.getDataset(node), function (phrase, plugin) {
 						applyPlugin(node, phrase, plugin);
 					});
 				});

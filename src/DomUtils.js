@@ -24,6 +24,26 @@ define("Olives/DomUtils", ["Tools"], function (Tools) {
 			} else {
 				return false;
 			}
+		},
+	
+		getDataset: function getDataset(dom) {
+			var i=0,
+				l, 
+				dataset={},
+				split,
+				join;
+			
+			if (dom instanceof HTMLElement) {
+				for (i, l=dom.attributes.length;i<l;i++) {
+					split = dom.attributes[i].name.split("-");
+					if (split.shift() == "data") {
+						dataset[join = split.join("-")] = dom.getAttribute("data-"+join);
+					}
+				}
+				return dataset;
+			} else {
+				return false;
+			}
 		}
 	
 	};
