@@ -68,4 +68,32 @@ require(["Olives/DomUtils"], function (DomUtils) {
 		
 	});
 	
+	describe("DomUtilsGetDataset", function () {
+		
+		var dom;
+		
+		beforeEach(function () {
+			dom = document.createElement("div");
+			dom.setAttribute("data-plugin1", "name1");
+			dom.setAttribute("data-plugin2", "name2");
+		});
+		
+		it("should be a function", function () {
+			expect(DomUtils.getDataset).toBeInstanceOf(Function);
+		});
+		
+		it("should only work with dom nodes", function () {
+			expect(DomUtils.getDataset()).toEqual(false);
+			expect(DomUtils.getDataset({})).toEqual(false);
+			expect(DomUtils.getDataset(dom)).toBeTruthy();
+		});
+		
+		it("should return an object similar to a dataset", function () {
+			var dataset = DomUtils.getDataset(dom);
+			expect(dataset).toBeInstanceOf(Object);
+			expect(dataset["plugin1"]).toEqual("name1");
+			expect(dataset["plugin2"]).toEqual("name2");
+		});
+		
+	});
 });

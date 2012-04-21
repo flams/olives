@@ -65,7 +65,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		beforeEach(function () {
 			dom = document.createElement("p");
 
-			dom.dataset["model"] = "bind:innerHTML,content";
+			dom.setAttribute("data-model", "bind:innerHTML,content");
 			model =  new Store({content: "Olives is fun!"});
 			plugins = new Plugins;
 			modelPlugin =  new ModelPlugin(model);
@@ -82,14 +82,14 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		});
 
 		it("should not touch the dom if the value isn't set", function () {
-			dom.dataset["model"] = "bind:innerHTML,content2";
+			dom.setAttribute("data-model", "bind:innerHTML,content2");
 			dom.innerHTML = "hey";
 			plugins.apply(dom);
 			expect(dom.innerHTML).toEqual("hey");
 		});
 
 		it("should set up the dom as soon as the value is set", function () {
-			dom.dataset["model"] = "bind:innerHTML,content2";
+			dom.setAttribute("data-model", "bind:innerHTML,content2");
 			plugins.apply(dom);
 			model.set("content2", "sup!");
 			expect(dom.innerHTML).toEqual("sup!");
@@ -97,7 +97,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 		it("should also work with properties", function () {
 			var dom = document.createElement("input");
-			dom.dataset["model"] = "bind:checked,bool";
+			dom.setAttribute("data-model", "bind:checked,bool");
 			model.reset({bool:true});
 			plugins.apply(dom);
 			expect(dom.checked).toEqual(true);
@@ -115,7 +115,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		
 		beforeEach(function () {
 			dom = document.createElement("input");
-			dom.dataset["model"] = "bind:checked,bool";
+			dom.setAttribute("data-model", "bind:checked,bool");
 			model = new Store({bool:false});
 			plugins = new Plugins;
 			plugins.add("model", new ModelPlugin(model));
@@ -187,7 +187,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		beforeEach(function () {
 			dom = document.createElement("ul");
-			dom.dataset["model"] = "foreach";
+			dom.setAttribute("data-model", "foreach");
 			dom.innerHTML = "<li><input type='checkbox' data-model='bind:checked,optin' />" +
 					"		<input type='text' data-model='bind:value,name' /></li>";
 			
@@ -320,8 +320,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(node.nodeName).toEqual("DIV");
 			expect(node.querySelectorAll("*").length).toEqual(6);
 
-			expect(node.querySelectorAll("[data-model]")[0].dataset["model_id"]).toEqual('0');
-			expect(node.querySelectorAll("[data-model]")[1].dataset["model_id"]).toEqual('0');
+			expect(node.querySelectorAll("[data-model]")[0].getAttribute("data-model_id")).toEqual('0');
+			expect(node.querySelectorAll("[data-model]")[1].getAttribute("data-model_id")).toEqual('0');
 			expect(node.querySelectorAll("[data-model_id]").length).toEqual(6);
 		});
 		
@@ -421,7 +421,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			spyOn(rootNode, "insertBefore").andCallThrough();
+			spyOn(rootNode, "appendChild").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
 			
 			expect(itemRenderer.addItem()).toEqual(false);
@@ -431,9 +431,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(itemRenderer.create.wasCalled).toEqual(true);
 			expect(itemRenderer.create.mostRecentCall.args[0]).toEqual(1);
 			
-			expect(rootNode.insertBefore.wasCalled).toEqual(true);
-			expect(rootNode.insertBefore.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
-			expect(rootNode.insertBefore.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
+			expect(rootNode.appendChild.wasCalled).toEqual(true);
+			expect(rootNode.appendChild.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
+			expect(rootNode.appendChild.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
 		});
 		
 		it("should not add an item that is already created", function () {
@@ -479,8 +479,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			
 			itemRenderer.addItem(2);
 			itemRenderer.addItem(0);
-			expect(rootNode.querySelectorAll("p")[0].dataset["model_id"]).toEqual("0");
-			expect(rootNode.querySelectorAll("p")[1].dataset["model_id"]).toEqual("2");
+			expect(rootNode.querySelectorAll("p")[0].getAttribute("data-model_id")).toEqual("0");
+			expect(rootNode.querySelectorAll("p")[1].getAttribute("data-model_id")).toEqual("2");
 		});
 		
 		it("should'nt try to add an item that doesn't exist", function () {
@@ -642,9 +642,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 		it("should expand the node inside", function () {
 			plugins.apply(dom);
 			expect(dom.querySelectorAll("li").length).toEqual(3);
-			expect(dom.querySelectorAll("li")[0].dataset["model_id"]).toEqual("0");
-			expect(dom.querySelectorAll("li")[1].dataset["model_id"]).toEqual("1");
-			expect(dom.querySelectorAll("li")[2].dataset["model_id"]).toEqual("2");
+			expect(dom.querySelectorAll("li")[0].getAttribute("data-model_id")).toEqual("0");
+			expect(dom.querySelectorAll("li")[1].getAttribute("data-model_id")).toEqual("1");
+			expect(dom.querySelectorAll("li")[2].getAttribute("data-model_id")).toEqual("2");
 		});
 
 		it("should'nt do anything if no inner node declared", function () {
@@ -712,7 +712,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		beforeEach(function () {
 			dom = document.createElement("ul");
-			dom.dataset["model"] = "foreach";
+			dom.setAttribute("data-model_id", "foreach");
 
 			dataSet = [{value : {
 				title: "Olives is cool",
@@ -946,7 +946,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			'<p><label>Age: </label><input type="number" step="1" min="0" max="99" name="age" value="25" /></p>' +
 			'<p><label>Job: </label><input type="text" name="job" value="engineer" /></p>' +
 			'<p><button type="submit">ok</button></p>';
-			form.dataset["model"] = "form";
+			form.setAttribute("data-model", "form");
 		});
 
 		it("should have a set function to set the model from form values", function () {

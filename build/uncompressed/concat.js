@@ -30,6 +30,26 @@ define("Olives/DomUtils", ["Tools"], function (Tools) {
 			} else {
 				return false;
 			}
+		},
+	
+		getDataset: function getDataset(dom) {
+			var i=0,
+				l, 
+				dataset={},
+				split,
+				join;
+			
+			if (dom instanceof HTMLElement) {
+				for (l=dom.attributes.length;i<l;i++) {
+					split = dom.attributes[i].name.split("-");
+					if (split.shift() == "data") {
+						dataset[join = split.join("-")] = dom.getAttribute("data-"+join);
+					}
+				}
+				return dataset;
+			} else {
+				return false;
+			}
 		}
 	
 	};
@@ -345,11 +365,15 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns
 			 */
 			this.addItem = function addItem(id) {
-				var node;
+				var node,
+					next;
+				
 				if (typeof id == "number" && !this.items.get(id)) {
 					node = this.create(id);
 					if (node) {
-						_rootNode.insertBefore(node, this.getNextItem(id));
+						// IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
+						next = this.getNextItem(id);
+						next ? _rootNode.insertBefore(node, next) : _rootNode.appendChild(node);
 						return true;
 					} else {
 						return false;
@@ -404,7 +428,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					nodes = DomUtils.getNodes(newNode);
 
 					Tools.toArray(nodes).forEach(function (child) {
-	            		child.dataset[_plugins.name+"_id"] = id;
+	            		child.setAttribute("data-" + _plugins.name+"_id", id);
 					});
 					
 					this.items.set(id, newNode);
@@ -568,7 +592,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 
 			// In case of an array-like model the id is the index of the model's item to look for.
 			// The _id is added by the foreach function
-			var id = node.dataset[this.plugins.name+"_id"],
+			var id = node.getAttribute("data-" + this.plugins.name+"_id"),
 		
 			// Else, it is the first element of the following
 			split = name.split("."),
@@ -798,7 +822,8 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 */
 		place = function place(UI, place, beforeNode) {
 			if (place) {
-				place.insertBefore(UI.dom, beforeNode);
+				// IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
+				beforeNode ? place.insertBefore(UI.dom, beforeNode) : place.appendChild(UI.dom);
 				// Also save the new place, so next renderings
 				// will be made inside it
 				_currentPlace = place;
@@ -1049,7 +1074,7 @@ function Plugins(Tools, DomUtils) {
 				
 				nodes = DomUtils.getNodes(dom);
 				Tools.loop(Tools.toArray(nodes), function (node) {
-					Tools.loop(node.dataset, function (phrase, plugin) {
+					Tools.loop(DomUtils.getDataset(node), function (phrase, plugin) {
 						applyPlugin(node, phrase, plugin);
 					});
 				});
