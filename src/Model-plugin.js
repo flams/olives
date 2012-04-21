@@ -230,11 +230,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					if (node) {
 						// IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
 						next = this.getNextItem(id);
-						if (next) {
-							_rootNode.insertBefore(node, next);
-						} else {
-							_rootNode.appendChild(node);
-						}
+						next ? _rootNode.insertBefore(node, next) : _rootNode.appendChild(node);
 						return true;
 					} else {
 						return false;
