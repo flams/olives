@@ -1,7 +1,7 @@
 /**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+ * @license Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define("Olives/LocalStore", 
@@ -26,11 +26,41 @@ function LocalStore(Store, Tools) {
 		var _name = null,
 		
 		/**
+		 * The localStorage
+		 * @private
+		 */
+		_localStorage = localStorage,
+		
+		/**
 		 * Saves the current values in localStorage
 		 * @private
 		 */
 		setLocalStorage = function () {
-			localStorage.setItem(_name, this.toJSON());
+			_localStorage.setItem(_name, this.toJSON());
+		};
+		
+		/**
+		 * Override default localStorage with a new one
+		 * @param local$torage the new localStorage
+		 * @returns {Boolean} true if success
+		 * @private
+		 */
+		this.setLocalStorage = function setLocalStorage(local$torage) {
+			if (local$torage && local$torage.setItem instanceof Function) {
+				_localStorage = local$torage;
+				return true;
+			} else {
+				return false;
+			}
+		};
+		
+		/**
+		 * Get the current localStorage
+		 * @returns localStorage
+		 * @private
+		 */
+		this.getLocalStorage = function getLocalStorage() {
+			return _localStorage;
 		};
 		
 		/**
@@ -40,26 +70,29 @@ function LocalStore(Store, Tools) {
 		 */
 		this.sync = function sync(name) {
 			var json;
+			
 			if (typeof name == "string") {
 				_name = name;
-				json = JSON.parse(localStorage.getItem(name));
+				json = JSON.parse(_localStorage.getItem(name));
 				
 				Tools.loop(json, function (value, idx) {
 					if (!this.has(idx)) {
 						this.set(idx, value);
 					}
 				}, this);
+				
 				setLocalStorage.call(this);
+				
+				// Watch for modifications to update localStorage
+				this.watch("added", setLocalStorage, this);
+				this.watch("updated", setLocalStorage, this);
+				this.watch("deleted", setLocalStorage, this);
 				return true;
 			} else {
 				return false;
 			}
 		};
-		
-		// Watch for modifications to update localStorage
-		this.watch("added", setLocalStorage, this);
-		this.watch("updated", setLocalStorage, this);
-		this.watch("deleted", setLocalStorage, this);
+
 		
 	}
 	
