@@ -1,8 +1,30 @@
 /*
  Olives http://flams.github.com/olives
-
  The MIT License (MIT)
-
+ Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ Olives http://flams.github.com/olives
+ The MIT License (MIT)
+ Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ Olives http://flams.github.com/olives
+ The MIT License (MIT)
+ Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ Olives http://flams.github.com/olives
+ The MIT License (MIT)
+ Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ Olives http://flams.github.com/olives
+ The MIT License (MIT)
+ Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ Olives http://flams.github.com/olives
+ The MIT License (MIT)
+ Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ Olives http://flams.github.com/olives
+ The MIT License (MIT)
+ Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ Olives http://flams.github.com/olives
+ The MIT License (MIT)
+ Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ Olives http://flams.github.com/olives
+ The MIT License (MIT)
  Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
 */
 define("Olives/DomUtils",["Tools"],function(){return{getNodes:function(f,h){return f instanceof HTMLElement?(f.parentNode||document.createDocumentFragment().appendChild(f),f.parentNode.querySelectorAll(h||"*")):false},getDataset:function(f){var h=0,g,k={},d,a;if(f instanceof HTMLElement){for(g=f.attributes.length;h<g;h++)d=f.attributes[h].name.split("-"),d.shift()=="data"&&(k[a=d.join("-")]=f.getAttribute("data-"+a));return k}else return false}}});
