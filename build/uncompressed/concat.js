@@ -3,7 +3,7 @@
  * The MIT License (MIT)
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  *//**
- * @license Olives http://flams.github.com/olives
+ * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
@@ -57,8 +57,9 @@ define("Olives/DomUtils", function () {
 	
 	};
 
-});/**
- * @license Olives http://flams.github.com/olives
+});
+/**
+ * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
@@ -74,8 +75,9 @@ define("Olives/Event-plugin", function () {
 		};	
 	};
 	
-});/**
- * @license Olives http://flams.github.com/olives
+});
+/**
+ * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
@@ -177,8 +179,9 @@ function LocalStore(Store, Tools) {
 		return new LocalStoreConstructor;
 	};
 	
-});/**
- * @license Olives http://flams.github.com/olives
+});
+/**
+ * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
@@ -791,8 +794,9 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		
 	};
 	
-});/**
- * @license Olives http://flams.github.com/olives
+});
+/**
+ * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
@@ -971,8 +975,9 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		
 	};
 	
-});/**
- * @license Olives http://flams.github.com/olives
+});
+/**
+ * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
@@ -1123,8 +1128,9 @@ function Plugins(Tools, DomUtils) {
 		};
 		
 	};
-});/**
- * @license Olives http://flams.github.com/olives
+});
+/**
+ * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
@@ -1319,8 +1325,9 @@ function Transport(Observable, Tools) {
 		this.setIO($io);
 		this.connect($url);
 	};
-});/**
- * @license Olives http://flams.github.com/olives
+});
+/**
+ * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */

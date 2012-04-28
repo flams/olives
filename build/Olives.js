@@ -2,30 +2,6 @@
  Olives http://flams.github.com/olives
  The MIT License (MIT)
  Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- Olives http://flams.github.com/olives
- The MIT License (MIT)
- Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- Olives http://flams.github.com/olives
- The MIT License (MIT)
- Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- Olives http://flams.github.com/olives
- The MIT License (MIT)
- Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- Olives http://flams.github.com/olives
- The MIT License (MIT)
- Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- Olives http://flams.github.com/olives
- The MIT License (MIT)
- Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- Olives http://flams.github.com/olives
- The MIT License (MIT)
- Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- Olives http://flams.github.com/olives
- The MIT License (MIT)
- Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- Olives http://flams.github.com/olives
- The MIT License (MIT)
- Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
 */
 define("Olives/DomUtils",function(){return{getNodes:function(f,g){return f instanceof HTMLElement?(f.parentNode||document.createDocumentFragment().appendChild(f),f.parentNode.querySelectorAll(g||"*")):false},getDataset:function(f){var g=0,i,k={},d,a;if(f instanceof HTMLElement)if(f.hasOwnProperty("dataset"))return f.dataset;else{for(i=f.attributes.length;g<i;g++)d=f.attributes[g].name.split("-"),d.shift()=="data"&&(k[a=d.join("-")]=f.getAttribute("data-"+a));return k}else return false}}});
 define("Olives/Event-plugin",function(){return function(f){this.listen=function(g,i,k,d){g.addEventListener(i,function(a){f[k].call(f,a,g)},d=="true")}}});
