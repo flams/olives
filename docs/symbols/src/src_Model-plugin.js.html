@@ -6,9 +6,9 @@
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
 	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
-<span class='line'>  2</span>  * Olives
-<span class='line'>  3</span>  * Copyright(c) 2012 Olivier Scherrer &lt;pode.fr@gmail.com> - Olivier Wietrich &lt;olivier.wietrich@gmail.com>
-<span class='line'>  4</span>  * MIT Licensed
+<span class='line'>  2</span>  * Olives http://flams.github.com/olives
+<span class='line'>  3</span>  * The MIT License (MIT)
+<span class='line'>  4</span>  * Copyright (c) 2012 Olivier Scherrer &lt;pode.fr@gmail.com> - Olivier Wietrich &lt;olivier.wietrich@gmail.com>
 <span class='line'>  5</span>  */</span><span class="WHIT">
 <span class='line'>  6</span> 
 <span class='line'>  7</span> </span><span class="NAME">define</span><span class="PUNC">(</span><span class="STRN">"Olives/Model-plugin"</span><span class="PUNC">,</span><span class="WHIT"> 
@@ -489,12 +489,12 @@
 <span class='line'>482</span> </span><span class="WHIT">			</span><span class="COMM">// has not been redefined</span><span class="WHIT">
 <span class='line'>483</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.hasBinding</span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>484</span> </span><span class="WHIT">				</span><span class="NAME">node.addEventListener</span><span class="PUNC">(</span><span class="STRN">"change"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>485</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">prop</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>486</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">temp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_model.get</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>487</span> </span><span class="WHIT">						</span><span class="NAME">Tools.setNestedProperty</span><span class="PUNC">(</span><span class="NAME">temp</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>488</span> </span><span class="WHIT">						</span><span class="NAME">_model.set</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">temp</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	
-<span class='line'>489</span> 					</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>490</span> </span><span class="WHIT">						</span><span class="NAME">_model.set</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_model.has</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">prop</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">							</span><span class="NAME">_model.update</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="WHIT">							</span><span class="NAME">_model.set</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>491</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>492</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>493</span> 
@@ -619,4 +619,5 @@
 <span class='line'>612</span> 		
 <span class='line'>613</span> 	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>614</span> </span><span class="WHIT">	
-<span class='line'>615</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
+<span class='line'>615</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>616</span> </span></pre></body></html>

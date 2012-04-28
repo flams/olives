@@ -1,8 +1,9 @@
 /**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
+
 require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 
 	var io = null;

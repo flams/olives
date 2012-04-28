@@ -1,7 +1,7 @@
 /**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 require(["Olives/DomUtils"], function (DomUtils) {
@@ -93,6 +93,14 @@ require(["Olives/DomUtils"], function (DomUtils) {
 			expect(dataset).toBeInstanceOf(Object);
 			expect(dataset["plugin1"]).toEqual("name1");
 			expect(dataset["plugin2"]).toEqual("name2");
+		});
+		
+		it("should exactly return the dataset if the browser supports it", function () {
+			if (dom.dataset) {
+				dom.dataset["plugin1"] = "browser supports dataset";
+				var dataset = DomUtils.getDataset(dom);
+				expect(dataset["plugin1"]).toEqual("browser supports dataset");
+			}
 		});
 		
 	});

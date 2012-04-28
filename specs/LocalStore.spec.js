@@ -1,10 +1,15 @@
 /**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 require(["Store", "Olives/LocalStore"], function (Store, LocalStore) {
+	
+	var localStorageMock = {
+		setItem: jasmine.createSpy(),
+		getItem: jasmine.createSpy().andReturn("{}")
+	};
 
 	describe("LocalStoreTest", function () {
 		
@@ -16,12 +21,26 @@ require(["Store", "Olives/LocalStore"], function (Store, LocalStore) {
 			expect(new LocalStore).toBeInstanceOf(Store);
 		});
 		
+		it("should have a function to set/get localStorage", function () {
+			var localStore = new LocalStore;
+			
+			expect(localStore.setLocalStorage).toBeInstanceOf(Function);
+			expect(localStore.setLocalStorage()).toEqual(false);
+			expect(localStore.setLocalStorage(localStorageMock)).toEqual(true);
+			expect(localStore.getLocalStorage()).toBe(localStorageMock);
+		});
+		
+		it("should sync with localStorage by default", function () {
+			var localStore = new LocalStore;
+			
+			expect(localStore.getLocalStorage()).toBe(localStorage);
+		});
+		
 	});
 	
 	describe("LocalStoreSync", function () {
 		
 		var localStore = null;
-
 		
 		beforeEach(function () {
 			localStore = new LocalStore;
@@ -32,7 +51,7 @@ require(["Store", "Olives/LocalStore"], function (Store, LocalStore) {
 			expect(localStore.sync).toBeInstanceOf(Function);
 		});
 		
-		it("should sync with localStorage", function () {
+		it("should sync with localStorage by default", function () {
 			expect(localStore.sync()).toEqual(false);
 			expect(localStore.sync({})).toEqual(false);
 			expect(localStore.sync("store")).toEqual(true);
@@ -86,6 +105,19 @@ require(["Store", "Olives/LocalStore"], function (Store, LocalStore) {
 			expect(json[1]).toEqual(1);
 			expect(json[2]).toEqual(2);
 			expect(json[3]).toBeUndefined();
+		});
+		
+		it("should sync with another localStore too", function () {
+			localStore.setLocalStorage(localStorageMock);
+			localStore.sync("store");
+			localStore.reset([1]);
+			expect(localStorageMock.setItem.wasCalled).toEqual(true);
+		});
+		
+		it("shouldn't sync data with localStorage if it's not sync", function () {
+			localStorageMock.setItem.reset();
+			localStore.setLocalStorage(localStorageMock);
+			expect(localStorageMock.setItem.wasCalled).toEqual(false);
 		});
 		
 	});

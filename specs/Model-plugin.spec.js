@@ -1,7 +1,7 @@
 /**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugin, Store, Plugins) {
@@ -133,6 +133,23 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			dom.checked = true;
 			func();
 			expect(model.get("bool")).toEqual(true);
+		});
+		
+		it("shouldn't set the item if it was removed, this could happen if the item is removed prior to the trigger of change", function () {
+			var func;
+			dom.setAttribute("data-model_id", "0");
+			spyOn(dom, "addEventListener");
+			spyOn(model, "update");
+			spyOn(model, "set");
+			spyOn(model, "has");
+			plugins.apply(dom);
+			func = dom.addEventListener.mostRecentCall.args[1];
+			model.reset([]);
+			func();
+			expect(model.has.wasCalled).toEqual(true);
+			expect(model.has.mostRecentCall.args[0]).toEqual('0');
+			expect(model.update.wasCalled).toEqual(false);
+			expect(model.set.wasCalled).toEqual(false);
 		});
 		
 	});

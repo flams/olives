@@ -1,16 +1,14 @@
 /**
- * @license Olives
- *
+ * @license Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * 
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  *//**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/DomUtils", ["Tools"], function (Tools) {
+define("Olives/DomUtils", function () {
 
 	return {
 		/**
@@ -40,13 +38,18 @@ define("Olives/DomUtils", ["Tools"], function (Tools) {
 				join;
 			
 			if (dom instanceof HTMLElement) {
-				for (l=dom.attributes.length;i<l;i++) {
-					split = dom.attributes[i].name.split("-");
-					if (split.shift() == "data") {
-						dataset[join = split.join("-")] = dom.getAttribute("data-"+join);
+				if (dom.hasOwnProperty("dataset")) {
+					return dom.dataset;
+				} else {
+					for (l=dom.attributes.length;i<l;i++) {
+						split = dom.attributes[i].name.split("-");
+						if (split.shift() == "data") {
+							dataset[join = split.join("-")] = dom.getAttribute("data-"+join);
+						}
 					}
+					return dataset;
 				}
-				return dataset;
+				
 			} else {
 				return false;
 			}
@@ -54,10 +57,11 @@ define("Olives/DomUtils", ["Tools"], function (Tools) {
 	
 	};
 
-});/**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+});
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define("Olives/Event-plugin", function () {
@@ -71,10 +75,11 @@ define("Olives/Event-plugin", function () {
 		};	
 	};
 	
-});/**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+});
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define("Olives/LocalStore", 
@@ -99,11 +104,41 @@ function LocalStore(Store, Tools) {
 		var _name = null,
 		
 		/**
+		 * The localStorage
+		 * @private
+		 */
+		_localStorage = localStorage,
+		
+		/**
 		 * Saves the current values in localStorage
 		 * @private
 		 */
 		setLocalStorage = function () {
-			localStorage.setItem(_name, this.toJSON());
+			_localStorage.setItem(_name, this.toJSON());
+		};
+		
+		/**
+		 * Override default localStorage with a new one
+		 * @param local$torage the new localStorage
+		 * @returns {Boolean} true if success
+		 * @private
+		 */
+		this.setLocalStorage = function setLocalStorage(local$torage) {
+			if (local$torage && local$torage.setItem instanceof Function) {
+				_localStorage = local$torage;
+				return true;
+			} else {
+				return false;
+			}
+		};
+		
+		/**
+		 * Get the current localStorage
+		 * @returns localStorage
+		 * @private
+		 */
+		this.getLocalStorage = function getLocalStorage() {
+			return _localStorage;
 		};
 		
 		/**
@@ -113,26 +148,29 @@ function LocalStore(Store, Tools) {
 		 */
 		this.sync = function sync(name) {
 			var json;
+			
 			if (typeof name == "string") {
 				_name = name;
-				json = JSON.parse(localStorage.getItem(name));
+				json = JSON.parse(_localStorage.getItem(name));
 				
 				Tools.loop(json, function (value, idx) {
 					if (!this.has(idx)) {
 						this.set(idx, value);
 					}
 				}, this);
+				
 				setLocalStorage.call(this);
+				
+				// Watch for modifications to update localStorage
+				this.watch("added", setLocalStorage, this);
+				this.watch("updated", setLocalStorage, this);
+				this.watch("deleted", setLocalStorage, this);
 				return true;
 			} else {
 				return false;
 			}
 		};
-		
-		// Watch for modifications to update localStorage
-		this.watch("added", setLocalStorage, this);
-		this.watch("updated", setLocalStorage, this);
-		this.watch("deleted", setLocalStorage, this);
+
 		
 	}
 	
@@ -141,10 +179,11 @@ function LocalStore(Store, Tools) {
 		return new LocalStoreConstructor;
 	};
 	
-});/**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+});
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define("Olives/Model-plugin", 
@@ -625,12 +664,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			// has not been redefined
 			if (!this.hasBinding(property)) {
 				node.addEventListener("change", function (event) {
-					if (prop) {
-						var temp = _model.get(modelIdx);
-						Tools.setNestedProperty(temp, name, node[property]);
-						_model.set(modelIdx, temp);	
-					} else {
-						_model.set(modelIdx, node[property]);
+					if (_model.has(modelIdx)) {
+						if (prop) {
+							_model.update(modelIdx, name, node[property]);
+						} else {
+							_model.set(modelIdx, node[property]);
+						}
 					}
 				}, true);
 
@@ -755,10 +794,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		
 	};
 	
-});/**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+});
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define("Olives/OObject", ["StateMachine", "Store", "Olives/Plugins", "Olives/DomUtils", "Tools"],
@@ -935,10 +975,11 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		
 	};
 	
-});/**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+});
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define("Olives/Plugins", ["Tools", "Olives/DomUtils"],
@@ -1087,10 +1128,11 @@ function Plugins(Tools, DomUtils) {
 		};
 		
 	};
-});/**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+});
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define("Olives/Transport",
@@ -1283,10 +1325,11 @@ function Transport(Observable, Tools) {
 		this.setIO($io);
 		this.connect($url);
 	};
-});/**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+});
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define("Olives/UI-plugin", 
