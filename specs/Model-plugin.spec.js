@@ -135,6 +135,23 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(model.get("bool")).toEqual(true);
 		});
 		
+		it("shouldn't set the item if it was removed, this could happen if the item is removed prior to the trigger of change", function () {
+			var func;
+			dom.setAttribute("data-model_id", "0");
+			spyOn(dom, "addEventListener");
+			spyOn(model, "update");
+			spyOn(model, "set");
+			spyOn(model, "has");
+			plugins.apply(dom);
+			func = dom.addEventListener.mostRecentCall.args[1];
+			model.reset([]);
+			func();
+			expect(model.has.wasCalled).toEqual(true);
+			expect(model.has.mostRecentCall.args[0]).toEqual('0');
+			expect(model.update.wasCalled).toEqual(false);
+			expect(model.set.wasCalled).toEqual(false);
+		});
+		
 	});
 
 

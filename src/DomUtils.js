@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/DomUtils", ["Tools"], function (Tools) {
+define("Olives/DomUtils", function () {
 
 	return {
 		/**
@@ -34,13 +34,18 @@ define("Olives/DomUtils", ["Tools"], function (Tools) {
 				join;
 			
 			if (dom instanceof HTMLElement) {
-				for (l=dom.attributes.length;i<l;i++) {
-					split = dom.attributes[i].name.split("-");
-					if (split.shift() == "data") {
-						dataset[join = split.join("-")] = dom.getAttribute("data-"+join);
+				if (dom.hasOwnProperty("dataset")) {
+					return dom.dataset;
+				} else {
+					for (l=dom.attributes.length;i<l;i++) {
+						split = dom.attributes[i].name.split("-");
+						if (split.shift() == "data") {
+							dataset[join = split.join("-")] = dom.getAttribute("data-"+join);
+						}
 					}
+					return dataset;
 				}
-				return dataset;
+				
 			} else {
 				return false;
 			}

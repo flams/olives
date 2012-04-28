@@ -8,7 +8,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/DomUtils", ["Tools"], function (Tools) {
+define("Olives/DomUtils", function () {
 
 	return {
 		/**
@@ -38,13 +38,18 @@ define("Olives/DomUtils", ["Tools"], function (Tools) {
 				join;
 			
 			if (dom instanceof HTMLElement) {
-				for (l=dom.attributes.length;i<l;i++) {
-					split = dom.attributes[i].name.split("-");
-					if (split.shift() == "data") {
-						dataset[join = split.join("-")] = dom.getAttribute("data-"+join);
+				if (dom.hasOwnProperty("dataset")) {
+					return dom.dataset;
+				} else {
+					for (l=dom.attributes.length;i<l;i++) {
+						split = dom.attributes[i].name.split("-");
+						if (split.shift() == "data") {
+							dataset[join = split.join("-")] = dom.getAttribute("data-"+join);
+						}
 					}
+					return dataset;
 				}
-				return dataset;
+				
 			} else {
 				return false;
 			}
@@ -656,12 +661,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			// has not been redefined
 			if (!this.hasBinding(property)) {
 				node.addEventListener("change", function (event) {
-					if (prop) {
-						var temp = _model.get(modelIdx);
-						Tools.setNestedProperty(temp, name, node[property]);
-						_model.set(modelIdx, temp);	
-					} else {
-						_model.set(modelIdx, node[property]);
+					if (_model.has(modelIdx)) {
+						if (prop) {
+							_model.update(modelIdx, name, node[property]);
+						} else {
+							_model.set(modelIdx, node[property]);
+						}
 					}
 				}, true);
 

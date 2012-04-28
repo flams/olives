@@ -482,12 +482,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			// has not been redefined
 			if (!this.hasBinding(property)) {
 				node.addEventListener("change", function (event) {
-					if (prop) {
-						var temp = _model.get(modelIdx);
-						Tools.setNestedProperty(temp, name, node[property]);
-						_model.set(modelIdx, temp);	
-					} else {
-						_model.set(modelIdx, node[property]);
+					if (_model.has(modelIdx)) {
+						if (prop) {
+							_model.update(modelIdx, name, node[property]);
+						} else {
+							_model.set(modelIdx, node[property]);
+						}
 					}
 				}, true);
 

@@ -95,5 +95,13 @@ require(["Olives/DomUtils"], function (DomUtils) {
 			expect(dataset["plugin2"]).toEqual("name2");
 		});
 		
+		it("should exactly return the dataset if the browser supports it", function () {
+			if (dom.dataset) {
+				dom.dataset["plugin1"] = "browser supports dataset";
+				var dataset = DomUtils.getDataset(dom);
+				expect(dataset["plugin1"]).toEqual("browser supports dataset");
+			}
+		});
+		
 	});
 });
