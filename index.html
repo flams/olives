@@ -32,6 +32,11 @@
  	margin-left: auto;
  	margin-right: auto;
  	margin-bottom: 50px;
+ 	text-align: center;
+ }
+ 
+ header a {
+ 	
  }
  
  ul {
@@ -39,14 +44,13 @@
 	margin-left: auto;
 	margin-right: auto;
  }
+ 
  li {
  	float: left;
  	margin: 25px;
  }
  
  #gallery {
- 	margin-left: auto;
- 	margin-right: auto;
  	width: 800px;
  	height: 250px;
  }
@@ -71,7 +75,6 @@
  	font-family: 'Great Vibes', cursive;
  	font-size: 180px;
  	text-shadow: 2px 2px 2px #333;
- 	margin-bottom: 20px;
  }
  header p {
  	text-align: center;
@@ -79,6 +82,21 @@
  	text-shadow: 1px 1px 1px #333;
  }
  
+ header p a {
+ 	background-color: grey;
+ 	padding: 10px;
+ 	border-radius: 5px;
+ 	color: white;
+ 	background: #c9de96; /* Old browsers */
+	background: -moz-linear-gradient(top, #c9de96 0%, #8ab66b 44%, #398235 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c9de96), color-stop(44%,#8ab66b), color-stop(100%,#398235)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* IE10+ */
+	background: linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c9de96', endColorstr='#398235',GradientType=0 ); /* IE6-9 */
+	box-shadow: 2px 2px 2px black;
+}
  
  footer {
  	width: 900px;
@@ -93,6 +111,11 @@
 	text-shadow:  0 1px 0 white;
 	text-align: center;
  }
+ 
+ footer p {
+ 	margin-bottom: 20px;
+ }
+
 </style>
 <link href='http://fonts.googleapis.com/css?family=Great+Vibes|Belleza' rel='stylesheet' type='text/css'>
 </head>
@@ -102,18 +125,22 @@
 	
 		<header>
 			<h1>Olives</h1>
+		
 			<p>
-				Create real-time HTML5 applications, in no time.
+				Create real-time HTML5 applications, in no time!
+				<a href="Olives.tgz">
+					Download <span id="version">1.1.3</span>
+				</a>
 			</p>
 		</header>
 
 		<ul id="gallery">
 			<li>
-				<a href="Olives.tgz">
-					<img src="img/download.jpg" alt="download Olives Picture" width="150" height="150" />
-					<span>Download</span>
+				<a href="http://groups.google.com/group/emily--olives">
+					<img src="img/groups.jpg" alt="Google Groups" width="150" height="150" />
+					<span>Google Groups</span>
 				</a>
-			</li>
+			</li>		
 			<li>
 				<a href="https://github.com/flams/olives/wiki" target="_blank">
 					<img src="img/wiki.jpg" alt="Olives Wiki Picture" width="150" height="150" />
@@ -158,23 +185,22 @@
 			</li>
 		</ul>
 
-		
 		<footer>
-			Olives is released under the <a href="https://github.com/flams/olives/blob/master/LICENSE">MIT license</a>. 
-			
-			Copyright 
-			
-			<a href="http://podefr.tumblr.com">Olivier Scherrer</a> 
-
-			&amp; 
-			
-			<a href="http://owietrich.tumblr.com/">Olivier Wietrich</a> 
-
-			2012
-		</footer>
+				Olives is released under the <a href="https://github.com/flams/olives/blob/master/LICENSE">MIT license</a>. 
+				
+				Copyright 
+				
+				<a href="http://podefr.tumblr.com">Olivier Scherrer</a> 
 	
-		
-	</header>
+				&amp; 
+				
+				<a href="http://owietrich.tumblr.com/">Olivier Wietrich</a> 
+	
+				2012
+				
+				<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://flams.github.com/olives/" data-text="Check out Olives: JCreate real-time HTML5 applications, in no time! by @podefr &amp; @owietrich" data-hashtags="OlivesJS">Tweet</a>
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="http://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+		</footer>
 	
 <a href="http://github.com/flams/olives"> <img
 alt="Fork me on GitHub"
