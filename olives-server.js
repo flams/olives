@@ -23,6 +23,10 @@ exports.registerSocketIO = function (io) {
 			var connectHandler = function (func, handler) {
 				// When a handler is called
 				socket.on(handler, function (reqData) {
+					
+					// Add socket.io's handshake for session management
+					reqData.handshake = socket.handshake;
+					
 					// pass it the requests data
 					var stop = func(reqData, 
 						// The function to handle the result
@@ -31,7 +35,7 @@ exports.registerSocketIO = function (io) {
 						}, 
 						// The function to handle chunks for a kept alive socket
 						function onData(chunk) {
-							reqData.keptAlive && socket.emit(reqData.__eventId__, ""+chunk);
+							reqData.__keepalive__ && socket.emit(reqData.__eventId__, ""+chunk);
 						});
 					
 					// If func returned a stop function

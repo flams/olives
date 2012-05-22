@@ -233,7 +233,7 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 			expect(socket.removeListener.mostRecentCall.args[0]).toEqual(eventId);
 			expect(socket.removeListener.mostRecentCall.args[1]).toBeInstanceOf(Function);
 			expect(transport.request.wasCalled).toEqual(true);
-			expect(transport.request.mostRecentCall.args[1].keptAlive).toEqual(true);
+			expect(transport.request.mostRecentCall.args[1].__keepalive__).toEqual(true);
 			expect(transport.request.mostRecentCall.args[1].method).toEqual("GET");
 			expect(transport.request.mostRecentCall.args[1].path).toEqual(url);
 
