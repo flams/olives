@@ -1258,10 +1258,10 @@ function Transport(Observable, Tools) {
 					func && func.apply(scope || null, arguments);
 				};
 				
-			_socket[requestData.keptAlive ? "on" : "once"](eventId, boundCallback);
+			_socket[requestData.__keepalive__ ? "on" : "once"](eventId, boundCallback);
 			requestData.__eventId__ = eventId;
 			_socket.emit(channel, requestData);
-			if (requestData.keptAlive) {
+			if (requestData.__keepalive__) {
 				return function stop() {
 					_socket.emit("disconnect-" + eventId);
 					_socket.removeListener(eventId, boundCallback);
@@ -1287,7 +1287,7 @@ function Transport(Observable, Tools) {
 			if (!_observable.hasTopic(topic)) {
 				Tools.mixin({
 					method: "GET",
-					keptAlive: true
+					__keepalive__: true
 				}, reqData);
 				
 				// Listen to changes on this topic (an url actually)
