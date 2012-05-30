@@ -126,12 +126,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			/**
 			 * Sets the rootNode and gets the node to copy
 			 * @private
-			 * @param {HTMLElement} rootNode
+			 * @param {HTMLElement|SVGElement} rootNode
 			 * @returns
 			 */
 			this.setRootNode = function setRootNode(rootNode) {
 				var renderer;
-				if (rootNode instanceof HTMLElement) {
+				if (DomUtils.isAcceptedType(rootNode)) {
 					_rootNode = rootNode;
 					renderer = _rootNode.querySelector("*");
 					this.setRenderer(renderer);
@@ -248,7 +248,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 */
 			this.getNextItem = function getNextItem(id) {
 				return this.items.alter("slice", id+1).filter(function (value) {
-					if (value instanceof HTMLElement) {
+					if (DomUtils.isAcceptedType(value)) {
 						return true;
 					}
 				})[0];
@@ -363,7 +363,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		
 		/**
 		 * Expands the inner dom nodes of a given dom node, filling it with model's values
-		 * @param {HTMLElement} node the dom node to apply foreach to
+		 * @param {HTMLElement|SVGElement} node the dom node to apply foreach to
 		 */
 		this.foreach = function foreach(node, idItemRenderer, start, nb) {
 			var itemRenderer = new this.ItemRenderer(this.plugins, node);
@@ -438,7 +438,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
          
 		/**
 		 * Both ways binding between a dom node attributes and the model
-		 * @param {HTMLElement} node the dom node to apply the plugin to
+		 * @param {HTMLElement|SVGElement} node the dom node to apply the plugin to
 		 * @param {String} name the name of the property to look for in the model's value
 		 * @returns
 		 */
@@ -509,11 +509,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		/**
 		 * Set the node's value into the model, the name is the model's property
 		 * @private
-		 * @param {HTMLElement} node
+		 * @param {HTMLElement|SVGElement} node
 		 * @returns true if the property is added
 		 */
 		this.set = function set(node) {
-			if (node instanceof HTMLElement && node.name) {
+			if (DomUtils.isAcceptedType(node) && node.name) {
 				_model.set(node.name, node.value);
 				return true;
 			} else {

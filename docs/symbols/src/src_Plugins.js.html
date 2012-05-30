@@ -133,14 +133,14 @@
 <span class='line'>126</span> </span><span class="WHIT">		
 <span class='line'>127</span> 		</span><span class="COMM">/**
 <span class='line'>128</span> 		 * Apply the plugins to a NodeList
-<span class='line'>129</span> 		 * @param {HTMLElement} dom the dom nodes on which to apply the plugins
+<span class='line'>129</span> 		 * @param {HTMLElement|SVGElement} dom the dom nodes on which to apply the plugins
 <span class='line'>130</span> 		 * @returns {Boolean} true if the param is a dom node
 <span class='line'>131</span> 		 */</span><span class="WHIT">
 <span class='line'>132</span> </span><span class="WHIT">		</span><span class="NAME">this.apply</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">apply</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>133</span> </span><span class="WHIT">			
 <span class='line'>134</span> 			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nodes</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>135</span> </span><span class="WHIT">			
-<span class='line'>136</span> 			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">dom</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HTMLElement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>136</span> 			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">DomUtils.isAcceptedType</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>137</span> </span><span class="WHIT">				
 <span class='line'>138</span> 				</span><span class="NAME">nodes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">DomUtils.getNodes</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>139</span> </span><span class="WHIT">				</span><span class="NAME">Tools.loop</span><span class="PUNC">(</span><span class="NAME">Tools.toArray</span><span class="PUNC">(</span><span class="NAME">nodes</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">

@@ -126,14 +126,14 @@ function Plugins(Tools, DomUtils) {
 		
 		/**
 		 * Apply the plugins to a NodeList
-		 * @param {HTMLElement} dom the dom nodes on which to apply the plugins
+		 * @param {HTMLElement|SVGElement} dom the dom nodes on which to apply the plugins
 		 * @returns {Boolean} true if the param is a dom node
 		 */
 		this.apply = function apply(dom) {
 			
 			var nodes;
 			
-			if (dom instanceof HTMLElement) {
+			if (DomUtils.isAcceptedType(dom)) {
 				
 				nodes = DomUtils.getNodes(dom);
 				Tools.loop(Tools.toArray(nodes), function (node) {

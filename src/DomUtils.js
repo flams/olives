@@ -10,12 +10,12 @@ define("Olives/DomUtils", function () {
 		/**
 		 * Returns a NodeList including the given dom node,
 		 * its childNodes and its siblingNodes
-		 * @param {HTMLElement} dom the dom node to start with
+		 * @param {HTMLElement|SVGElement} dom the dom node to start with
 		 * @param {String} query an optional CSS selector to narrow down the query
 		 * @returns the list of nodes
 		 */
 		getNodes: function getNodes(dom, query) {
-			if (dom instanceof HTMLElement) {
+			if (this.isAcceptedType(dom)) {
 				if (!dom.parentNode) {
 					document.createDocumentFragment().appendChild(dom);
 				}
@@ -26,6 +26,12 @@ define("Olives/DomUtils", function () {
 			}
 		},
 	
+		/**
+		 * Get a domNode's dataset attribute. If dataset doesn't exist (IE) 
+		 * then the domNode is looped through to collect them.
+		 * @param {HTMLElement|SVGElement} dom
+		 * @returns {Object} dataset
+		 */
 		getDataset: function getDataset(dom) {
 			var i=0,
 				l, 
@@ -33,7 +39,7 @@ define("Olives/DomUtils", function () {
 				split,
 				join;
 			
-			if (dom instanceof HTMLElement) {
+			if (this.isAcceptedType(dom)) {
 				if (dom.hasOwnProperty("dataset")) {
 					return dom.dataset;
 				} else {
@@ -46,6 +52,15 @@ define("Olives/DomUtils", function () {
 					return dataset;
 				}
 				
+			} else {
+				return false;
+			}
+		},
+		
+		isAcceptedType: function isAcceptedType(type) {
+			if (type instanceof HTMLElement ||
+				type instanceof SVGElement) {
+				return true;
 			} else {
 				return false;
 			}

@@ -133,12 +133,12 @@
 <span class='line'>126</span> 			</span><span class="COMM">/**
 <span class='line'>127</span> 			 * Sets the rootNode and gets the node to copy
 <span class='line'>128</span> 			 * @private
-<span class='line'>129</span> 			 * @param {HTMLElement} rootNode
+<span class='line'>129</span> 			 * @param {HTMLElement|SVGElement} rootNode
 <span class='line'>130</span> 			 * @returns
 <span class='line'>131</span> 			 */</span><span class="WHIT">
 <span class='line'>132</span> </span><span class="WHIT">			</span><span class="NAME">this.setRootNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">setRootNode</span><span class="PUNC">(</span><span class="NAME">rootNode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>133</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">renderer</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>134</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">rootNode</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HTMLElement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">DomUtils.isAcceptedType</span><span class="PUNC">(</span><span class="NAME">rootNode</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>135</span> </span><span class="WHIT">					</span><span class="NAME">_rootNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">rootNode</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>136</span> </span><span class="WHIT">					</span><span class="NAME">renderer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_rootNode.querySelector</span><span class="PUNC">(</span><span class="STRN">"*"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>137</span> </span><span class="WHIT">					</span><span class="NAME">this.setRenderer</span><span class="PUNC">(</span><span class="NAME">renderer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -255,7 +255,7 @@
 <span class='line'>248</span> 			 */</span><span class="WHIT">
 <span class='line'>249</span> </span><span class="WHIT">			</span><span class="NAME">this.getNextItem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">getNextItem</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>250</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.items.alter</span><span class="PUNC">(</span><span class="STRN">"slice"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">+</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">filter</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>251</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HTMLElement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">DomUtils.isAcceptedType</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>252</span> </span><span class="WHIT">						</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>253</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>254</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
@@ -370,7 +370,7 @@
 <span class='line'>363</span> </span><span class="WHIT">		
 <span class='line'>364</span> 		</span><span class="COMM">/**
 <span class='line'>365</span> 		 * Expands the inner dom nodes of a given dom node, filling it with model's values
-<span class='line'>366</span> 		 * @param {HTMLElement} node the dom node to apply foreach to
+<span class='line'>366</span> 		 * @param {HTMLElement|SVGElement} node the dom node to apply foreach to
 <span class='line'>367</span> 		 */</span><span class="WHIT">
 <span class='line'>368</span> </span><span class="WHIT">		</span><span class="NAME">this.foreach</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">foreach</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idItemRenderer</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">start</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nb</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>369</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">itemRenderer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">this.ItemRenderer</span><span class="PUNC">(</span><span class="NAME">this.plugins</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -445,7 +445,7 @@
 <span class='line'>438</span> </span><span class="WHIT">         
 <span class='line'>439</span> 		</span><span class="COMM">/**
 <span class='line'>440</span> 		 * Both ways binding between a dom node attributes and the model
-<span class='line'>441</span> 		 * @param {HTMLElement} node the dom node to apply the plugin to
+<span class='line'>441</span> 		 * @param {HTMLElement|SVGElement} node the dom node to apply the plugin to
 <span class='line'>442</span> 		 * @param {String} name the name of the property to look for in the model's value
 <span class='line'>443</span> 		 * @returns
 <span class='line'>444</span> 		 */</span><span class="WHIT">
@@ -516,11 +516,11 @@
 <span class='line'>509</span> 		</span><span class="COMM">/**
 <span class='line'>510</span> 		 * Set the node's value into the model, the name is the model's property
 <span class='line'>511</span> 		 * @private
-<span class='line'>512</span> 		 * @param {HTMLElement} node
+<span class='line'>512</span> 		 * @param {HTMLElement|SVGElement} node
 <span class='line'>513</span> 		 * @returns true if the property is added
 <span class='line'>514</span> 		 */</span><span class="WHIT">
 <span class='line'>515</span> </span><span class="WHIT">		</span><span class="NAME">this.set</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">set</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>516</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">node</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HTMLElement</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">node.name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">DomUtils.isAcceptedType</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">node.name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>517</span> </span><span class="WHIT">				</span><span class="NAME">_model.set</span><span class="PUNC">(</span><span class="NAME">node.name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node.value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>518</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>519</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">

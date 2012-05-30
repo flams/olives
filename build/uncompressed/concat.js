@@ -14,12 +14,12 @@ define("Olives/DomUtils", function () {
 		/**
 		 * Returns a NodeList including the given dom node,
 		 * its childNodes and its siblingNodes
-		 * @param {HTMLElement} dom the dom node to start with
+		 * @param {HTMLElement|SVGElement} dom the dom node to start with
 		 * @param {String} query an optional CSS selector to narrow down the query
 		 * @returns the list of nodes
 		 */
 		getNodes: function getNodes(dom, query) {
-			if (dom instanceof HTMLElement) {
+			if (this.isAcceptedType(dom)) {
 				if (!dom.parentNode) {
 					document.createDocumentFragment().appendChild(dom);
 				}
@@ -30,6 +30,12 @@ define("Olives/DomUtils", function () {
 			}
 		},
 	
+		/**
+		 * Get a domNode's dataset attribute. If dataset doesn't exist (IE) 
+		 * then the domNode is looped through to collect them.
+		 * @param {HTMLElement|SVGElement} dom
+		 * @returns {Object} dataset
+		 */
 		getDataset: function getDataset(dom) {
 			var i=0,
 				l, 
@@ -37,7 +43,7 @@ define("Olives/DomUtils", function () {
 				split,
 				join;
 			
-			if (dom instanceof HTMLElement) {
+			if (this.isAcceptedType(dom)) {
 				if (dom.hasOwnProperty("dataset")) {
 					return dom.dataset;
 				} else {
@@ -50,6 +56,15 @@ define("Olives/DomUtils", function () {
 					return dataset;
 				}
 				
+			} else {
+				return false;
+			}
+		},
+		
+		isAcceptedType: function isAcceptedType(type) {
+			if (type instanceof HTMLElement ||
+				type instanceof SVGElement) {
+				return true;
 			} else {
 				return false;
 			}
@@ -308,12 +323,12 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			/**
 			 * Sets the rootNode and gets the node to copy
 			 * @private
-			 * @param {HTMLElement} rootNode
+			 * @param {HTMLElement|SVGElement} rootNode
 			 * @returns
 			 */
 			this.setRootNode = function setRootNode(rootNode) {
 				var renderer;
-				if (rootNode instanceof HTMLElement) {
+				if (DomUtils.isAcceptedType(rootNode)) {
 					_rootNode = rootNode;
 					renderer = _rootNode.querySelector("*");
 					this.setRenderer(renderer);
@@ -430,7 +445,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			 */
 			this.getNextItem = function getNextItem(id) {
 				return this.items.alter("slice", id+1).filter(function (value) {
-					if (value instanceof HTMLElement) {
+					if (DomUtils.isAcceptedType(value)) {
 						return true;
 					}
 				})[0];
@@ -545,7 +560,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		
 		/**
 		 * Expands the inner dom nodes of a given dom node, filling it with model's values
-		 * @param {HTMLElement} node the dom node to apply foreach to
+		 * @param {HTMLElement|SVGElement} node the dom node to apply foreach to
 		 */
 		this.foreach = function foreach(node, idItemRenderer, start, nb) {
 			var itemRenderer = new this.ItemRenderer(this.plugins, node);
@@ -620,7 +635,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
          
 		/**
 		 * Both ways binding between a dom node attributes and the model
-		 * @param {HTMLElement} node the dom node to apply the plugin to
+		 * @param {HTMLElement|SVGElement} node the dom node to apply the plugin to
 		 * @param {String} name the name of the property to look for in the model's value
 		 * @returns
 		 */
@@ -691,11 +706,11 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 		/**
 		 * Set the node's value into the model, the name is the model's property
 		 * @private
-		 * @param {HTMLElement} node
+		 * @param {HTMLElement|SVGElement} node
 		 * @returns true if the property is added
 		 */
 		this.set = function set(node) {
-			if (node instanceof HTMLElement && node.name) {
+			if (DomUtils.isAcceptedType(node) && node.name) {
 				_model.set(node.name, node.value);
 				return true;
 			} else {
@@ -832,7 +847,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 				if (typeof UI.template == "string") {
 					// Let the browser do the parsing, can't be faster & easier.
 					baseNode.innerHTML = UI.template.trim();
-				} else if (UI.template instanceof HTMLElement) {
+				} else if (DomUtils.isAcceptedType(UI.template)) {
 					// If it's already an HTML element
 					baseNode.appendChild(UI.template);
 				}
@@ -915,7 +930,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		
 		/**
 		 * Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
-		 * @type string or HTMLElement
+		 * @type string or HTMLElement|SVGElement
 		 */
 		this.template = null;
 		
@@ -926,8 +941,8 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		
 		/**
 		 * Place the UI in a given dom node
-		 * @param {HTMLElement} node the node on which to append the UI
-		 * @param {HTMLElement} beforeNode the dom before which to append the UI  
+		 * @param  node the node on which to append the UI
+		 * @param  beforeNode the dom before which to append the UI  
 		 */
 		this.place = function place(node, beforeNode) {
 			_stateMachine.event("place", this, node, beforeNode);
@@ -943,11 +958,11 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		
 		/**
 		 * Set the UI's template from a DOM element
-		 * @param {HTMLElement} dom the dom element that'll become the template of the UI
-		 * @returns true if dom is an HTMLElement
+		 * @param {HTMLElement|SVGElement} dom the dom element that'll become the template of the UI
+		 * @returns true if dom is an HTMLElement|SVGElement
 		 */
 		this.setTemplateFromDom = function setTemplateFromDom(dom) {
-			if (dom instanceof HTMLElement) {
+			if (DomUtils.isAcceptedType(dom)) {
 				this.template = dom;
 				return true;
 			} else {
@@ -959,11 +974,11 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 * Transforms dom nodes into a UI.
 		 * It basically does a setTemplateFromDOM, then a place
 		 * It's a helper function
-		 * @param {HTMLElement} node the dom to transform to a UI
-		 * @returns true if dom is an HTMLElement
+		 * @param {HTMLElement|SVGElement} node the dom to transform to a UI
+		 * @returns true if dom is an HTMLElement|SVGElement
 		 */
 		this.alive = function alive(dom) {
-			if (dom instanceof HTMLElement) {
+			if (DomUtils.isAcceptedType(dom)) {
 				this.setTemplateFromDom(dom);
 				this.place(dom.parentNode, dom.nextElementSibling);
 				return true;
@@ -1104,14 +1119,14 @@ function Plugins(Tools, DomUtils) {
 		
 		/**
 		 * Apply the plugins to a NodeList
-		 * @param {HTMLElement} dom the dom nodes on which to apply the plugins
+		 * @param {HTMLElement|SVGElement} dom the dom nodes on which to apply the plugins
 		 * @returns {Boolean} true if the param is a dom node
 		 */
 		this.apply = function apply(dom) {
 			
 			var nodes;
 			
-			if (dom instanceof HTMLElement) {
+			if (DomUtils.isAcceptedType(dom)) {
 				
 				nodes = DomUtils.getNodes(dom);
 				Tools.loop(Tools.toArray(nodes), function (node) {

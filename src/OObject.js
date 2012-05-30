@@ -35,7 +35,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 				if (typeof UI.template == "string") {
 					// Let the browser do the parsing, can't be faster & easier.
 					baseNode.innerHTML = UI.template.trim();
-				} else if (UI.template instanceof HTMLElement) {
+				} else if (DomUtils.isAcceptedType(UI.template)) {
 					// If it's already an HTML element
 					baseNode.appendChild(UI.template);
 				}
@@ -118,7 +118,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		
 		/**
 		 * Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
-		 * @type string or HTMLElement
+		 * @type string or HTMLElement|SVGElement
 		 */
 		this.template = null;
 		
@@ -129,8 +129,8 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		
 		/**
 		 * Place the UI in a given dom node
-		 * @param {HTMLElement} node the node on which to append the UI
-		 * @param {HTMLElement} beforeNode the dom before which to append the UI  
+		 * @param  node the node on which to append the UI
+		 * @param  beforeNode the dom before which to append the UI  
 		 */
 		this.place = function place(node, beforeNode) {
 			_stateMachine.event("place", this, node, beforeNode);
@@ -146,11 +146,11 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		
 		/**
 		 * Set the UI's template from a DOM element
-		 * @param {HTMLElement} dom the dom element that'll become the template of the UI
-		 * @returns true if dom is an HTMLElement
+		 * @param {HTMLElement|SVGElement} dom the dom element that'll become the template of the UI
+		 * @returns true if dom is an HTMLElement|SVGElement
 		 */
 		this.setTemplateFromDom = function setTemplateFromDom(dom) {
-			if (dom instanceof HTMLElement) {
+			if (DomUtils.isAcceptedType(dom)) {
 				this.template = dom;
 				return true;
 			} else {
@@ -162,11 +162,11 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 * Transforms dom nodes into a UI.
 		 * It basically does a setTemplateFromDOM, then a place
 		 * It's a helper function
-		 * @param {HTMLElement} node the dom to transform to a UI
-		 * @returns true if dom is an HTMLElement
+		 * @param {HTMLElement|SVGElement} node the dom to transform to a UI
+		 * @returns true if dom is an HTMLElement|SVGElement
 		 */
 		this.alive = function alive(dom) {
-			if (dom instanceof HTMLElement) {
+			if (DomUtils.isAcceptedType(dom)) {
 				this.setTemplateFromDom(dom);
 				this.place(dom.parentNode, dom.nextElementSibling);
 				return true;

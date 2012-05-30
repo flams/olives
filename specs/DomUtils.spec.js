@@ -104,4 +104,28 @@ require(["Olives/DomUtils"], function (DomUtils) {
 		});
 		
 	});
+	
+	describe("DomUtilsAcceptedElements", function () {
+		
+		var acceptedElements = [document.createElement("div"), 
+		                        document.createElementNS("http://www.w3.org/2000/svg", "ellipse")];
+		
+		it("should be a function", function () {
+			expect(DomUtils.isAcceptedType).toBeInstanceOf(Function);
+		});
+		
+		it("should return true if given an accepted type", function () {
+			acceptedElements.forEach(function (type) {
+				expect(DomUtils.isAcceptedType(type)).toEqual(true);
+			});
+		});
+		
+		it("should return false if not an accepted type", function () {
+			expect(DomUtils.isAcceptedType(Object)).toEqual(false);
+			expect(DomUtils.isAcceptedType(null)).toEqual(false);
+			expect(DomUtils.isAcceptedType(undefined)).toEqual(false);
+			expect(DomUtils.isAcceptedType(Function)).toEqual(false);
+		});
+		
+	});
 });
