@@ -104,4 +104,58 @@ require(["Olives/DomUtils"], function (DomUtils) {
 		});
 		
 	});
+	
+	describe("DomUtilsAcceptedElements", function () {
+		
+		var acceptedElements = [document.createElement("div"), 
+		                        document.createElementNS("http://www.w3.org/2000/svg", "ellipse")];
+		
+		it("should be a function", function () {
+			expect(DomUtils.isAcceptedType).toBeInstanceOf(Function);
+		});
+		
+		it("should return true if given an accepted type", function () {
+			acceptedElements.forEach(function (type) {
+				expect(DomUtils.isAcceptedType(type)).toEqual(true);
+			});
+		});
+		
+		it("should return false if not an accepted type", function () {
+			expect(DomUtils.isAcceptedType(Object)).toEqual(false);
+			expect(DomUtils.isAcceptedType(null)).toEqual(false);
+			expect(DomUtils.isAcceptedType(undefined)).toEqual(false);
+			expect(DomUtils.isAcceptedType(Function)).toEqual(false);
+		});
+		
+	});
+	
+	describe("DomUtilsSetATtribute", function () {
+		
+		var htmlElement = document.createElement("div"),
+			svgElement = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+		
+		it("should be a function", function () {
+			expect(DomUtils.setAttribute).toBeInstanceOf(Function);
+		});
+		
+		it("should set attribute by assigning value to the Element's property if it's a dom node", function () {
+			spyOn(htmlElement, "setAttribute");
+			expect(DomUtils.setAttribute(htmlElement, "innerHTML", "Olives")).toEqual(true);
+			expect(htmlElement.setAttribute.wasCalled).toEqual(false);
+			expect(htmlElement.innerHTML).toEqual("Olives");
+		});
+		
+		it("should set attribute by calling setAttribute if it's an SVGElement", function () {
+			spyOn(svgElement, "setAttribute");
+			expect(DomUtils.setAttribute(svgElement, "width", "10px")).toEqual(true);
+			expect(svgElement.setAttribute.wasCalled).toEqual(true);
+			expect(svgElement.setAttribute.mostRecentCall.args[0]).toEqual("width");
+			expect(svgElement.setAttribute.mostRecentCall.args[1]).toEqual("10px");
+		});
+		
+		it("should return false if the Element is neither an HTMLElement or an SVGElement", function () {
+			expect(DomUtils.setAttribute({}, "false")).toEqual(false);
+		});
+		
+	});
 });

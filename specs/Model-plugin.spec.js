@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugin, Store, Plugins) {
+require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], function (ModelPlugin, Store, Plugins, DomUtils) {
 
 
 	describe("ModelPluginTest", function () {
@@ -74,11 +74,18 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 
 		it("should link the model and the dom node with bind", function () {
 			plugins.apply(dom);
+			spyOn(DomUtils, "setAttribute").andCallThrough();
 			expect(dom.innerHTML).toEqual("Olives is fun!");
 			model.set("content", "Olives is cool!");
+			
 			expect(dom.innerHTML).toEqual("Olives is cool!");
 			expect(modelPlugin.observers["content"]).toBeInstanceOf(Array);
 			expect(model.getValueObservable().hasObserver(modelPlugin.observers["content"][0])).toEqual(true);
+			
+			expect(DomUtils.setAttribute.wasCalled).toEqual(true);
+			expect(DomUtils.setAttribute.mostRecentCall.args[0]).toBe(dom);
+			expect(DomUtils.setAttribute.mostRecentCall.args[1]).toEqual("innerHTML");
+			expect(DomUtils.setAttribute.mostRecentCall.args[2]).toEqual("Olives is cool!");
 		});
 
 		it("should not touch the dom if the value isn't set", function () {
@@ -103,6 +110,22 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins"], function (ModelPlugi
 			expect(dom.checked).toEqual(true);
 			model.set("bool", false);
 			expect(dom.checked).toEqual(false);
+		});
+		
+		
+		it("should call DomUtils.setAttribute", function () {
+			var dom = document.createElement("input");
+			dom.setAttribute("data-model", "bind:checked,bool");
+			model.reset({bool:true});
+			spyOn(DomUtils, "setAttribute").andCallThrough();
+			plugins.apply(dom);
+			expect(dom.checked).toEqual(true);
+			model.set("bool", false);
+			expect(dom.checked).toEqual(false);
+			expect(DomUtils.setAttribute.wasCalled).toEqual(true);
+			expect(DomUtils.setAttribute.mostRecentCall.args[0]).toBe(dom);
+			expect(DomUtils.setAttribute.mostRecentCall.args[1]).toEqual("checked");
+			expect(DomUtils.setAttribute.mostRecentCall.args[2]).toEqual(false);
 		});
 
 	});
