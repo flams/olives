@@ -474,7 +474,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					// Extra params are passed to the new binding too
 						.concat(extraParam))) {
 					// Execute the default one which is a simple assignation
-					node[property] = get;
+					//node[property] = get;
+					DomUtils.setAttribute(node, property, get);
 				}
 			}
 			
@@ -500,7 +501,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 						[node, property, Tools.getNestedProperty(value, prop)]
 						// passing extra params too
 						.concat(extraParam))) {
-					node[property] = Tools.getNestedProperty(value, prop);
+					//node[property] = Tools.getNestedProperty(value, prop);
+					DomUtils.setAttribute(node, property, Tools.getNestedProperty(value, prop));
 				}
 			}, this));
 

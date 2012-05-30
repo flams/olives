@@ -64,16 +64,41 @@
 <span class='line'> 57</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 58</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 59</span> </span><span class="WHIT">		
-<span class='line'> 60</span> 		</span><span class="NAME">isAcceptedType</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">isAcceptedType</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 61</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HTMLElement</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
-<span class='line'> 62</span> </span><span class="WHIT">				</span><span class="NAME">type</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">SVGElement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 63</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 64</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 65</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 66</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 67</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 68</span> </span><span class="WHIT">	
-<span class='line'> 69</span> 	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 70</span> 
-<span class='line'> 71</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 72</span> </span></pre></body></html>
+<span class='line'> 60</span> 		</span><span class="COMM">/**
+<span class='line'> 61</span> 		 * Olives can manipulate HTMLElement and SVGElements
+<span class='line'> 62</span> 		 * This function tells if an element is one of them
+<span class='line'> 63</span> 		 * @param {Element} type
+<span class='line'> 64</span> 		 * @returns true if HTMLElement or SVGElement
+<span class='line'> 65</span> 		 */</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">		</span><span class="NAME">isAcceptedType</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">isAcceptedType</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HTMLElement</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">				</span><span class="NAME">type</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">SVGElement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">		
+<span class='line'> 75</span> 		</span><span class="COMM">/**
+<span class='line'> 76</span> 		 * Assign a new value to an Element's property. Works with HTMLElement and SVGElement.
+<span class='line'> 77</span> 		 * @param {HTMLElement|SVGElement} node the node which property should be changed
+<span class='line'> 78</span> 		 * @param {String} property the name of the property
+<span class='line'> 79</span> 		 * @param {any} value the value to set
+<span class='line'> 80</span> 		 * @returns true if assigned
+<span class='line'> 81</span> 		 */</span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="WHIT">		</span><span class="NAME">setAttribute</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">setAttribute</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">node</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HTMLElement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">					</span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="WHIT">					</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 86</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">node</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">SVGElement</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="WHIT">					</span><span class="NAME">node.setAttribute</span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">					</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">					</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">	
+<span class='line'> 94</span> 	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 95</span> 
+<span class='line'> 96</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 97</span> </span></pre></body></html>

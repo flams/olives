@@ -481,143 +481,145 @@
 <span class='line'>474</span> </span><span class="WHIT">					</span><span class="COMM">// Extra params are passed to the new binding too</span><span class="WHIT">
 <span class='line'>475</span> </span><span class="WHIT">						</span><span class="PUNC">.</span><span class="NAME">concat</span><span class="PUNC">(</span><span class="NAME">extraParam</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>476</span> </span><span class="WHIT">					</span><span class="COMM">// Execute the default one which is a simple assignation</span><span class="WHIT">
-<span class='line'>477</span> </span><span class="WHIT">					</span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>478</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>479</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>480</span> </span><span class="WHIT">			
-<span class='line'>481</span> 			</span><span class="COMM">// Only watch for changes (double way data binding) if the binding</span><span class="WHIT">
-<span class='line'>482</span> </span><span class="WHIT">			</span><span class="COMM">// has not been redefined</span><span class="WHIT">
-<span class='line'>483</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.hasBinding</span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>484</span> </span><span class="WHIT">				</span><span class="NAME">node.addEventListener</span><span class="PUNC">(</span><span class="STRN">"change"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>485</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_model.has</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>486</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">prop</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>487</span> </span><span class="WHIT">							</span><span class="NAME">_model.update</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>488</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>489</span> </span><span class="WHIT">							</span><span class="NAME">_model.set</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>490</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>491</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>492</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>493</span> 
-<span class='line'>494</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>495</span> </span><span class="WHIT">			
-<span class='line'>496</span> 			</span><span class="COMM">// Watch for changes</span><span class="WHIT">
-<span class='line'>497</span> </span><span class="WHIT">			</span><span class="NAME">this.observers</span><span class="PUNC">[</span><span class="NAME">modelIdx</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.observers</span><span class="PUNC">[</span><span class="NAME">modelIdx</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>498</span> </span><span class="WHIT">			</span><span class="NAME">this.observers</span><span class="PUNC">[</span><span class="NAME">modelIdx</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">push</span><span class="PUNC">(</span><span class="NAME">_model.watchValue</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>499</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.execBinding.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> 
-<span class='line'>500</span> 						</span><span class="PUNC">[</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Tools.getNestedProperty</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prop</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="WHIT">
-<span class='line'>501</span> </span><span class="WHIT">						</span><span class="COMM">// passing extra params too</span><span class="WHIT">
-<span class='line'>502</span> </span><span class="WHIT">						</span><span class="PUNC">.</span><span class="NAME">concat</span><span class="PUNC">(</span><span class="NAME">extraParam</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>503</span> </span><span class="WHIT">					</span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Tools.getNestedProperty</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prop</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>504</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>505</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>506</span> 
-<span class='line'>507</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>508</span> </span><span class="WHIT">		
-<span class='line'>509</span> 		</span><span class="COMM">/**
-<span class='line'>510</span> 		 * Set the node's value into the model, the name is the model's property
-<span class='line'>511</span> 		 * @private
-<span class='line'>512</span> 		 * @param {HTMLElement|SVGElement} node
-<span class='line'>513</span> 		 * @returns true if the property is added
-<span class='line'>514</span> 		 */</span><span class="WHIT">
-<span class='line'>515</span> </span><span class="WHIT">		</span><span class="NAME">this.set</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">set</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>516</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">DomUtils.isAcceptedType</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">node.name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>517</span> </span><span class="WHIT">				</span><span class="NAME">_model.set</span><span class="PUNC">(</span><span class="NAME">node.name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node.value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>518</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>519</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>520</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>521</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>522</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>523</span> </span><span class="WHIT">		
-<span class='line'>524</span> 		</span><span class="COMM">/**
-<span class='line'>525</span> 		 * Prevents the submit and set the model with all form's inputs
-<span class='line'>526</span> 		 * @param {HTMLFormElement} form
-<span class='line'>527</span> 		 * @returns true if valid form
-<span class='line'>528</span> 		 */</span><span class="WHIT">
-<span class='line'>529</span> </span><span class="WHIT">		</span><span class="NAME">this.form</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">form</span><span class="PUNC">(</span><span class="NAME">form</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>530</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">form</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">form.nodeName</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"FORM"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>531</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">that</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>532</span> </span><span class="WHIT">				</span><span class="NAME">form.addEventListener</span><span class="PUNC">(</span><span class="STRN">"submit"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>533</span> </span><span class="WHIT">					</span><span class="NAME">Tools.toArray</span><span class="PUNC">(</span><span class="NAME">form.querySelectorAll</span><span class="PUNC">(</span><span class="STRN">"[name]"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">forEach</span><span class="PUNC">(</span><span class="NAME">that.set</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">that</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>534</span> </span><span class="WHIT">					</span><span class="NAME">event.preventDefault</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>535</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>536</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>537</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>538</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>539</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>540</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>541</span> </span><span class="WHIT">		
-<span class='line'>542</span> 		</span><span class="COMM">/**
-<span class='line'>543</span> 		 * Add a new way to handle a binding
-<span class='line'>544</span> 		 * @param {String} name of the binding
-<span class='line'>545</span> 		 * @param {Function} binding the function to handle the binding
-<span class='line'>546</span> 		 * @returns
-<span class='line'>547</span> 		 */</span><span class="WHIT">
-<span class='line'>548</span> </span><span class="WHIT">		</span><span class="NAME">this.addBinding</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">addBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>549</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"function"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>550</span> </span><span class="WHIT">				</span><span class="NAME">_bindings</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>551</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>552</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>553</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>554</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>555</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>556</span> </span><span class="WHIT">		
-<span class='line'>557</span> 		</span><span class="COMM">/**
-<span class='line'>558</span> 		 * Execute a binding
-<span class='line'>559</span> 		 * Only used by the plugin
-<span class='line'>560</span> 		 * @private
-<span class='line'>561</span> 		 * @param {HTMLElement} node the dom node on which to execute the binding
-<span class='line'>562</span> 		 * @param {String} name the name of the binding
-<span class='line'>563</span> 		 * @param {Any type} value the value to pass to the function
-<span class='line'>564</span> 		 * @returns
-<span class='line'>565</span> 		 */</span><span class="WHIT">
-<span class='line'>566</span> </span><span class="WHIT">		</span><span class="NAME">this.execBinding</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">execBinding</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>567</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.hasBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>568</span> </span><span class="WHIT">				</span><span class="NAME">_bindings</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">apply</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Array.prototype.slice.call</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>569</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>570</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>571</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>572</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>573</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>574</span> </span><span class="WHIT">		
-<span class='line'>575</span> 		</span><span class="COMM">/**
-<span class='line'>576</span> 		 * Check if the binding exists
-<span class='line'>577</span> 		 * @private
-<span class='line'>578</span> 		 * @param {String} name the name of the binding
-<span class='line'>579</span> 		 * @returns
-<span class='line'>580</span> 		 */</span><span class="WHIT">
-<span class='line'>581</span> </span><span class="WHIT">		</span><span class="NAME">this.hasBinding</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hasBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>582</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_bindings.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>583</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>584</span> </span><span class="WHIT">		
-<span class='line'>585</span> 		</span><span class="COMM">/**
-<span class='line'>586</span> 		 * Get a binding
-<span class='line'>587</span> 		 * For debugging only
-<span class='line'>588</span> 		 * @private
-<span class='line'>589</span> 		 * @param {String} name the name of the binding
-<span class='line'>590</span> 		 * @returns
-<span class='line'>591</span> 		 */</span><span class="WHIT">
-<span class='line'>592</span> </span><span class="WHIT">		</span><span class="NAME">this.getBinding</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">getBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>593</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_bindings</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>594</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>595</span> </span><span class="WHIT">		
-<span class='line'>596</span> 		</span><span class="COMM">/**
-<span class='line'>597</span> 		 * Add multiple binding at once
-<span class='line'>598</span> 		 * @param {Object} list the list of bindings to add
-<span class='line'>599</span> 		 * @returns
-<span class='line'>600</span> 		 */</span><span class="WHIT">
-<span class='line'>601</span> </span><span class="WHIT">		</span><span class="NAME">this.addBindings</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">addBindings</span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>602</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Tools.loop</span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">binding</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>603</span> </span><span class="WHIT">				</span><span class="NAME">this.addBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>604</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>605</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>606</span> </span><span class="WHIT">	
-<span class='line'>607</span> 		</span><span class="COMM">// Inits the model</span><span class="WHIT">
-<span class='line'>608</span> </span><span class="WHIT">		</span><span class="NAME">this.setModel</span><span class="PUNC">(</span><span class="NAME">$model</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>609</span> </span><span class="WHIT">		</span><span class="COMM">// Inits bindings</span><span class="WHIT">
-<span class='line'>610</span> </span><span class="WHIT">		</span><span class="NAME">this.addBindings</span><span class="PUNC">(</span><span class="NAME">$bindings</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>611</span> </span><span class="WHIT">		
-<span class='line'>612</span> 		
-<span class='line'>613</span> 	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>614</span> </span><span class="WHIT">	
-<span class='line'>615</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>616</span> </span></pre></body></html>
+<span class='line'>477</span> </span><span class="WHIT">					</span><span class="COMM">//node[property] = get;</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="WHIT">					</span><span class="NAME">DomUtils.setAttribute</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="WHIT">			
+<span class='line'>482</span> 			</span><span class="COMM">// Only watch for changes (double way data binding) if the binding</span><span class="WHIT">
+<span class='line'>483</span> </span><span class="WHIT">			</span><span class="COMM">// has not been redefined</span><span class="WHIT">
+<span class='line'>484</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.hasBinding</span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="WHIT">				</span><span class="NAME">node.addEventListener</span><span class="PUNC">(</span><span class="STRN">"change"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_model.has</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">prop</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="WHIT">							</span><span class="NAME">_model.update</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">							</span><span class="NAME">_model.set</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>493</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>494</span> 
+<span class='line'>495</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>496</span> </span><span class="WHIT">			
+<span class='line'>497</span> 			</span><span class="COMM">// Watch for changes</span><span class="WHIT">
+<span class='line'>498</span> </span><span class="WHIT">			</span><span class="NAME">this.observers</span><span class="PUNC">[</span><span class="NAME">modelIdx</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.observers</span><span class="PUNC">[</span><span class="NAME">modelIdx</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>499</span> </span><span class="WHIT">			</span><span class="NAME">this.observers</span><span class="PUNC">[</span><span class="NAME">modelIdx</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">push</span><span class="PUNC">(</span><span class="NAME">_model.watchValue</span><span class="PUNC">(</span><span class="NAME">modelIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>500</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.execBinding.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> 
+<span class='line'>501</span> 						</span><span class="PUNC">[</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Tools.getNestedProperty</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prop</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">						</span><span class="COMM">// passing extra params too</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="WHIT">						</span><span class="PUNC">.</span><span class="NAME">concat</span><span class="PUNC">(</span><span class="NAME">extraParam</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="WHIT">					</span><span class="COMM">//node[property] = Tools.getNestedProperty(value, prop);</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="WHIT">					</span><span class="NAME">DomUtils.setAttribute</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Tools.getNestedProperty</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prop</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>506</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>508</span> 
+<span class='line'>509</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="WHIT">		
+<span class='line'>511</span> 		</span><span class="COMM">/**
+<span class='line'>512</span> 		 * Set the node's value into the model, the name is the model's property
+<span class='line'>513</span> 		 * @private
+<span class='line'>514</span> 		 * @param {HTMLElement|SVGElement} node
+<span class='line'>515</span> 		 * @returns true if the property is added
+<span class='line'>516</span> 		 */</span><span class="WHIT">
+<span class='line'>517</span> </span><span class="WHIT">		</span><span class="NAME">this.set</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">set</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>518</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">DomUtils.isAcceptedType</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">node.name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>519</span> </span><span class="WHIT">				</span><span class="NAME">_model.set</span><span class="PUNC">(</span><span class="NAME">node.name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node.value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>520</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>521</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>522</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>523</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>524</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>525</span> </span><span class="WHIT">		
+<span class='line'>526</span> 		</span><span class="COMM">/**
+<span class='line'>527</span> 		 * Prevents the submit and set the model with all form's inputs
+<span class='line'>528</span> 		 * @param {HTMLFormElement} form
+<span class='line'>529</span> 		 * @returns true if valid form
+<span class='line'>530</span> 		 */</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="WHIT">		</span><span class="NAME">this.form</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">form</span><span class="PUNC">(</span><span class="NAME">form</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>532</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">form</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">form.nodeName</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"FORM"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>533</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">that</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>534</span> </span><span class="WHIT">				</span><span class="NAME">form.addEventListener</span><span class="PUNC">(</span><span class="STRN">"submit"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>535</span> </span><span class="WHIT">					</span><span class="NAME">Tools.toArray</span><span class="PUNC">(</span><span class="NAME">form.querySelectorAll</span><span class="PUNC">(</span><span class="STRN">"[name]"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">forEach</span><span class="PUNC">(</span><span class="NAME">that.set</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">that</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>536</span> </span><span class="WHIT">					</span><span class="NAME">event.preventDefault</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>537</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>538</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>539</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>540</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>541</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>543</span> </span><span class="WHIT">		
+<span class='line'>544</span> 		</span><span class="COMM">/**
+<span class='line'>545</span> 		 * Add a new way to handle a binding
+<span class='line'>546</span> 		 * @param {String} name of the binding
+<span class='line'>547</span> 		 * @param {Function} binding the function to handle the binding
+<span class='line'>548</span> 		 * @returns
+<span class='line'>549</span> 		 */</span><span class="WHIT">
+<span class='line'>550</span> </span><span class="WHIT">		</span><span class="NAME">this.addBinding</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">addBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>551</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"function"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>552</span> </span><span class="WHIT">				</span><span class="NAME">_bindings</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>553</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>554</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>555</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>556</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>557</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>558</span> </span><span class="WHIT">		
+<span class='line'>559</span> 		</span><span class="COMM">/**
+<span class='line'>560</span> 		 * Execute a binding
+<span class='line'>561</span> 		 * Only used by the plugin
+<span class='line'>562</span> 		 * @private
+<span class='line'>563</span> 		 * @param {HTMLElement} node the dom node on which to execute the binding
+<span class='line'>564</span> 		 * @param {String} name the name of the binding
+<span class='line'>565</span> 		 * @param {Any type} value the value to pass to the function
+<span class='line'>566</span> 		 * @returns
+<span class='line'>567</span> 		 */</span><span class="WHIT">
+<span class='line'>568</span> </span><span class="WHIT">		</span><span class="NAME">this.execBinding</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">execBinding</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>569</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.hasBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>570</span> </span><span class="WHIT">				</span><span class="NAME">_bindings</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">apply</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Array.prototype.slice.call</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>571</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>572</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>573</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>574</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>575</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>576</span> </span><span class="WHIT">		
+<span class='line'>577</span> 		</span><span class="COMM">/**
+<span class='line'>578</span> 		 * Check if the binding exists
+<span class='line'>579</span> 		 * @private
+<span class='line'>580</span> 		 * @param {String} name the name of the binding
+<span class='line'>581</span> 		 * @returns
+<span class='line'>582</span> 		 */</span><span class="WHIT">
+<span class='line'>583</span> </span><span class="WHIT">		</span><span class="NAME">this.hasBinding</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hasBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>584</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_bindings.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>585</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>586</span> </span><span class="WHIT">		
+<span class='line'>587</span> 		</span><span class="COMM">/**
+<span class='line'>588</span> 		 * Get a binding
+<span class='line'>589</span> 		 * For debugging only
+<span class='line'>590</span> 		 * @private
+<span class='line'>591</span> 		 * @param {String} name the name of the binding
+<span class='line'>592</span> 		 * @returns
+<span class='line'>593</span> 		 */</span><span class="WHIT">
+<span class='line'>594</span> </span><span class="WHIT">		</span><span class="NAME">this.getBinding</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">getBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>595</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_bindings</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>596</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>597</span> </span><span class="WHIT">		
+<span class='line'>598</span> 		</span><span class="COMM">/**
+<span class='line'>599</span> 		 * Add multiple binding at once
+<span class='line'>600</span> 		 * @param {Object} list the list of bindings to add
+<span class='line'>601</span> 		 * @returns
+<span class='line'>602</span> 		 */</span><span class="WHIT">
+<span class='line'>603</span> </span><span class="WHIT">		</span><span class="NAME">this.addBindings</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">addBindings</span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>604</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Tools.loop</span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">binding</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>605</span> </span><span class="WHIT">				</span><span class="NAME">this.addBinding</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>606</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>607</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>608</span> </span><span class="WHIT">	
+<span class='line'>609</span> 		</span><span class="COMM">// Inits the model</span><span class="WHIT">
+<span class='line'>610</span> </span><span class="WHIT">		</span><span class="NAME">this.setModel</span><span class="PUNC">(</span><span class="NAME">$model</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>611</span> </span><span class="WHIT">		</span><span class="COMM">// Inits bindings</span><span class="WHIT">
+<span class='line'>612</span> </span><span class="WHIT">		</span><span class="NAME">this.addBindings</span><span class="PUNC">(</span><span class="NAME">$bindings</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>613</span> </span><span class="WHIT">		
+<span class='line'>614</span> 		
+<span class='line'>615</span> 	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>616</span> </span><span class="WHIT">	
+<span class='line'>617</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>618</span> </span></pre></body></html>

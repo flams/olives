@@ -61,6 +61,12 @@ define("Olives/DomUtils", function () {
 			}
 		},
 		
+		/**
+		 * Olives can manipulate HTMLElement and SVGElements
+		 * This function tells if an element is one of them
+		 * @param {Element} type
+		 * @returns true if HTMLElement or SVGElement
+		 */
 		isAcceptedType: function isAcceptedType(type) {
 			if (type instanceof HTMLElement ||
 				type instanceof SVGElement) {
@@ -68,6 +74,25 @@ define("Olives/DomUtils", function () {
 			} else {
 				return false;
 			}
+		},
+		
+		/**
+		 * Assign a new value to an Element's property. Works with HTMLElement and SVGElement.
+		 * @param {HTMLElement|SVGElement} node the node which property should be changed
+		 * @param {String} property the name of the property
+		 * @param {any} value the value to set
+		 * @returns true if assigned
+		 */
+		setAttribute: function setAttribute(node, property, value) {
+				if (node instanceof HTMLElement) {
+					node[property] = value;
+					return true;
+				} else if (node instanceof SVGElement){
+					node.setAttribute(property, value);
+					return true;
+				} else {
+					return false;
+				}
 		}
 	
 	};
@@ -671,7 +696,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 					// Extra params are passed to the new binding too
 						.concat(extraParam))) {
 					// Execute the default one which is a simple assignation
-					node[property] = get;
+					//node[property] = get;
+					DomUtils.setAttribute(node, property, get);
 				}
 			}
 			
@@ -697,7 +723,8 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 						[node, property, Tools.getNestedProperty(value, prop)]
 						// passing extra params too
 						.concat(extraParam))) {
-					node[property] = Tools.getNestedProperty(value, prop);
+					//node[property] = Tools.getNestedProperty(value, prop);
+					DomUtils.setAttribute(node, property, Tools.getNestedProperty(value, prop));
 				}
 			}, this));
 
