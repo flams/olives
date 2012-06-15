@@ -71,7 +71,7 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 				
 				_transport.request(_channel, {
 					method: "GET",
-					path: "/" + _syncInfo.database + "/_design/" + _syncInfo.design + "/" + "_view/" + _syncInfo.view,
+					path: "/" + _syncInfo.database + "/_design/" + _syncInfo.design + "/" + _syncInfo.view,
 					query: _syncInfo.query
 				}, function (results) {
 					var json = JSON.parse(results);
@@ -79,6 +79,11 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 						throw new Error("CouchDBStore [" + _syncInfo.database + ", " + _syncInfo.design + ", " + _syncInfo.view + "].sync() failed: " + results);	
 					} else {
 						this.reset(json.rows);
+						
+						if (typeof json.total_rows == "undefined") {
+							this.setReducedViewInfo(true);
+						}
+
 						_stateMachine.event("subscribeToViewChanges", json.update_seq);
 					}
 				}, this);
@@ -158,7 +163,7 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 			createDocument: function (promise) {
             	_transport.request(_channel, {
             		method: "PUT",
-            		path: '/' + _syncInfo.database + '/' + _syncInfo.document,
+            		path: "/" + _syncInfo.database + "/" + _syncInfo.document,
             		headers: {
             			"Content-Type": "application/json"
             		},
@@ -200,14 +205,20 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 						
 						var json = JSON.parse(changes),
 							action;
-
-						if (json.deleted) {
-							action = "delete";
-						} else if (json.changes[0].rev.search("1-") == 0) {
-							action = "add";
+						
+						// reducedView is known on the first get view
+						if (_syncInfo.reducedView) { 
+							action = "updateReduced";
 						} else {
-							action = "change";
+							if (json.deleted) {
+								action = "delete";
+							} else if (json.changes[0].rev.search("1-") == 0) {
+								action = "add";
+							} else {
+								action = "change";
+							}
 						}
+							
 						_stateMachine.event(action, json.id);
 					}, this);
 			},
@@ -301,7 +312,7 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 			updateDocInStore: function (id) {
 				_transport.request(_channel,{
 					method: "GET",
-					path: '/'+_syncInfo.database+'/_design/'+_syncInfo.design+'/_view/'+_syncInfo.view,
+					path: "/" + _syncInfo.database + "/_design/" + _syncInfo.design + "/" + _syncInfo.view,
 					query: _syncInfo.query
 				}, function (view) {
 					var json = JSON.parse(view);
@@ -378,7 +389,7 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 			addDocInStore: function (id) {
 				_transport.request(_channel,{
 					method: "GET",
-					path: '/'+_syncInfo.database+'/_design/'+_syncInfo.design+'/_view/'+_syncInfo.view,
+					path: "/" + _syncInfo.database + "/_design/" + _syncInfo.design + "/" + _syncInfo.view,
 					query: _syncInfo.query
 				}, function (view) {
 					var json = JSON.parse(view);
@@ -393,6 +404,23 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 			},
 			
 			/**
+			 * Update a reduced view (it has one row with no id)
+			 * @private
+			 */
+			updateReduced: function () {
+				_transport.request(_channel,{
+					method: "GET",
+					path: "/" + _syncInfo.database + "/_design/" + _syncInfo.design + "/" + _syncInfo.view,
+					query: _syncInfo.query
+				}, function (view) {
+					var json = JSON.parse(view);
+					
+					this.set(0, json.rows[0]);
+					
+				}, this);
+			},
+			
+			/**
 			 * Update the document when synchronized with a document.
 			 * This differs than updating a document in a View
 			 * @private
@@ -400,7 +428,7 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 			updateDoc: function () {
 				_transport.request(_channel, {
 					method: "GET",
-					path: '/'+_syncInfo.database+'/' + _syncInfo.document
+					path: "/"+_syncInfo.database+"/" + _syncInfo.document
 				}, function (doc) {
 					this.reset(JSON.parse(doc));			
 				}, this);
@@ -422,7 +450,7 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 
 		    	_transport.request(_channel, {
             		method: "PUT",
-            		path: '/' + _syncInfo.database + '/' + _syncInfo.document,
+            		path: "/" + _syncInfo.database + "/" + _syncInfo.document,
             		headers: {
             			"Content-Type": "application/json"
             		},
@@ -467,7 +495,7 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 		    removeFromDatabase: function () {
 		    	_transport.request(_channel, {
             		method: "DELETE",
-            		path: '/' + _syncInfo.database + '/' + _syncInfo.document,
+            		path: "/" + _syncInfo.database + "/" + _syncInfo.document,
             		query: {
             			rev: this.get("_rev")
             		}
@@ -519,6 +547,7 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 			    ["bulkChange", actions.updateBulkDocInStore, this],
 				["delete", actions.removeDocInStore, this],
 				["add", actions.addDocInStore, this],
+				["updateReduced", actions.updateReduced, this],
 				["updateDoc", actions.updateDoc, this],
 			    ["deleteDoc", actions.deleteDoc, this],
 			    ["updateDatabase", actions.updateDatabase, this],
@@ -559,6 +588,7 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 		 * @returns {Boolean}
 		 */
 		this.setSyncInfo = function setSyncInfo() {
+			this.clearSyncInfo();
 			if (typeof arguments[0] == "string" && typeof arguments[1] == "string" && typeof arguments[2] == "string") {
 				_syncInfo["database"] = arguments[0];
 				_syncInfo["design"] = arguments[1];
@@ -580,6 +610,28 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
 				return true;
 			}
 			return false;
+		};
+		
+		/**
+		 * Between two synchs, the previous info must be cleared up
+		 * @private
+		 */
+		this.clearSyncInfo = function clearSyncInfo() {
+			_syncInfo = {};
+			return true;
+		};
+		
+		/**
+		 * Set a flag to tell that a synchronized view is reduced
+		 * @private
+		 */
+		this.setReducedViewInfo = function setReducedViewInfo(reduced) {
+			if (typeof reduced == "boolean") {
+				_syncInfo.reducedView = reduced;
+				return true;
+			} else {
+				return false;
+			} 
 		};
 		
 		/**
