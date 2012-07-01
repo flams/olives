@@ -238,11 +238,54 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 			expect(transport.request.mostRecentCall.args[1].path).toEqual(url);
 
 		});
+		
+		it("should save the function to stop listening (the request's return) in an object", function () {
+			expect(transport.getStopFunctions).toBeInstanceOf(Function);
+			expect(transport.getStopFunctions()).toBeInstanceOf(Object);
+		});
+		
+		it("should allow for multiple listeners on the same url", function () {
+			var channel = "DB",
+				url = "changes",
+				callback1 = jasmine.createSpy(),
+				callback2 = jasmine.createSpy(),
+				stop = jasmine.createSpy(),
+				observable,
+				stops,
+				stop1,
+				stop2;
+			
+			observable = transport.getListenObservable();
+			spyOn(observable, "unwatch").andCallThrough();
+			spyOn(transport, "request").andReturn(stop);
+				
+			stop1 = transport.listen(channel, {path: url}, callback1);
+			stop2 = transport.listen(channel, {path: url}, callback2);
+			
+			stops = transport.getStopFunctions();
+			
+			expect(stops["DB/changes"]).toBe(stop);
+
+			observable.notify("DB/changes", "called");
+			
+			expect(callback1.wasCalled).toEqual(true);
+			expect(callback1.mostRecentCall.args[0]).toEqual("called");
+			expect(callback2.wasCalled).toEqual(true);
+			expect(callback2.mostRecentCall.args[0]).toEqual("called");
+			
+			stop1();
+			stop2();
+			
+			expect(observable.unwatch.callCount).toEqual(2);
+			expect(stop.callCount).toEqual(1);
+
+		});
 
 		it("should implement an observable for the listen func", function () {
 			var channel = "DB",
-			url = "changes",
-			observable, listen;
+				url = "changes",
+				observable,
+				listen;
 
 			expect(transport.getListenObservable).toBeInstanceOf(Function);
 			observable = transport.getListenObservable();

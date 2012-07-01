@@ -39,7 +39,14 @@ function Transport(Observable, Tools) {
 		 * @private
 		 * The Observable that is used for the listen function
 		 */
-		_observable = new Observable();
+		_observable = new Observable(),
+		
+		/**
+		 * @private
+		 * listen internally calls request, which returns a "stop listen" function
+		 * It should be saved in an object alongside the topic name
+		 */
+		_stops = {};
 		
 		/**
 		 * Set the io handler (socket.io)
@@ -80,6 +87,7 @@ function Transport(Observable, Tools) {
 		
 		/**
 		 * Get the socket, for debugging purpose
+		 * @private
 		 * @returns {Object} the socket
 		 */
 		this.getSocket = function getSocket() {
@@ -149,18 +157,18 @@ function Transport(Observable, Tools) {
 		this.listen = function listen(channel, reqData, func, scope) {
 			
 			var topic = channel + "/" + reqData.path,
-				handler,
-				stop;
+				handler;
 			
-			// If no such topic
+			// If listen to this topic for the first time
 			if (!_observable.hasTopic(topic)) {
+				// Add params to the request
 				Tools.mixin({
 					method: "GET",
 					__keepalive__: true
 				}, reqData);
 				
 				// Listen to changes on this topic (an url actually)
-				stop = this.request(channel, reqData, 
+				_stops[topic] = this.request(channel, reqData, 
 						// Notify when new data arrives
 						function (data) {
 					_observable.notify(topic, data);
@@ -175,13 +183,23 @@ function Transport(Observable, Tools) {
 					// If no more observers
 					if (!_observable.hasTopic(topic)) {
 						// stop listening
-						stop();
+						_stops[topic]();
 					}
 			};
 		};
 		
 		/**
 		 * This function is for debugging only
+		 * @private
+		 * @returns
+		 */
+		this.getStopFunctions = function getStopFunctions() {
+			return _stops;
+		};
+		
+		/**
+		 * This function is for debugging only
+		 * @private
 		 * @returns {Observable}
 		 */
 		this.getListenObservable = function getListenObservable() {
