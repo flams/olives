@@ -191,7 +191,6 @@ function Transport(Observable, Tools) {
 		/**
 		 * This function is for debugging only
 		 * @private
-		 * @returns
 		 */
 		this.getStopFunctions = function getStopFunctions() {
 			return _stops;

@@ -458,11 +458,12 @@ function CouchDBStore(Store, StateMachine, Tools, Promise) {
             	}, function (response) {
             		var json = JSON.parse(response);
             		if (json.ok) {
+            			this.set("_rev", json.rev);
             			promise.resolve(json);
             		} else {
             			promise.reject(json);
             		}
-            	});
+            	}, this);
 		    },
 		    
 		    /**
@@ -770,9 +771,9 @@ function Observable(Tools) {
 		 */
 		this.watch = function watch(topic, callback, scope) {
 			if (typeof callback == "function") {
-				var observers = _topics[topic] = _topics[topic] || [];
-			
+				var observers = _topics[topic] = _topics[topic] || [],
 				observer = [callback, scope];
+				
 				observers.push(observer);
 				return [topic,observers.indexOf(observer)];
 				
@@ -1598,6 +1599,7 @@ function Tools(){
 		/**
 		 * Small adapter for looping over objects and arrays
 		 * Warning: it's not meant to be used with nodeList
+		 * To use with nodeList, convert to array first
 		 * @param {Array/Object} iterated the array or object to loop through
 		 * @param {Function} callback the function to execute for each iteration
 		 * @param {Object} scope the scope in which to execute the callback
@@ -1607,10 +1609,9 @@ function Tools(){
 			var i, 
 				length;
 			
-			if (iterated instanceof Object && typeof callback == "function") {
-				length = iterated.length;
-				if (length) {
-					for (i=0; i<length; i++) {
+			if (iterated instanceof Object && callback instanceof Function) {
+				if (iterated instanceof Array) {
+					for (i=0; i<iterated.length; i++) {
 						callback.call(scope, iterated[i], i, iterated);
 					}
 				} else {
