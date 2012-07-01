@@ -1,5 +1,5 @@
 /*
- Olives http://flams.github.com/olives
+ Olives ${VERSION} http://flams.github.com/olives
  The MIT License (MIT)
  Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
 */
