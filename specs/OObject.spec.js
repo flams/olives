@@ -23,6 +23,7 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 			expect(ui.place).toBeInstanceOf(Function);
 			expect(ui.alive).toBeInstanceOf(Function);
 			expect(ui.setTemplateFromDom).toBeInstanceOf(Function);
+			expect(ui.getCurrentPlace).toBeInstanceOf(Function);
 		});
 		
 		it("should have a plugins property that is a Plugins aggragator", function () {
@@ -289,6 +290,21 @@ require(["Olives/OObject", "Tools", "Store", "CouchDBStore", "Olives/Plugins"], 
 		});
 
 
+	});
+	
+	describe("GetCurrentPlace", function(){
+		it("should return the current place", function(){
+			var ui = new OObject(),
+				place1 = document.createElement("div"),
+				place2 = document.createElement("div");
+			ui.template = "<p>olives</p>";
+			
+			expect(ui.getCurrentPlace()).toBe(null);
+			ui.place(place1);
+			expect(ui.getCurrentPlace()).toBe(place1);
+			ui.place(place2);
+			expect(ui.getCurrentPlace()).toBe(place2);
+		});
 	});
 	
 	
