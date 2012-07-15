@@ -61,4 +61,6 @@ exports.registerSocketIO = function (io) {
 		
 };
 
+exports.requirejs = requirejs;
+
 
