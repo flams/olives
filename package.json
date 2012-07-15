@@ -18,8 +18,8 @@
  	"Olivier Wietrich <olivier.wietrich@gmail.com"
  ],
  "dependencies": {
-  "requirejs": ">=2.0.2",
-  "emily": ">=1.1.4",
+  "requirejs": ">=2.0.4",
+  "emily": ">=1.1.5",
   "socket.io": ">=0.9.6"
   },
  "keywords": ["framework", "web", "realtime", "UI", "CouchDB", "AMD/commonJS", "requirejs"],
