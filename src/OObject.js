@@ -176,6 +176,14 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 			
 		};
 		
+		/**
+		 * Get the current dom node where the UI has been placed.
+		 * #return {HTMLElement} node the dom where the UI has been placed.
+		 */
+		this.getCurrentPlace = function(){
+			return _currentPlace;
+		};
+		
 	};
 	
 });
