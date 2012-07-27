@@ -1,16 +1,16 @@
 /**
- * Olives
- * Copyright(c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- * MIT Licensed
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/UI-Plugin", 
+define("Olives/UI-plugin", 
 		
 ["Olives/OObject", "Tools"],
 		
 function (OObject, Tools) {
 	
-	return function UIPluginConstructor($uis) {
+	return function TypePluginConstructor($uis) {
 	
 		var _uis = {};
 		
