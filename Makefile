@@ -55,10 +55,26 @@ Olives.min.js: Olives.js
 		
 clean: clean-build 
 	
-.PHONY: docs clean-docs clean-build build tests release clean
+gh-pages:
+ifndef VERSION
+	@echo "You must give a VERSION number to make gh-pages"
+	@exit 2
+endif
 
-test:
 	git checkout gh-pages
 	
-test2:
-	git checkout master
+	git checkout master Makefile
+	git checkout master docs; git add docs
+	git checkout master specs; git add specs
+	git checkout master tools; git add lib
+	git checkout master lib; git add lib
+	git checkout master release; git add release
+	
+	sed -i .bak 's#version">.*<#version">'${VERSION}'<#g' index.html
+	sed -i .bak 's#<a href="release/Olives.*\.tgz">#<a href="release/Olives-'${VERSION}'.tgz">#' index.html
+	rm index.html.bak
+
+	git commit -am "updated to $(VERSION)"
+	
+	
+.PHONY: docs clean-docs clean-build build tests release clean gh-pages	
