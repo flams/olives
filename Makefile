@@ -56,3 +56,9 @@ Olives.min.js: Olives.js
 clean: clean-docs clean-build 
 	
 .PHONY: docs clean-docs clean-build build tests release clean
+
+test:
+	git checkout gh-pages
+	
+test2:
+	git checkout master
