@@ -65,6 +65,7 @@ endif
 	
 	git checkout master Makefile
 	git checkout master docs; git add docs
+	git checkout master src; git add src
 	git checkout master specs; git add specs
 	git checkout master tools; git add lib
 	git checkout master lib; git add lib
