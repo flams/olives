@@ -77,5 +77,11 @@ endif
 
 	git commit -am "updated to $(VERSION)"
 	
+	git push
+	
+	git checkout master
+	
+	git push
+	
 	
 .PHONY: docs clean-docs clean-build build tests release clean gh-pages	
