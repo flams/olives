@@ -53,7 +53,7 @@ Olives.min.js: Olives.js
 		--js_output_file build/Olives.min.js \
 		--create_source_map build/Olives-map
 		
-clean: clean-docs clean-build 
+clean: clean-build 
 	
 .PHONY: docs clean-docs clean-build build tests release clean
 
