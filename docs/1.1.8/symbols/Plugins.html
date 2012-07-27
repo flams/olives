@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - Transport</title>
+		<title>JsDoc Reference - Plugins</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -210,7 +210,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class Transport
+				Class Plugins
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -218,17 +218,19 @@ ul.inheritsList
 				
 				
 			
-				Transport allows for client-server eventing.
-It's based on socket.io.
+				Plugins is the link between the UI and your plugins.
+You can design your own plugin, declare them in your UI, and call them
+from the template, like :
+<tag data-yourPlugin="method: param"></tag>
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_Transport.js.html">Transport.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_Plugins.js.html">Plugins.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Transport.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Plugins.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -241,7 +243,7 @@ It's based on socket.io.
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/Transport.html#constructor">Transport</a></b>(Observable, Tools)
+								<b><a href="../symbols/Plugins.html#constructor">Plugins</a></b>(Tools, DomUtils)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -257,7 +259,7 @@ It's based on socket.io.
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Transport.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Plugins.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -270,63 +272,47 @@ It's based on socket.io.
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Transport.html#connect">connect</a></b>(url)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#add">add</a></b>(name, plugin)
 								</div>
-								<div class="description">Connect Transport to an url</div>
+								<div class="description">Add a plugin
+
+Note that once added, the function adds a "plugins" property to the plugin.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Transport.html#emit">emit</a></b>(event, data, callback)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#addAll">addAll</a></b>(list)
 								</div>
-								<div class="description">Publish an event on the socket</div>
+								<div class="description">Add multiple plugins at once</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Transport.html#listen">listen</a></b>(channel, reqData, func, scope)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#apply">apply</a></b>(dom)
 								</div>
-								<div class="description">Listen to an url and get notified on new data</div>
+								<div class="description">Apply the plugins to a NodeList</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Transport.html#on">on</a></b>(event, func)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#del">del</a></b>(name)
 								</div>
-								<div class="description">Subscribe to a socket event</div>
+								<div class="description">Delete a plugin from the list</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Transport.html#once">once</a></b>(event, func)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#get">get</a></b>(name)
 								</div>
-								<div class="description">Subscribe to a socket event but disconnect as soon as it fires.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Transport.html#request">request</a></b>(channel, requestData, func, scope)
-								</div>
-								<div class="description">Make a request on the node server</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Transport.html#setIO">setIO</a></b>(io)
-								</div>
-								<div class="description">Set the io handler (socket.io)</div>
+								<div class="description">Get a previously added plugin</div>
 							</td>
 						</tr>
 					
@@ -347,7 +333,7 @@ It's based on socket.io.
 				</div>
 				
 				<div class="fixedFont">
-						<b>Transport</b>(Observable, Tools)
+						<b>Plugins</b>(Tools, DomUtils)
 				</div>
 				
 				<div class="description">
@@ -363,13 +349,13 @@ It's based on socket.io.
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								 <b>Observable</b>
+								 <b>Tools</b>
 								
 							</dt>
 								<dd></dd>
 						
 							<dt>
-								 <b>Tools</b>
+								 <b>DomUtils</b>
 								
 							</dt>
 								<dd></dd>
@@ -381,6 +367,20 @@ It's based on socket.io.
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">Requires:</dt>
+						
+							<dd>Tools</dd>
+						
+						</dl>
+					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd>Model-Plugin for instance</dd>
+						
+						</dl>
 					
 
 			</div>
@@ -395,51 +395,19 @@ It's based on socket.io.
 					Method Detail
 				</div>
 				
-					<a name="connect"> </a>
+					<a name="add"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>connect</b>(url)
+					<b>add</b>(name, plugin)
 					
 					</div>
 					<div class="description">
-						Connect Transport to an url
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Url}</span> <b>url</b>
-									
-								</dt>
-								<dd>the url to connect Transport to</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
+						Add a plugin
 
-					<hr />
-				
-					<a name="emit"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>emit</b>(event, data, callback)
-					
-					</div>
-					<div class="description">
-						Publish an event on the socket
+Note that once added, the function adds a "plugins" property to the plugin.
+It's an object that holds a name property, with the registered name of the plugin
+and an apply function, to use on new nodes that the plugin would generate
 						
 						
 					</div>
@@ -451,76 +419,16 @@ It's based on socket.io.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>event</b>
+									<span class="light fixedFont">{String}</span> <b>name</b>
 									
 								</dt>
-								<dd>the event to publish</dd>
+								<dd>the name of the data that the plugin should look for</dd>
 							
 								<dt>
-									<b>data</b>
+									<span class="light fixedFont">{Object}</span> <b>plugin</b>
 									
 								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span> <b>callback</b>
-									
-								</dt>
-								<dd>is the function to be called for ack</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="listen"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>listen</b>(channel, reqData, func, scope)
-					
-					</div>
-					<div class="description">
-						Listen to an url and get notified on new data
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>channel</b>
-									
-								</dt>
-								<dd>watch the server's documentation to see available channels</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>reqData</b>
-									
-								</dt>
-								<dd>the request data: path should indicate the url, query can add up query strings to the url</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span> <b>func</b>
-									
-								</dt>
-								<dd>the callback that will get the data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>scope</b>
-									
-								</dt>
-								<dd>the scope in which to execute the callback</dd>
+								<dd>the plugin that has the functions to execute</dd>
 							
 							</dl>
 						
@@ -531,7 +439,7 @@ It's based on socket.io.
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd></dd>
+								<dd>true if plugin successfully added.</dd>
 							
 							</dl>
 						
@@ -540,15 +448,15 @@ It's based on socket.io.
 
 					<hr />
 				
-					<a name="on"> </a>
+					<a name="addAll"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>on</b>(event, func)
+					<b>addAll</b>(list)
 					
 					</div>
 					<div class="description">
-						Subscribe to a socket event
+						Add multiple plugins at once
 						
 						
 					</div>
@@ -560,148 +468,10 @@ It's based on socket.io.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>event</b>
+									<span class="light fixedFont">{Object}</span> <b>list</b>
 									
 								</dt>
-								<dd>the name of the event</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span> <b>func</b>
-									
-								</dt>
-								<dd>the function to execute when the event fires</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="once"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>once</b>(event, func)
-					
-					</div>
-					<div class="description">
-						Subscribe to a socket event but disconnect as soon as it fires.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>event</b>
-									
-								</dt>
-								<dd>the name of the event</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span> <b>func</b>
-									
-								</dt>
-								<dd>the function to execute when the event fires</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="request"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>request</b>(channel, requestData, func, scope)
-					
-					</div>
-					<div class="description">
-						Make a request on the node server
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>channel</b>
-									
-								</dt>
-								<dd>watch the server's documentation to see available channels</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>requestData</b>
-									
-								</dt>
-								<dd>the JSON that details the request</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span> <b>func</b>
-									
-								</dt>
-								<dd>the callback that will get the response.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>scope</b>
-									
-								</dt>
-								<dd>the scope in which to execute the callback</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setIO"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setIO</b>(io)
-					
-					</div>
-					<div class="description">
-						Set the io handler (socket.io)
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>io</b>
-									
-								</dt>
-								<dd>the socket.io object</dd>
+								<dd>key is the plugin name and value is the plugin</dd>
 							
 							</dl>
 						
@@ -712,7 +482,136 @@ It's based on socket.io.
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if it seems to be socket.io</dd>
+								<dd>true if correct param</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="apply"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>apply</b>(dom)
+					
+					</div>
+					<div class="description">
+						Apply the plugins to a NodeList
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>dom</b>
+									
+								</dt>
+								<dd>the dom nodes on which to apply the plugins</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if the param is a dom node</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="del"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>del</b>(name)
+					
+					</div>
+					<div class="description">
+						Delete a plugin from the list
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>the name of the plugin</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if success</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="get"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>get</b>(name)
+					
+					</div>
+					<div class="description">
+						Get a previously added plugin
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>the name of the plugin</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> the plugin</dd>
 							
 							</dl>
 						
@@ -733,7 +632,7 @@ It's based on socket.io.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Jul 27 2012 12:25:39 GMT+0200 (CEST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Jul 27 2012 12:48:06 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

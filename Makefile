@@ -3,15 +3,15 @@ JsTestDriver = $(shell find tools -name "JsTestDriver-*.jar" -type f)
 
 all: tests docs build
 
+clean-docs:
+	-rm -rf docs/latest/
+
 docs: clean-docs
 	java -jar tools/JsDoc/jsrun.jar \
 		tools/JsDoc/app/run.js src \
 		-r=2 \
-		-d=docs \
+		-d=docs/latest/ \
 		-t=tools/JsDoc/templates/jsdoc
-		
-clean-docs:
-	-rm -rf docs
 		
 tests:
 	java -jar $(JsTestDriver) \
@@ -40,6 +40,8 @@ endif
 	tar czf ../Olives-$(VERSION).tgz Olives-$(VERSION)
 	
 	rm -rf release/tmp/
+	
+	cp -rf docs/latest/ docs/$(VERSION)/
 	
 Olives.js: $(SRC)
 	mkdir -p build

@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - ModelPlugin</title>
+		<title>JsDoc Reference - Plugins</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -210,7 +210,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class ModelPlugin
+				Class Plugins
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -218,16 +218,19 @@ ul.inheritsList
 				
 				
 			
-				This plugin links dom nodes to a model
+				Plugins is the link between the UI and your plugins.
+You can design your own plugin, declare them in your UI, and call them
+from the template, like :
+<tag data-yourPlugin="method: param"></tag>
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_Model-plugin.js.html">Model-plugin.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_Plugins.js.html">Plugins.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ModelPlugin.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Plugins.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -240,7 +243,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/ModelPlugin.html#constructor">ModelPlugin</a></b>(Store, Observable, Tools, DomUtils)
+								<b><a href="../symbols/Plugins.html#constructor">Plugins</a></b>(Tools, DomUtils)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -256,7 +259,7 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class ModelPlugin.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Plugins.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -269,81 +272,47 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#addBinding">addBinding</a></b>(name, binding)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#add">add</a></b>(name, plugin)
 								</div>
-								<div class="description">Add a new way to handle a binding</div>
+								<div class="description">Add a plugin
+
+Note that once added, the function adds a "plugins" property to the plugin.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#addBindings">addBindings</a></b>(list)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#addAll">addAll</a></b>(list)
 								</div>
-								<div class="description">Add multiple binding at once</div>
+								<div class="description">Add multiple plugins at once</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#bind">bind</a></b>(node, name, name)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#apply">apply</a></b>(dom)
 								</div>
-								<div class="description">Both ways binding between a dom node attributes and the model</div>
+								<div class="description">Apply the plugins to a NodeList</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#foreach">foreach</a></b>(node, idItemRenderer, start, nb)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#del">del</a></b>(name)
 								</div>
-								<div class="description">Expands the inner dom nodes of a given dom node, filling it with model's values</div>
+								<div class="description">Delete a plugin from the list</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#form">form</a></b>(form)
+								<div class="fixedFont"><b><a href="../symbols/Plugins.html#get">get</a></b>(name)
 								</div>
-								<div class="description">Prevents the submit and set the model with all form's inputs</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#refresh">refresh</a></b>(id)
-								</div>
-								<div class="description">Refresh a foreach after having modified its limits</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#setModel">setModel</a></b>(model)
-								</div>
-								<div class="description">Define the model to watch for</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#updateNb">updateNb</a></b>(id, nb)
-								</div>
-								<div class="description">Update the number of item to display in a foreach</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ModelPlugin.html#updateStart">updateStart</a></b>(id, start)
-								</div>
-								<div class="description">Update the lower boundary of a foreach</div>
+								<div class="description">Get a previously added plugin</div>
 							</td>
 						</tr>
 					
@@ -364,7 +333,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>ModelPlugin</b>(Store, Observable, Tools, DomUtils)
+						<b>Plugins</b>(Tools, DomUtils)
 				</div>
 				
 				<div class="description">
@@ -378,18 +347,6 @@ ul.inheritsList
 					
 						<dl class="detailList">
 						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								 <b>Store</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Observable</b>
-								
-							</dt>
-								<dd></dd>
 						
 							<dt>
 								 <b>Tools</b>
@@ -413,10 +370,17 @@ ul.inheritsList
 						<dl class="detailList">
 						<dt class="heading">Requires:</dt>
 						
-							<dd>Store, Observable</dd>
+							<dd>Tools</dd>
 						
 						</dl>
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd>Model-Plugin for instance</dd>
+						
+						</dl>
 					
 
 			</div>
@@ -431,15 +395,19 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="addBinding"> </a>
+					<a name="add"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>addBinding</b>(name, binding)
+					<b>add</b>(name, plugin)
 					
 					</div>
 					<div class="description">
-						Add a new way to handle a binding
+						Add a plugin
+
+Note that once added, the function adds a "plugins" property to the plugin.
+It's an object that holds a name property, with the registered name of the plugin
+and an apply function, to use on new nodes that the plugin would generate
 						
 						
 					</div>
@@ -454,13 +422,13 @@ ul.inheritsList
 									<span class="light fixedFont">{String}</span> <b>name</b>
 									
 								</dt>
-								<dd>of the binding</dd>
+								<dd>the name of the data that the plugin should look for</dd>
 							
 								<dt>
-									<span class="light fixedFont">{Function}</span> <b>binding</b>
+									<span class="light fixedFont">{Object}</span> <b>plugin</b>
 									
 								</dt>
-								<dd>the function to handle the binding</dd>
+								<dd>the plugin that has the functions to execute</dd>
 							
 							</dl>
 						
@@ -471,7 +439,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd></dd>
+								<dd>true if plugin successfully added.</dd>
 							
 							</dl>
 						
@@ -480,15 +448,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="addBindings"> </a>
+					<a name="addAll"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>addBindings</b>(list)
+					<b>addAll</b>(list)
 					
 					</div>
 					<div class="description">
-						Add multiple binding at once
+						Add multiple plugins at once
 						
 						
 					</div>
@@ -503,7 +471,7 @@ ul.inheritsList
 									<span class="light fixedFont">{Object}</span> <b>list</b>
 									
 								</dt>
-								<dd>the list of bindings to add</dd>
+								<dd>key is the plugin name and value is the plugin</dd>
 							
 							</dl>
 						
@@ -514,7 +482,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd></dd>
+								<dd>true if correct param</dd>
 							
 							</dl>
 						
@@ -523,15 +491,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="bind"> </a>
+					<a name="apply"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>bind</b>(node, name, name)
+					<span class="light">{Boolean}</span>
+					<b>apply</b>(dom)
 					
 					</div>
 					<div class="description">
-						Both ways binding between a dom node attributes and the model
+						Apply the plugins to a NodeList
 						
 						
 					</div>
@@ -543,22 +511,53 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>node</b>
+									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>dom</b>
 									
 								</dt>
-								<dd>the dom node to apply the plugin to</dd>
+								<dd>the dom nodes on which to apply the plugins</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if the param is a dom node</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="del"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>del</b>(name)
+					
+					</div>
+					<div class="description">
+						Delete a plugin from the list
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>name</b>
 									
 								</dt>
-								<dd>the name of the property to look for in the model's value</dd>
-							
-								<dt>
-									<b>name</b>
-									
-								</dt>
-								<dd></dd>
+								<dd>the name of the plugin</dd>
 							
 							</dl>
 						
@@ -569,7 +568,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd></dd>
+								<dd><span class="light fixedFont">{Boolean}</span> true if success</dd>
 							
 							</dl>
 						
@@ -578,15 +577,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="foreach"> </a>
+					<a name="get"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>foreach</b>(node, idItemRenderer, start, nb)
+					<span class="light">{Object}</span>
+					<b>get</b>(name)
 					
 					</div>
 					<div class="description">
-						Expands the inner dom nodes of a given dom node, filling it with model's values
+						Get a previously added plugin
 						
 						
 					</div>
@@ -598,64 +597,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>node</b>
+									<span class="light fixedFont">{String}</span> <b>name</b>
 									
 								</dt>
-								<dd>the dom node to apply foreach to</dd>
-							
-								<dt>
-									<b>idItemRenderer</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>start</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>nb</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="form"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>form</b>(form)
-					
-					</div>
-					<div class="description">
-						Prevents the submit and set the model with all form's inputs
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{HTMLFormElement}</span> <b>form</b>
-									
-								</dt>
-								<dd></dd>
+								<dd>the name of the plugin</dd>
 							
 							</dl>
 						
@@ -666,191 +611,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if valid form</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="refresh"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>refresh</b>(id)
-					
-					</div>
-					<div class="description">
-						Refresh a foreach after having modified its limits
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>id</b>
-									
-								</dt>
-								<dd>the id of the foreach to refresh</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>true if the foreach exists</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="setModel"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{Boolean}</span>
-					<b>setModel</b>(model)
-					
-					</div>
-					<div class="description">
-						Define the model to watch for
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Store}</span> <b>model</b>
-									
-								</dt>
-								<dd>the model to watch for changes</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Boolean}</span> true if the model was set</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="updateNb"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>updateNb</b>(id, nb)
-					
-					</div>
-					<div class="description">
-						Update the number of item to display in a foreach
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>id</b>
-									
-								</dt>
-								<dd>the id of the foreach to update</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>nb</b>
-									
-								</dt>
-								<dd>the number of items to display</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>true if the foreach exists</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="updateStart"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>updateStart</b>(id, start)
-					
-					</div>
-					<div class="description">
-						Update the lower boundary of a foreach
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>id</b>
-									
-								</dt>
-								<dd>the id of the foreach to update</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>start</b>
-									
-								</dt>
-								<dd>the new value</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>true if the foreach exists</dd>
+								<dd><span class="light fixedFont">{Object}</span> the plugin</dd>
 							
 							</dl>
 						
@@ -871,7 +632,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Jul 27 2012 12:25:39 GMT+0200 (CEST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Jul 27 2012 12:48:06 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>
