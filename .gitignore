@@ -3,3 +3,5 @@
 .project
 */.DS_Store
 build
+.DS_Store
+material/

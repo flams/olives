@@ -1,3 +1,24 @@
+###############################################################################################
+# Olives http://flams.github.com/olives
+# The MIT License (MIT)
+# Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com>
+#
+# Targets:
+#
+# make tests-jstd: runs the JsTestDriver tests
+# make tests: runs both tests
+#
+# make docs: generates the documentation into docs/latest
+# make build: generates Olives.js and Olives.min.js as they appear in the release
+#
+# make all: tests + docs + build
+#
+# make release VERSION=x.x.x: make all, then creates the package and pushes to github
+#
+# make gh-pages VERSION=x.x.x: generates the web site with latest version and pushes to github
+#
+################################################################################################
+
 SRC := $(wildcard src/*.js)
 JsTestDriver = $(shell find tools -name "JsTestDriver-*.jar" -type f)
 
@@ -43,6 +64,12 @@ endif
 	
 	cp -rf docs/latest/ docs/$(VERSION)/
 	
+	$(MAKE) clean-build
+	
+	git commit -am "released version $(VERSION)"
+	
+	git push
+	
 Olives.js: $(SRC)
 	mkdir -p build
 	cat LICENSE-MINI $(SRC) > build/$@
@@ -63,13 +90,8 @@ endif
 
 	git checkout gh-pages
 	
-	git checkout master Makefile
-	git checkout master docs; git add docs
-	git checkout master src; git add src
-	git checkout master specs; git add specs
-	git checkout master tools; git add lib
-	git checkout master lib; git add lib
-	git checkout master release; git add release
+	git checkout master Makefile docs src specs tools lib release
+	git add docs src specs tools lib release
 	
 	sed -i .bak 's#version">.*<#version">'${VERSION}'<#g' index.html
 	sed -i .bak 's#<a href="release/Olives.*\.tgz">#<a href="release/Olives-'${VERSION}'.tgz">#' index.html
@@ -80,8 +102,6 @@ endif
 	git push
 	
 	git checkout master
-	
-	git push
 	
 	
 .PHONY: docs clean-docs clean-build build tests release clean gh-pages	
