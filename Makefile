@@ -65,11 +65,17 @@ endif
 	cp -rf docs/latest/ docs/$(VERSION)/
 	
 	$(MAKE) clean-build
+
+	git add docs release
 	
 	git commit -am "released version $(VERSION)"
 	
 	git push
 	
+	git tag $(VERSION)
+
+	git push --tags
+
 Olives.js: $(SRC)
 	mkdir -p build
 	cat LICENSE-MINI $(SRC) > build/$@

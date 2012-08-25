@@ -28,26 +28,6 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 
 	});
 
-	describe("TransportTestAPI", function () {
-
-		var transport = null;
-
-		beforeEach(function () {
-			transport = new Transport();
-		});
-
-		it("should have the correct API", function () {
-			expect(transport.connect).toBeInstanceOf(Function);
-			expect(transport.on).toBeInstanceOf(Function);
-			expect(transport.emit).toBeInstanceOf(Function);
-			expect(transport.getSocket).toBeInstanceOf(Function);
-			expect(transport.setIO).toBeInstanceOf(Function);
-			expect(transport.getIO).toBeInstanceOf(Function);
-			expect(transport.request).toBeInstanceOf(Function);
-			expect(transport.listen).toBeInstanceOf(Function);
-		});
-	});
-
 	describe("TransportTestInit", function () {
 
 		var transport = null;
@@ -55,7 +35,7 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 		beforeEach(function () {
 			transport = new Transport();
 		});
-		
+
 		it("should set the io handler (socket.io)", function () {
 			expect(transport.getIO()).toBeNull();
 			expect(transport.setIO()).toEqual(false);
@@ -97,7 +77,8 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 	describe("TransportTestRequests", function () {
 
 		var transport = null,
-		socket = null;
+			socket = null,
+			reqData = {};
 
 		beforeEach(function () {
 			transport = new Transport(io, "/");
@@ -106,9 +87,12 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 
 		it("should subscribe to events", function () {
 			var event = "event",
-			func = function () {};
+			func = function () {},
+			returnValue = {};
 
-			transport.on(event, func);
+			socket.on.andReturn(returnValue);
+
+			expect(transport.on(event, func)).toBe(returnValue);
 
 			expect(socket.on.wasCalled).toEqual(true);
 			expect(socket.on.mostRecentCall.args[0]).toEqual(event);
@@ -118,11 +102,13 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 
 		it("should subscribe to events and disconnect after it fires", function () {
 			var event = "event",
-			func = function () {};
+			func = function () {},
+			returnValue = {};
 
 			expect(transport.once).toBeInstanceOf(Function);
+			socket.once.andReturn(returnValue);
 
-			transport.once(event, func);
+			expect(transport.once(event, func)).toBe(returnValue);
 
 			expect(socket.once.wasCalled).toEqual(true);
 			expect(socket.once.mostRecentCall.args[0]).toEqual(event);
@@ -132,9 +118,11 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 		it("should emit events", function () {
 			var	event = "event",
 			data = {},
-			callback = function () {};
+			callback = function () {},
+			returnValue = {};
 
-			transport.emit(event, data, callback);
+			socket.emit.andReturn(returnValue);
+			expect(transport.emit(event, data, callback)).toBe(returnValue);
 
 			expect(socket.emit.wasCalled).toEqual(true);
 			expect(socket.emit.mostRecentCall.args[0]).toEqual(event);
@@ -142,197 +130,125 @@ require(["Olives/Transport", "Observable"], function (Transport, Observable) {
 			expect(socket.emit.mostRecentCall.args[2]).toBe(callback);
 		});
 
+		it("should remove listeners", function () {
+			var	event = "event",
+			data = {},
+			callback = function () {},
+			returnValue = {};
+
+			socket.removeListener.andReturn(returnValue);
+			expect(transport.removeListener(event, data, callback)).toBe(returnValue);
+
+			expect(socket.removeListener.wasCalled).toEqual(true);
+			expect(socket.removeListener.mostRecentCall.args[0]).toEqual(event);
+			expect(socket.removeListener.mostRecentCall.args[1]).toEqual(data);
+			expect(socket.removeListener.mostRecentCall.args[2]).toBe(callback);
+		});
+
 		it("should make requests", function () {
-			var channel = "File",
-			requestData = {
-					resource: "image.jpg"
-			},
-			callback = jasmine.createSpy(),
-			eventId;
+			var eventId;
 
-
-			socket.once = function (id, func) {
-				func();
-			};
-			spyOn(socket, "once").andCallThrough();
+			spyOn(transport, "once").andCallThrough();
 
 			expect(transport.request).toBeInstanceOf(Function);
 
-			transport.request(channel, requestData, callback);
+			expect(transport.request()).toEqual(false);
+			expect(transport.request("channel")).toEqual(false);
+			expect(transport.request("channel", "data")).toEqual(true);
 
-			expect(socket.once.wasCalled).toEqual(true);
+			expect(transport.once.wasCalled).toEqual(true);
 
 			eventId = socket.once.mostRecentCall.args[0];
 			expect(eventId).toBeTruthy();
 
 			expect(socket.once.mostRecentCall.args[1]).toBeInstanceOf(Function);
-			expect(callback.wasCalled).toEqual(true);
+
 			expect(socket.emit.wasCalled).toEqual(true);
-			expect(socket.emit.mostRecentCall.args[0]).toEqual(channel);
-			expect(socket.emit.mostRecentCall.args[1]).toBeInstanceOf(Object);
-			expect(socket.emit.mostRecentCall.args[1].__eventId__).toEqual(eventId);
+			expect(socket.emit.mostRecentCall.args[0]).toEqual("channel");
+			expect(socket.emit.mostRecentCall.args[1].data).toEqual("data");
+			expect(socket.emit.mostRecentCall.args[1].eventId).toEqual(eventId);
 		});
 
-		it("should not fail if a request is made without callback function", function () {
-			var channel = "File",
-			requestData = {
-					resource: "image.jpg"
-			};
+		it("should make requests with callbacks", function () {
+			var callback = jasmine.createSpy(),
+				func,
+				args = {};
 
-			socket.once = function (id, func) {
-				func();
-			};
-			expect(function () {
-				transport.request(channel, requestData);
-			}).not.toThrow();
+			expect(transport.request("channel", "data", callback)).toEqual(true);
+
+			func = socket.once.mostRecentCall.args[1];
+			expect(func).toBeInstanceOf(Function);
+
+			func(args);
+
+			expect(callback.wasCalled).toEqual(true);
+			expect(callback.mostRecentCall.args[0]).toBe(args);
 		});
 
 		it("should make requests in scope", function () {
-			var channel = "File",
-			requestData = {
-					resource: "image.jpg"
-			},
-			callback = jasmine.createSpy(),
-			thisObj = {};
+			var callback = jasmine.createSpy(),
+				scope = {};
 
-			socket.once = function (id, func) {
-				func();
-			};
-			spyOn(socket, "once").andCallThrough();
-			transport.request(channel, requestData, callback, thisObj);
-			expect(callback.wasCalled).toEqual(true);
+			expect(transport.request("channel", "data", callback, scope)).toEqual(true);
+
+			socket.once.mostRecentCall.args[1]();
+
+			expect(callback.mostRecentCall.object).toBe(scope)
 		});
 
-		it("should also listen on a kept-alive socket", function () {
-			var channel = "File",
-			url = "image.jpg",
-			callback = jasmine.createSpy(),
-			listen,
-			eventId;
+		it("should also listen to kept-alive socket", function () {
+			var callback = jasmine.createSpy(),
+				eventId,
+				func;
 
-			socket.on = function (id, func) {
-				func();
-			};
-			spyOn(socket, "on").andCallThrough();
+			spyOn(transport, "on").andCallThrough();
 
 			expect(transport.listen).toBeInstanceOf(Function);
 
-			spyOn(transport, "request").andCallThrough();
-			stop = transport.listen(channel, {path: url}, callback);
+			expect(transport.listen()).toEqual(false);
+			expect(transport.listen("channel")).toEqual(false);
+			expect(transport.listen("channel", "data")).toEqual(false);
+			expect(transport.listen("channel", "data", callback)).toBeTruthy();
 
-			expect(stop).toBeInstanceOf(Function);
-
-			expect(socket.on.wasCalled).toEqual(true);
+			expect(transport.on.wasCalled).toEqual(true);
 
 			eventId = socket.on.mostRecentCall.args[0];
 			expect(eventId).toBeTruthy();
-			
-			stop();
 
-			expect(socket.emit.mostRecentCall.args[0]).toEqual("disconnect-" + eventId);
-			expect(socket.removeListener.mostRecentCall.args[0]).toEqual(eventId);
-			expect(socket.removeListener.mostRecentCall.args[1]).toBeInstanceOf(Function);
-			expect(transport.request.wasCalled).toEqual(true);
-			expect(transport.request.mostRecentCall.args[1].__keepalive__).toEqual(true);
-			expect(transport.request.mostRecentCall.args[1].method).toEqual("GET");
-			expect(transport.request.mostRecentCall.args[1].path).toEqual(url);
+			func = socket.on.mostRecentCall.args[1];
+			expect(func).toBeInstanceOf(Function);
+			func();
 
-		});
-		
-		it("should save the function to stop listening (the request's return) in an object", function () {
-			expect(transport.getStopFunctions).toBeInstanceOf(Function);
-			expect(transport.getStopFunctions()).toBeInstanceOf(Object);
-		});
-		
-		it("should allow for multiple listeners on the same url", function () {
-			var channel = "DB",
-				url = "changes",
-				callback1 = jasmine.createSpy(),
-				callback2 = jasmine.createSpy(),
-				stop = jasmine.createSpy(),
-				observable,
-				stops,
-				stop1,
-				stop2;
-			
-			observable = transport.getListenObservable();
-			spyOn(observable, "unwatch").andCallThrough();
-			spyOn(transport, "request").andReturn(stop);
-				
-			stop1 = transport.listen(channel, {path: url}, callback1);
-			stop2 = transport.listen(channel, {path: url}, callback2);
-			
-			stops = transport.getStopFunctions();
-			
-			expect(stops["DB/changes"]).toBe(stop);
-
-			observable.notify("DB/changes", "called");
-			
-			expect(callback1.wasCalled).toEqual(true);
-			expect(callback1.mostRecentCall.args[0]).toEqual("called");
-			expect(callback2.wasCalled).toEqual(true);
-			expect(callback2.mostRecentCall.args[0]).toEqual("called");
-			
-			stop1();
-			stop2();
-			
-			expect(observable.unwatch.callCount).toEqual(2);
-			expect(stop.callCount).toEqual(1);
-
+			expect(socket.emit.wasCalled).toEqual(true);
+			expect(socket.emit.mostRecentCall.args[0]).toEqual("channel");
+			expect(socket.emit.mostRecentCall.args[1].data).toEqual("data");
+			expect(socket.emit.mostRecentCall.args[1].eventId).toEqual(eventId);
 		});
 
-		it("should implement an observable for the listen func", function () {
-			var channel = "DB",
-				url = "changes",
-				observable,
-				listen;
+		it("should return a stop function that disconnects the channel", function () {
+			var callback = jasmine.createSpy(),
+				eventId,
+				stopFunc;
 
-			expect(transport.getListenObservable).toBeInstanceOf(Function);
-			observable = transport.getListenObservable();
-			expect(observable).toBeInstanceOf(Observable);
+			spyOn(transport, "on");
+			spyOn(transport, "emit");
+			spyOn(transport, "removeListener");
 
-			spyOn(observable, "watch").andCallThrough();
-			spyOn(observable, "unwatch").andCallThrough();
-			stop = transport.listen(channel, {path: url}, function () {});
-			expect(observable.watch.wasCalled).toEqual(true);
-			expect(observable.watch.mostRecentCall.args[0]).toEqual(channel+"/"+url);
+			var stopFunc = transport.listen("channel", "data", callback);
+			eventId = transport.on.mostRecentCall.args[0];
 
-			stop();
+			expect(stopFunc.name).toEqual("stop");
 
-			expect(observable.unwatch.wasCalled).toEqual(true);
-			expect(observable.unwatch.mostRecentCall.args[0]).toBeInstanceOf(Array);
+			stopFunc();
 
-		});
-		
-		it("should let query strings pass", function () {
-			var channel = "DB",
-				reqData = {
-					path: "/",
-					query: {
-						param1: true,
-						hello: "world"
-					}
-				};
-			
-			spyOn(transport, "request");
-			
-			transport.listen(channel, reqData, function () {});
-			expect(transport.request.mostRecentCall.args[1].query).toBe(reqData.query);
-		});
-			
+			expect(transport.emit.wasCalled).toEqual(true);
+			expect(transport.emit.mostRecentCall.args[0]).toEqual("disconnect-" + eventId);
 
-		it("should listen to the same path only once", function () {
-			var channel = "DB",
-			url = "changes",
-			callback = jasmine.createSpy();
+			expect(transport.removeListener.wasCalled).toEqual(true);
+			expect(transport.removeListener.mostRecentCall.args[0]).toEqual(eventId);
+			expect(transport.removeListener.mostRecentCall.args[1]).toBe(transport.on.mostRecentCall.args[1]);
 
-			spyOn(transport, "request");
 
-			transport.listen(channel, {path: url}, callback);
-			transport.listen(channel, {path: url}, callback);
-			expect(transport.request.callCount).toEqual(1);
-			transport.listen(channel, {path: "otherpath"}, callback);
-			expect(transport.request.callCount).toEqual(2);
 		});
 
 	});
