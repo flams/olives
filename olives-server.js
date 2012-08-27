@@ -25,7 +25,7 @@ exports.registerSocketIO = function (io) {
 				socket.on(handler, function (reqData) {
 
 					// Add socket.io's handshake for session management
-					reqData.handshake = socket.handshake;
+					reqData.data.handshake = socket.handshake;
 
 					// pass it the requests data
 					var stop = func(reqData.data,
