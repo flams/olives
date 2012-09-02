@@ -16,7 +16,7 @@ requirejs(__dirname + "/build/Emily.js");
 // We're going to need Stores to store the handlers.
 // The Store's observers can be useful. They'll actually be used by Olives
 requirejs(["Store"], function (Store) {
-	
+
 	// There's a store to save the configuration
 	exports.config = new Store({
 		// CouchDB is built-in
@@ -29,39 +29,39 @@ requirejs(["Store"], function (Store) {
 
 	// There's a store to save each handler
 	exports.handlers = new Store({
-		
+
 		// CouchDB is built-in
 		"CouchDB" : function (data, onEnd, onData) {
-			
+
 			var cfg = exports.config.get("CouchDB"),
 				req;
-			
+
 			data.hostname = cfg.hostname;
 			data.port = cfg.port;
 			data.path += "?" + qs.stringify(data.query);
-			
+
 			var exec = function () {
 				req = http.request(data, function (res) {
-					
+
 					var body = "";
-					
-					res.on('data', function (chunk) {
+
+					res.on("data", function (chunk) {
 						onData && onData(chunk);
 						body += chunk;
 					});
-					
-					res.on('end', function () {
+
+					res.on("end", function () {
 						onEnd(body);
 					});
 				});
-				
+
 				req.end(data.data, "utf8");
 			};
 
 			if (data.handshake) {
 
 				var cookieJSON = cookie.parse(data.handshake.headers.cookie);
-	
+
 				// I don't like the split but is there a better solution?
 				cfg.sessionStore.get(cookieJSON["suggestions.sid"].split("s:")[1].split(".")[0], function (err, session) {
 					if (err) {
@@ -79,9 +79,9 @@ requirejs(["Store"], function (Store) {
 				req.abort && req.abort();
 			};
 		}
-	
+
 	});
-	
+
 });
 
 module.exports.requirejs = requirejs;
