@@ -19,7 +19,7 @@
  ],
  "dependencies": {
   "requirejs": ">=2.0.4",
-  "emily": ">=1.1.8",
+  "emily": ">=1.1.9",
   "socket.io": ">=0.9.6"
   },
  "keywords": ["framework", "web", "realtime", "UI", "CouchDB", "AMD/commonJS", "requirejs"],
