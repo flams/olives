@@ -18,6 +18,87 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 		});
 		
 	});
+
+	describe("ParentObjectHandler", function(){
+		var plugin = null;
+		beforeEach(function(){
+			plugin = new EventPlugin();
+		});
+
+		it("should have getter/setter functions", function(){
+			expect(plugin.setParent).toBeInstanceOf(Function);
+			expect(plugin.parent).toBeInstanceOf(Function);
+		});
+
+		it("should haven't default parent", function(){
+			expect(plugin.parent()).toBe(null);
+		});
+
+		it("should allow to set parent object", function(){
+			var obj = {};
+			expect(plugin.setParent(obj)).toEqual(true);
+			expect(plugin.parent()).toBe(obj);
+		});
+
+		it("should only set object as parent", function(){
+			expect(plugin.setParent("test")).toEqual(false);
+			expect(plugin.setParent(true)).toEqual(false);
+			expect(plugin.setParent()).toEqual(false);
+			expect(plugin.setParent(null)).toEqual(false);
+			expect(plugin.setParent({})).toEqual(true);
+		});
+
+		it("should set parent at init if defined", function(){
+			var obj = {};
+			var plugin = new EventPlugin(obj);
+			expect(plugin.parent()).toBe(obj);
+		});
+
+	});
+
+	describe("MapHandler", function(){
+		var plugin = null;
+		beforeEach(function(){
+			plugin = new EventPlugin({}, true);
+		});
+		it("should have getter/setter functions", function(){
+			expect(plugin.map).toBeInstanceOf(Function);
+			expect(plugin.setMap).toBeInstanceOf(Function);
+		});
+
+		//should we have a isMobile function?
+		it("should by default map mouse with touch events", function(){
+			expect(plugin.map("mousedown")).toEqual("touchstart");
+			expect(plugin.map("mousemove")).toEqual("touchmove");
+			expect(plugin.map("mouseup")).toEqual("touchend");
+		});
+
+		it("should return none mobile events", function(){
+			//none or false
+			var plugin = new EventPlugin({});
+			expect(plugin.map("mousedown")).toEqual("mousedown");
+			expect(plugin.map("mousemove")).toEqual("mousemove");
+			expect(plugin.map("mouseup")).toEqual("mouseup");
+		});
+
+		it("should not map unset events", function(){
+			expect(plugin.map("click")).toEqual("click");
+			expect(plugin.map("touchcancel")).toEqual("touchcancel");
+		});
+
+		it("should set map", function(){
+			expect(plugin.setMap("click", "touchcancel")).toEqual(true);
+			expect(plugin.map("click")).toEqual("touchcancel");
+			expect(plugin.setMap("mousedown", "touchcancel")).toEqual(true);
+			expect(plugin.map("mousedown")).toEqual("touchcancel");
+			expect(plugin.setMap("mouseup")).toEqual(false);
+			expect(plugin.map("mouseup")).toEqual("touchend");
+			expect(plugin.setMap()).toEqual(false);
+			expect(plugin.setMap(undefined, "touchstart")).toEqual(false);
+			expect(plugin.setMap("mousedown", false)).toEqual(false);
+			expect(plugin.map("mousedown")).toEqual("touchcancel");
+		});
+	});
 	
 	describe("EventPluginListen", function() {
 		
