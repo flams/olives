@@ -158,4 +158,26 @@ require(["Olives/DomUtils"], function (DomUtils) {
 		});
 		
 	});
+
+	describe("DomUtilsMatches", function(){
+
+		it("should be a function", function(){
+			expect(DomUtils.matches).toBeInstanceOf(Function);
+		});
+
+		//matchesSelector exists with prefix vendor
+		it("should determine if an element matches a certain CSS selector from a parent node", function(){
+			var parent = document.createElement("div");
+			var node = document.createElement("p");
+			node.className = "is awesome";
+			parent.appendChild(node);
+
+
+			expect(DomUtils.matches(node, "p", parent)).toEqual(true);
+			expect(DomUtils.matches(node, "p.is.awesome", parent)).toEqual(true);
+			expect(DomUtils.matches(node, ".other", parent)).toEqual(false);
+			expect(DomUtils.matches(node, "#other", parent)).toEqual(false);
+		});
+
+	});
 });

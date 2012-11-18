@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/DomUtils", function () {
+define("Olives/DomUtils", ["Tools"], function (Tools) {
 
 	return {
 		/**
@@ -89,6 +89,17 @@ define("Olives/DomUtils", function () {
 				} else {
 					return false;
 				}
+		},
+
+		/**
+		 * Determine if an element matche a certain CSS selector.
+		 * @param {Element} the node to check out
+		 * @param {String} CSS selector
+		 * @param {Element} the parent node
+		 * @param true if matches
+		 */
+		matches : function matches(node, selector, parent){
+			return Tools.toArray(this.getNodes(parent, selector)).indexOf(node) > -1;
 		}
 	
 	};
