@@ -12,11 +12,6 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 			expect(EventPlugin).toBeInstanceOf(Function);
 		});
 		
-		it("Should have the following API", function() {
-			var eventPlugin = new EventPlugin();
-			expect(eventPlugin.listen).toBeInstanceOf(Function);
-		});
-		
 	});
 
 	describe("ParentObjectHandler", function(){
@@ -86,6 +81,7 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 			expect(plugin.map("touchcancel")).toEqual("touchcancel");
 		});
 
+		//is it necessary to return boolean when set?
 		it("should set map", function(){
 			expect(plugin.setMap("click", "touchcancel")).toEqual(true);
 			expect(plugin.map("click")).toEqual("touchcancel");
@@ -97,6 +93,43 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 			expect(plugin.setMap(undefined, "touchstart")).toEqual(false);
 			expect(plugin.setMap("mousedown", false)).toEqual(false);
 			expect(plugin.map("mousedown")).toEqual("touchcancel");
+		});
+	});
+
+	/* we could do a private structure by creating a property object with all utils and that
+	 we freeze */
+
+	describe("EventPluginAddEventListener", function(){
+
+		var eventPlugin = null,
+			node = null;
+			
+		beforeEach(function() {
+			node = document.createElement("div");
+			eventPlugin = new EventPlugin({}, true);
+			spyOn(node, "addEventListener").andCallThrough();
+		});
+
+		it("should add an event listener", function(){
+			expect(eventPlugin.addEventListener).toBeInstanceOf(Function);
+		});
+
+		it("should listen event from the given node", function(){
+
+			var func = function(){};
+			eventPlugin.addEventListener(node, "click", func, true);
+
+			expect(node.addEventListener.wasCalled).toEqual(true);
+			expect(node.addEventListener.mostRecentCall.args[0]).toEqual("click");
+			expect(node.addEventListener.mostRecentCall.args[1]).toBe(func);
+			expect(node.addEventListener.mostRecentCall.args[2]).toEqual(true);
+
+
+		});
+
+		it("should map events according the browser type", function(){
+			eventPlugin.addEventListener(node, "mousedown", function(){}, "true");
+			expect(node.addEventListener.mostRecentCall.args[0]).toEqual("touchstart");
 		});
 	});
 	
@@ -114,28 +147,31 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 			obj = new _func();
 			dom = document.createElement("button");
 			eventPlugin = new EventPlugin(obj);
+			spyOn(eventPlugin, "addEventListener").andCallThrough();
+		});
+
+		it("should have a listen function", function(){
+			expect(eventPlugin.listen).toBeInstanceOf(Function);
 		});
 		
-		it("Link addEventListener with the dom", function() {
-			spyOn(dom,"addEventListener").andCallThrough();
-			spyOn(obj, "listener");
+		//shoud we just triger events to test the listen method?
+		it("should add dom event listener", function() {
 			
 			eventPlugin.listen(dom,"click","listener","true");
-			expect(dom.addEventListener.wasCalled).toEqual(true);
-			expect(dom.addEventListener.mostRecentCall.args[0]).toEqual("click");
-			//expect(dom.addEventListener.mostRecentCall.args[1]).toBe(obj["listener"]);
-			expect(dom.addEventListener.mostRecentCall.args[2]).toEqual(true);
-			
-			eventPlugin.listen(dom,"click","listener","test");
-			expect(dom.addEventListener.mostRecentCall.args[2]).toEqual(false);
-			
-			eventPlugin.listen(dom,"click","listener","false");
-			expect(dom.addEventListener.mostRecentCall.args[2]).toEqual(false);
-			
-			eventPlugin.listen(dom,"click","listener");
-			expect(dom.addEventListener.mostRecentCall.args[2]).toEqual(false);
-			
-			var test = dom.addEventListener.mostRecentCall.args[1];
+			expect(eventPlugin.addEventListener.wasCalled).toEqual(true);
+			expect(eventPlugin.addEventListener.mostRecentCall.args[0]).toBe(dom);
+			expect(eventPlugin.addEventListener.mostRecentCall.args[1]).toEqual("click");
+			expect(eventPlugin.addEventListener.mostRecentCall.args[3]).toEqual(true);
+
+		});
+
+		it("should call the parent callback with parameters", function(){
+
+			spyOn(obj, "listener");
+
+			eventPlugin.listen(dom,"click","listener","true");
+
+			var test = eventPlugin.addEventListener.mostRecentCall.args[2];
 			expect(test).toBeInstanceOf(Function);
 			var param = {};
 			test(param);
@@ -144,6 +180,49 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 			//test listener paramter
 			expect(obj.listener.mostRecentCall.args[0]).toBe(param);
 			expect(obj.listener.mostRecentCall.args[1]).toBe(dom);
+		});
+	});
+
+	describe("EventPluginDelegate", function(){
+		var eventPlugin = null,
+			dom = null,
+			obj = null;
+
+		beforeEach(function(){
+			obj = {
+				listener : jasmine.createSpy("listener")
+			};
+			dom = document.createElement("div");
+			dom.className = "is awesome";
+			eventPlugin = new EventPlugin(obj);
+			spyOn(eventPlugin, "addEventListener").andCallThrough();
+		});
+
+		it("should have a delegate function", function(){
+			expect(eventPlugin.delegate).toBeInstanceOf(Function);
+		});
+
+		it("should add dom event listener", function(){
+			eventPlugin.delegate(dom, "div.is.awesome", "click", "listener", "true");
+			expect(eventPlugin.addEventListener.wasCalled).toEqual(true);
+			expect(eventPlugin.addEventListener.mostRecentCall.args[0]).toEqual(dom);
+			expect(eventPlugin.addEventListener.mostRecentCall.args[1]).toEqual("click");
+			expect(eventPlugin.addEventListener.mostRecentCall.args[3]).toEqual(true);
+		});
+
+		it("should call the parent callback only if query matches with event target", function(){
+			var node = document.createElement("div");
+			node.appendChild(dom);
+
+			eventPlugin.delegate(dom, "button #test", "click", "listener", "true");
+			expect(obj.listener).not.toHaveBeenCalled();
+
+			eventPlugin.delegate(dom, "div.is.awesome", "click", "listener", "true");
+
+			eventPlugin.addEventListener.mostRecentCall.args[2].call(null, {
+				target : dom
+			});
+			expect(obj.listener).toHaveBeenCalled();
 		});
 	});
 	
