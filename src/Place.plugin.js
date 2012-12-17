@@ -4,16 +4,14 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/UI-plugin", 
-		
-["Olives/OObject", "Tools"],
-		
+define(["Olives/OObject", "Tools"],
+
 function (OObject, Tools) {
-	
-	return function TypePluginConstructor($uis) {
-	
+
+	return function PlacePluginConstructor($uis) {
+
 		var _uis = {};
-		
+
 		this.place = function place(node, name) {
 			if (_uis[name] instanceof OObject) {
 				_uis[name].place(node);
@@ -21,7 +19,7 @@ function (OObject, Tools) {
 				throw new Error(name + " is not an OObject UI in place:"+name);
 			}
 		};
-		
+
 		this.set = function set(name, ui) {
 			if (typeof name == "string" && ui instanceof OObject) {
 				_uis[name] = ui;
@@ -30,19 +28,19 @@ function (OObject, Tools) {
 				return false;
 			}
 		};
-		
+
 		this.setAll = function setAll(uis) {
 			Tools.loop(uis, function (ui, name) {
 				this.set(name, ui);
 			}, this);
 		};
-		
+
 		this.get = function get(name) {
 			return _uis[name];
 		};
-		
+
 		this.setAll($uis);
-		
+
 	};
-	
+
 });

@@ -4,9 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/Transport",
-
-["Observable", "Tools"],
+define(["Observable", "Tools"],
 /**
  * @class
  * Transport allows for client-server eventing.

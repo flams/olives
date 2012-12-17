@@ -4,8 +4,8 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/Plugins", ["Tools", "Olives/DomUtils"],
-		
+define(["Tools", "Olives/DomUtils"],
+
 /**
  * @class
  * Plugins is the link between the UI and your plugins.
@@ -16,9 +16,9 @@ define("Olives/Plugins", ["Tools", "Olives/DomUtils"],
  * @requires Tools
  */
 function Plugins(Tools, DomUtils) {
-	
+
 	return function PluginsConstructor() {
-		
+
 		/**
 		 * The list of plugins
 		 * @private
@@ -33,7 +33,7 @@ function Plugins(Tools, DomUtils) {
 		trim = function trim(string) {
 			return string.trim();
 		},
-			
+
 		/**
 		 * Call the plugins methods, passing them the dom node
 		 * A phrase can be :
@@ -52,7 +52,7 @@ function Plugins(Tools, DomUtils) {
 				method = split[0].trim(),
 				// And the params, if any
 				params = split[1] ? split[1].split(",").map(trim) : [];
-				
+
 				// The first param must be the dom node
 				params.unshift(node);
 
@@ -64,14 +64,14 @@ function Plugins(Tools, DomUtils) {
 
 			});
 		};
-		
+
 		/**
 		 * Add a plugin
-		 * 
+		 *
 		 * Note that once added, the function adds a "plugins" property to the plugin.
 		 * It's an object that holds a name property, with the registered name of the plugin
 		 * and an apply function, to use on new nodes that the plugin would generate
-		 * 
+		 *
 		 * @param {String} name the name of the data that the plugin should look for
 		 * @param {Object} plugin the plugin that has the functions to execute
 		 * @returns true if plugin successfully added.
@@ -79,10 +79,10 @@ function Plugins(Tools, DomUtils) {
 		this.add = function add(name, plugin) {
 			var that = this,
 				propertyName = "plugins";
-			
+
 			if (typeof name == "string" && typeof plugin == "object" && plugin) {
 				_plugins[name] = plugin;
-				
+
 				plugin[propertyName] = {
 						name: name,
 						apply: function apply() {
@@ -94,7 +94,7 @@ function Plugins(Tools, DomUtils) {
 				return false;
 			}
 		};
-		
+
 		/**
 		 * Add multiple plugins at once
 		 * @param {Object} list key is the plugin name and value is the plugin
@@ -102,10 +102,10 @@ function Plugins(Tools, DomUtils) {
 		 */
 		this.addAll = function addAll(list) {
 			return Tools.loop(list, function (plugin, name) {
-				this.add(name, plugin); 
+				this.add(name, plugin);
 			}, this);
 		};
-		
+
 		/**
 		 * Get a previously added plugin
 		 * @param {String} name the name of the plugin
@@ -114,7 +114,7 @@ function Plugins(Tools, DomUtils) {
 		this.get = function get(name) {
 			return _plugins[name];
 		};
-		
+
 		/**
 		 * Delete a plugin from the list
 		 * @param {String} name the name of the plugin
@@ -123,31 +123,31 @@ function Plugins(Tools, DomUtils) {
 		this.del = function del(name) {
 			return delete _plugins[name];
 		};
-		
+
 		/**
 		 * Apply the plugins to a NodeList
 		 * @param {HTMLElement|SVGElement} dom the dom nodes on which to apply the plugins
 		 * @returns {Boolean} true if the param is a dom node
 		 */
 		this.apply = function apply(dom) {
-			
+
 			var nodes;
-			
+
 			if (DomUtils.isAcceptedType(dom)) {
-				
+
 				nodes = DomUtils.getNodes(dom);
 				Tools.loop(Tools.toArray(nodes), function (node) {
 					Tools.loop(DomUtils.getDataset(node), function (phrase, plugin) {
 						applyPlugin(node, phrase, plugin);
 					});
 				});
-				
+
 				return dom;
-				
+
 			} else {
 				return false;
 			}
 		};
-		
+
 	};
 });
