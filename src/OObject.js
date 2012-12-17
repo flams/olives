@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define(["StateMachine", "Store", "Olives/Plugins", "Olives/DomUtils", "Tools"],
+define(["StateMachine", "Store", "Plugins", "DomUtils", "Tools"],
 /**
 * @class
 * OObject is an abstract class that any UI can inherit from.

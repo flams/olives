@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define(["Store", "Observable", "Tools", "Olives/DomUtils"],
+define(["Store", "Observable", "Tools", "DomUtils"],
 
 /**
  * @class

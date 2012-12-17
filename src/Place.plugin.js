@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define(["Olives/OObject", "Tools"],
+define(["OObject", "Tools"],
 
 function (OObject, Tools) {
 
