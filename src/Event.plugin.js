@@ -7,11 +7,13 @@
 define(["DomUtils"], function (Utils) {
 
 	return function EventPluginConstructor($parent, $isMobile) {
+
 		/**
-		 * The mapping object.
+		 * The parent callback
 		 * @private
 		 */
 		var _parent = null,
+
 		/**
 		 * The mapping object.
 		 * @private
@@ -21,59 +23,60 @@ define(["DomUtils"], function (Utils) {
 			"mouseup" : "touchend",
 			"mousemove" : "touchmove"
 		},
+
 		/**
 		 * Is touch device.
 		 * @private
 		 */
-		_isMobile = $isMobile===true ? $isMobile : false;
+		_isMobile = !!$isMobile,
 
 		/**
 		 * Add mapped event listener (for test purpose).
 		 */
-		this.addEventListener = function(node, event, callback, useCapture){
-			node.addEventListener(this.map(event), callback, useCapture);
+		this.addEventListener = function addEventListener(node, event, callback, useCapture) {
+			node.addEventListener(this.map(event), callback, !!useCapture);
 		};
 
 		/**
-		 * Listen DOM events.
+		 * Listen to DOM events.
 		 * @param {Object} DOM node
 		 * @param {String} event's name
 		 * @param {String} callback's name
 		 * @param {String} useCapture string
 		 */
-		this.listen = function(node, name, listener, useCapture) {
+		this.listen = function listen(node, name, listener, useCapture) {
 			this.addEventListener(node, name, function(e){
 				_parent[listener].call(_parent,e, node);
-			}, (useCapture == "true"));
+			}, !!useCapture);
 		};
 
-		/*
+		/**
 		 *
 		 */
-		this.delegate = function(node, selector, name, listener, useCapture){
+		this.delegate = function delegate(node, selector, name, listener, useCapture) {
 			this.addEventListener(node, name, function(event){
-				if(Utils.matches(node, selector, event.target)) {
+				if (Utils.matches(node, selector, event.target)) {
 					_parent[listener].call(_parent,event, node);
 				}
-			}, (useCapture == "true"));
+			}, !!useCapture);
 		};
 
-		/*
+		/**
 		 * Get the parent object.
 		 * @return {Object} the parent object
 		 */
-		this.parent = function(){
+		this.getParent = function getParent() {
 			return _parent;
 		};
 
-		/*
+		/**
 		 * Set the parent object.
 		 * The parent object is an object which the functions are called by node listeners.
 		 * @param {Object} the parent object
 		 * @return true if object has been set
 		 */
-		this.setParent = function(parent){
-			if(parent instanceof Object){
+		this.setParent = function setParent(parent) {
+			if (parent instanceof Object){
 				_parent = parent;
 				return true;
 			}
@@ -85,9 +88,8 @@ define(["DomUtils"], function (Utils) {
 		 * @param {String} event's name
 		 * @return the mapped event's name
 		 */
-		this.map = function(name){
-			var value = _map[name];
-			return value && _isMobile ? value : name;
+		this.map = function map(name) {
+			return _isMobile ? _map[name] : name;
 		};
 
 		/**
@@ -96,8 +98,9 @@ define(["DomUtils"], function (Utils) {
 		 * @param {String} event's value
 		 * @return true if mapped
 		 */
-		this.setMap = function(name, value){
-			if(typeof name =="string" && typeof value =="string"){
+		this.setMap = function setMap(name, value) {
+			if (typeof name == "string" &&
+				typeof value =="string") {
 				_map[name] = value;
 				return true;
 			}

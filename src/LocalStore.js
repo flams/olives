@@ -33,7 +33,7 @@ function LocalStore(Store, Tools) {
 		 * Saves the current values in localStorage
 		 * @private
 		 */
-		setLocalStorage = function () {
+		setLocalStorage = function setLocalStorage() {
 			_localStorage.setItem(_name, this.toJSON());
 		};
 
