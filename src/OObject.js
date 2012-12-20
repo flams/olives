@@ -4,17 +4,17 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/OObject", ["StateMachine", "Store", "Olives/Plugins", "Olives/DomUtils", "Tools"],
-/** 
-* @class 
+define(["StateMachine", "Store", "Plugins", "DomUtils", "Tools"],
+/**
+* @class
 * OObject is an abstract class that any UI can inherit from.
 * It should provide code that is easy to reuse
 * @requires StateMachine
 */
 function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
-	
+
 	return function OObjectConstructor(otherStore) {
-		
+
 		/**
 		 * This function creates the dom of the UI from it's template
 		 * It then queries the dom for data-model to list them into this.connects
@@ -22,12 +22,12 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		 * @private
 		 */
 		var render = function render(UI) {
-			
+
 			// The place where the template will be created
 			// is either the currentPlace where the node is placed
 			// or a temporary div
 			var baseNode = _currentPlace || document.createElement("div");
-			
+
 			// If the template is set
 			if (UI.template) {
 				// In this function, the thisObject is the UI's prototype
@@ -39,7 +39,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 					// If it's already an HTML element
 					baseNode.appendChild(UI.template);
 				}
-				
+
 				// The UI must be placed in a unique dom node
 				// If not, there can't be multiple UIs placed in the same parentNode
 				// as it wouldn't be possible to know which node would belong to which UI
@@ -49,7 +49,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 				} else {
 					UI.dom = baseNode.childNodes[0];
 				}
-				
+
 				UI.plugins.apply(UI.dom);
 
 			} else {
@@ -57,7 +57,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 				throw Error("UI.template must be set prior to render");
 			}
 		},
-		
+
 		/**
 		 * This function appends the dom tree to the given dom node.
 		 * This dom node should be somewhere in the dom of the application
@@ -72,7 +72,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 				_currentPlace = place;
 			}
 		},
-		
+
 		/**
 		 * Does rendering & placing in one function
 		 * @private
@@ -81,15 +81,15 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 			render(UI);
 			place.apply(null, Tools.toArray(arguments));
 		},
-		
+
 		/**
 		 * This stores the current place
 		 * If this is set, this is the place where new templates
 		 * will be appended
 		 * @private
 		 */
-		_currentPlace = null, 
-		
+		_currentPlace = null,
+
 		/**
 		 * The UI's stateMachine.
 		 * Much better than if(stuff) do(stuff) else if (!stuff and stuff but not stouff) do (otherstuff)
@@ -102,40 +102,40 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 			"Rendered": [["place", place, this],
 			             ["render", render, this]]
 		});
-		
+
 		/**
 		 * The UI's Store
 		 * It has set/get/del/has/watch/unwatch methods
 		 * @see Emily's doc for more info on how it works.
 		 */
 		this.model = otherStore instanceof Store ? otherStore : new Store;
-		
+
 		/**
 		 * The module that will manage the plugins for this UI
 		 * @see Olives/Plugins' doc for more info on how it works.
 		 */
 		this.plugins = new Plugins();
-		
+
 		/**
 		 * Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
 		 * @type string or HTMLElement|SVGElement
 		 */
 		this.template = null;
-		
+
 		/**
 		 * This will hold the dom nodes built from the template.
 		 */
 		this.dom = null;
-		
+
 		/**
 		 * Place the UI in a given dom node
 		 * @param  node the node on which to append the UI
-		 * @param  beforeNode the dom before which to append the UI  
+		 * @param  beforeNode the dom before which to append the UI
 		 */
 		this.place = function place(node, beforeNode) {
 			_stateMachine.event("place", this, node, beforeNode);
 		};
-		
+
 		/**
 		 * Renders the template to dom nodes and applies the plugins on it
 		 * It requires the template to be set first
@@ -143,7 +143,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		this.render = function render() {
 			_stateMachine.event("render", this);
 		};
-		
+
 		/**
 		 * Set the UI's template from a DOM element
 		 * @param {HTMLElement|SVGElement} dom the dom element that'll become the template of the UI
@@ -157,7 +157,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 				return false;
 			}
 		};
-		
+
 		/**
 		 * Transforms dom nodes into a UI.
 		 * It basically does a setTemplateFromDOM, then a place
@@ -173,9 +173,9 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 			} else {
 				return false;
 			}
-			
+
 		};
-		
+
 		/**
 		 * Get the current dom node where the UI is placed.
 		 * for debugging purpose
@@ -185,7 +185,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 		this.getCurrentPlace = function(){
 			return _currentPlace;
 		};
-		
+
 	};
-	
+
 });

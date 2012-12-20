@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/DomUtils", function () {
+define(["Tools"], function (Tools) {
 
 	return {
 		/**
@@ -25,20 +25,20 @@ define("Olives/DomUtils", function () {
 				return false;
 			}
 		},
-	
+
 		/**
-		 * Get a domNode's dataset attribute. If dataset doesn't exist (IE) 
+		 * Get a domNode's dataset attribute. If dataset doesn't exist (IE)
 		 * then the domNode is looped through to collect them.
 		 * @param {HTMLElement|SVGElement} dom
 		 * @returns {Object} dataset
 		 */
 		getDataset: function getDataset(dom) {
 			var i=0,
-				l, 
+				l,
 				dataset={},
 				split,
 				join;
-			
+
 			if (this.isAcceptedType(dom)) {
 				if (dom.hasOwnProperty("dataset")) {
 					return dom.dataset;
@@ -51,12 +51,12 @@ define("Olives/DomUtils", function () {
 					}
 					return dataset;
 				}
-				
+
 			} else {
 				return false;
 			}
 		},
-		
+
 		/**
 		 * Olives can manipulate HTMLElement and SVGElements
 		 * This function tells if an element is one of them
@@ -71,7 +71,7 @@ define("Olives/DomUtils", function () {
 				return false;
 			}
 		},
-		
+
 		/**
 		 * Assign a new value to an Element's property. Works with HTMLElement and SVGElement.
 		 * @param {HTMLElement|SVGElement} node the node which property should be changed
@@ -89,8 +89,19 @@ define("Olives/DomUtils", function () {
 				} else {
 					return false;
 				}
+		},
+
+		/**
+		 * Determine if an element matche a certain CSS selector.
+		 * @param {Element} the node to check out
+		 * @param {String} CSS selector
+		 * @param {Element} the parent node
+		 * @param true if matches
+		 */
+		matches : function matches(node, selector, parent){
+			return Tools.toArray(this.getNodes(parent, selector)).indexOf(node) > -1;
 		}
-	
+
 	};
 
 });

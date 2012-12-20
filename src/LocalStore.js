@@ -4,10 +4,8 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define("Olives/LocalStore", 
-		
-["Store", "Tools"],
-		
+define(["Store", "Tools"],
+
 /**
  * @class
  * LocalStore is an Emily's Store that can be synchronized with localStorage
@@ -16,29 +14,29 @@ define("Olives/LocalStore",
  * Only valid JSON data will be stored
  */
 function LocalStore(Store, Tools) {
-	
+
 	function LocalStoreConstructor() {
-		
+
 		/**
-		 * The name of the property in which to store the data 
+		 * The name of the property in which to store the data
 		 * @private
 		 */
 		var _name = null,
-		
+
 		/**
 		 * The localStorage
 		 * @private
 		 */
 		_localStorage = localStorage,
-		
+
 		/**
 		 * Saves the current values in localStorage
 		 * @private
 		 */
-		setLocalStorage = function () {
+		setLocalStorage = function setLocalStorage() {
 			_localStorage.setItem(_name, this.toJSON());
 		};
-		
+
 		/**
 		 * Override default localStorage with a new one
 		 * @param local$torage the new localStorage
@@ -53,7 +51,7 @@ function LocalStore(Store, Tools) {
 				return false;
 			}
 		};
-		
+
 		/**
 		 * Get the current localStorage
 		 * @returns localStorage
@@ -62,7 +60,7 @@ function LocalStore(Store, Tools) {
 		this.getLocalStorage = function getLocalStorage() {
 			return _localStorage;
 		};
-		
+
 		/**
 		 * Synchronize the store with localStorage
 		 * @param {String} name the name in which to save the data
@@ -70,19 +68,19 @@ function LocalStore(Store, Tools) {
 		 */
 		this.sync = function sync(name) {
 			var json;
-			
+
 			if (typeof name == "string") {
 				_name = name;
 				json = JSON.parse(_localStorage.getItem(name));
-				
+
 				Tools.loop(json, function (value, idx) {
 					if (!this.has(idx)) {
 						this.set(idx, value);
 					}
 				}, this);
-				
+
 				setLocalStorage.call(this);
-				
+
 				// Watch for modifications to update localStorage
 				this.watch("added", setLocalStorage, this);
 				this.watch("updated", setLocalStorage, this);
@@ -93,12 +91,12 @@ function LocalStore(Store, Tools) {
 			}
 		};
 
-		
+
 	}
-	
+
 	return function LocalStoreFactory(init) {
 		LocalStoreConstructor.prototype = new Store(init);
 		return new LocalStoreConstructor;
 	};
-	
+
 });
