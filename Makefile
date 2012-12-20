@@ -88,7 +88,7 @@ Olives.js: temp.js
 		--js_output_file build/Olives.min.js \
 		--create_source_map build/Olives-map
 
-clean: clean-build clean-docs clean temp
+clean: clean-build clean-docs clean-temp
 
 gh-pages: clean
 ifndef VERSION
