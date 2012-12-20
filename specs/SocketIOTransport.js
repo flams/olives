@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["Olives/Transport", "Observable"], function (Transport, Observable) {
+require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 
 	var io = null;
 

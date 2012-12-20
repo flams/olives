@@ -28,7 +28,7 @@ define(["DomUtils"], function (Utils) {
 		 * Is touch device.
 		 * @private
 		 */
-		_isMobile = !!$isMobile,
+		_isMobile = !!$isMobile;
 
 		/**
 		 * Add mapped event listener (for test purpose).
@@ -89,7 +89,7 @@ define(["DomUtils"], function (Utils) {
 		 * @return the mapped event's name
 		 */
 		this.map = function map(name) {
-			return _isMobile ? _map[name] : name;
+			return _isMobile ? (_map[name] || name) : name;
 		};
 
 		/**
@@ -100,7 +100,7 @@ define(["DomUtils"], function (Utils) {
 		 */
 		this.setMap = function setMap(name, value) {
 			if (typeof name == "string" &&
-				typeof value =="string") {
+				typeof value == "string") {
 				_map[name] = value;
 				return true;
 			}

@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], function (ModelPlugin, Store, Plugins, DomUtils) {
+require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, Store, Plugins, DomUtils) {
 
 
 	describe("ModelPluginTest", function () {
@@ -77,11 +77,11 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			spyOn(DomUtils, "setAttribute").andCallThrough();
 			expect(dom.innerHTML).toEqual("Olives is fun!");
 			model.set("content", "Olives is cool!");
-			
+
 			expect(dom.innerHTML).toEqual("Olives is cool!");
 			expect(modelPlugin.observers["content"]).toBeInstanceOf(Array);
 			expect(model.getValueObservable().hasObserver(modelPlugin.observers["content"][0])).toEqual(true);
-			
+
 			expect(DomUtils.setAttribute.wasCalled).toEqual(true);
 			expect(DomUtils.setAttribute.mostRecentCall.args[0]).toBe(dom);
 			expect(DomUtils.setAttribute.mostRecentCall.args[1]).toEqual("innerHTML");
@@ -101,7 +101,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			model.set("content2", "sup!");
 			expect(dom.innerHTML).toEqual("sup!");
 		});
-		
+
 		it("should also work with properties", function () {
 			var dom = document.createElement("input");
 			dom.setAttribute("data-model", "bind:checked,bool");
@@ -111,8 +111,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			model.set("bool", false);
 			expect(dom.checked).toEqual(false);
 		});
-		
-		
+
+
 		it("should call DomUtils.setAttribute", function () {
 			var dom = document.createElement("input");
 			dom.setAttribute("data-model", "bind:checked,bool");
@@ -129,13 +129,13 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 		});
 
 	});
-	
+
 	describe("ModelPluginBindTheOtherWay", function () {
-		
+
 		var plugins = null,
 			model = null,
 			dom = null;
-		
+
 		beforeEach(function () {
 			dom = document.createElement("input");
 			dom.setAttribute("data-model", "bind:checked,bool");
@@ -143,7 +143,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			plugins = new Plugins;
 			plugins.add("model", new ModelPlugin(model));
 		});
-		
+
 		it("should update the model on dom change", function () {
 			var func;
 			spyOn(dom, "addEventListener");
@@ -157,7 +157,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			func();
 			expect(model.get("bool")).toEqual(true);
 		});
-		
+
 		it("shouldn't set the item if it was removed, this could happen if the item is removed prior to the trigger of change", function () {
 			var func;
 			dom.setAttribute("data-model_id", "0");
@@ -174,7 +174,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(model.update.wasCalled).toEqual(false);
 			expect(model.set.wasCalled).toEqual(false);
 		});
-		
+
 	});
 
 
@@ -198,7 +198,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 					mail: "mailbox@domain.com",
 					office: "+1234567890"
 				}
-			});	
+			});
 			plugins = new Plugins;
 			plugins.add("model", new ModelPlugin(model));
 		});
@@ -218,7 +218,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 		});
 
 	});
-	
+
 	describe("ModelPluginBindTheOtherWayEnhanced", function () {
 
 		var plugins = null,
@@ -230,15 +230,15 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			dom.setAttribute("data-model", "foreach");
 			dom.innerHTML = "<li><input type='checkbox' data-model='bind:checked,optin' />" +
 					"		<input type='text' data-model='bind:value,name' /></li>";
-			
+
 			model = new Store([{
 					optin: false,
 					name: "Emily"
 				}, {
 					optin: false,
 					name: "Olives"
-				}]);	
-			
+				}]);
+
 			plugins = new Plugins;
 			plugins.add("model", new ModelPlugin(model));
 		});
@@ -249,15 +249,15 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			plugins.apply(dom);
 
 			event.initEvent("change", true, true, window, 0);
-			
+
 			checkbox = dom.querySelector("input[type='checkbox']");
 			checkbox.checked = true;
-			
+
 			checkbox.dispatchEvent(event);
-			
+
 			expect(model.get(0).optin).toEqual(true);
 		});
-		
+
 	});
 
 	describe("ModelPluginItemRenderer", function () {
@@ -306,38 +306,38 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(itemRenderer.setRenderer(div)).toEqual(true);
 			expect(itemRenderer.getRenderer()).toBe(div);
 		});
-		
+
 		it("should set the root node where to attach created nodes and set item renderer", function () {
 			var rootNode = document.createElement("div"),
 				p = document.createElement("p"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(p);
 			spyOn(rootNode, "removeChild").andCallThrough();
 			itemRenderer = new modelPlugin.ItemRenderer();
 			expect(itemRenderer.setRootNode()).toEqual(false);
 			expect(itemRenderer.setRootNode({})).toEqual(false);
-			
+
 			spyOn(itemRenderer, "setRenderer").andCallThrough();
-			
+
 			expect(itemRenderer.setRootNode(rootNode)).toEqual(true);
 			expect(itemRenderer.getRootNode()).toBe(rootNode);
-			
+
 			expect(itemRenderer.setRenderer.wasCalled).toEqual(true);
 			expect(itemRenderer.setRenderer.mostRecentCall.args[0]).toBe(p);
-			
+
 			expect(rootNode.removeChild.wasCalled).toEqual(true);
 			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(p);
-			
+
 		});
-		
+
 		it("shouldn't fail if rootNode has no children", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer();
 			expect(function () {
 				itemRenderer.setRootNode(rootNode);
 			}).not.toThrow();
 		});
-		
+
 		it("should set plugins", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer();
 			expect(itemRenderer.setPlugins(plugins)).toEqual(true);
@@ -348,7 +348,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			var div = document.createElement("div"),
 				itemRenderer,
 				node;
-			
+
 			rootNode.appendChild(div);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 
@@ -364,27 +364,27 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(node.querySelectorAll("[data-model]")[1].getAttribute("data-model_id")).toEqual('0');
 			expect(node.querySelectorAll("[data-model_id]").length).toEqual(6);
 		});
-		
+
 		it("should call plugins.apply on item create", function () {
 			var ul = document.createElement("ul"),
 				itemRenderer,
 				item;
-			
+
 			rootNode.appendChild(ul);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode),
 
 			item = itemRenderer.create(0);
 			expect(plugins.apply.wasCalled).toEqual(true);
 			expect(plugins.apply.mostRecentCall.args[0]).toBe(item);
-			
+
 		});
 
 		it("should return a cloned node", function () {
 			var div = document.createElement("div"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(div);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);	
+			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 
 			expect(itemRenderer.create(0)).not.toBe(div);
 		});
@@ -392,39 +392,39 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 		it("should set the item renderer at init", function () {
 			var div = document.createElement("div"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(div);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 
 			expect(itemRenderer.getRenderer()).toBe(div);
 		});
-		
+
 		it("should set plugins at init", function () {
 			var div = document.createElement("div"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(div);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			
+
 			expect(itemRenderer.getPlugins()).toEqual(plugins);
 		});
-		
+
 		it("should set rootnode at init", function () {
 			var div = document.createElement("div"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(div);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			expect(itemRenderer.getRootNode()).toBe(rootNode);
 		});
-		
+
 		it("should have a function to get/set start", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer();
 			expect(itemRenderer.setStart(0)).toEqual(0);
 			expect(itemRenderer.setStart("5")).toEqual(5);
 			expect(itemRenderer.getStart()).toEqual(5);
 		});
-		
+
 		it("should have a function to get/set nb", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer();
 			expect(itemRenderer.setNb(0)).toEqual(0);
@@ -433,53 +433,53 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(itemRenderer.setNb("*")).toEqual("*");
 			expect(itemRenderer.getNb()).toEqual("*");
 		});
-			
+
 		it("should have a store to store items", function () {
 			var dom = document.createElement("ul"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			expect(itemRenderer.items.toJSON()).toEqual("[]");
 		});
-		
+
 		it("should store created items in the store", function () {
 			var ul = document.createElement("ul"),
 				item,
 				itemRenderer;
-			
+
 			rootNode.appendChild(ul);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			
+
 			item = itemRenderer.create(0);
 			expect(itemRenderer.items.get(0)).toEqual(item);
 		});
-		
+
 		it("should have a function to add an item", function () {
 			var dom = document.createElement("p"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			spyOn(rootNode, "appendChild").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
-			
+
 			expect(itemRenderer.addItem()).toEqual(false);
 			expect(itemRenderer.addItem({})).toEqual(false);
 			expect(itemRenderer.addItem(1)).toEqual(true);
-			
+
 			expect(itemRenderer.create.wasCalled).toEqual(true);
 			expect(itemRenderer.create.mostRecentCall.args[0]).toEqual(1);
-			
+
 			expect(rootNode.appendChild.wasCalled).toEqual(true);
 			expect(rootNode.appendChild.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
 			expect(rootNode.appendChild.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
 		});
-		
+
 		it("should not add an item that is already created", function () {
 			var dom = document.createElement("p"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			spyOn(itemRenderer.items, "get").andCallThrough();
@@ -487,134 +487,134 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 
 			expect(itemRenderer.addItem(1)).toEqual(true);
 			expect(itemRenderer.create.callCount).toEqual(1);
-			
+
 			expect(itemRenderer.items.get.wasCalled).toEqual(true);
 			expect(itemRenderer.items.get.mostRecentCall.args[0]).toEqual(1);
-			
+
 			expect(itemRenderer.addItem(1)).toEqual(false);
 			expect(itemRenderer.create.callCount).toEqual(1);
-			
+
 		});
-		
+
 		it("should have a function to get the next item", function () {
 			var dom = document.createElement("p"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			
+
 			expect(itemRenderer.getNextItem(0)).toBeUndefined();
 			itemRenderer.addItem(3);
 			expect(itemRenderer.getNextItem(0)).toEqual(itemRenderer.items.get(3));
 			expect(itemRenderer.getNextItem(2)).toEqual(itemRenderer.items.get(3));
 			expect(itemRenderer.getNextItem(3)).toBeUndefined();
 		});
-		
+
 		it("should add an item at the correct position even if it's not directly followed by another one", function () {
 			var dom = document.createElement("p"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			
+
 			itemRenderer.addItem(2);
 			itemRenderer.addItem(0);
 			expect(rootNode.querySelectorAll("p")[0].getAttribute("data-model_id")).toEqual("0");
 			expect(rootNode.querySelectorAll("p")[1].getAttribute("data-model_id")).toEqual("2");
 		});
-		
+
 		it("should'nt try to add an item that doesn't exist", function () {
 			var dom = document.createElement("p"),
 			itemRenderer;
-			
+
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			
+
 			expect(function () {
 				itemRenderer.addItem(-1);
 			}).not.toThrow();
-			
+
 			expect(itemRenderer.addItem(-1)).toEqual(false);
 		});
-		
+
 		it("should have a function to remove an item", function () {
 			var dom = document.createElement("p"),
 				itemRenderer,
 				item;
-			
+
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			spyOn(rootNode, "removeChild").andCallThrough();
 			spyOn(itemRenderer.items, "set").andCallThrough();
-			
+
 			expect(itemRenderer.removeItem()).toEqual(false);
 			expect(itemRenderer.removeItem({})).toEqual(false);
 			expect(itemRenderer.removeItem(1)).toEqual(false);
-			
+
 			itemRenderer.addItem(1);
-			
+
 			item = itemRenderer.items.get(1);
-			
+
 			expect(itemRenderer.removeItem(1)).toEqual(true);
 			expect(rootNode.removeChild.wasCalled).toEqual(true);
 			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(item);
-			
+
 			// We don't delete the item but set it to undefined
 			// so we keep the indexes in line with the model's indexes
 			expect(itemRenderer.items.set.wasCalled).toEqual(true);
 			expect(itemRenderer.items.set.mostRecentCall.args[0]).toEqual(1);
 			expect(itemRenderer.items.set.mostRecentCall.args[1]).toBeUndefined();
 		});
-	
+
 		it("shouldn't create an item if it doesn't exist in the model", function () {
 			var ul = document.createElement("ul"),
 				item,
 				itemRenderer;
-			
+
 			rootNode.appendChild(ul);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			
+
 			item = itemRenderer.create(10);
 			expect(item).toBeUndefined();
 			expect(itemRenderer.items.has(10)).toEqual(false);
 		});
-		
+
 		it("should allow for populating the rootNode with items on render", function () {
 			var item = document.createElement("p"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(item);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			
+
 			spyOn(itemRenderer, "addItem").andCallThrough();
 			spyOn(itemRenderer, "removeItem");
-			
+
 			expect(itemRenderer.render()).toEqual(false);
 			itemRenderer.setNb(3);
 			itemRenderer.setStart(1);
 			expect(itemRenderer.render()).toEqual(true);
-			
+
 			expect(itemRenderer.addItem.callCount).toEqual(3);
 			expect(itemRenderer.addItem.calls[0].args[0]).toEqual(1);
 			expect(rootNode.querySelectorAll("p").length).toEqual(3);
 		});
-		
+
 		it("should update rendering when the limits change", function () {
 			var item = document.createElement("p"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(item);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 			itemRenderer.setNb(3);
 			itemRenderer.setStart(1);
 			itemRenderer.render();
-			
+
 			spyOn(itemRenderer, "addItem").andCallThrough();
 			spyOn(itemRenderer, "removeItem").andCallThrough();
-			
+
 			itemRenderer.setStart(2);
 			itemRenderer.render();
-			
+
 			expect(itemRenderer.addItem.wasCalled).toEqual(true);
 			expect(itemRenderer.addItem.mostRecentCall.args[0]).toEqual(4);
 			expect(itemRenderer.removeItem.wasCalled).toEqual(true);
@@ -623,14 +623,14 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(itemRenderer.removeItem.calls[0].args[0]).toEqual(1);
 			expect(itemRenderer.removeItem.calls[1].args[0]).toEqual(0);
 		});
-		
+
 		it("should update rendering when an item is removed", function () {
 			var item = document.createElement("p"),
 				itemRenderer;
-			
+
 			rootNode.appendChild(item);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			
+
 			itemRenderer.setNb("*");
 			itemRenderer.setStart(0);
 			spyOn(itemRenderer, "removeItem").andCallThrough();
@@ -647,12 +647,12 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			// to remove item with index 5.
 			// 5?? yes! the items from 0 to 4 are updated, the 5 is deleted!
 			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toEqual(5);
-			
+
 			// Deletes item 0, 1, 2
 			modelPlugin.getModel().alter("splice", 0, 3);
-			// which should remove 3 dom nodes : the 5th, 
+			// which should remove 3 dom nodes : the 5th,
 			itemRenderer.render();
-			
+
 			expect(itemRenderer.removeItem.callCount).toEqual(5);
 			expect(itemRenderer.removeItem.calls[3].args[0]).toEqual(3);
 			expect(itemRenderer.removeItem.calls[2].args[0]).toEqual(4);
@@ -670,7 +670,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 		beforeEach(function () {
 			dom = document.createElement("ul");
 
-			dom.setAttribute("data-model", "foreach"); 
+			dom.setAttribute("data-model", "foreach");
 			dom.innerHTML = '<li data-model="bind:innerHTML"></li>';
 
 			model = new Store(["Olives", "is", "fun"]);
@@ -721,7 +721,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			model.alter("pop");
 			expect(dom.querySelectorAll("li")[2]).toBeUndefined();
 		});
-		
+
 		it("should remove the observers of the removed item", function () {
 			var handler;
 			plugins.apply(dom);
@@ -730,8 +730,8 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(model.getValueObservable().hasObserver(handler)).toEqual(false);
 			expect(modelPlugin.observers[2]).toBeUndefined();
 		});
-		
-		
+
+
 		it("should not fail if the ItemRenderer is given a DOM that starts with a textnode", function () {
 			dom.innerHTML = " \n \t\t <li></li>";
 			spyOn(modelPlugin, "ItemRenderer").andCallThrough();
@@ -770,7 +770,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 				title: "Olives is nice",
 				date: "2012/01/22",
 				body: "you ... no"
-			}}	
+			}}
 			];
 			model = new Store(dataSet);
 			modelPlugin = new ModelPlugin(model);
@@ -818,9 +818,9 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 
 
 	});
-	
+
 	describe("ModelPluginNestedForeach", function () {
-		
+
 		var modelPlugin = null,
 		model = null,
 		dom = null,
@@ -830,13 +830,13 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			dom = document.createElement("ul");
 			dom.innerHTML = '<li>' +
 								'<span data-model="bind:innerHTML,name"></span>' +
-								'<ul data-model="foreach:plugins">' + 
+								'<ul data-model="foreach:plugins">' +
 								 	'<li data-model_id="plugins" data-model="bind:innerHTML"></li>' +
 								'</ul>' +
 							'</li>';
 
 			model = new Store([{
-				name:"emily", 
+				name:"emily",
 				plugins: ["Store", "Observable", "StateMachine"]
 			}, {
 				name:"olives",
@@ -846,18 +846,18 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			plugins = new Plugins;
 			plugins.add("model", modelPlugin);
 		});
-		
+
 		it("should render nested foreach", function () {
 			modelPlugin.foreach(dom, "fwks");
 			// Nested for each are not supported yet. Should be done by April
 		});
-		
-		
+
+
 	});
-	
-	
+
+
 	describe("ModelPluginForeachLimits", function () {
-		
+
 		var modelPlugin = null,
 			model = null,
 			dataSet = null,
@@ -875,7 +875,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			plugins = new Plugins;
 			plugins.add("model", modelPlugin);
 		});
-		
+
 		it("should limit the list length to the given params", function () {
 			modelPlugin.foreach(dom, "id", 1, 3);
 			expect(dom.querySelectorAll("li").length).toEqual(3);
@@ -883,20 +883,20 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("cool");
 			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("it handles");
 		});
-		
+
 		it("should not fail with outbounds values", function () {
 			modelPlugin.foreach(dom, "id", -1, 7);
 			expect(dom.querySelectorAll("li").length).toEqual(6);
 			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives");
 			expect(dom.querySelectorAll("li")[5].innerHTML).toEqual("for me");
 		});
-		
+
 		it("should not add a new item if it's out of the limits", function () {
 			modelPlugin.foreach(dom, "id", 2, 3);
 			model.alter("push", "new item out of the limits");
 			expect(dom.querySelectorAll("li").length).toEqual(3);
 		});
-		
+
 		it("should not fail if an item is removed", function() {
 			modelPlugin.foreach(dom, "id", 2, 3);
 			model.alter("push", "new item out of the limits");
@@ -905,11 +905,11 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			model.del(2);
 			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("it handles");
 		});
-		
+
 		it("should store the item renderers according to their id", function () {
 			var itemRenderer;
 			spyOn(modelPlugin, "setItemRenderer").andCallThrough();
-			
+
 			modelPlugin.foreach(dom, "id", 2, 3);
 			expect(modelPlugin.setItemRenderer.mostRecentCall.args[0]).toEqual("id");
 			itemRenderer = modelPlugin.setItemRenderer.mostRecentCall.args[1];
@@ -917,26 +917,26 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(modelPlugin.getItemRenderer).toBeInstanceOf(Function);
 			expect(modelPlugin.getItemRenderer("id")).toBe(itemRenderer);
 		});
-		
+
 		it("should save the store as default if no id is given", function () {
 			var itemRenderer;
 			spyOn(modelPlugin, "setItemRenderer").andCallThrough();
-			
+
 			modelPlugin.foreach(dom);
 			itemRenderer = modelPlugin.setItemRenderer.mostRecentCall.args[1];
 			expect(modelPlugin.getItemRenderer("default")).toBe(itemRenderer);
 		});
-		
+
 		it("should allow for multiple foreaches", function () {
 			var dom2 = dom.cloneNode(true);
 			modelPlugin.foreach(dom, "id", 1, 3);
 			modelPlugin.foreach(dom2, "id2", 3, 3);
-			
+
 			expect(dom2.querySelectorAll("li").length).toEqual(3);
 			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("is");
 			expect(dom2.querySelectorAll("li")[0].innerHTML).toEqual("it handles");
 		});
-		
+
 		it("should update the foreach start", function () {
 			var itemRenderer;
 			modelPlugin.foreach(dom, "id", 1, 3);
@@ -945,7 +945,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(modelPlugin.updateStart("id", 2)).toEqual(true);
 			expect(itemRenderer.getStart()).toEqual(2);
 		});
-		
+
 		it("should update the nb of items displayed by foreach", function () {
 			var itemRenderer;
 			modelPlugin.foreach(dom, "id", 1, 3);
@@ -954,13 +954,13 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(modelPlugin.updateNb("id", 2)).toEqual(true);
 			expect(itemRenderer.getNb()).toEqual(2);
 		});
-		
+
 		it("should have a function to call itemRenderer's render", function () {
 			var itemRenderer;
 			modelPlugin.foreach(dom, "id", 1, 3);
 			itemRenderer = modelPlugin.getItemRenderer("id");
 			spyOn(itemRenderer, "render");
-			
+
 			expect(modelPlugin.refresh("fakeid")).toEqual(false);
 			expect(modelPlugin.refresh("id")).toEqual(true);
 			expect(itemRenderer.render.wasCalled).toEqual(true);
@@ -1041,14 +1041,14 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(event.preventDefault.wasCalled).toEqual(true);
 		});
 	});
-	
+
 	describe("ModelPluginPlugins", function () {
-		
+
 		var modelPlugin = null,
 			model = null,
 			newBindings = null,
 			dom = null;
-		
+
 		beforeEach(function () {
 			model = new Store({"property": false});
 			newBindings = {
@@ -1058,7 +1058,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			modelPlugin.plugins = {}; modelPlugin.plugins.name = "model";
 			dom = document.createElement("div");
 		});
-		
+
 		it("should have the following methods", function () {
 			expect(modelPlugin.addBindings).toBeInstanceOf(Function);
 			expect(modelPlugin.getBinding).toBeInstanceOf(Function);
@@ -1066,7 +1066,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(modelPlugin.hasBinding).toBeInstanceOf(Function);
 			expect(modelPlugin.execBinding).toBeInstanceOf(Function);
 		});
-		
+
 		it("should add a new binding", function () {
 			expect(modelPlugin.addBinding("")).toEqual(false);
 			expect(modelPlugin.addBinding("", {})).toEqual(false);
@@ -1074,7 +1074,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(modelPlugin.addBinding("toggleClass", newBindings.toggleClass)).toEqual(true);
 			expect(modelPlugin.getBinding("toggleClass")).toBe(newBindings.toggleClass);
 		});
-		
+
 		it("should add multiple bindings at once", function () {
 			spyOn(modelPlugin, "addBinding").andCallThrough();
 			expect(modelPlugin.addBindings(newBindings)).toEqual(true);
@@ -1082,13 +1082,13 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(modelPlugin.addBinding.mostRecentCall.args[0]).toEqual("toggleClass");
 			expect(modelPlugin.addBinding.mostRecentCall.args[1]).toBe(newBindings.toggleClass);
 		});
-		
+
 		it("should tell if binding exists", function () {
 			modelPlugin.addBindings(newBindings);
 			expect(modelPlugin.hasBinding("toggleClass")).toEqual(true);
 			expect(modelPlugin.hasBinding("valueOf")).toEqual(false);
 		});
-		
+
 		it("should execute binding", function () {
 			expect(modelPlugin.execBinding(dom, "nop", false)).toEqual(false);
 			modelPlugin.addBindings(newBindings);
@@ -1097,7 +1097,7 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(newBindings.toggleClass.mostRecentCall.args[1]).toEqual("otherParam");
 			expect(newBindings.toggleClass.mostRecentCall.object).toBe(dom);
 		});
-		
+
 		it("should execute new bindings", function () {
 			modelPlugin.addBindings(newBindings);
 			spyOn(modelPlugin, "execBinding");
@@ -1109,19 +1109,19 @@ require(["Olives/Model-plugin", "Store", "Olives/Plugins", "Olives/DomUtils"], f
 			expect(modelPlugin.execBinding.mostRecentCall.args[2]).toEqual(true);
 			expect(modelPlugin.execBinding.mostRecentCall.args[3]).toEqual("otherParam");
 		});
-		
+
 		it("should not double way bind the plugins", function () {
 			modelPlugin.addBindings(newBindings);
 			spyOn(dom, "addEventListener").andCallThrough();
 			modelPlugin.bind(dom, "toggleClass","property");
 			expect(dom.addEventListener.wasCalled).toEqual(false);
 		});
-		
+
 		it("should add bindings at ModelPlugin init", function () {
 			var modelPlugin = new ModelPlugin(model, newBindings);
-			
+
 			expect(modelPlugin.getBinding("toggleClass")).toBe(newBindings.toggleClass);
 		});
-		
+
 	});
 });

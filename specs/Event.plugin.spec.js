@@ -4,14 +4,14 @@
  * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["Olives/Event-plugin"], function (EventPlugin) {
-	
+require(["Event.plugin"], function (EventPlugin) {
+
 	describe("EventPluginInit", function () {
-		
+
 		it("should be a constructor function", function () {
 			expect(EventPlugin).toBeInstanceOf(Function);
 		});
-		
+
 	});
 
 	describe("ParentObjectHandler", function(){
@@ -22,17 +22,17 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 
 		it("should have getter/setter functions", function(){
 			expect(plugin.setParent).toBeInstanceOf(Function);
-			expect(plugin.parent).toBeInstanceOf(Function);
+			expect(plugin.getParent).toBeInstanceOf(Function);
 		});
 
 		it("should haven't default parent", function(){
-			expect(plugin.parent()).toBe(null);
+			expect(plugin.getParent()).toBe(null);
 		});
 
 		it("should allow to set parent object", function(){
 			var obj = {};
 			expect(plugin.setParent(obj)).toEqual(true);
-			expect(plugin.parent()).toBe(obj);
+			expect(plugin.getParent()).toBe(obj);
 		});
 
 		it("should only set object as parent", function(){
@@ -46,7 +46,7 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 		it("should set parent at init if defined", function(){
 			var obj = {};
 			var plugin = new EventPlugin(obj);
-			expect(plugin.parent()).toBe(obj);
+			expect(plugin.getParent()).toBe(obj);
 		});
 
 	});
@@ -103,7 +103,7 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 
 		var eventPlugin = null,
 			node = null;
-			
+
 		beforeEach(function() {
 			node = document.createElement("div");
 			eventPlugin = new EventPlugin({}, true);
@@ -132,13 +132,13 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 			expect(node.addEventListener.mostRecentCall.args[0]).toEqual("touchstart");
 		});
 	});
-	
+
 	describe("EventPluginListen", function() {
-		
+
 		var eventPlugin = null,
 			dom = null,
 			obj = null;
-			
+
 		beforeEach(function() {
 			var _func = function() {
 				this.listener = function(event) {
@@ -153,10 +153,10 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 		it("should have a listen function", function(){
 			expect(eventPlugin.listen).toBeInstanceOf(Function);
 		});
-		
+
 		//shoud we just triger events to test the listen method?
 		it("should add dom event listener", function() {
-			
+
 			eventPlugin.listen(dom,"click","listener","true");
 			expect(eventPlugin.addEventListener.wasCalled).toEqual(true);
 			expect(eventPlugin.addEventListener.mostRecentCall.args[0]).toBe(dom);
@@ -176,7 +176,7 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 			var param = {};
 			test(param);
 			expect(obj.listener.mostRecentCall.object).toBe(obj);
-			
+
 			//test listener paramter
 			expect(obj.listener.mostRecentCall.args[0]).toBe(param);
 			expect(obj.listener.mostRecentCall.args[1]).toBe(dom);
@@ -225,5 +225,5 @@ require(["Olives/Event-plugin"], function (EventPlugin) {
 			expect(obj.listener).toHaveBeenCalled();
 		});
 	});
-	
+
 });
