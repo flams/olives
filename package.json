@@ -1,7 +1,7 @@
 {
  "name": "olives",
- "description": "a framework to create realtime UIs, based on emily",
- "version": "1.2.0",
+ "description": "A JS Framework for creating realtime and scalable web applications. Based on Emily.js and socket.io",
+ "version": "1.3.0",
  "homepage": "http://flams.github.com/olives/",
  "licenses": [{
   "type":"MIT",
@@ -19,10 +19,10 @@
  ],
  "dependencies": {
   "requirejs": ">=2.0.4",
-  "emily": ">=1.2.0",
+  "emily": ">=1.3.0",
   "socket.io": ">=0.9.6"
   },
- "keywords": ["framework", "web", "realtime", "UI", "CouchDB", "AMD/commonJS", "requirejs"],
+ "keywords": ["framework", "web", "realtime", "UI", "MVC", "scalable", "AMD/commonJS"],
  "repository": {
   "type": "git",
   "url": "git@github.com:flams/olives.git"
@@ -31,11 +31,8 @@
   "url": "https://github.com/flams/olives/issues"
  },
  "main":"olives-server.js",
- "engines": { 
+ "engines": {
  	"node":">= 0.6.0"
- }, 
- "scripts": {
- 	"test": "jake tests:all"
  }
 
 }
