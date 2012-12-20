@@ -43,7 +43,7 @@ tests: temp.js
 	java -jar $(JsTestDriver) \
 		--tests all
 
-build: clean-build Olives.js Olives.min.js
+build: clean-build Olives.js
 	cp LICENSE build/
 
 release: all
@@ -88,7 +88,7 @@ Olives.js: temp.js
 		--js_output_file build/Olives.min.js \
 		--create_source_map build/Olives-map
 
-clean: clean-build
+clean: clean-build clean-docs clean temp
 
 gh-pages: clean
 ifndef VERSION
