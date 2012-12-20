@@ -39,7 +39,7 @@ docs: clean-docs
 		-d=docs/latest/ \
 		-t=tools/JsDoc/templates/jsdoc
 
-tests:
+tests: temp.js
 	java -jar $(JsTestDriver) \
 		--tests all
 
@@ -76,7 +76,7 @@ endif
 
 	git push --tags
 
-temp.js:
+temp.js: clean-temp
 	r.js -o tools/build.js
 
 Olives.js: temp.js

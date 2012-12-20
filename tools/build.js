@@ -2,9 +2,13 @@
     baseUrl: "../src",
     include: ["Bind.plugin", "DomUtils", "Event.plugin", "LocalStore", "OObject", "Place.plugin", "Plugins", "SocketIOTransport"],
     paths: {
-    	lib: "../lib"
+    	"Store": "empty:",
+    	"Tools": "empty:",
+    	"Observable": "empty:",
+    	"StateMachine": "empty:",
+    	"Promise": "empty:",
+    	"Transport": "empty:"
     },
-    deps: ["lib/Emily"],
     optimize: "none",
     out: "../temp.js"
 })
