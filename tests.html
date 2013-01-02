@@ -11,25 +11,18 @@
 
 
   <!-- include source files here... -->
-  <script type="text/javascript" src="src/DomUtils.js"></script>
-  <script type="text/javascript" src="src/Event-plugin.js"></script>
-  <script type="text/javascript" src="src/LocalStore.js"></script>
-  <script type="text/javascript" src="src/Model-plugin.js"></script>
-  <script type="text/javascript" src="src/OObject.js"></script>
-  <script type="text/javascript" src="src/Plugins.js"></script>
-  <script type="text/javascript" src="src/Transport.js"></script>
-  <script type="text/javascript" src="src/UI-plugin.js"></script>
+  <script type="text/javascript" src="build/Olives.js"></script>
 
   <!-- include spec files here... -->
   <script type="text/javascript" src="specs/specHelper.js"></script>
   <script type="text/javascript" src="specs/DomUtils.spec.js"></script>
-  <script type="text/javascript" src="specs/Event-plugin.spec.js"></script>
+  <script type="text/javascript" src="specs/Event.plugin.spec.js"></script>
   <script type="text/javascript" src="specs/LocalStore.spec.js"></script>
-  <script type="text/javascript" src="specs/Model-plugin.spec.js"></script>
+  <script type="text/javascript" src="specs/Bind.plugin.spec.js"></script>
   <script type="text/javascript" src="specs/OObject.spec.js"></script>
   <script type="text/javascript" src="specs/Plugins.spec.js"></script>
-  <script type="text/javascript" src="specs/Transport.spec.js"></script>
-  <script type="text/javascript" src="specs/UI-plugin.spec.js"></script>
+  <script type="text/javascript" src="specs/SocketIOTransport.spec.js"></script>
+  <script type="text/javascript" src="specs/Place.plugin.spec.js"></script>
 
   <script type="text/javascript">
   window.addEventListener("load", function onLoad() {
@@ -41,7 +34,7 @@
 		jasmineEnv.execute();
 	}, 10);
     window.removeEventListener("load", onLoad, true);
-  
+
   }, true);
   </script>
 
