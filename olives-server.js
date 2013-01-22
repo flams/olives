@@ -1,15 +1,11 @@
 /**
  * @license Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-
 var requirejs = require("requirejs"),
 	emily = require("emily"),
 	isConnected = false;
-
-exports.handlers = emily.handlers;
-exports.config = emily.config;
 
 exports.registerSocketIO = function (io) {
 
@@ -60,6 +56,8 @@ exports.registerSocketIO = function (io) {
 
 
 };
+
+exports.handlers = emily.handlers;
 
 exports.requirejs = requirejs;
 
