@@ -45,6 +45,7 @@ tests: temp.js
 
 build: clean-build Olives.js
 	cp LICENSE build/
+	cp -rf src/ build/src/
 
 release: all
 ifndef VERSION
@@ -66,7 +67,7 @@ endif
 
 	cp -rf docs/latest/ docs/$(VERSION)/
 
-	git add docs release
+	git add build docs release
 
 	git commit -am "released version $(VERSION)"
 
@@ -90,7 +91,7 @@ Olives.js: temp.js
 
 clean: clean-build clean-docs clean-temp
 
-gh-pages: clean
+gh-pages:
 ifndef VERSION
 	@echo "You must give a VERSION number to make gh-pages"
 	@exit 2
@@ -98,8 +99,8 @@ endif
 
 	git checkout gh-pages
 
-	git checkout master Makefile docs src specs tools lib release
-	git add docs src specs tools lib release
+	git checkout master build Makefile docs src specs tools lib release
+	git add build docs src specs tools lib release
 
 	sed -i .bak 's#version">.*<#version">'${VERSION}'<#g' index.html
 	sed -i .bak 's#<a href="release/Olives.*\.tgz">#<a href="release/Olives-'${VERSION}'.tgz">#' index.html
