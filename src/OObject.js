@@ -7,8 +7,8 @@
 define(["StateMachine", "Store", "Plugins", "DomUtils", "Tools"],
 /**
 * @class
-* OObject is an abstract class that any UI can inherit from.
-* It should provide code that is easy to reuse
+* OObject is a container for dom elements. It will also bind
+* the dom to additional plugins like Data binding
 * @requires StateMachine
 */
 function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
@@ -16,8 +16,8 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 	return function OObjectConstructor(otherStore) {
 
 		/**
-		 * This function creates the dom of the UI from it's template
-		 * It then queries the dom for data-model to list them into this.connects
+		 * This function creates the dom of the UI from its template
+		 * It then queries the dom for data- attributes
 		 * It can't be executed if the template is not set
 		 * @private
 		 */
