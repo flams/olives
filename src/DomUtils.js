@@ -98,7 +98,7 @@ define(["Tools"], function (Tools) {
 		 * @param {Element} the parent node
 		 * @param true if matches
 		 */
-		matches : function matches(node, selector, parent){
+		matches : function matches(parent, selector, node){
 			return Tools.toArray(this.getNodes(parent, selector)).indexOf(node) > -1;
 		}
 
