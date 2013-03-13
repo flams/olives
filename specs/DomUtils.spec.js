@@ -175,14 +175,14 @@ require(["DomUtils"], function (DomUtils) {
 		it("should determine if an element matches a certain CSS selector from a parent node", function(){
 			var parent = document.createElement("div");
 			var node = document.createElement("p");
-			node.className = "is awesome";
+			node.className = "isawesome";
 			parent.appendChild(node);
 
 
-			expect(DomUtils.matches(node, "p", parent)).toBe(true);
-			expect(DomUtils.matches(node, "p.is.awesome", parent)).toBe(true);
-			expect(DomUtils.matches(node, ".other", parent)).toBe(false);
-			expect(DomUtils.matches(node, "#other", parent)).toBe(false);
+			expect(DomUtils.matches(parent, "p", node)).toBe(true);
+			expect(DomUtils.matches(parent, "p.isawesome", node)).toBe(true);
+			expect(DomUtils.matches(parent, ".other", node)).toBe(false);
+			expect(DomUtils.matches(parent, "#other", node)).toBe(false);
 		});
 
 	});

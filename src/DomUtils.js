@@ -92,10 +92,10 @@ define(["Tools"], function (Tools) {
 		},
 
 		/**
-		 * Determine if an element matche a certain CSS selector.
-		 * @param {Element} the node to check out
-		 * @param {String} CSS selector
+		 * Determine if an element matches a certain CSS selector.
 		 * @param {Element} the parent node
+		 * @param {String} CSS selector
+		 * @param {Element} the node to check out
 		 * @param true if matches
 		 */
 		matches : function matches(parent, selector, node){
