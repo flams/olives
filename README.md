@@ -33,10 +33,11 @@ Olives requires an AMD/commonJS compatible loader. I use requirejs: http://requi
 require(["Module"], function (Module) {
 	// Do what you want with Module
 });
+```
 
 If your application is based on node and you want the realtime part of Olives, on the server side, do:
 
-```
+```bash
 npm install requirejs
 npm install olives
 ```
@@ -54,7 +55,7 @@ olives.registerSocketIO(io);
 
 ```js
 
-```
+``
 
 
 ##Live examples
