@@ -34,11 +34,11 @@ require(["Plugins"], function (Plugins) {
 
 		it("should allow for adding plugins", function () {
 
-			expect(plugins.add()).toEqual(false);
-			expect(plugins.add("test")).toEqual(false);
-			expect(plugins.add("test", null)).toEqual(false);
-			expect(plugins.add(plugin, "test")).toEqual(false);
-			expect(plugins.add("test", plugin)).toEqual(true);
+			expect(plugins.add()).toBe(false);
+			expect(plugins.add("test")).toBe(false);
+			expect(plugins.add("test", null)).toBe(false);
+			expect(plugins.add(plugin, "test")).toBe(false);
+			expect(plugins.add("test", plugin)).toBe(true);
 
 			expect(plugins.get("test")).toBe(plugin);
 		});
@@ -46,9 +46,9 @@ require(["Plugins"], function (Plugins) {
 		it("should allow for removing plugins", function () {
 			plugins.add("test", plugin);
 
-			expect(plugins.del("test")).toEqual(true);
+			expect(plugins.del("test")).toBe(true);
 			expect(plugins.get("test")).toBeUndefined();
-			expect(plugins.del("test")).toEqual(true);
+			expect(plugins.del("test")).toBe(true);
 		});
 
 		it("should allow for adding multiple plugins at once", function () {
@@ -60,11 +60,11 @@ require(["Plugins"], function (Plugins) {
 			expect(plugins.addAll({
 				"plugin1": plugin1,
 				"plugin2": plugin2
-			})).toEqual(true);
+			})).toBe(true);
 
 
-			expect(plugins.add.wasCalled).toEqual(true);
-			expect(plugins.add.callCount).toEqual(2);
+			expect(plugins.add.wasCalled).toBe(true);
+			expect(plugins.add.callCount).toBe(2);
 
 			expect(plugins.get("plugin1")).toBe(plugin1);
 			expect(plugins.get("plugin2")).toBe(plugin2);
@@ -100,20 +100,20 @@ require(["Plugins"], function (Plugins) {
 		});
 
 		it("should apply the plugins only on dom nodes", function () {
-			expect(plugins.apply()).toEqual(false);
-			expect(plugins.apply({})).toEqual(false);
+			expect(plugins.apply()).toBe(false);
+			expect(plugins.apply({})).toBe(false);
 			expect(plugins.apply(dom)).toBe(dom);
 		});
 
 		it("should call the plugins on apply", function () {
 			dom.setAttribute("data-plugin1", "method");
 			plugins.apply(dom);
-			expect(plugin1.method.wasCalled).toEqual(false);
+			expect(plugin1.method.wasCalled).toBe(false);
 
 			plugins.add("plugin1", plugin1);
 			plugins.apply(dom);
-			expect(plugin1.method.wasCalled).toEqual(true);
-			expect(plugin1.method.callCount).toEqual(1);
+			expect(plugin1.method.wasCalled).toBe(true);
+			expect(plugin1.method.callCount).toBe(1);
 			expect(plugin1.method.mostRecentCall.object).toBe(plugin1);
 		});
 
@@ -125,11 +125,11 @@ require(["Plugins"], function (Plugins) {
 			plugins.add("plugin2", plugin2);
 
 			plugins.apply(dom);
-			expect(plugin1.method.callCount).toEqual(2);
+			expect(plugin1.method.callCount).toBe(2);
 			expect(plugin1.method.mostRecentCall.object).toBe(plugin1);
-			expect(plugin2.method1.callCount).toEqual(2);
+			expect(plugin2.method1.callCount).toBe(2);
 			expect(plugin2.method1.mostRecentCall.object).toBe(plugin2);
-			expect(plugin2.method2.callCount).toEqual(1);
+			expect(plugin2.method2.callCount).toBe(1);
 			expect(plugin2.method2.mostRecentCall.object).toBe(plugin2);
 
 		});
@@ -139,7 +139,7 @@ require(["Plugins"], function (Plugins) {
 			dom.setAttribute("data-plugin2", "method1; method2");
 			plugins.add("plugin2", plugin2);
 			plugins.apply(dom);
-			expect(plugin2.method2.wasCalled).toEqual(true);
+			expect(plugin2.method2.wasCalled).toBe(true);
 		});
 
 		it("should'nt fail if no such method", function () {
@@ -156,12 +156,12 @@ require(["Plugins"], function (Plugins) {
 			dom.setAttribute("data-plugin2", "method1:param1, param2; method2: param1");
 			plugins.add("plugin2", plugin2);
 			plugins.apply(dom);
-			expect(plugin2.method1.callCount).toEqual(1);
+			expect(plugin2.method1.callCount).toBe(1);
 			expect(plugin2.method1.mostRecentCall.args[0]).toBe(dom);
-			expect(plugin2.method1.mostRecentCall.args[1]).toEqual("param1");
-			expect(plugin2.method1.mostRecentCall.args[2]).toEqual("param2");
+			expect(plugin2.method1.mostRecentCall.args[1]).toBe("param1");
+			expect(plugin2.method1.mostRecentCall.args[2]).toBe("param2");
 			expect(plugin2.method2.mostRecentCall.args[0]).toBe(dom);
-			expect(plugin2.method2.mostRecentCall.args[1]).toEqual("param1");
+			expect(plugin2.method2.mostRecentCall.args[1]).toBe("param1");
 		});
 
 	});
@@ -182,7 +182,7 @@ require(["Plugins"], function (Plugins) {
 		});
 
 		it("should decorate with a name property that holds the plugin's name", function () {
-			expect(plugin.plugins.name).toEqual("plugin");
+			expect(plugin.plugins.name).toBe("plugin");
 		});
 
 		it("should decorate with an apply function", function () {
@@ -191,7 +191,7 @@ require(["Plugins"], function (Plugins) {
 			spyOn(plugins, "apply").andCallThrough();
 			applied = plugin.plugins.apply(div);
 
-			expect(plugins.apply.wasCalled).toEqual(true);
+			expect(plugins.apply.wasCalled).toBe(true);
 			expect(plugins.apply.mostRecentCall.object).toBe(plugins);
 			expect(plugins.apply.mostRecentCall.args[0]).toBe(div);
 			expect(applied).toBe(div);

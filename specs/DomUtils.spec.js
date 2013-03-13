@@ -13,47 +13,53 @@ require(["DomUtils"], function (DomUtils) {
 		});
 
 		it("should only accept a dom node", function () {
-			expect(DomUtils.getNodes()).toEqual(false);
-			expect(DomUtils.getNodes({})).toEqual(false);
+			expect(DomUtils.getNodes()).toBe(false);
+			expect(DomUtils.getNodes({})).toBe(false);
 			expect(DomUtils.getNodes(document.createElement("div"))).toBeTruthy();
 		});
 
 		it("should return the list of dom nodes", function () {
 			var dom = document.createElement("div"),
 				ul = document.createElement("ul"),
+				p = document.createElement("p"),
+				li1 = document.createElement("li"),
+				li2 = document.createElement("li"),
 				nodes;
 
-			dom.appendChild(document.createElement("p"));
+			dom.appendChild(p);
 			dom.appendChild(ul);
-			ul.appendChild(document.createElement("li"));
-			ul.appendChild(document.createElement("li"));
+			ul.appendChild(li1);
+			ul.appendChild(li2);
 
 			nodes = DomUtils.getNodes(ul);
-			expect(nodes.length).toEqual(4);
-			expect(nodes[0]).toBeInstanceOf(HTMLParagraphElement);
-			expect(nodes[1]).toBeInstanceOf(HTMLUListElement);
-			expect(nodes[2]).toBeInstanceOf(HTMLLIElement);
-			expect(nodes[3]).toBeInstanceOf(HTMLLIElement);
+			expect(nodes.length).toBe(4);
+			expect(nodes[0]).toBe(p);
+			expect(nodes[1]).toBe(ul);
+			expect(nodes[2]).toBe(li1);
+			expect(nodes[3]).toBe(li2);
 		});
 
 		it("should allow for specifying a query string", function () {
 			var dom = document.createElement("div"),
 				ul = document.createElement("ul"),
+				p = document.createElement("p"),
+				li1 = document.createElement("li"),
+				li2 = document.createElement("li"),
 				nodes;
 
-			dom.appendChild(document.createElement("p"));
+			dom.appendChild(p);
 			dom.appendChild(ul);
-			ul.appendChild(document.createElement("li"));
-			ul.appendChild(document.createElement("li"));
+			ul.appendChild(li1);
+			ul.appendChild(li2);
 
 			nodes = DomUtils.getNodes(dom, "div");
-			expect(nodes.length).toEqual(1);
-			expect(nodes[0]).toBeInstanceOf(HTMLDivElement);
+			expect(nodes.length).toBe(1);
+			expect(nodes[0]).toBe(dom);
 
 			nodes = DomUtils.getNodes(dom, "li");
-			expect(nodes.length).toEqual(2);
-			expect(nodes[0]).toBeInstanceOf(HTMLLIElement);
-			expect(nodes[1]).toBeInstanceOf(HTMLLIElement);
+			expect(nodes.length).toBe(2);
+			expect(nodes[0]).toBe(li1);
+			expect(nodes[1]).toBe(li2);
 		});
 
 		it("shouldn't break the parent-child relation if any", function () {
@@ -83,23 +89,23 @@ require(["DomUtils"], function (DomUtils) {
 		});
 
 		it("should only work with dom nodes", function () {
-			expect(DomUtils.getDataset()).toEqual(false);
-			expect(DomUtils.getDataset({})).toEqual(false);
+			expect(DomUtils.getDataset()).toBe(false);
+			expect(DomUtils.getDataset({})).toBe(false);
 			expect(DomUtils.getDataset(dom)).toBeTruthy();
 		});
 
 		it("should return an object similar to a dataset", function () {
 			var dataset = DomUtils.getDataset(dom);
 			expect(dataset).toBeInstanceOf(Object);
-			expect(dataset["plugin1"]).toEqual("name1");
-			expect(dataset["plugin2"]).toEqual("name2");
+			expect(dataset["plugin1"]).toBe("name1");
+			expect(dataset["plugin2"]).toBe("name2");
 		});
 
 		it("should exactly return the dataset if the browser supports it", function () {
 			if (dom.dataset) {
 				dom.dataset["plugin1"] = "browser supports dataset";
 				var dataset = DomUtils.getDataset(dom);
-				expect(dataset["plugin1"]).toEqual("browser supports dataset");
+				expect(dataset["plugin1"]).toBe("browser supports dataset");
 			}
 		});
 
@@ -116,15 +122,15 @@ require(["DomUtils"], function (DomUtils) {
 
 		it("should return true if given an accepted type", function () {
 			acceptedElements.forEach(function (type) {
-				expect(DomUtils.isAcceptedType(type)).toEqual(true);
+				expect(DomUtils.isAcceptedType(type)).toBe(true);
 			});
 		});
 
 		it("should return false if not an accepted type", function () {
-			expect(DomUtils.isAcceptedType(Object)).toEqual(false);
-			expect(DomUtils.isAcceptedType(null)).toEqual(false);
-			expect(DomUtils.isAcceptedType(undefined)).toEqual(false);
-			expect(DomUtils.isAcceptedType(Function)).toEqual(false);
+			expect(DomUtils.isAcceptedType(Object)).toBe(false);
+			expect(DomUtils.isAcceptedType(null)).toBe(false);
+			expect(DomUtils.isAcceptedType(undefined)).toBe(false);
+			expect(DomUtils.isAcceptedType(Function)).toBe(false);
 		});
 
 	});
@@ -140,21 +146,21 @@ require(["DomUtils"], function (DomUtils) {
 
 		it("should set attribute by assigning value to the Element's property if it's a dom node", function () {
 			spyOn(htmlElement, "setAttribute");
-			expect(DomUtils.setAttribute(htmlElement, "innerHTML", "Olives")).toEqual(true);
-			expect(htmlElement.setAttribute.wasCalled).toEqual(false);
-			expect(htmlElement.innerHTML).toEqual("Olives");
+			expect(DomUtils.setAttribute(htmlElement, "innerHTML", "Olives")).toBe(true);
+			expect(htmlElement.setAttribute.wasCalled).toBe(false);
+			expect(htmlElement.innerHTML).toBe("Olives");
 		});
 
 		it("should set attribute by calling setAttribute if it's an SVGElement", function () {
 			spyOn(svgElement, "setAttribute");
-			expect(DomUtils.setAttribute(svgElement, "width", "10px")).toEqual(true);
-			expect(svgElement.setAttribute.wasCalled).toEqual(true);
-			expect(svgElement.setAttribute.mostRecentCall.args[0]).toEqual("width");
-			expect(svgElement.setAttribute.mostRecentCall.args[1]).toEqual("10px");
+			expect(DomUtils.setAttribute(svgElement, "width", "10px")).toBe(true);
+			expect(svgElement.setAttribute.wasCalled).toBe(true);
+			expect(svgElement.setAttribute.mostRecentCall.args[0]).toBe("width");
+			expect(svgElement.setAttribute.mostRecentCall.args[1]).toBe("10px");
 		});
 
 		it("should return false if the Element is neither an HTMLElement or an SVGElement", function () {
-			expect(DomUtils.setAttribute({}, "false")).toEqual(false);
+			expect(DomUtils.setAttribute({}, "false")).toBe(false);
 		});
 
 	});
@@ -173,10 +179,10 @@ require(["DomUtils"], function (DomUtils) {
 			parent.appendChild(node);
 
 
-			expect(DomUtils.matches(node, "p", parent)).toEqual(true);
-			expect(DomUtils.matches(node, "p.is.awesome", parent)).toEqual(true);
-			expect(DomUtils.matches(node, ".other", parent)).toEqual(false);
-			expect(DomUtils.matches(node, "#other", parent)).toEqual(false);
+			expect(DomUtils.matches(node, "p", parent)).toBe(true);
+			expect(DomUtils.matches(node, "p.is.awesome", parent)).toBe(true);
+			expect(DomUtils.matches(node, ".other", parent)).toBe(false);
+			expect(DomUtils.matches(node, "#other", parent)).toBe(false);
 		});
 
 	});
