@@ -1,7 +1,7 @@
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
@@ -38,18 +38,18 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 
 		it("should set the io handler (socket.io)", function () {
 			expect(transport.getIO()).toBeNull();
-			expect(transport.setIO()).toEqual(false);
-			expect(transport.setIO({})).toEqual(false);
-			expect(transport.setIO(io)).toEqual(true);
+			expect(transport.setIO()).toBe(false);
+			expect(transport.setIO({})).toBe(false);
+			expect(transport.setIO(io)).toBe(true);
 			expect(transport.getIO()).toBe(io);
 		});
 
 
 		it("should connect transport on given url", function () {
 			transport.setIO(io);
-			expect(transport.connect()).toEqual(false);
-			expect(transport.connect({})).toEqual(false);
-			expect(transport.connect("/")).toEqual(true);
+			expect(transport.connect()).toBe(false);
+			expect(transport.connect({})).toBe(false);
+			expect(transport.connect("/")).toBe(true);
 		});
 
 		it("should return the newly created socket", function () {
@@ -94,9 +94,9 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 
 			expect(transport.on(event, func)).toBe(returnValue);
 
-			expect(socket.on.wasCalled).toEqual(true);
-			expect(socket.on.mostRecentCall.args[0]).toEqual(event);
-			expect(socket.on.mostRecentCall.args[1]).toEqual(func);
+			expect(socket.on.wasCalled).toBe(true);
+			expect(socket.on.mostRecentCall.args[0]).toBe(event);
+			expect(socket.on.mostRecentCall.args[1]).toBe(func);
 
 		});
 
@@ -110,9 +110,9 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 
 			expect(transport.once(event, func)).toBe(returnValue);
 
-			expect(socket.once.wasCalled).toEqual(true);
-			expect(socket.once.mostRecentCall.args[0]).toEqual(event);
-			expect(socket.once.mostRecentCall.args[1]).toEqual(func);
+			expect(socket.once.wasCalled).toBe(true);
+			expect(socket.once.mostRecentCall.args[0]).toBe(event);
+			expect(socket.once.mostRecentCall.args[1]).toBe(func);
 		});
 
 		it("should emit events", function () {
@@ -124,9 +124,9 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 			socket.emit.andReturn(returnValue);
 			expect(transport.emit(event, data, callback)).toBe(returnValue);
 
-			expect(socket.emit.wasCalled).toEqual(true);
-			expect(socket.emit.mostRecentCall.args[0]).toEqual(event);
-			expect(socket.emit.mostRecentCall.args[1]).toEqual(data);
+			expect(socket.emit.wasCalled).toBe(true);
+			expect(socket.emit.mostRecentCall.args[0]).toBe(event);
+			expect(socket.emit.mostRecentCall.args[1]).toBe(data);
 			expect(socket.emit.mostRecentCall.args[2]).toBe(callback);
 		});
 
@@ -139,9 +139,9 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 			socket.removeListener.andReturn(returnValue);
 			expect(transport.removeListener(event, data, callback)).toBe(returnValue);
 
-			expect(socket.removeListener.wasCalled).toEqual(true);
-			expect(socket.removeListener.mostRecentCall.args[0]).toEqual(event);
-			expect(socket.removeListener.mostRecentCall.args[1]).toEqual(data);
+			expect(socket.removeListener.wasCalled).toBe(true);
+			expect(socket.removeListener.mostRecentCall.args[0]).toBe(event);
+			expect(socket.removeListener.mostRecentCall.args[1]).toBe(data);
 			expect(socket.removeListener.mostRecentCall.args[2]).toBe(callback);
 		});
 
@@ -152,21 +152,21 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 
 			expect(transport.request).toBeInstanceOf(Function);
 
-			expect(transport.request()).toEqual(false);
-			expect(transport.request("channel")).toEqual(false);
-			expect(transport.request("channel", "data")).toEqual(true);
+			expect(transport.request()).toBe(false);
+			expect(transport.request("channel")).toBe(false);
+			expect(transport.request("channel", "data")).toBe(true);
 
-			expect(transport.once.wasCalled).toEqual(true);
+			expect(transport.once.wasCalled).toBe(true);
 
 			eventId = socket.once.mostRecentCall.args[0];
 			expect(eventId).toBeTruthy();
 
 			expect(socket.once.mostRecentCall.args[1]).toBeInstanceOf(Function);
 
-			expect(socket.emit.wasCalled).toEqual(true);
-			expect(socket.emit.mostRecentCall.args[0]).toEqual("channel");
-			expect(socket.emit.mostRecentCall.args[1].data).toEqual("data");
-			expect(socket.emit.mostRecentCall.args[1].eventId).toEqual(eventId);
+			expect(socket.emit.wasCalled).toBe(true);
+			expect(socket.emit.mostRecentCall.args[0]).toBe("channel");
+			expect(socket.emit.mostRecentCall.args[1].data).toBe("data");
+			expect(socket.emit.mostRecentCall.args[1].eventId).toBe(eventId);
 		});
 
 		it("should make requests with callbacks", function () {
@@ -174,14 +174,14 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 				func,
 				args = {};
 
-			expect(transport.request("channel", "data", callback)).toEqual(true);
+			expect(transport.request("channel", "data", callback)).toBe(true);
 
 			func = socket.once.mostRecentCall.args[1];
 			expect(func).toBeInstanceOf(Function);
 
 			func(args);
 
-			expect(callback.wasCalled).toEqual(true);
+			expect(callback.wasCalled).toBe(true);
 			expect(callback.mostRecentCall.args[0]).toBe(args);
 		});
 
@@ -189,7 +189,7 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 			var callback = jasmine.createSpy(),
 				scope = {};
 
-			expect(transport.request("channel", "data", callback, scope)).toEqual(true);
+			expect(transport.request("channel", "data", callback, scope)).toBe(true);
 
 			socket.once.mostRecentCall.args[1]();
 
@@ -205,12 +205,12 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 
 			expect(transport.listen).toBeInstanceOf(Function);
 
-			expect(transport.listen()).toEqual(false);
-			expect(transport.listen("channel")).toEqual(false);
-			expect(transport.listen("channel", "data")).toEqual(false);
+			expect(transport.listen()).toBe(false);
+			expect(transport.listen("channel")).toBe(false);
+			expect(transport.listen("channel", "data")).toBe(false);
 			expect(transport.listen("channel", "data", callback)).toBeTruthy();
 
-			expect(transport.on.wasCalled).toEqual(true);
+			expect(transport.on.wasCalled).toBe(true);
 
 			eventId = socket.on.mostRecentCall.args[0];
 			expect(eventId).toBeTruthy();
@@ -219,10 +219,10 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 			expect(func).toBeInstanceOf(Function);
 			func();
 
-			expect(socket.emit.wasCalled).toEqual(true);
-			expect(socket.emit.mostRecentCall.args[0]).toEqual("channel");
-			expect(socket.emit.mostRecentCall.args[1].data).toEqual("data");
-			expect(socket.emit.mostRecentCall.args[1].eventId).toEqual(eventId);
+			expect(socket.emit.wasCalled).toBe(true);
+			expect(socket.emit.mostRecentCall.args[0]).toBe("channel");
+			expect(socket.emit.mostRecentCall.args[1].data).toBe("data");
+			expect(socket.emit.mostRecentCall.args[1].eventId).toBe(eventId);
 		});
 
 		it("should return a stop function that disconnects the channel", function () {
@@ -237,15 +237,15 @@ require(["SocketIOTransport", "Observable"], function (Transport, Observable) {
 			var stopFunc = transport.listen("channel", "data", callback);
 			eventId = transport.on.mostRecentCall.args[0];
 
-			expect(stopFunc.name).toEqual("stop");
+			expect(stopFunc.name).toBe("stop");
 
 			stopFunc();
 
-			expect(transport.emit.wasCalled).toEqual(true);
-			expect(transport.emit.mostRecentCall.args[0]).toEqual("disconnect-" + eventId);
+			expect(transport.emit.wasCalled).toBe(true);
+			expect(transport.emit.mostRecentCall.args[0]).toBe("disconnect-" + eventId);
 
-			expect(transport.removeListener.wasCalled).toEqual(true);
-			expect(transport.removeListener.mostRecentCall.args[0]).toEqual(eventId);
+			expect(transport.removeListener.wasCalled).toBe(true);
+			expect(transport.removeListener.mostRecentCall.args[0]).toBe(eventId);
 			expect(transport.removeListener.mostRecentCall.args[1]).toBe(transport.on.mostRecentCall.args[1]);
 
 

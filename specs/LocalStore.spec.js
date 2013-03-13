@@ -1,7 +1,7 @@
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 require(["Store", "LocalStore"], function (Store, LocalStore) {
@@ -25,8 +25,8 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 			var localStore = new LocalStore;
 
 			expect(localStore.setLocalStorage).toBeInstanceOf(Function);
-			expect(localStore.setLocalStorage()).toEqual(false);
-			expect(localStore.setLocalStorage(localStorageMock)).toEqual(true);
+			expect(localStore.setLocalStorage()).toBe(false);
+			expect(localStore.setLocalStorage(localStorageMock)).toBe(true);
 			expect(localStore.getLocalStorage()).toBe(localStorageMock);
 		});
 
@@ -52,9 +52,9 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 		});
 
 		it("should sync with localStorage by default", function () {
-			expect(localStore.sync()).toEqual(false);
-			expect(localStore.sync({})).toEqual(false);
-			expect(localStore.sync("store")).toEqual(true);
+			expect(localStore.sync()).toBe(false);
+			expect(localStore.sync({})).toBe(false);
+			expect(localStore.sync("store")).toBe(true);
 		});
 
 		it("should save its data into localStorage on sync", function () {
@@ -64,15 +64,15 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 			expect(localStorage.store).toBeTruthy();
 			json = JSON.parse(localStorage.store);
 			expect(json).toBeTruthy();
-			expect(json.a).toEqual(10);
-			expect(json.b).toEqual(20);
+			expect(json.a).toBe(10);
+			expect(json.b).toBe(20);
 		});
 
 		it("should load already existing data from localStorage on sync", function () {
 			localStorage.store = '{"a":10,"b":20}';
 			localStore.sync("store");
-			expect(localStore.get("a")).toEqual(10);
-			expect(localStore.get("b")).toEqual(20);
+			expect(localStore.get("a")).toBe(10);
+			expect(localStore.get("b")).toBe(20);
 		});
 
 		it("should save modifications in the localStorage", function () {
@@ -86,9 +86,9 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 
 			json = JSON.parse(localStorage.store);
 
-			expect(json.a).toEqual(15);
+			expect(json.a).toBe(15);
 			expect(json.b).toBeUndefined();
-			expect(json.c).toEqual(30);
+			expect(json.c).toBe(30);
 		});
 
 		it("should work with array-like store too", function () {
@@ -101,9 +101,9 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 
 			json = JSON.parse(localStorage.store);
 
-			expect(json[0]).toEqual(15);
-			expect(json[1]).toEqual(1);
-			expect(json[2]).toEqual(2);
+			expect(json[0]).toBe(15);
+			expect(json[1]).toBe(1);
+			expect(json[2]).toBe(2);
 			expect(json[3]).toBeUndefined();
 		});
 
@@ -111,13 +111,13 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 			localStore.setLocalStorage(localStorageMock);
 			localStore.sync("store");
 			localStore.reset([1]);
-			expect(localStorageMock.setItem.wasCalled).toEqual(true);
+			expect(localStorageMock.setItem.wasCalled).toBe(true);
 		});
 
 		it("shouldn't sync data with localStorage if it's not sync", function () {
 			localStorageMock.setItem.reset();
 			localStore.setLocalStorage(localStorageMock);
-			expect(localStorageMock.setItem.wasCalled).toEqual(false);
+			expect(localStorageMock.setItem.wasCalled).toBe(false);
 		});
 
 	});
@@ -138,13 +138,13 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 			localStore.sync("store");
 
 			json = JSON.parse(localStorage.store);
-			expect(json.a).toEqual(10);
-			expect(json.b).toEqual(30);
-			expect(json.c).toEqual(40);
+			expect(json.a).toBe(10);
+			expect(json.b).toBe(30);
+			expect(json.c).toBe(40);
 
-			expect(localStore.get("a")).toEqual(10);
-			expect(localStore.get("b")).toEqual(30);
-			expect(localStore.get("c")).toEqual(40);
+			expect(localStore.get("a")).toBe(10);
+			expect(localStore.get("b")).toBe(30);
+			expect(localStore.get("c")).toBe(40);
 		});
 
 	});
@@ -153,7 +153,7 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 
 		it("should pass the init params to Store", function () {
 			localStore = new LocalStore([]);
-			expect(localStore.toJSON()).toEqual("[]");
+			expect(localStore.toJSON()).toBe("[]");
 		});
 
 	});

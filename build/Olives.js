@@ -1,12 +1,13 @@
 /**
  * @license Olives <VERSION> http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
+
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define('DomUtils',["Tools"], function (Tools) {
@@ -97,13 +98,13 @@ define('DomUtils',["Tools"], function (Tools) {
 		},
 
 		/**
-		 * Determine if an element matche a certain CSS selector.
-		 * @param {Element} the node to check out
-		 * @param {String} CSS selector
+		 * Determine if an element matches a certain CSS selector.
 		 * @param {Element} the parent node
+		 * @param {String} CSS selector
+		 * @param {Element} the node to check out
 		 * @param true if matches
 		 */
-		matches : function matches(node, selector, parent){
+		matches : function matches(parent, selector, node){
 			return Tools.toArray(this.getNodes(parent, selector)).indexOf(node) > -1;
 		}
 
@@ -114,7 +115,7 @@ define('DomUtils',["Tools"], function (Tools) {
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define('Bind.plugin',["Store", "Observable", "Tools", "DomUtils"],
@@ -730,7 +731,7 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define('Event.plugin',["DomUtils"], function (Utils) {
@@ -845,7 +846,7 @@ define('Event.plugin',["DomUtils"], function (Utils) {
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define('LocalStore',["Store", "Tools"],
@@ -948,7 +949,7 @@ function LocalStore(Store, Tools) {
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define('Plugins',["Tools", "DomUtils"],
@@ -1102,14 +1103,14 @@ function Plugins(Tools, DomUtils) {
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define('OObject',["StateMachine", "Store", "Plugins", "DomUtils", "Tools"],
 /**
 * @class
-* OObject is an abstract class that any UI can inherit from.
-* It should provide code that is easy to reuse
+* OObject is a container for dom elements. It will also bind
+* the dom to additional plugins like Data binding
 * @requires StateMachine
 */
 function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
@@ -1117,8 +1118,8 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 	return function OObjectConstructor(otherStore) {
 
 		/**
-		 * This function creates the dom of the UI from it's template
-		 * It then queries the dom for data-model to list them into this.connects
+		 * This function creates the dom of the UI from its template
+		 * It then queries the dom for data- attributes
 		 * It can't be executed if the template is not set
 		 * @private
 		 */
@@ -1294,7 +1295,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define('Place.plugin',["OObject", "Tools"],
@@ -1341,7 +1342,7 @@ function (OObject, Tools) {
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define('SocketIOTransport',["Observable", "Tools"],

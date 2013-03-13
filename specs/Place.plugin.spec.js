@@ -1,7 +1,7 @@
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 require(["Place.plugin", "Plugins", "OObject"], function (UIPlugin, Plugins, OObject) {
@@ -33,11 +33,11 @@ require(["Place.plugin", "Plugins", "OObject"], function (UIPlugin, Plugins, OOb
 		});
 
 		it("should set a new ui", function () {
-			expect(uiPlugin.set("ui")).toEqual(false);
-			expect(uiPlugin.set()).toEqual(false);
-			expect(uiPlugin.set("ui", "ui")).toEqual(false);
-			expect(uiPlugin.set("ui", falseUI)).toEqual(false);
-			expect(uiPlugin.set("ui", rightUI)).toEqual(true);
+			expect(uiPlugin.set("ui")).toBe(false);
+			expect(uiPlugin.set()).toBe(false);
+			expect(uiPlugin.set("ui", "ui")).toBe(false);
+			expect(uiPlugin.set("ui", falseUI)).toBe(false);
+			expect(uiPlugin.set("ui", rightUI)).toBe(true);
 		});
 
 		it("should get a set ui", function () {
@@ -91,7 +91,7 @@ require(["Place.plugin", "Plugins", "OObject"], function (UIPlugin, Plugins, OOb
 		it("should call the place method of an ui", function () {
 			spyOn(myUI, "place");
 			uiPlugin.place(node, "myUI");
-			expect(myUI.place.wasCalled).toEqual(true);
+			expect(myUI.place.wasCalled).toBe(true);
 			expect(myUI.place.mostRecentCall.args[0]).toBe(node);
 		});
 

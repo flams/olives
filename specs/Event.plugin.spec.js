@@ -1,7 +1,7 @@
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 require(["Event.plugin"], function (EventPlugin) {
@@ -31,16 +31,16 @@ require(["Event.plugin"], function (EventPlugin) {
 
 		it("should allow to set parent object", function(){
 			var obj = {};
-			expect(plugin.setParent(obj)).toEqual(true);
+			expect(plugin.setParent(obj)).toBe(true);
 			expect(plugin.getParent()).toBe(obj);
 		});
 
 		it("should only set object as parent", function(){
-			expect(plugin.setParent("test")).toEqual(false);
-			expect(plugin.setParent(true)).toEqual(false);
-			expect(plugin.setParent()).toEqual(false);
-			expect(plugin.setParent(null)).toEqual(false);
-			expect(plugin.setParent({})).toEqual(true);
+			expect(plugin.setParent("test")).toBe(false);
+			expect(plugin.setParent(true)).toBe(false);
+			expect(plugin.setParent()).toBe(false);
+			expect(plugin.setParent(null)).toBe(false);
+			expect(plugin.setParent({})).toBe(true);
 		});
 
 		it("should set parent at init if defined", function(){
@@ -63,36 +63,36 @@ require(["Event.plugin"], function (EventPlugin) {
 
 		//should we have a isMobile function?
 		it("should by default map mouse with touch events", function(){
-			expect(plugin.map("mousedown")).toEqual("touchstart");
-			expect(plugin.map("mousemove")).toEqual("touchmove");
-			expect(plugin.map("mouseup")).toEqual("touchend");
+			expect(plugin.map("mousedown")).toBe("touchstart");
+			expect(plugin.map("mousemove")).toBe("touchmove");
+			expect(plugin.map("mouseup")).toBe("touchend");
 		});
 
 		it("should return none mobile events", function(){
 			//none or false
 			var plugin = new EventPlugin({});
-			expect(plugin.map("mousedown")).toEqual("mousedown");
-			expect(plugin.map("mousemove")).toEqual("mousemove");
-			expect(plugin.map("mouseup")).toEqual("mouseup");
+			expect(plugin.map("mousedown")).toBe("mousedown");
+			expect(plugin.map("mousemove")).toBe("mousemove");
+			expect(plugin.map("mouseup")).toBe("mouseup");
 		});
 
 		it("should not map unset events", function(){
-			expect(plugin.map("click")).toEqual("click");
-			expect(plugin.map("touchcancel")).toEqual("touchcancel");
+			expect(plugin.map("click")).toBe("click");
+			expect(plugin.map("touchcancel")).toBe("touchcancel");
 		});
 
 		//is it necessary to return boolean when set?
 		it("should set map", function(){
-			expect(plugin.setMap("click", "touchcancel")).toEqual(true);
-			expect(plugin.map("click")).toEqual("touchcancel");
-			expect(plugin.setMap("mousedown", "touchcancel")).toEqual(true);
-			expect(plugin.map("mousedown")).toEqual("touchcancel");
-			expect(plugin.setMap("mouseup")).toEqual(false);
-			expect(plugin.map("mouseup")).toEqual("touchend");
-			expect(plugin.setMap()).toEqual(false);
-			expect(plugin.setMap(undefined, "touchstart")).toEqual(false);
-			expect(plugin.setMap("mousedown", false)).toEqual(false);
-			expect(plugin.map("mousedown")).toEqual("touchcancel");
+			expect(plugin.setMap("click", "touchcancel")).toBe(true);
+			expect(plugin.map("click")).toBe("touchcancel");
+			expect(plugin.setMap("mousedown", "touchcancel")).toBe(true);
+			expect(plugin.map("mousedown")).toBe("touchcancel");
+			expect(plugin.setMap("mouseup")).toBe(false);
+			expect(plugin.map("mouseup")).toBe("touchend");
+			expect(plugin.setMap()).toBe(false);
+			expect(plugin.setMap(undefined, "touchstart")).toBe(false);
+			expect(plugin.setMap("mousedown", false)).toBe(false);
+			expect(plugin.map("mousedown")).toBe("touchcancel");
 		});
 	});
 
@@ -119,17 +119,17 @@ require(["Event.plugin"], function (EventPlugin) {
 			var func = function(){};
 			eventPlugin.addEventListener(node, "click", func, true);
 
-			expect(node.addEventListener.wasCalled).toEqual(true);
-			expect(node.addEventListener.mostRecentCall.args[0]).toEqual("click");
+			expect(node.addEventListener.wasCalled).toBe(true);
+			expect(node.addEventListener.mostRecentCall.args[0]).toBe("click");
 			expect(node.addEventListener.mostRecentCall.args[1]).toBe(func);
-			expect(node.addEventListener.mostRecentCall.args[2]).toEqual(true);
+			expect(node.addEventListener.mostRecentCall.args[2]).toBe(true);
 
 
 		});
 
 		it("should map events according the browser type", function(){
 			eventPlugin.addEventListener(node, "mousedown", function(){}, "true");
-			expect(node.addEventListener.mostRecentCall.args[0]).toEqual("touchstart");
+			expect(node.addEventListener.mostRecentCall.args[0]).toBe("touchstart");
 		});
 	});
 
@@ -158,10 +158,10 @@ require(["Event.plugin"], function (EventPlugin) {
 		it("should add dom event listener", function() {
 
 			eventPlugin.listen(dom,"click","listener","true");
-			expect(eventPlugin.addEventListener.wasCalled).toEqual(true);
+			expect(eventPlugin.addEventListener.wasCalled).toBe(true);
 			expect(eventPlugin.addEventListener.mostRecentCall.args[0]).toBe(dom);
-			expect(eventPlugin.addEventListener.mostRecentCall.args[1]).toEqual("click");
-			expect(eventPlugin.addEventListener.mostRecentCall.args[3]).toEqual(true);
+			expect(eventPlugin.addEventListener.mostRecentCall.args[1]).toBe("click");
+			expect(eventPlugin.addEventListener.mostRecentCall.args[3]).toBe(true);
 
 		});
 
@@ -204,10 +204,10 @@ require(["Event.plugin"], function (EventPlugin) {
 
 		it("should add dom event listener", function(){
 			eventPlugin.delegate(dom, "div.is.awesome", "click", "listener", "true");
-			expect(eventPlugin.addEventListener.wasCalled).toEqual(true);
-			expect(eventPlugin.addEventListener.mostRecentCall.args[0]).toEqual(dom);
-			expect(eventPlugin.addEventListener.mostRecentCall.args[1]).toEqual("click");
-			expect(eventPlugin.addEventListener.mostRecentCall.args[3]).toEqual(true);
+			expect(eventPlugin.addEventListener.wasCalled).toBe(true);
+			expect(eventPlugin.addEventListener.mostRecentCall.args[0]).toBe(dom);
+			expect(eventPlugin.addEventListener.mostRecentCall.args[1]).toBe("click");
+			expect(eventPlugin.addEventListener.mostRecentCall.args[3]).toBe(true);
 		});
 
 		it("should call the parent callback only if query matches with event target", function(){

@@ -1,7 +1,7 @@
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, Store, Plugins, DomUtils) {
@@ -38,9 +38,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		});
 
 		it("should allow for setting model if it's a store", function () {
-			expect(modelPlugin.setModel()).toEqual(false);
-			expect(modelPlugin.setModel({})).toEqual(false);
-			expect(modelPlugin.setModel(model)).toEqual(true);
+			expect(modelPlugin.setModel()).toBe(false);
+			expect(modelPlugin.setModel({})).toBe(false);
+			expect(modelPlugin.setModel(model)).toBe(true);
 		});
 
 		it("should return the model", function () {
@@ -75,31 +75,31 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		it("should link the model and the dom node with bind", function () {
 			plugins.apply(dom);
 			spyOn(DomUtils, "setAttribute").andCallThrough();
-			expect(dom.innerHTML).toEqual("Olives is fun!");
+			expect(dom.innerHTML).toBe("Olives is fun!");
 			model.set("content", "Olives is cool!");
 
-			expect(dom.innerHTML).toEqual("Olives is cool!");
+			expect(dom.innerHTML).toBe("Olives is cool!");
 			expect(modelPlugin.observers["content"]).toBeInstanceOf(Array);
-			expect(model.getValueObservable().hasObserver(modelPlugin.observers["content"][0])).toEqual(true);
+			expect(model.getValueObservable().hasObserver(modelPlugin.observers["content"][0])).toBe(true);
 
-			expect(DomUtils.setAttribute.wasCalled).toEqual(true);
+			expect(DomUtils.setAttribute.wasCalled).toBe(true);
 			expect(DomUtils.setAttribute.mostRecentCall.args[0]).toBe(dom);
-			expect(DomUtils.setAttribute.mostRecentCall.args[1]).toEqual("innerHTML");
-			expect(DomUtils.setAttribute.mostRecentCall.args[2]).toEqual("Olives is cool!");
+			expect(DomUtils.setAttribute.mostRecentCall.args[1]).toBe("innerHTML");
+			expect(DomUtils.setAttribute.mostRecentCall.args[2]).toBe("Olives is cool!");
 		});
 
 		it("should not touch the dom if the value isn't set", function () {
 			dom.setAttribute("data-model", "bind:innerHTML,content2");
 			dom.innerHTML = "hey";
 			plugins.apply(dom);
-			expect(dom.innerHTML).toEqual("hey");
+			expect(dom.innerHTML).toBe("hey");
 		});
 
 		it("should set up the dom as soon as the value is set", function () {
 			dom.setAttribute("data-model", "bind:innerHTML,content2");
 			plugins.apply(dom);
 			model.set("content2", "sup!");
-			expect(dom.innerHTML).toEqual("sup!");
+			expect(dom.innerHTML).toBe("sup!");
 		});
 
 		it("should also work with properties", function () {
@@ -107,9 +107,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			dom.setAttribute("data-model", "bind:checked,bool");
 			model.reset({bool:true});
 			plugins.apply(dom);
-			expect(dom.checked).toEqual(true);
+			expect(dom.checked).toBe(true);
 			model.set("bool", false);
-			expect(dom.checked).toEqual(false);
+			expect(dom.checked).toBe(false);
 		});
 
 
@@ -119,13 +119,13 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			model.reset({bool:true});
 			spyOn(DomUtils, "setAttribute").andCallThrough();
 			plugins.apply(dom);
-			expect(dom.checked).toEqual(true);
+			expect(dom.checked).toBe(true);
 			model.set("bool", false);
-			expect(dom.checked).toEqual(false);
-			expect(DomUtils.setAttribute.wasCalled).toEqual(true);
+			expect(dom.checked).toBe(false);
+			expect(DomUtils.setAttribute.wasCalled).toBe(true);
 			expect(DomUtils.setAttribute.mostRecentCall.args[0]).toBe(dom);
-			expect(DomUtils.setAttribute.mostRecentCall.args[1]).toEqual("checked");
-			expect(DomUtils.setAttribute.mostRecentCall.args[2]).toEqual(false);
+			expect(DomUtils.setAttribute.mostRecentCall.args[1]).toBe("checked");
+			expect(DomUtils.setAttribute.mostRecentCall.args[2]).toBe(false);
 		});
 
 	});
@@ -149,13 +149,13 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			spyOn(dom, "addEventListener");
 			plugins.apply(dom);
 			expect(dom.addEventListener.wasCalled);
-			expect(dom.addEventListener.mostRecentCall.args[0]).toEqual("change");
+			expect(dom.addEventListener.mostRecentCall.args[0]).toBe("change");
 			expect(dom.addEventListener.mostRecentCall.args[2]).toBe(true);
 			func = dom.addEventListener.mostRecentCall.args[1];
 			expect(func).toBeInstanceOf(Function);
 			dom.checked = true;
 			func();
-			expect(model.get("bool")).toEqual(true);
+			expect(model.get("bool")).toBe(true);
 		});
 
 		it("shouldn't set the item if it was removed, this could happen if the item is removed prior to the trigger of change", function () {
@@ -169,10 +169,10 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			func = dom.addEventListener.mostRecentCall.args[1];
 			model.reset([]);
 			func();
-			expect(model.has.wasCalled).toEqual(true);
-			expect(model.has.mostRecentCall.args[0]).toEqual('0');
-			expect(model.update.wasCalled).toEqual(false);
-			expect(model.set.wasCalled).toEqual(false);
+			expect(model.has.wasCalled).toBe(true);
+			expect(model.has.mostRecentCall.args[0]).toBe('0');
+			expect(model.update.wasCalled).toBe(false);
+			expect(model.set.wasCalled).toBe(false);
 		});
 
 	});
@@ -205,16 +205,16 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 		it("should also work with complex data", function () {
 			plugins.apply(dom);
-			expect(dom.querySelectorAll("strong")[0].innerHTML).toEqual("Olives");
-			expect(dom.querySelectorAll("dd")[0].innerHTML).toEqual("mailbox@domain.com");
-			expect(dom.querySelectorAll("dd")[1].innerHTML).toEqual("+1234567890");
-			expect(dom.querySelectorAll("dd")[2].innerHTML).toEqual("");
+			expect(dom.querySelectorAll("strong")[0].innerHTML).toBe("Olives");
+			expect(dom.querySelectorAll("dd")[0].innerHTML).toBe("mailbox@domain.com");
+			expect(dom.querySelectorAll("dd")[1].innerHTML).toBe("+1234567890");
+			expect(dom.querySelectorAll("dd")[2].innerHTML).toBe("");
 		});
 
 		it("should also be updatable", function () {
 			plugins.apply(dom);
 			model.set("contact", {office: "-0987654321"});
-			expect(dom.querySelectorAll("dd")[1].innerHTML).toEqual("-0987654321");
+			expect(dom.querySelectorAll("dd")[1].innerHTML).toBe("-0987654321");
 		});
 
 	});
@@ -255,7 +255,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 			checkbox.dispatchEvent(event);
 
-			expect(model.get(0).optin).toEqual(true);
+			expect(model.get(0).optin).toBe(true);
 		});
 
 	});
@@ -303,7 +303,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			var itemRenderer = new modelPlugin.ItemRenderer(),
 				div = document.createElement("div");
 
-			expect(itemRenderer.setRenderer(div)).toEqual(true);
+			expect(itemRenderer.setRenderer(div)).toBe(true);
 			expect(itemRenderer.getRenderer()).toBe(div);
 		});
 
@@ -315,18 +315,18 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			rootNode.appendChild(p);
 			spyOn(rootNode, "removeChild").andCallThrough();
 			itemRenderer = new modelPlugin.ItemRenderer();
-			expect(itemRenderer.setRootNode()).toEqual(false);
-			expect(itemRenderer.setRootNode({})).toEqual(false);
+			expect(itemRenderer.setRootNode()).toBe(false);
+			expect(itemRenderer.setRootNode({})).toBe(false);
 
 			spyOn(itemRenderer, "setRenderer").andCallThrough();
 
-			expect(itemRenderer.setRootNode(rootNode)).toEqual(true);
+			expect(itemRenderer.setRootNode(rootNode)).toBe(true);
 			expect(itemRenderer.getRootNode()).toBe(rootNode);
 
-			expect(itemRenderer.setRenderer.wasCalled).toEqual(true);
+			expect(itemRenderer.setRenderer.wasCalled).toBe(true);
 			expect(itemRenderer.setRenderer.mostRecentCall.args[0]).toBe(p);
 
-			expect(rootNode.removeChild.wasCalled).toEqual(true);
+			expect(rootNode.removeChild.wasCalled).toBe(true);
 			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(p);
 
 		});
@@ -340,8 +340,8 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 		it("should set plugins", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer();
-			expect(itemRenderer.setPlugins(plugins)).toEqual(true);
-			expect(itemRenderer.getPlugins()).toEqual(plugins);
+			expect(itemRenderer.setPlugins(plugins)).toBe(true);
+			expect(itemRenderer.getPlugins()).toBe(plugins);
 		});
 
 		it("should have a function to create items", function () {
@@ -357,12 +357,12 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 			node = itemRenderer.create(0);
 			expect(node).toBeInstanceOf(HTMLElement);
-			expect(node.nodeName).toEqual("DIV");
-			expect(node.querySelectorAll("*").length).toEqual(6);
+			expect(node.nodeName).toBe("DIV");
+			expect(node.querySelectorAll("*").length).toBe(6);
 
-			expect(node.querySelectorAll("[data-model]")[0].getAttribute("data-model_id")).toEqual('0');
-			expect(node.querySelectorAll("[data-model]")[1].getAttribute("data-model_id")).toEqual('0');
-			expect(node.querySelectorAll("[data-model_id]").length).toEqual(6);
+			expect(node.querySelectorAll("[data-model]")[0].getAttribute("data-model_id")).toBe('0');
+			expect(node.querySelectorAll("[data-model]")[1].getAttribute("data-model_id")).toBe('0');
+			expect(node.querySelectorAll("[data-model_id]").length).toBe(6);
 		});
 
 		it("should call plugins.apply on item create", function () {
@@ -374,7 +374,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode),
 
 			item = itemRenderer.create(0);
-			expect(plugins.apply.wasCalled).toEqual(true);
+			expect(plugins.apply.wasCalled).toBe(true);
 			expect(plugins.apply.mostRecentCall.args[0]).toBe(item);
 
 		});
@@ -406,7 +406,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			rootNode.appendChild(div);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 
-			expect(itemRenderer.getPlugins()).toEqual(plugins);
+			expect(itemRenderer.getPlugins()).toBe(plugins);
 		});
 
 		it("should set rootnode at init", function () {
@@ -420,18 +420,18 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 		it("should have a function to get/set start", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer();
-			expect(itemRenderer.setStart(0)).toEqual(0);
-			expect(itemRenderer.setStart("5")).toEqual(5);
-			expect(itemRenderer.getStart()).toEqual(5);
+			expect(itemRenderer.setStart(0)).toBe(0);
+			expect(itemRenderer.setStart("5")).toBe(5);
+			expect(itemRenderer.getStart()).toBe(5);
 		});
 
 		it("should have a function to get/set nb", function () {
 			var itemRenderer = new modelPlugin.ItemRenderer();
-			expect(itemRenderer.setNb(0)).toEqual(0);
-			expect(itemRenderer.setNb("5")).toEqual(5);
-			expect(itemRenderer.getNb()).toEqual(5);
-			expect(itemRenderer.setNb("*")).toEqual("*");
-			expect(itemRenderer.getNb()).toEqual("*");
+			expect(itemRenderer.setNb(0)).toBe(0);
+			expect(itemRenderer.setNb("5")).toBe(5);
+			expect(itemRenderer.getNb()).toBe(5);
+			expect(itemRenderer.setNb("*")).toBe("*");
+			expect(itemRenderer.getNb()).toBe("*");
 		});
 
 		it("should have a store to store items", function () {
@@ -440,7 +440,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 			rootNode.appendChild(dom);
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
-			expect(itemRenderer.items.toJSON()).toEqual("[]");
+			expect(itemRenderer.items.toJSON()).toBe("[]");
 		});
 
 		it("should store created items in the store", function () {
@@ -452,7 +452,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
 
 			item = itemRenderer.create(0);
-			expect(itemRenderer.items.get(0)).toEqual(item);
+			expect(itemRenderer.items.get(0)).toBe(item);
 		});
 
 		it("should have a function to add an item", function () {
@@ -464,14 +464,14 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			spyOn(rootNode, "appendChild").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
 
-			expect(itemRenderer.addItem()).toEqual(false);
-			expect(itemRenderer.addItem({})).toEqual(false);
-			expect(itemRenderer.addItem(1)).toEqual(true);
+			expect(itemRenderer.addItem()).toBe(false);
+			expect(itemRenderer.addItem({})).toBe(false);
+			expect(itemRenderer.addItem(1)).toBe(true);
 
-			expect(itemRenderer.create.wasCalled).toEqual(true);
-			expect(itemRenderer.create.mostRecentCall.args[0]).toEqual(1);
+			expect(itemRenderer.create.wasCalled).toBe(true);
+			expect(itemRenderer.create.mostRecentCall.args[0]).toBe(1);
 
-			expect(rootNode.appendChild.wasCalled).toEqual(true);
+			expect(rootNode.appendChild.wasCalled).toBe(true);
 			expect(rootNode.appendChild.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
 			expect(rootNode.appendChild.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
 		});
@@ -485,14 +485,14 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			spyOn(itemRenderer.items, "get").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
 
-			expect(itemRenderer.addItem(1)).toEqual(true);
-			expect(itemRenderer.create.callCount).toEqual(1);
+			expect(itemRenderer.addItem(1)).toBe(true);
+			expect(itemRenderer.create.callCount).toBe(1);
 
-			expect(itemRenderer.items.get.wasCalled).toEqual(true);
-			expect(itemRenderer.items.get.mostRecentCall.args[0]).toEqual(1);
+			expect(itemRenderer.items.get.wasCalled).toBe(true);
+			expect(itemRenderer.items.get.mostRecentCall.args[0]).toBe(1);
 
-			expect(itemRenderer.addItem(1)).toEqual(false);
-			expect(itemRenderer.create.callCount).toEqual(1);
+			expect(itemRenderer.addItem(1)).toBe(false);
+			expect(itemRenderer.create.callCount).toBe(1);
 
 		});
 
@@ -505,8 +505,8 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 			expect(itemRenderer.getNextItem(0)).toBeUndefined();
 			itemRenderer.addItem(3);
-			expect(itemRenderer.getNextItem(0)).toEqual(itemRenderer.items.get(3));
-			expect(itemRenderer.getNextItem(2)).toEqual(itemRenderer.items.get(3));
+			expect(itemRenderer.getNextItem(0)).toBe(itemRenderer.items.get(3));
+			expect(itemRenderer.getNextItem(2)).toBe(itemRenderer.items.get(3));
 			expect(itemRenderer.getNextItem(3)).toBeUndefined();
 		});
 
@@ -519,8 +519,8 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 			itemRenderer.addItem(2);
 			itemRenderer.addItem(0);
-			expect(rootNode.querySelectorAll("p")[0].getAttribute("data-model_id")).toEqual("0");
-			expect(rootNode.querySelectorAll("p")[1].getAttribute("data-model_id")).toEqual("2");
+			expect(rootNode.querySelectorAll("p")[0].getAttribute("data-model_id")).toBe("0");
+			expect(rootNode.querySelectorAll("p")[1].getAttribute("data-model_id")).toBe("2");
 		});
 
 		it("should'nt try to add an item that doesn't exist", function () {
@@ -534,7 +534,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer.addItem(-1);
 			}).not.toThrow();
 
-			expect(itemRenderer.addItem(-1)).toEqual(false);
+			expect(itemRenderer.addItem(-1)).toBe(false);
 		});
 
 		it("should have a function to remove an item", function () {
@@ -547,22 +547,22 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			spyOn(rootNode, "removeChild").andCallThrough();
 			spyOn(itemRenderer.items, "set").andCallThrough();
 
-			expect(itemRenderer.removeItem()).toEqual(false);
-			expect(itemRenderer.removeItem({})).toEqual(false);
-			expect(itemRenderer.removeItem(1)).toEqual(false);
+			expect(itemRenderer.removeItem()).toBe(false);
+			expect(itemRenderer.removeItem({})).toBe(false);
+			expect(itemRenderer.removeItem(1)).toBe(false);
 
 			itemRenderer.addItem(1);
 
 			item = itemRenderer.items.get(1);
 
-			expect(itemRenderer.removeItem(1)).toEqual(true);
-			expect(rootNode.removeChild.wasCalled).toEqual(true);
+			expect(itemRenderer.removeItem(1)).toBe(true);
+			expect(rootNode.removeChild.wasCalled).toBe(true);
 			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(item);
 
 			// We don't delete the item but set it to undefined
 			// so we keep the indexes in line with the model's indexes
-			expect(itemRenderer.items.set.wasCalled).toEqual(true);
-			expect(itemRenderer.items.set.mostRecentCall.args[0]).toEqual(1);
+			expect(itemRenderer.items.set.wasCalled).toBe(true);
+			expect(itemRenderer.items.set.mostRecentCall.args[0]).toBe(1);
 			expect(itemRenderer.items.set.mostRecentCall.args[1]).toBeUndefined();
 		});
 
@@ -576,7 +576,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 			item = itemRenderer.create(10);
 			expect(item).toBeUndefined();
-			expect(itemRenderer.items.has(10)).toEqual(false);
+			expect(itemRenderer.items.has(10)).toBe(false);
 		});
 
 		it("should allow for populating the rootNode with items on render", function () {
@@ -589,14 +589,14 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			spyOn(itemRenderer, "addItem").andCallThrough();
 			spyOn(itemRenderer, "removeItem");
 
-			expect(itemRenderer.render()).toEqual(false);
+			expect(itemRenderer.render()).toBe(false);
 			itemRenderer.setNb(3);
 			itemRenderer.setStart(1);
-			expect(itemRenderer.render()).toEqual(true);
+			expect(itemRenderer.render()).toBe(true);
 
-			expect(itemRenderer.addItem.callCount).toEqual(3);
-			expect(itemRenderer.addItem.calls[0].args[0]).toEqual(1);
-			expect(rootNode.querySelectorAll("p").length).toEqual(3);
+			expect(itemRenderer.addItem.callCount).toBe(3);
+			expect(itemRenderer.addItem.calls[0].args[0]).toBe(1);
+			expect(rootNode.querySelectorAll("p").length).toBe(3);
 		});
 
 		it("should update rendering when the limits change", function () {
@@ -615,13 +615,13 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			itemRenderer.setStart(2);
 			itemRenderer.render();
 
-			expect(itemRenderer.addItem.wasCalled).toEqual(true);
-			expect(itemRenderer.addItem.mostRecentCall.args[0]).toEqual(4);
-			expect(itemRenderer.removeItem.wasCalled).toEqual(true);
+			expect(itemRenderer.addItem.wasCalled).toBe(true);
+			expect(itemRenderer.addItem.mostRecentCall.args[0]).toBe(4);
+			expect(itemRenderer.removeItem.wasCalled).toBe(true);
 			// The items must be removed from the highest id to the lowest
 			// so the ids don't change during the removal process
-			expect(itemRenderer.removeItem.calls[0].args[0]).toEqual(1);
-			expect(itemRenderer.removeItem.calls[1].args[0]).toEqual(0);
+			expect(itemRenderer.removeItem.calls[0].args[0]).toBe(1);
+			expect(itemRenderer.removeItem.calls[1].args[0]).toBe(0);
 		});
 
 		it("should update rendering when an item is removed", function () {
@@ -641,22 +641,22 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			// And the rendering should be updated
 			itemRenderer.render();
 			// There are now 5 items
-			expect(rootNode.querySelectorAll("p").length).toEqual(5);
+			expect(rootNode.querySelectorAll("p").length).toBe(5);
 			// Because removeItem was called once
-			expect(itemRenderer.removeItem.callCount).toEqual(1);
+			expect(itemRenderer.removeItem.callCount).toBe(1);
 			// to remove item with index 5.
 			// 5?? yes! the items from 0 to 4 are updated, the 5 is deleted!
-			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toEqual(5);
+			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toBe(5);
 
 			// Deletes item 0, 1, 2
 			modelPlugin.getModel().alter("splice", 0, 3);
 			// which should remove 3 dom nodes : the 5th,
 			itemRenderer.render();
 
-			expect(itemRenderer.removeItem.callCount).toEqual(5);
-			expect(itemRenderer.removeItem.calls[3].args[0]).toEqual(3);
-			expect(itemRenderer.removeItem.calls[2].args[0]).toEqual(4);
-			expect(itemRenderer.removeItem.calls[1].args[0]).toEqual(5);
+			expect(itemRenderer.removeItem.callCount).toBe(5);
+			expect(itemRenderer.removeItem.calls[3].args[0]).toBe(3);
+			expect(itemRenderer.removeItem.calls[2].args[0]).toBe(4);
+			expect(itemRenderer.removeItem.calls[1].args[0]).toBe(5);
 
 		});
 	});
@@ -681,10 +681,10 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 		it("should expand the node inside", function () {
 			plugins.apply(dom);
-			expect(dom.querySelectorAll("li").length).toEqual(3);
-			expect(dom.querySelectorAll("li")[0].getAttribute("data-model_id")).toEqual("0");
-			expect(dom.querySelectorAll("li")[1].getAttribute("data-model_id")).toEqual("1");
-			expect(dom.querySelectorAll("li")[2].getAttribute("data-model_id")).toEqual("2");
+			expect(dom.querySelectorAll("li").length).toBe(3);
+			expect(dom.querySelectorAll("li")[0].getAttribute("data-model_id")).toBe("0");
+			expect(dom.querySelectorAll("li")[1].getAttribute("data-model_id")).toBe("1");
+			expect(dom.querySelectorAll("li")[2].getAttribute("data-model_id")).toBe("2");
 		});
 
 		it("should'nt do anything if no inner node declared", function () {
@@ -693,27 +693,27 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			expect(function () {
 				plugins.apply(dom);
 			}).not.toThrow();
-			expect(dom.querySelectorAll("*").length).toEqual(0);
+			expect(dom.querySelectorAll("*").length).toBe(0);
 		});
 
 		it("should associate the model with the dom nodes", function () {
 			plugins.apply(dom);
-			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives");
-			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("is");
-			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("fun");
-			expect(dom.querySelectorAll("li").length).toEqual(3);
+			expect(dom.querySelectorAll("li")[0].innerHTML).toBe("Olives");
+			expect(dom.querySelectorAll("li")[1].innerHTML).toBe("is");
+			expect(dom.querySelectorAll("li")[2].innerHTML).toBe("fun");
+			expect(dom.querySelectorAll("li").length).toBe(3);
 		});
 
 		it("should update the generated dom when the model is updated", function () {
 			plugins.apply(dom);
 			model.set(0, "Olives and Emily");
-			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives and Emily");
+			expect(dom.querySelectorAll("li")[0].innerHTML).toBe("Olives and Emily");
 			model.set(1, "are");
-			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("are");
+			expect(dom.querySelectorAll("li")[1].innerHTML).toBe("are");
 			model.alter("splice", 2, 0, "very");
-			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("very");
-			expect(dom.querySelectorAll("li")[3].innerHTML).toEqual("fun");
-			expect(dom.querySelectorAll("li").length).toEqual(4);
+			expect(dom.querySelectorAll("li")[2].innerHTML).toBe("very");
+			expect(dom.querySelectorAll("li")[3].innerHTML).toBe("fun");
+			expect(dom.querySelectorAll("li").length).toBe(4);
 		});
 
 		it("should remove an item if it's removed from the model", function () {
@@ -727,7 +727,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			plugins.apply(dom);
 			handler = modelPlugin.observers[2][0];
 			model.alter("pop");
-			expect(model.getValueObservable().hasObserver(handler)).toEqual(false);
+			expect(model.getValueObservable().hasObserver(handler)).toBe(false);
 			expect(modelPlugin.observers[2]).toBeUndefined();
 		});
 
@@ -738,7 +738,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			expect(function () {
 				plugins.apply(dom);
 			}).not.toThrow();
-			expect(dom.querySelectorAll("li").length).toEqual(3);
+			expect(dom.querySelectorAll("li").length).toBe(3);
 		});
 	});
 
@@ -784,18 +784,18 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			'<span data-model="bind:innerHTML,value.body"></span></li>';
 
 			modelPlugin.foreach(dom);
-			expect(dom.querySelectorAll("li").length).toEqual(3);
-			expect(dom.querySelectorAll("em")[0].innerHTML).toEqual(dataSet[0].value.date);
-			expect(dom.querySelectorAll("strong")[0].innerHTML).toEqual(dataSet[0].value.title);
-			expect(dom.querySelectorAll("span")[0].innerHTML).toEqual(dataSet[0].value.body);
+			expect(dom.querySelectorAll("li").length).toBe(3);
+			expect(dom.querySelectorAll("em")[0].innerHTML).toBe(dataSet[0].value.date);
+			expect(dom.querySelectorAll("strong")[0].innerHTML).toBe(dataSet[0].value.title);
+			expect(dom.querySelectorAll("span")[0].innerHTML).toBe(dataSet[0].value.body);
 
-			expect(dom.querySelectorAll("em")[1].innerHTML).toEqual(dataSet[1].value.date);
-			expect(dom.querySelectorAll("strong")[1].innerHTML).toEqual(dataSet[1].value.title);
-			expect(dom.querySelectorAll("span")[1].innerHTML).toEqual(dataSet[1].value.body);
+			expect(dom.querySelectorAll("em")[1].innerHTML).toBe(dataSet[1].value.date);
+			expect(dom.querySelectorAll("strong")[1].innerHTML).toBe(dataSet[1].value.title);
+			expect(dom.querySelectorAll("span")[1].innerHTML).toBe(dataSet[1].value.body);
 
-			expect(dom.querySelectorAll("em")[2].innerHTML).toEqual(dataSet[2].value.date);
-			expect(dom.querySelectorAll("strong")[2].innerHTML).toEqual(dataSet[2].value.title);
-			expect(dom.querySelectorAll("span")[2].innerHTML).toEqual(dataSet[2].value.body);
+			expect(dom.querySelectorAll("em")[2].innerHTML).toBe(dataSet[2].value.date);
+			expect(dom.querySelectorAll("strong")[2].innerHTML).toBe(dataSet[2].value.title);
+			expect(dom.querySelectorAll("span")[2].innerHTML).toBe(dataSet[2].value.body);
 		});
 
 		it("should update such expanded list", function () {
@@ -811,9 +811,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 					body: "innit"
 				}
 			});
-			expect(dom.querySelectorAll("em")[1].innerHTML).toEqual("2012/01/24");
-			expect(dom.querySelectorAll("strong")[1].innerHTML).toEqual("Olives is fantastic");
-			expect(dom.querySelectorAll("span")[1].innerHTML).toEqual("innit");
+			expect(dom.querySelectorAll("em")[1].innerHTML).toBe("2012/01/24");
+			expect(dom.querySelectorAll("strong")[1].innerHTML).toBe("Olives is fantastic");
+			expect(dom.querySelectorAll("span")[1].innerHTML).toBe("innit");
 		});
 
 
@@ -878,32 +878,32 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 		it("should limit the list length to the given params", function () {
 			modelPlugin.foreach(dom, "id", 1, 3);
-			expect(dom.querySelectorAll("li").length).toEqual(3);
-			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("is");
-			expect(dom.querySelectorAll("li")[1].innerHTML).toEqual("cool");
-			expect(dom.querySelectorAll("li")[2].innerHTML).toEqual("it handles");
+			expect(dom.querySelectorAll("li").length).toBe(3);
+			expect(dom.querySelectorAll("li")[0].innerHTML).toBe("is");
+			expect(dom.querySelectorAll("li")[1].innerHTML).toBe("cool");
+			expect(dom.querySelectorAll("li")[2].innerHTML).toBe("it handles");
 		});
 
 		it("should not fail with outbounds values", function () {
 			modelPlugin.foreach(dom, "id", -1, 7);
-			expect(dom.querySelectorAll("li").length).toEqual(6);
-			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("Olives");
-			expect(dom.querySelectorAll("li")[5].innerHTML).toEqual("for me");
+			expect(dom.querySelectorAll("li").length).toBe(6);
+			expect(dom.querySelectorAll("li")[0].innerHTML).toBe("Olives");
+			expect(dom.querySelectorAll("li")[5].innerHTML).toBe("for me");
 		});
 
 		it("should not add a new item if it's out of the limits", function () {
 			modelPlugin.foreach(dom, "id", 2, 3);
 			model.alter("push", "new item out of the limits");
-			expect(dom.querySelectorAll("li").length).toEqual(3);
+			expect(dom.querySelectorAll("li").length).toBe(3);
 		});
 
 		it("should not fail if an item is removed", function() {
 			modelPlugin.foreach(dom, "id", 2, 3);
 			model.alter("push", "new item out of the limits");
 			model.alter("pop");
-			expect(dom.querySelectorAll("li").length).toEqual(3);
+			expect(dom.querySelectorAll("li").length).toBe(3);
 			model.del(2);
-			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("it handles");
+			expect(dom.querySelectorAll("li")[0].innerHTML).toBe("it handles");
 		});
 
 		it("should store the item renderers according to their id", function () {
@@ -911,7 +911,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			spyOn(modelPlugin, "setItemRenderer").andCallThrough();
 
 			modelPlugin.foreach(dom, "id", 2, 3);
-			expect(modelPlugin.setItemRenderer.mostRecentCall.args[0]).toEqual("id");
+			expect(modelPlugin.setItemRenderer.mostRecentCall.args[0]).toBe("id");
 			itemRenderer = modelPlugin.setItemRenderer.mostRecentCall.args[1];
 			expect(itemRenderer).toBeInstanceOf(modelPlugin.ItemRenderer);
 			expect(modelPlugin.getItemRenderer).toBeInstanceOf(Function);
@@ -932,27 +932,27 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			modelPlugin.foreach(dom, "id", 1, 3);
 			modelPlugin.foreach(dom2, "id2", 3, 3);
 
-			expect(dom2.querySelectorAll("li").length).toEqual(3);
-			expect(dom.querySelectorAll("li")[0].innerHTML).toEqual("is");
-			expect(dom2.querySelectorAll("li")[0].innerHTML).toEqual("it handles");
+			expect(dom2.querySelectorAll("li").length).toBe(3);
+			expect(dom.querySelectorAll("li")[0].innerHTML).toBe("is");
+			expect(dom2.querySelectorAll("li")[0].innerHTML).toBe("it handles");
 		});
 
 		it("should update the foreach start", function () {
 			var itemRenderer;
 			modelPlugin.foreach(dom, "id", 1, 3);
 			itemRenderer = modelPlugin.getItemRenderer("id");
-			expect(modelPlugin.updateStart("fakeId")).toEqual(false);
-			expect(modelPlugin.updateStart("id", 2)).toEqual(true);
-			expect(itemRenderer.getStart()).toEqual(2);
+			expect(modelPlugin.updateStart("fakeId")).toBe(false);
+			expect(modelPlugin.updateStart("id", 2)).toBe(true);
+			expect(itemRenderer.getStart()).toBe(2);
 		});
 
 		it("should update the nb of items displayed by foreach", function () {
 			var itemRenderer;
 			modelPlugin.foreach(dom, "id", 1, 3);
 			itemRenderer = modelPlugin.getItemRenderer("id");
-			expect(modelPlugin.updateNb("fakeId")).toEqual(false);
-			expect(modelPlugin.updateNb("id", 2)).toEqual(true);
-			expect(itemRenderer.getNb()).toEqual(2);
+			expect(modelPlugin.updateNb("fakeId")).toBe(false);
+			expect(modelPlugin.updateNb("id", 2)).toBe(true);
+			expect(itemRenderer.getNb()).toBe(2);
 		});
 
 		it("should have a function to call itemRenderer's render", function () {
@@ -961,9 +961,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			itemRenderer = modelPlugin.getItemRenderer("id");
 			spyOn(itemRenderer, "render");
 
-			expect(modelPlugin.refresh("fakeid")).toEqual(false);
-			expect(modelPlugin.refresh("id")).toEqual(true);
-			expect(itemRenderer.render.wasCalled).toEqual(true);
+			expect(modelPlugin.refresh("fakeid")).toBe(false);
+			expect(modelPlugin.refresh("id")).toBe(true);
+			expect(itemRenderer.render.wasCalled).toBe(true);
 		});
 
 	});
@@ -995,9 +995,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				input.name = "firstname";
 			input.value = "olivier";
 			expect(modelPlugin.set).toBeInstanceOf(Function);
-			expect(modelPlugin.set(document.createElement("input"))).toEqual(false);
-			expect(modelPlugin.set(input)).toEqual(true);
-			expect(model.get("firstname")).toEqual("olivier");
+			expect(modelPlugin.set(document.createElement("input"))).toBe(false);
+			expect(modelPlugin.set(input)).toBe(true);
+			expect(model.get("firstname")).toBe("olivier");
 		});
 
 		it("should have a form function", function () {
@@ -1005,9 +1005,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		});
 
 		it("should accept only form nodes", function () {
-			expect(modelPlugin.form()).toEqual(false);
-			expect(modelPlugin.form(document.createElement("div"))).toEqual(false);
-			expect(modelPlugin.form(form)).toEqual(true);
+			expect(modelPlugin.form()).toBe(false);
+			expect(modelPlugin.form(document.createElement("div"))).toBe(false);
+			expect(modelPlugin.form(form)).toBe(true);
 		});
 
 		it("should make form listen to submit", function () {
@@ -1016,9 +1016,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 			modelPlugin.form(form);
 
-			expect(form.addEventListener.wasCalled).toEqual(true);
-			expect(form.addEventListener.mostRecentCall.args[0]).toEqual("submit");
-			expect(form.addEventListener.mostRecentCall.args[2]).toEqual(true);
+			expect(form.addEventListener.wasCalled).toBe(true);
+			expect(form.addEventListener.mostRecentCall.args[0]).toBe("submit");
+			expect(form.addEventListener.mostRecentCall.args[2]).toBe(true);
 
 		});
 
@@ -1036,9 +1036,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			expect(func).toBeInstanceOf(Function);
 			func(event);
 
-			expect(modelPlugin.set.wasCalled).toEqual(true);
-			expect(modelPlugin.set.callCount).toEqual(4);
-			expect(event.preventDefault.wasCalled).toEqual(true);
+			expect(modelPlugin.set.wasCalled).toBe(true);
+			expect(modelPlugin.set.callCount).toBe(4);
+			expect(event.preventDefault.wasCalled).toBe(true);
 		});
 	});
 
@@ -1068,33 +1068,33 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		});
 
 		it("should add a new binding", function () {
-			expect(modelPlugin.addBinding("")).toEqual(false);
-			expect(modelPlugin.addBinding("", {})).toEqual(false);
-			expect(modelPlugin.addBinding("", function () {})).toEqual(false);
-			expect(modelPlugin.addBinding("toggleClass", newBindings.toggleClass)).toEqual(true);
+			expect(modelPlugin.addBinding("")).toBe(false);
+			expect(modelPlugin.addBinding("", {})).toBe(false);
+			expect(modelPlugin.addBinding("", function () {})).toBe(false);
+			expect(modelPlugin.addBinding("toggleClass", newBindings.toggleClass)).toBe(true);
 			expect(modelPlugin.getBinding("toggleClass")).toBe(newBindings.toggleClass);
 		});
 
 		it("should add multiple bindings at once", function () {
 			spyOn(modelPlugin, "addBinding").andCallThrough();
-			expect(modelPlugin.addBindings(newBindings)).toEqual(true);
-			expect(modelPlugin.addBinding.wasCalled).toEqual(true);
-			expect(modelPlugin.addBinding.mostRecentCall.args[0]).toEqual("toggleClass");
+			expect(modelPlugin.addBindings(newBindings)).toBe(true);
+			expect(modelPlugin.addBinding.wasCalled).toBe(true);
+			expect(modelPlugin.addBinding.mostRecentCall.args[0]).toBe("toggleClass");
 			expect(modelPlugin.addBinding.mostRecentCall.args[1]).toBe(newBindings.toggleClass);
 		});
 
 		it("should tell if binding exists", function () {
 			modelPlugin.addBindings(newBindings);
-			expect(modelPlugin.hasBinding("toggleClass")).toEqual(true);
-			expect(modelPlugin.hasBinding("valueOf")).toEqual(false);
+			expect(modelPlugin.hasBinding("toggleClass")).toBe(true);
+			expect(modelPlugin.hasBinding("valueOf")).toBe(false);
 		});
 
 		it("should execute binding", function () {
-			expect(modelPlugin.execBinding(dom, "nop", false)).toEqual(false);
+			expect(modelPlugin.execBinding(dom, "nop", false)).toBe(false);
 			modelPlugin.addBindings(newBindings);
-			expect(modelPlugin.execBinding(dom, "toggleClass", false, "otherParam")).toEqual(true);
-			expect(newBindings.toggleClass.mostRecentCall.args[0]).toEqual(false);
-			expect(newBindings.toggleClass.mostRecentCall.args[1]).toEqual("otherParam");
+			expect(modelPlugin.execBinding(dom, "toggleClass", false, "otherParam")).toBe(true);
+			expect(newBindings.toggleClass.mostRecentCall.args[0]).toBe(false);
+			expect(newBindings.toggleClass.mostRecentCall.args[1]).toBe("otherParam");
 			expect(newBindings.toggleClass.mostRecentCall.object).toBe(dom);
 		});
 
@@ -1103,18 +1103,18 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			spyOn(modelPlugin, "execBinding");
 			modelPlugin.bind(dom, "toggleClass","property", "otherParam");
 			model.set("property", true);
-			expect(modelPlugin.execBinding.wasCalled).toEqual(true);
+			expect(modelPlugin.execBinding.wasCalled).toBe(true);
 			expect(modelPlugin.execBinding.mostRecentCall.args[0]).toBe(dom);
 			expect(modelPlugin.execBinding.mostRecentCall.args[1]).toBe("toggleClass");
-			expect(modelPlugin.execBinding.mostRecentCall.args[2]).toEqual(true);
-			expect(modelPlugin.execBinding.mostRecentCall.args[3]).toEqual("otherParam");
+			expect(modelPlugin.execBinding.mostRecentCall.args[2]).toBe(true);
+			expect(modelPlugin.execBinding.mostRecentCall.args[3]).toBe("otherParam");
 		});
 
 		it("should not double way bind the plugins", function () {
 			modelPlugin.addBindings(newBindings);
 			spyOn(dom, "addEventListener").andCallThrough();
 			modelPlugin.bind(dom, "toggleClass","property");
-			expect(dom.addEventListener.wasCalled).toEqual(false);
+			expect(dom.addEventListener.wasCalled).toBe(false);
 		});
 
 		it("should add bindings at ModelPlugin init", function () {
