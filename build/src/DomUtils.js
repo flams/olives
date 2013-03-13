@@ -1,7 +1,7 @@
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
 define(["Tools"], function (Tools) {
@@ -92,13 +92,13 @@ define(["Tools"], function (Tools) {
 		},
 
 		/**
-		 * Determine if an element matche a certain CSS selector.
-		 * @param {Element} the node to check out
-		 * @param {String} CSS selector
+		 * Determine if an element matches a certain CSS selector.
 		 * @param {Element} the parent node
+		 * @param {String} CSS selector
+		 * @param {Element} the node to check out
 		 * @param true if matches
 		 */
-		matches : function matches(node, selector, parent){
+		matches : function matches(parent, selector, node){
 			return Tools.toArray(this.getNodes(parent, selector)).indexOf(node) > -1;
 		}
 
