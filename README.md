@@ -55,7 +55,7 @@ olives.registerSocketIO(io);
 
 ```js
 
-``
+```
 
 
 ##Live examples
