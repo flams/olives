@@ -38,6 +38,39 @@ function(OObject) {
 			expect(oobject.dom).toBe(div);
 		});
 
+		it("can be placed somewhere in the dom", function () {
+			var oobject = new OObject(),
+				parent = document.createElement("div"),
+				child = document.createElement("p");
+
+			oobject.template = child;
+
+			oobject.render();
+
+			oobject.place(parent);
+
+			expect(parent.childNodes[0]).toBe(child);
+		});
+
+		it("can be moved around", function () {
+			var oobject = new OObject(),
+				parent1 = document.createElement("div"),
+				parent2 = document.createElement("div"),
+				parent3 = document.createElement("div"),
+				child = document.createElement("p");
+
+			oobject.template = child;
+
+			oobject.render();
+
+			oobject.place(parent1);
+			expect(parent1.childNodes[0]).toBe(child);
+
+			oobject.place(parent2);
+			expect(parent1.childNodes.length).toBe(0);
+			expect(parent2.childNodes[0]).toBe(child);
+		});
+
 	});
 
 });
