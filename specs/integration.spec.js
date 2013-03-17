@@ -38,6 +38,22 @@ function(OObject) {
 			expect(oobject.dom).toBe(div);
 		});
 
+		it("can be rerendered with a new template", function () {
+			var oobject = new OObject(),
+				div = document.createElement("div");
+
+			oobject.template = div;
+
+			oobject.render();
+
+			oobject.template = "<p>";
+
+			oobject.render();
+
+			expect(oobject.dom.nodeName).toBe("P");
+
+		});
+
 		it("can be placed somewhere in the dom", function () {
 			var oobject = new OObject(),
 				parent = document.createElement("div"),
