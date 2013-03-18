@@ -126,7 +126,20 @@ function(OObject) {
 		});
 
 		it("add behaviour to the template via plugins", function () {
+			var oobject = new OObject();
 
+			oobject.template = '<div data-i18n="translate: hello"></div>';
+			oobject.plugins.add('i18n', {
+				translate: function (dom, text) {
+					if (text == "hello") {
+						dom.innerHTML = "bonjour";
+					}
+				}
+			});
+
+			oobject.render();
+
+			expect(oobject.dom.innerHTML).toBe("bonjour");
 		});
 
 	});
