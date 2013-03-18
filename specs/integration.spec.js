@@ -128,7 +128,7 @@ function(OObject) {
 		it("add behaviour to the template via plugins", function () {
 			var oobject = new OObject();
 
-			oobject.template = '<div data-i18n="translate: hello"></div>';
+			oobject.template = '<p data-i18n="translate: hello"></p>';
 			oobject.plugins.add('i18n', {
 				translate: function (dom, text) {
 					if (text == "hello") {
@@ -140,6 +140,25 @@ function(OObject) {
 			oobject.render();
 
 			expect(oobject.dom.innerHTML).toBe("bonjour");
+		});
+
+		it("can create and render an OObject from existing DOM elements", function () {
+			var oobject = new OObject(),
+				dom = '<p data-i18n="translate: hello"></p>',
+				parent = document.createElement("div");
+
+			parent.innerHTML = dom;
+			oobject.plugins.add('i18n', {
+				translate: function (dom, text) {
+					if (text == "hello") {
+						dom.innerHTML = "bonjour";
+					}
+				}
+			});
+
+			oobject.alive(parent);
+
+			expect(oobject.dom.querySelector("p").innerHTML).toBe("bonjour");
 		});
 
 	});
