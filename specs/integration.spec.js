@@ -87,6 +87,48 @@ function(OObject) {
 			expect(parent2.childNodes[0]).toBe(child);
 		});
 
+		it("can be placed before an existing dom node", function () {
+			var oobject = new OObject(),
+				parent = document.createElement("div"),
+				sibling = document.createElement("div"),
+				child = document.createElement("p");
+
+			parent.appendChild(sibling);
+
+			oobject.template = child;
+
+			oobject.render();
+
+			oobject.place(parent, sibling);
+
+			expect(parent.childNodes[0]).toBe(child);
+			expect(parent.childNodes[1]).toBe(sibling);
+		});
+
+		it("calls render prior to place if the UI has never been rendered", function () {
+			var oobject = new OObject,
+				parent = document.createElement("div"),
+				child = document.createElement("p");
+
+			oobject.template = child;
+
+			oobject.place(parent);
+
+			expect(oobject.dom).toBe(child);
+		});
+
+		it("should throw an error if trying to render or place an oobject without specifying a template", function () {
+			var oobject = new OObject;
+
+			expect(function () {
+				oobject.render();
+			}).toThrow();
+		});
+
+		it("add behaviour to the template via plugins", function () {
+
+		});
+
 	});
 
 });
