@@ -161,6 +161,18 @@ function(OObject) {
 			expect(oobject.dom.querySelector("p").innerHTML).toBe("bonjour");
 		});
 
+		it("can return the current place", function () {
+			var oobject = new OObject(),
+				parent = document.createElement("div"),
+				child = document.createElement("p");
+
+			oobject.template = child;
+
+			oobject.place(parent);
+
+			expect(oobject.getCurrentPlace()).toBe(parent);
+		});
+
 	});
 
 });
