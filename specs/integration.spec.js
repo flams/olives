@@ -175,4 +175,10 @@ function(OObject) {
 
 	});
 
+	describe("plugins can add behaviour to your HTML", function () {
+
+
+
+	});
+
 });
