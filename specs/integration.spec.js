@@ -4,9 +4,9 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["OObject"],
+require(["OObject", "Plugins"],
 
-function(OObject) {
+function(OObject, Plugins) {
 
 
 	describe("OObject is a container for DOM elements and a starting point for adding it behaviour", function () {
@@ -177,7 +177,26 @@ function(OObject) {
 
 	describe("plugins can add behaviour to your HTML", function () {
 
+		it("has a function for attaching behaviour to the template", function () {
+			var plugins = new Plugins(),
+				dom = document.createElement("div"),
+				template = '<p data-i18n="translate: hello"></p>',
+				translationMap = {};
 
+			translationMap["hello"] = "bonjour";
+
+			dom.innerHTML = template;
+
+			plugins.add("i18n", {
+				translate: function (dom, key) {
+					dom.innerHTML = translationMap[key];
+				}
+			});
+
+			plugins.apply(dom);
+
+			expect(dom.querySelector("p").innerHTML).toBe("bonjour");
+		});
 
 	});
 
