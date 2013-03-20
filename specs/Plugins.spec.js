@@ -21,6 +21,13 @@ require(["Plugins"], function (Plugins) {
 			expect(plugins.del).toBeInstanceOf(Function);
 			expect(plugins.apply).toBeInstanceOf(Function);
 		});
+
+		it("can be directly initialized with a set of plugins", function () {
+			var plugin = {},
+				plugins = new Plugins({plugin: plugin});
+
+			expect(plugins.get("plugin")).toBe(plugin);
+		});
 	});
 
 	describe("PluginsPluginTest", function () {
