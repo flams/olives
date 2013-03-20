@@ -248,43 +248,78 @@ describe("plugins can add behaviour to your HTML", function () {
 	});
 
 	it("can apply multiple plugins", function () {
-			var plugins = new Plugins(),
-				dom = document.createElement("div"),
-				template = ('<p data-i18n="translate: hello"> </p> ' +
-					'<button data-action="listen: click, onClick">Click me</button>'),
-				translationMap = {},
-				actions = {},
-				called = false;
+		var plugins = new Plugins(),
+			dom = document.createElement("div"),
+			template = ('<p data-i18n="translate: hello"> </p> ' +
+				'<button data-action="listen: click, onClick">Click me</button>'),
+			translationMap = {},
+			actions = {},
+			called = false;
 
-			translationMap["hello"] = "bonjour",
-			actions.onClick = function () {
-				called = true;
-			};
+		translationMap["hello"] = "bonjour",
+		actions.onClick = function () {
+			called = true;
+		};
 
-			dom.innerHTML = template;
+		dom.innerHTML = template;
 
-			plugins.addAll({
-				"i18n": {
-					translate: function (dom, key) {
-						dom.innerHTML = translationMap[key];
-					}
-				},
-				"action": {
-					listen: function (dom, event, method) {
-						dom.addEventListener(event, actions[method], false);
-					}
+		plugins.addAll({
+			"i18n": {
+				translate: function (dom, key) {
+					dom.innerHTML = translationMap[key];
 				}
-			});
-
-			plugins.apply(dom);
-
-			expect(dom.querySelector("p").innerHTML).toBe("bonjour");
-
-			dom.querySelector("button").dispatchEvent(CreateMouseEvent("click"));
-
-			expect(called).toBe(true);
-
+			},
+			"action": {
+				listen: function (dom, event, method) {
+					dom.addEventListener(event, actions[method], false);
+				}
+			}
 		});
+
+		plugins.apply(dom);
+
+		expect(dom.querySelector("p").innerHTML).toBe("bonjour");
+
+		dom.querySelector("button").dispatchEvent(CreateMouseEvent("click"));
+
+		expect(called).toBe(true);
+
+	});
+
+	it("can be initialised with a set of plugins", function () {
+		var plugin = {},
+			plugins = new Plugins({plugin: plugin});
+
+		expect(plugins.get("plugin")).toBe(plugin);
+	});
+
+	it("can pass as many arguments to a plugins method as required, and a plugin can have several method", function () {
+		var length1,
+			length2,
+			length3,
+			plugin = {
+				method1: function (dom, arg1, arg2, arg3) {
+					length1 = arguments.length;
+				},
+				method2: function (dom, arg1, arg2, arg3, arg4) {
+					length2 = arguments.length;
+				},
+				method3: function (dom, arg1, arg2) {
+					length3 = arguments.length;
+				}
+			},
+			plugins = new Plugins({plugin: plugin}),
+			dom = document.createElement("div"),
+			template = '<p data-plugin="method1: arg1, arg2, arg3; method2: arg1, arg2, arg3, arg4; method3: arg1, arg2"></p>';
+
+		dom.innerHTML = template;
+
+		plugins.apply(dom);
+
+		expect(length1).toBe(4);
+		expect(length2).toBe(5);
+		expect(length3).toBe(3);
+	});
 
 });
 ```
