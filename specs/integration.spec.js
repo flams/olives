@@ -250,6 +250,34 @@ function(OObject, Plugins) {
 			expect(plugins.get("plugin")).toBe(plugin);
 		});
 
+		it("can pass as many arguments to a plugins method as required, and a plugin can have several method", function () {
+			var length1,
+				length2,
+				length3,
+				plugin = {
+					method1: function (dom, arg1, arg2, arg3) {
+						length1 = arguments.length;
+					},
+					method2: function (dom, arg1, arg2, arg3, arg4) {
+						length2 = arguments.length;
+					},
+					method3: function (dom, arg1, arg2) {
+						length3 = arguments.length;
+					}
+				},
+				plugins = new Plugins({plugin: plugin}),
+				dom = document.createElement("div"),
+				template = '<p data-plugin="method1: arg1, arg2, arg3; method2: arg1, arg2, arg3, arg4; method3: arg1, arg2"></p>';
+
+			dom.innerHTML = template;
+
+			plugins.apply(dom);
+
+			expect(length1).toBe(4);
+			expect(length2).toBe(5);
+			expect(length3).toBe(3);
+		});
+
 	});
 
 });
