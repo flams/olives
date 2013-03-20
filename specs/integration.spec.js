@@ -8,6 +8,12 @@ require(["OObject", "Plugins"],
 
 function(OObject, Plugins) {
 
+	function CreateMouseEvent(type) {
+		var event = document.createEvent("MouseEvent");
+		event.initEvent(type, true, true);
+		return event;
+	}
+
 
 	describe("OObject is a container for DOM elements and a starting point for adding it behaviour", function () {
 
@@ -196,6 +202,45 @@ function(OObject, Plugins) {
 			plugins.apply(dom);
 
 			expect(dom.querySelector("p").innerHTML).toBe("bonjour");
+		});
+
+		it("can apply multiple plugins", function () {
+			var plugins = new Plugins(),
+				dom = document.createElement("div"),
+				template = ('<p data-i18n="translate: hello"> </p> ' +
+					'<button data-action="listen: click, onClick">Click me</button>'),
+				translationMap = {},
+				actions = {},
+				called = false;
+
+			translationMap["hello"] = "bonjour",
+			actions.onClick = function () {
+				called = true;
+			};
+
+			dom.innerHTML = template;
+
+			plugins.addAll({
+				"i18n": {
+					translate: function (dom, key) {
+						dom.innerHTML = translationMap[key];
+					}
+				},
+				"action": {
+					listen: function (dom, event, method) {
+						dom.addEventListener(event, actions[method], false);
+					}
+				}
+			});
+
+			plugins.apply(dom);
+
+			expect(dom.querySelector("p").innerHTML).toBe("bonjour");
+
+			dom.querySelector("button").dispatchEvent(CreateMouseEvent("click"));
+
+			expect(called).toBe(true);
+
 		});
 
 	});
