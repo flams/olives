@@ -243,6 +243,13 @@ function(OObject, Plugins) {
 
 		});
 
+		it("can be initialised with a set of plugins", function () {
+			var plugin = {},
+				plugins = new Plugins({plugin: plugin});
+
+			expect(plugins.get("plugin")).toBe(plugin);
+		});
+
 	});
 
 });
