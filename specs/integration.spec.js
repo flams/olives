@@ -4,9 +4,9 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["OObject", "Plugins"],
+require(["OObject", "Plugins", "Event.plugin"],
 
-function(OObject, Plugins) {
+function(OObject, Plugins, EventPlugin) {
 
 	function CreateMouseEvent(type) {
 		var event = document.createEvent("MouseEvent");
@@ -276,6 +276,31 @@ function(OObject, Plugins) {
 			expect(length1).toBe(4);
 			expect(length2).toBe(5);
 			expect(length3).toBe(3);
+		});
+
+	});
+
+	describe("Event plugin can bind event listeners to the DOM", function () {
+
+		it("has a method for adding an event listener to a dom element", function () {
+			var oobject = new OObject(),
+				eventPlugin = new EventPlugin(oobject),
+				called = false;
+
+			oobject.template = '<button data-event="listen: click, onClick"></button>';
+
+			oobject.onClick = function () {
+				called = true;
+			}
+
+			oobject.plugins.add("event", eventPlugin);
+
+			oobject.render();
+
+			oobject.dom.dispatchEvent(CreateMouseEvent("click"));
+
+			expect(called).toBe(true);
+
 		});
 
 	});
