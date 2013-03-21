@@ -41,7 +41,8 @@ docs: clean-docs
 
 tests: temp.js
 	java -jar $(JsTestDriver) \
-		--tests all
+		--tests all \
+		--reset
 
 build: clean-build Olives.js
 	cp LICENSE build/
