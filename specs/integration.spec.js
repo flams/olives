@@ -9,7 +9,7 @@ require(["OObject", "Plugins", "Event.plugin"],
 function(OObject, Plugins, EventPlugin) {
 
 	function CreateMouseEvent(type) {
-		var event = document.createEvent("MouseEvent");
+		var event = document.createEvent("MouseEvents");
 		event.initEvent(type, true, true);
 		return event;
 	}
@@ -284,15 +284,24 @@ function(OObject, Plugins, EventPlugin) {
 
 		it("has a method for adding an event listener to a dom element", function () {
 			var oobject = new OObject(),
+				// The event plugin must be given an object
+				// so it knows where to find the methods to call
 				eventPlugin = new EventPlugin(oobject),
-				called = false;
+				called = false,
+				thisObject;
 
-			oobject.template = '<button data-event="listen: click, onClick"></button>';
+			// Here we tell the event plugin to listen for the click event
+			// And that when it occurs, it should call onClick
+			// The last parameter tells the phase we want to listen to (propagation == true, bubbling == false)
+			oobject.template = '<button data-event="listen: click, onClick, true"></button>';
 
+			// The function that will be called when the dom node is clicked
 			oobject.onClick = function () {
 				called = true;
-			}
+				thisObject = this;
+			};
 
+			// Add the event plugin to the oobject
 			oobject.plugins.add("event", eventPlugin);
 
 			oobject.render();
@@ -300,7 +309,43 @@ function(OObject, Plugins, EventPlugin) {
 			oobject.dom.dispatchEvent(CreateMouseEvent("click"));
 
 			expect(called).toBe(true);
+			expect(thisObject).toBe(oobject);
 
+		});
+
+		xit("can delegate an event for a set of DOM elements to the parent DOM", function () {
+			var oobject = new OObject(),
+				// The event plugin must be given an object
+				// so it knows where to find the methods to call
+				eventPlugin = new EventPlugin(oobject),
+				clickedNode,
+				clickEvent = CreateMouseEvent("click");
+
+			// Here we tell the event plugin to listen for the click event
+			// And that when it occurs, it should call onClick
+			// The last parameter tells the phase we want to listen to (propagation == true, bubbling == false)
+			oobject.template = '<ul data-event="delegate: li, click, onClick, true">';
+			oobject.template +=	'<li>Item 1</li>';
+			oobject.template +=	'<li>Item 2</li>';
+			oobject.template +=	'<li>Item 3</li>';
+			oobject.template +=	'<li>Item 4</li>';
+			oobject.template += '</ul>';
+
+			// The function that will be called when the dom node is clicked
+			oobject.onClick = function (event, node) {
+				clickedNode = node;
+			};
+
+			// Add the event plugin to the oobject
+			oobject.plugins.add("event", eventPlugin);
+
+			oobject.render();
+
+
+			clickEvent.target = oobject.dom.querySelectorAll("li")[3];
+			oobject.dom.dispatchEvent(clickEvent);
+
+			expect(clickedNode.innerText).toBe("Item 4");
 		});
 
 	});

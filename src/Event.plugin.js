@@ -31,7 +31,8 @@ define(["DomUtils"], function (Utils) {
 		_isMobile = !!$isMobile;
 
 		/**
-		 * Add mapped event listener (for test purpose).
+		 * Add mapped event listener (for testing purpose).
+		 * @private
 		 */
 		this.addEventListener = function addEventListener(node, event, callback, useCapture) {
 			node.addEventListener(this.map(event), callback, !!useCapture);
@@ -46,7 +47,7 @@ define(["DomUtils"], function (Utils) {
 		 */
 		this.listen = function listen(node, name, listener, useCapture) {
 			this.addEventListener(node, name, function(e){
-				_parent[listener].call(_parent,e, node);
+				_parent[listener].call(_parent, e, node);
 			}, !!useCapture);
 		};
 
@@ -56,7 +57,7 @@ define(["DomUtils"], function (Utils) {
 		this.delegate = function delegate(node, selector, name, listener, useCapture) {
 			this.addEventListener(node, name, function(event){
 				if (Utils.matches(node, selector, event.target)) {
-					_parent[listener].call(_parent,event, node);
+					_parent[listener].call(_parent, event, node);
 				}
 			}, !!useCapture);
 		};
