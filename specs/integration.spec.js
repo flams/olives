@@ -4,9 +4,9 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["OObject", "Plugins", "Event.plugin"],
+require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store"],
 
-function(OObject, Plugins, EventPlugin) {
+function(OObject, Plugins, EventPlugin, BindPlugin, Store) {
 
 	function CreateMouseEvent(type) {
 		var event = document.createEvent("MouseEvents");
@@ -349,5 +349,33 @@ function(OObject, Plugins, EventPlugin) {
 		});
 
 	});
+
+	describe("Bind plugin can bind an SVG/HTML template with a Store for two-way binding", function () {
+
+		it("sets the property of a DOM element to the value set in the store, for a given key", function () {
+			var oobject = new OObject(),
+				store = new Store(),
+				bindPlugin = new BindPlugin(store);
+
+			oobject.template = '<p data-bind="bind: innerText, name"></p>';
+
+			oobject.plugins.add("bind", bindPlugin);
+
+			oobject.render();
+
+			store.set("name", "Olives");
+
+			expect(oobject.dom.innerText).toBe("Olives");
+
+			store.set("name", "Emily");
+
+			expect(oobject.dom.innerText).toBe("Emily");
+		});
+
+		it("can work with any dom property", function () {
+
+		});
+
+	})
 
 });
