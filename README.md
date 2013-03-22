@@ -15,7 +15,7 @@
  * LocalStore: A subtype of Emily Store for saving your model into localStorage.
  * SocketIOTransport: connect your UI with a node.js server using socket.io. This is the realtime part of Olives.
  * Place.plugin: compose UIs with multiple UIs.
- * Plugins: extend Olives functionalities with your own plugins.
+ * Plugins: extend Olives with your own plugins.
 
 Olives is based on [Emily](https://github.com/flams/emily)
 
