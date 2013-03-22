@@ -398,6 +398,152 @@ describe("Event plugin can bind event listeners to the DOM", function () {
 });
 ```
 
+### Bind.plugin
+
+```js
+describe("Bind plugin can bind an SVG/HTML template with a Store for two-way binding", function () {
+
+	it("sets the property of a DOM element to the value set in the store, for a given key", function () {
+		var oobject = new OObject(),
+			store = new Store(),
+			bindPlugin = new BindPlugin(store);
+
+		oobject.template = '<p data-bind="bind: innerText, name"></p>';
+
+		oobject.plugins.add("bind", bindPlugin);
+
+		oobject.render();
+
+		store.set("name", "Olives");
+
+		expect(oobject.dom.innerText).toBe("Olives");
+
+		store.set("name", "Emily");
+
+		expect(oobject.dom.innerText).toBe("Emily");
+	});
+
+	it("can work with any dom property", function () {
+		var oobject = new OObject(),
+			store = new Store(),
+			bindPlugin = new BindPlugin(store);
+
+		oobject.template = '<p data-bind="bind: className, level"></p>';
+
+		oobject.plugins.add("bind", bindPlugin);
+
+		oobject.render();
+
+		store.set("level", "info");
+
+		expect(oobject.dom.className).toBe("info");
+
+		store.set("level", "warning");
+
+		expect(oobject.dom.className).toBe("warning");
+	});
+
+	it("can create a new template for each item in a store", function () {
+		var oobject = new OObject(),
+			store = new Store([]),
+			bindPlugin = new BindPlugin(store);
+
+		oobject.template = '<ul data-bind="foreach">';
+		oobject.template += '<li data-bind="bind: innerText"></li>';
+		oobject.template += '</ul>';
+
+		oobject.plugins.add("bind", bindPlugin);
+
+		oobject.render();
+
+		store.alter("push", "Olives");
+
+		expect(oobject.dom.childNodes.length).toBe(1);
+		expect(oobject.dom.querySelectorAll("li")[0].innerText).toBe("Olives");
+
+		store.alter("push", "Emily");
+
+		expect(oobject.dom.childNodes.length).toBe(2);
+		expect(oobject.dom.querySelectorAll("li")[1].innerText).toBe("Emily");
+
+		store.alter("shift");
+
+		expect(oobject.dom.childNodes.length).toBe(1);
+		expect(oobject.dom.querySelectorAll("li")[0].innerText).toBe("Emily");
+	});
+
+	it("can create a new template for more complex items in a store, like an object", function () {
+		var oobject = new OObject(),
+			store = new Store([]),
+			bindPlugin = new BindPlugin(store);
+
+
+		oobject.template = '<ul data-bind="foreach">';
+		oobject.template += 	'<li>';
+									// The className are only useful for querying the dom node for facilitating
+									// the understanding of the test
+		oobject.template += 		'<span class="itemName" data-bind="bind: innerText, name"></span>';
+		oobject.template += 		'<span class="itemType" data-bind="bind: innerText, type"></span>';
+		oobject.template += 	'</li>';
+		oobject.template += '</ul>';
+
+		oobject.plugins.add("bind", bindPlugin);
+
+		oobject.render();
+
+		store.alter("push", {
+			name: "Olives",
+			type: "MVC"
+		});
+
+		expect(oobject.dom.childNodes.length).toBe(1);
+		expect(oobject.dom.querySelectorAll("li .itemName")[0].innerText).toBe("Olives");
+		expect(oobject.dom.querySelectorAll("li .itemType")[0].innerText).toBe("MVC");
+
+		store.alter("push", {
+			name: "Emily",
+			type: "Library"
+		})
+
+		expect(oobject.dom.childNodes.length).toBe(2);
+		expect(oobject.dom.querySelectorAll("li .itemName")[1].innerText).toBe("Emily");
+		expect(oobject.dom.querySelectorAll("li .itemType")[1].innerText).toBe("Library");
+
+		store.alter("shift");
+
+		expect(oobject.dom.childNodes.length).toBe(1);
+		expect(oobject.dom.querySelectorAll("li .itemName")[0].innerText).toBe("Emily");
+
+	});
+
+	it("can tell the id of an item in the store", function () {
+		var oobject = new OObject(),
+			store = new Store([]),
+			bindPlugin = new BindPlugin(store);
+
+		oobject.template = '<ul data-bind="foreach">';
+		oobject.template += '<li data-bind="bind: innerText, name"></li>';
+		oobject.template += '</ul>';
+
+		oobject.plugins.add("bind", bindPlugin);
+
+		oobject.render();
+
+		store.alter("push", {
+			name: "Olives"
+		});
+
+		store.alter("push", {
+			name: "Emily"
+		});
+
+		expect(bindPlugin.getItemIndex(oobject.dom.querySelectorAll("li")[0])).toBe(0);
+		expect(bindPlugin.getItemIndex(oobject.dom.querySelectorAll("li")[1])).toBe(1);
+	});
+
+});
+```
+
 
 ##Live examples
 
