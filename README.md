@@ -333,6 +333,11 @@ describe("plugins can add behaviour to your HTML", function () {
 
 ## Changelog
 
+####1.3.3 - pending...
+
+* Added Bind.plugin.getItemIndex for getting the index of a foreach generated item in a store
+* Plugins constructor can be called with the list of plugins
+
 ####1.3.2 - 15 MAR 2013
 
 * Incorporating 1.3.1 changes, tests + docs clean up
