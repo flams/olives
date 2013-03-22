@@ -373,6 +373,56 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store) {
 		});
 
 		it("can work with any dom property", function () {
+			var oobject = new OObject(),
+				store = new Store(),
+				bindPlugin = new BindPlugin(store);
+
+			oobject.template = '<p data-bind="bind: className, level"></p>';
+
+			oobject.plugins.add("bind", bindPlugin);
+
+			oobject.render();
+
+			store.set("level", "info");
+
+			expect(oobject.dom.className).toBe("info");
+
+			store.set("level", "warning");
+
+			expect(oobject.dom.className).toBe("warning");
+		});
+
+		it("can create a new template for each item in a store", function () {
+			var oobject = new OObject(),
+				store = new Store([]),
+				bindPlugin = new BindPlugin(store);
+
+			oobject.template = '<ul data-bind="foreach">';
+			oobject.template += '<li data-bind="bind: innerText, name"></li>';
+			oobject.template += '</ul>';
+
+			oobject.plugins.add("bind", bindPlugin);
+
+			oobject.render();
+
+			store.alter("push", {
+				name: "Olives"
+			});
+
+			expect(oobject.dom.childNodes.length).toBe(1);
+			expect(oobject.dom.querySelectorAll("li")[0].innerText).toBe("Olives");
+
+			store.alter("push", {
+				name: "Emily"
+			})
+
+			expect(oobject.dom.childNodes.length).toBe(2);
+			expect(oobject.dom.querySelectorAll("li")[1].innerText).toBe("Emily");
+
+			store.alter("shift");
+
+			expect(oobject.dom.childNodes.length).toBe(1);
+			expect(oobject.dom.querySelectorAll("li")[0].innerText).toBe("Emily");
 
 		});
 
