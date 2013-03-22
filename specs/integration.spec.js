@@ -490,6 +490,6 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store) {
 			expect(bindPlugin.getItemIndex(oobject.dom.querySelectorAll("li")[1])).toBe(1);
 		});
 
-	})
+	});
 
 });
