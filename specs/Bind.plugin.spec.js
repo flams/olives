@@ -731,7 +731,6 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			expect(modelPlugin.observers[2]).toBeUndefined();
 		});
 
-
 		it("should not fail if the ItemRenderer is given a DOM that starts with a textnode", function () {
 			dom.innerHTML = " \n \t\t <li></li>";
 			spyOn(modelPlugin, "ItemRenderer").andCallThrough();
@@ -739,6 +738,14 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				plugins.apply(dom);
 			}).not.toThrow();
 			expect(dom.querySelectorAll("li").length).toBe(3);
+		});
+
+		it("should have a function for getting the item index in a store given a dom element", function () {
+			plugins.apply(dom);
+			expect(modelPlugin.getItemIndex()).toBe(false);
+			expect(modelPlugin.getItemIndex(document.createElement("li"))).toBe(false);
+			expect(modelPlugin.getItemIndex(dom.querySelector("li"))).toBe(0);
+			expect(modelPlugin.getItemIndex(dom.querySelectorAll("li")[2])).toBe(2);
 		});
 	});
 

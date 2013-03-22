@@ -521,6 +521,16 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			}
 		};
 
+		this.getItemIndex = function getElementId(dom) {
+			var dataset = DomUtils.getDataset(dom);
+
+			if (dataset && typeof dataset[this.plugins.name + "_id"] != "undefined") {
+				return +dataset[this.plugins.name + "_id"];
+			} else {
+				return false;
+			}
+		};
+
 		/**
 		 * Prevents the submit and set the model with all form's inputs
 		 * @param {HTMLFormElement} form
