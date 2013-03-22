@@ -426,6 +426,31 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store) {
 
 		});
 
+		it("can tell the id of an item in the store", function () {
+			var oobject = new OObject(),
+				store = new Store([]),
+				bindPlugin = new BindPlugin(store);
+
+			oobject.template = '<ul data-bind="foreach">';
+			oobject.template += '<li data-bind="bind: innerText, name"></li>';
+			oobject.template += '</ul>';
+
+			oobject.plugins.add("bind", bindPlugin);
+
+			oobject.render();
+
+			store.alter("push", {
+				name: "Olives"
+			});
+
+			store.alter("push", {
+				name: "Emily"
+			});
+
+			expect(bindPlugin.getItemIndex(oobject.dom.querySelectorAll("li")[0])).toBe(0);
+			expect(bindPlugin.getItemIndex(oobject.dom.querySelectorAll("li")[1])).toBe(1);
+		});
+
 	})
 
 });
