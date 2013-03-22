@@ -398,23 +398,19 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store) {
 				bindPlugin = new BindPlugin(store);
 
 			oobject.template = '<ul data-bind="foreach">';
-			oobject.template += '<li data-bind="bind: innerText, name"></li>';
+			oobject.template += '<li data-bind="bind: innerText"></li>';
 			oobject.template += '</ul>';
 
 			oobject.plugins.add("bind", bindPlugin);
 
 			oobject.render();
 
-			store.alter("push", {
-				name: "Olives"
-			});
+			store.alter("push", "Olives");
 
 			expect(oobject.dom.childNodes.length).toBe(1);
 			expect(oobject.dom.querySelectorAll("li")[0].innerText).toBe("Olives");
 
-			store.alter("push", {
-				name: "Emily"
-			})
+			store.alter("push", "Emily");
 
 			expect(oobject.dom.childNodes.length).toBe(2);
 			expect(oobject.dom.querySelectorAll("li")[1].innerText).toBe("Emily");
@@ -423,6 +419,49 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store) {
 
 			expect(oobject.dom.childNodes.length).toBe(1);
 			expect(oobject.dom.querySelectorAll("li")[0].innerText).toBe("Emily");
+		});
+
+		it("can create a new template for more complex items in a store, like an object", function () {
+			var oobject = new OObject(),
+				store = new Store([]),
+				bindPlugin = new BindPlugin(store);
+
+
+			oobject.template = '<ul data-bind="foreach">';
+			oobject.template += 	'<li>';
+										// The className are only useful for querying the dom node for facilitating
+										// the understanding of the test
+			oobject.template += 		'<span class="itemName" data-bind="bind: innerText, name"></span>';
+			oobject.template += 		'<span class="itemType" data-bind="bind: innerText, type"></span>';
+			oobject.template += 	'</li>';
+			oobject.template += '</ul>';
+
+			oobject.plugins.add("bind", bindPlugin);
+
+			oobject.render();
+
+			store.alter("push", {
+				name: "Olives",
+				type: "MVC"
+			});
+
+			expect(oobject.dom.childNodes.length).toBe(1);
+			expect(oobject.dom.querySelectorAll("li .itemName")[0].innerText).toBe("Olives");
+			expect(oobject.dom.querySelectorAll("li .itemType")[0].innerText).toBe("MVC");
+
+			store.alter("push", {
+				name: "Emily",
+				type: "Library"
+			})
+
+			expect(oobject.dom.childNodes.length).toBe(2);
+			expect(oobject.dom.querySelectorAll("li .itemName")[1].innerText).toBe("Emily");
+			expect(oobject.dom.querySelectorAll("li .itemType")[1].innerText).toBe("Library");
+
+			store.alter("shift");
+
+			expect(oobject.dom.childNodes.length).toBe(1);
+			expect(oobject.dom.querySelectorAll("li .itemName")[0].innerText).toBe("Emily");
 
 		});
 
