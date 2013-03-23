@@ -547,7 +547,103 @@ describe("Bind plugin can bind an SVG/HTML template with a Store for two-way bin
 ### DomUtils
 
 ```js
+describe("DomUtils is a collection of tools for manipulating the dom", function () {
 
+	it("has a function for getting an element's dataset even if the browser doesn't support the property", function () {
+
+		var dom = document.createElement("div");
+
+		dom.innerHTML = '<p data-name="Olives"></p>';
+
+		dataset = DomUtils.getDataset(dom.querySelector("p"));
+
+		expect(dataset.name).toBe("Olives");
+
+	});
+
+	it("has a function for setting the attribute of both an HTML and an SVG element", function () {
+		var htmlElement = document.createElement("p"),
+			svgElement = svgElement = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+
+		DomUtils.setAttribute(svgElement, "width", 100);
+
+		expect(svgElement.getAttribute("width")).toBe('100');
+
+		DomUtils.setAttribute(htmlElement, "innerText", "Olives");
+
+		expect(htmlElement.innerText).toBe("Olives");
+	});
+
+	it("has a function for getting a DOM node and its siblings", function () {
+
+		var parent = document.createElement("div"),
+			sibling1 = document.createElement("p"),
+			sibling2 = document.createElement("p"),
+			sibling3 = document.createElement("p"),
+			child1 = document.createElement("span"),
+			child2 = document.createElement("span"),
+			child3 = document.createElement("span");
+
+		parent.appendChild(sibling1);
+		parent.appendChild(sibling2);
+		parent.appendChild(sibling3);
+
+		sibling1.appendChild(child1);
+		sibling2.appendChild(child2);
+		sibling3.appendChild(child3);
+
+		var list = toArray(DomUtils.getNodes(sibling2));
+
+		expect(hasItem(list, sibling1)).toBe(true);
+		expect(hasItem(list, sibling2)).toBe(true);
+		expect(hasItem(list, sibling3)).toBe(true);
+		expect(hasItem(list, child1)).toBe(true);
+		expect(hasItem(list, child2)).toBe(true);
+		expect(hasItem(list, child3)).toBe(true);
+
+	});
+
+	it("can restrict the returns DOM elements to a given CSS selector", function () {
+		var parent = document.createElement("div"),
+			sibling1 = document.createElement("p"),
+			sibling2 = document.createElement("p"),
+			sibling3 = document.createElement("p"),
+			child1 = document.createElement("span"),
+			child2 = document.createElement("span"),
+			child3 = document.createElement("span");
+
+		parent.appendChild(sibling1);
+		parent.appendChild(sibling2);
+		parent.appendChild(sibling3);
+
+		sibling1.appendChild(child1);
+		sibling2.appendChild(child2);
+		sibling3.appendChild(child3);
+
+		var list = toArray(DomUtils.getNodes(sibling2, "span"));
+
+		expect(hasItem(list, sibling1)).toBe(false);
+		expect(hasItem(list, sibling2)).toBe(false);
+		expect(hasItem(list, sibling3)).toBe(false);
+		expect(hasItem(list, child1)).toBe(true);
+		expect(hasItem(list, child2)).toBe(true);
+		expect(hasItem(list, child3)).toBe(true);
+	});
+
+	it("has a function for telling if an a child node matches a given CSS selector", function () {
+
+		var parent = document.createElement("div"),
+			child = document.createElement("p");
+
+		parent.appendChild(child);
+
+		expect(DomUtils.matches(parent, "p", child)).toBe(true);
+		expect(DomUtils.matches(parent, "ul", child)).toBe(false);
+		expect(DomUtils.matches(parent, "p.text", child)).toBe(false);
+
+	});
+
+});
 
 ```
 
