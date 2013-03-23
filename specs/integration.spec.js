@@ -583,6 +583,19 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils) {
 			expect(hasItem(list, child3)).toBe(true);
 		});
 
+		it("has a function for telling if an a child node matches a given CSS selector", function () {
+
+			var parent = document.createElement("div"),
+				child = document.createElement("p");
+
+			parent.appendChild(child);
+
+			expect(DomUtils.matches(parent, "p", child)).toBe(true);
+			expect(DomUtils.matches(parent, "ul", child)).toBe(false);
+			expect(DomUtils.matches(parent, "p.text", child)).toBe(false);
+
+		});
+
 	});
 
 });
