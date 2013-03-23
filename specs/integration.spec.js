@@ -4,9 +4,9 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store"],
+require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store", "DomUtils"],
 
-function(OObject, Plugins, EventPlugin, BindPlugin, Store) {
+function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils) {
 
 	function CreateMouseEvent(type) {
 		var event = document.createEvent("MouseEvents");
@@ -488,6 +488,35 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store) {
 
 			expect(bindPlugin.getItemIndex(oobject.dom.querySelectorAll("li")[0])).toBe(0);
 			expect(bindPlugin.getItemIndex(oobject.dom.querySelectorAll("li")[1])).toBe(1);
+		});
+
+	});
+
+	describe("DomUtils is a collection of tools for manipulating the dom", function () {
+
+		it("has a function for getting an element's dataset even if the browser doesn't support the property", function () {
+
+			var dom = document.createElement("div");
+
+			dom.innerHTML = '<p data-name="Olives"></p>';
+
+			dataset = DomUtils.getDataset(dom.querySelector("p"));
+
+			expect(dataset.name).toBe("Olives");
+
+		});
+
+		it("has a function for setting the attribute of both an HTML and an SVG element", function () {
+			var htmlElement = document.createElement("p"),
+				svgElement = svgElement = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+
+			DomUtils.setAttribute(svgElement, "width", 100);
+
+			expect(svgElement.getAttribute("width")).toBe('100');
+
+			DomUtils.setAttribute(htmlElement, "innerText", "Olives");
+
+			expect(htmlElement.innerText).toBe("Olives");
 		});
 
 	});

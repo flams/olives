@@ -544,6 +544,30 @@ describe("Bind plugin can bind an SVG/HTML template with a Store for two-way bin
 });
 ```
 
+### DomUtils
+
+```js
+
+
+```
+
+### Place.plugin
+
+```js
+
+```
+
+### SocketIOTransport
+
+```js
+
+```
+
+### LocalStore
+
+```js
+
+```
 
 ##Live examples
 
