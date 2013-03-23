@@ -14,6 +14,14 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils) {
 		return event;
 	}
 
+	function hasItem(array, item) {
+		return array.indexOf(item) >= 0;
+	}
+
+	function toArray(list) {
+		return [].slice.call(list, 0);
+	}
+
 
 	describe("OObject is a container for DOM elements and a starting point for adding it behaviour", function () {
 
@@ -517,6 +525,62 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils) {
 			DomUtils.setAttribute(htmlElement, "innerText", "Olives");
 
 			expect(htmlElement.innerText).toBe("Olives");
+		});
+
+		it("has a function for getting a DOM node and its siblings", function () {
+
+			var parent = document.createElement("div"),
+				sibling1 = document.createElement("p"),
+				sibling2 = document.createElement("p"),
+				sibling3 = document.createElement("p"),
+				child1 = document.createElement("span"),
+				child2 = document.createElement("span"),
+				child3 = document.createElement("span");
+
+			parent.appendChild(sibling1);
+			parent.appendChild(sibling2);
+			parent.appendChild(sibling3);
+
+			sibling1.appendChild(child1);
+			sibling2.appendChild(child2);
+			sibling3.appendChild(child3);
+
+			var list = toArray(DomUtils.getNodes(sibling2));
+
+			expect(hasItem(list, sibling1)).toBe(true);
+			expect(hasItem(list, sibling2)).toBe(true);
+			expect(hasItem(list, sibling3)).toBe(true);
+			expect(hasItem(list, child1)).toBe(true);
+			expect(hasItem(list, child2)).toBe(true);
+			expect(hasItem(list, child3)).toBe(true);
+
+		});
+
+		it("can restrict the returns DOM elements to a given CSS selector", function () {
+			var parent = document.createElement("div"),
+				sibling1 = document.createElement("p"),
+				sibling2 = document.createElement("p"),
+				sibling3 = document.createElement("p"),
+				child1 = document.createElement("span"),
+				child2 = document.createElement("span"),
+				child3 = document.createElement("span");
+
+			parent.appendChild(sibling1);
+			parent.appendChild(sibling2);
+			parent.appendChild(sibling3);
+
+			sibling1.appendChild(child1);
+			sibling2.appendChild(child2);
+			sibling3.appendChild(child3);
+
+			var list = toArray(DomUtils.getNodes(sibling2, "span"));
+
+			expect(hasItem(list, sibling1)).toBe(false);
+			expect(hasItem(list, sibling2)).toBe(false);
+			expect(hasItem(list, sibling3)).toBe(false);
+			expect(hasItem(list, child1)).toBe(true);
+			expect(hasItem(list, child2)).toBe(true);
+			expect(hasItem(list, child3)).toBe(true);
 		});
 
 	});
