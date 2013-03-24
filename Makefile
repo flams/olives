@@ -41,7 +41,8 @@ docs: clean-docs
 
 tests: temp.js
 	java -jar $(JsTestDriver) \
-		--tests all
+		--tests all \
+		--reset
 
 build: clean-build Olives.js
 	cp LICENSE build/
@@ -99,8 +100,10 @@ endif
 
 	git checkout gh-pages
 
-	git checkout master build Makefile docs src specs tools lib release
+	git checkout master build Makefile docs src specs tools lib release README.md
 	git add build docs src specs tools lib release
+
+	node genhtml.js
 
 	sed -i .bak 's#version">.*<#version">'${VERSION}'<#g' index.html
 	sed -i .bak 's#<a href="release/Olives.*\.tgz">#<a href="release/Olives-'${VERSION}'.tgz">#' index.html
