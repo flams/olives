@@ -647,4 +647,21 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
 
 	});
 
+	describe("SocketIOTransport wraps socket.io to issue requests and listen to Olives channels from a node.js server", function () {
+
+		var fakeSocket = {
+				on: jasmine.createSpy("on"),
+				once: jasmine.createSpy("once"),
+				emit: jasmine.createSpy("emit"),
+				removeListener: jasmine.createSpy("removeListener")
+			};
+
+		xit("it can issue a request to a handler on the server side", function () {
+			var transport = new SocketIOTransport();
+
+			transport.setSocket()
+		});
+
+	});
+
 });

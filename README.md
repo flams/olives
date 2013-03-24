@@ -720,11 +720,12 @@ describe("Place.plugin places OObject in the DOM", function () {
 
 ## Changelog
 
-####1.3.3 - pending...
+####1.4.0 - pending...
 
 * Added Bind.plugin.getItemIndex for getting the index of a foreach generated item in a store
 * Plugins constructor can be called with the list of plugins
 * Updated all documentations
+* SocketIOTransport doesn't initialise the socket anymore, the socket must be given
 
 ####1.3.2 - 15 MAR 2013
 

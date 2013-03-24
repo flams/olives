@@ -16,72 +16,29 @@ function SocketIOTransport(Observable, Tools) {
 	 * Defines the SocketIOTransport
 	 * @private
 	 * @param {Object} $io socket.io's object
-	 * @param {url} $url the url to connect Transport to
 	 * @returns
 	 */
-	return function SocketIOTransportConstructor($io, $url) {
+	return function SocketIOTransportConstructor($socket) {
 
 		/**
 		 * @private
 		 * The socket.io's socket
 		 */
-		var _socket = null,
+		var _socket = null;
 
 		/**
-		 * @private
-		 * The socket.io globally defined module
+		 * Set the socket created by SocketIO
+		 * @param {Object} socket the socket.io socket
+		 * @returns true if it seems to be a socket.io socket
 		 */
-		_io = null,
-
-		/**
-		 * @private
-		 * The Observable that is used for the listen function
-		 */
-		_observable = new Observable(),
-
-		/**
-		 * @private
-		 * listen internally calls request, which returns a "stop listen" function
-		 * It should be saved in an object alongside the topic name
-		 */
-		_stops = {};
-
-		/**
-		 * Set the io handler (socket.io)
-		 * @param {Object} io the socket.io object
-		 * @returns true if it seems to be socket.io
-		 */
-		this.setIO = function setIO(io) {
-			if (io && typeof io.connect == "function") {
-				_io = io;
+		this.setSocket = function setSocket(socket) {
+			if (socket && typeof socket.emit == "function") {
+				_socket = socket;
 				return true;
 			} else {
 				return false;
 			}
 		};
-
-		/**
-		 * Get socket.io, for debugging purpose
-		 * @private
-		 * @param
-		 * @returns the handler
-		 */
-		this.getIO = function getIO() {
-			return _io;
-		};
-
-		/**
-		 * Connect Transport to an url
-		 * @param {Url} url the url to connect Transport to
-		 */
-		this.connect = function connect(url) {
-			if (typeof url == "string") {
-				_socket = _io.connect(url);
-				return true;
-			} else {
-				return false;
-			}
-		},
 
 		/**
 		 * Get the socket, for debugging purpose
@@ -126,7 +83,7 @@ function SocketIOTransport(Observable, Tools) {
 		 * @param data
 		 * @param {Function} callback is the function to be called for ack
 		 */
-		this.removeListener = function emit(event, data, callback) {
+		this.removeListener = function removeListener(event, data, callback) {
 			return _socket.removeListener(event, data, callback);
 		};
 
@@ -196,9 +153,8 @@ function SocketIOTransport(Observable, Tools) {
 		};
 
 		/**
-		 * Initializes the transport to the given url.
+		 * Sets the socket.io
 		 */
-		this.setIO($io);
-		this.connect($url);
+		this.setSocket($socket);
 	};
 });

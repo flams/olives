@@ -6,17 +6,14 @@
 
 require(["SocketIOTransport", "Observable"], function (SocketIOTransport, Observable) {
 
-	var io = null;
+	var socket = null;
 
 	beforeEach(function () {
-		io = { connect : function connect(url) {
-				return {
-					on: jasmine.createSpy("on"),
-					once: jasmine.createSpy("once"),
-					emit: jasmine.createSpy("emit"),
-					removeListener: jasmine.createSpy("removeListener")
-				};
-			}
+		socket = {
+			on: jasmine.createSpy("on"),
+			once: jasmine.createSpy("once"),
+			emit: jasmine.createSpy("emit"),
+			removeListener: jasmine.createSpy("removeListener")
 		};
 	});
 
@@ -36,40 +33,20 @@ require(["SocketIOTransport", "Observable"], function (SocketIOTransport, Observ
 			socketIOTransport = new SocketIOTransport();
 		});
 
-		it("should set the io handler (socket.io)", function () {
-			expect(socketIOTransport.getIO()).toBeNull();
-			expect(socketIOTransport.setIO()).toBe(false);
-			expect(socketIOTransport.setIO({})).toBe(false);
-			expect(socketIOTransport.setIO(io)).toBe(true);
-			expect(socketIOTransport.getIO()).toBe(io);
+		it("should set the socket (socket.io)", function () {
+			expect(socketIOTransport.setSocket()).toBe(false);
+			expect(socketIOTransport.setSocket({})).toBe(false);
+			expect(socketIOTransport.setSocket(socket)).toBe(true);
 		});
 
-
-		it("should connect socketIOTransport on given url", function () {
-			socketIOTransport.setIO(io);
-			expect(socketIOTransport.connect()).toBe(false);
-			expect(socketIOTransport.connect({})).toBe(false);
-			expect(socketIOTransport.connect("/")).toBe(true);
+		it("should return the socket", function () {
+			socketIOTransport.setSocket(socket);
+			expect(socketIOTransport.getSocket()).toBe(socket);
 		});
 
-		it("should return the newly created socket", function () {
-			socketIOTransport.setIO(io);
-			socketIOTransport.connect("/");
-			expect(socketIOTransport.getSocket()).toBeInstanceOf(Object);
-			expect(socketIOTransport.getSocket().on).toBeInstanceOf(Function);
-			expect(socketIOTransport.getSocket().emit).toBeInstanceOf(Function);
-		});
-
-		it("should define io directly from init", function () {
-			socketIOTransport = new SocketIOTransport(io);
-			expect(socketIOTransport.getIO()).toBe(io);
-		});
-
-		it("should be connected directly from create", function () {
-			var url = "/",
-				socketIOTransport = new SocketIOTransport(io, url);
-
-			expect(socketIOTransport.getSocket()).toBeTruthy();
+		it("should set the socket at init", function () {
+			var transport = new SocketIOTransport(socket);
+			expect(transport.getSocket()).toBe(socket);
 		});
 
 	});
@@ -77,12 +54,10 @@ require(["SocketIOTransport", "Observable"], function (SocketIOTransport, Observ
 	describe("SocketIOTransportTestRequests", function () {
 
 		var socketIOTransport = null,
-			socket = null,
 			reqData = {};
 
 		beforeEach(function () {
-			socketIOTransport = new SocketIOTransport(io, "/");
-			socket = socketIOTransport.getSocket();
+			socketIOTransport = new SocketIOTransport(socket);
 		});
 
 		it("should subscribe to events", function () {
