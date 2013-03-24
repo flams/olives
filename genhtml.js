@@ -50,7 +50,7 @@ function Helpers(window) {
 	this.generateMenu = function generateMenu() {
 		var modules = this.getDom("h2, h3"),
 			menu = this.getDom(".menu")[0],
-			generatedMenu = '<ul><li><a href="release/Emily-1.3.5.tgz">Download Emily</a></li>';
+			generatedMenu = '<ul><li><a href="release/Olives-1.4.0.tgz">Download Olives</a></li>';
 
 		[].slice.call(modules, 0).forEach(function (title) {
 			generatedMenu += '<li class="' + title.nodeName +  '"><a href="#' + title.id + '">' + title.innerHTML + '</a></li>\n';
