@@ -11,9 +11,9 @@ define(["Store", "Observable", "Tools", "DomUtils"],
  * This plugin links dom nodes to a model
  * @requires Store, Observable
  */
-function ModelPlugin(Store, Observable, Tools, DomUtils) {
+function BindPlugin(Store, Observable, Tools, DomUtils) {
 
-	return function ModelPluginConstructor($model, $bindings) {
+	return function BindPluginConstructor($model, $bindings) {
 
 		/**
 		 * The model to watch

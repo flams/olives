@@ -4,63 +4,63 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, Store, Plugins, DomUtils) {
+require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, Store, Plugins, DomUtils) {
 
 
-	describe("ModelPluginTest", function () {
+	describe("BindPluginTest", function () {
 		it("should be a constructor function", function () {
-			expect(ModelPlugin).toBeInstanceOf(Function);
+			expect(BindPlugin).toBeInstanceOf(Function);
 		});
 
 		it("should have the following API", function () {
-			var modelPlugin = new ModelPlugin();
+			var bindPlugin = new BindPlugin();
 
-			expect(modelPlugin.bind).toBeInstanceOf(Function);
-			expect(modelPlugin.foreach).toBeInstanceOf(Function);
-			expect(modelPlugin.setModel).toBeInstanceOf(Function);
-			expect(modelPlugin.getModel).toBeInstanceOf(Function);
-			expect(modelPlugin.form).toBeInstanceOf(Function);
-			expect(modelPlugin.observers).toBeInstanceOf(Object);
-			expect(modelPlugin.updateStart).toBeInstanceOf(Function);
-			expect(modelPlugin.updateNb).toBeInstanceOf(Function);
-			expect(modelPlugin.refresh).toBeInstanceOf(Function);
+			expect(bindPlugin.bind).toBeInstanceOf(Function);
+			expect(bindPlugin.foreach).toBeInstanceOf(Function);
+			expect(bindPlugin.setModel).toBeInstanceOf(Function);
+			expect(bindPlugin.getModel).toBeInstanceOf(Function);
+			expect(bindPlugin.form).toBeInstanceOf(Function);
+			expect(bindPlugin.observers).toBeInstanceOf(Object);
+			expect(bindPlugin.updateStart).toBeInstanceOf(Function);
+			expect(bindPlugin.updateNb).toBeInstanceOf(Function);
+			expect(bindPlugin.refresh).toBeInstanceOf(Function);
 		});
 
 	});
 
-	describe("ModelPluginInit", function () {
+	describe("BindPluginInit", function () {
 
-		var modelPlugin = null,
+		var bindPlugin = null,
 		model = new Store;
 
 		beforeEach(function () {
-			modelPlugin = new ModelPlugin;
+			bindPlugin = new BindPlugin;
 		});
 
 		it("should allow for setting model if it's a store", function () {
-			expect(modelPlugin.setModel()).toBe(false);
-			expect(modelPlugin.setModel({})).toBe(false);
-			expect(modelPlugin.setModel(model)).toBe(true);
+			expect(bindPlugin.setModel()).toBe(false);
+			expect(bindPlugin.setModel({})).toBe(false);
+			expect(bindPlugin.setModel(model)).toBe(true);
 		});
 
 		it("should return the model", function () {
-			modelPlugin.setModel(model);
-			expect(modelPlugin.getModel()).toBe(model);
+			bindPlugin.setModel(model);
+			expect(bindPlugin.getModel()).toBe(model);
 		});
 
 		it("should directly init the plugin with the given store", function () {
-			modelPlugin = new ModelPlugin(model);
-			expect(modelPlugin.getModel()).toBe(model);
+			bindPlugin = new BindPlugin(model);
+			expect(bindPlugin.getModel()).toBe(model);
 		});
 
 	});
 
-	describe("ModelPluginBind", function () {
+	describe("BindPluginBind", function () {
 
 		var plugins = null,
 		model = null,
 		dom = null,
-		modelPlugin = null;
+		bindPlugin = null;
 
 		beforeEach(function () {
 			dom = document.createElement("p");
@@ -68,8 +68,8 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			dom.setAttribute("data-model", "bind:innerHTML,content");
 			model =  new Store({content: "Olives is fun!"});
 			plugins = new Plugins;
-			modelPlugin =  new ModelPlugin(model);
-			plugins.add("model", modelPlugin);
+			bindPlugin =  new BindPlugin(model);
+			plugins.add("model", bindPlugin);
 		});
 
 		it("should link the model and the dom node with bind", function () {
@@ -79,8 +79,8 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			model.set("content", "Olives is cool!");
 
 			expect(dom.innerHTML).toBe("Olives is cool!");
-			expect(modelPlugin.observers["content"]).toBeInstanceOf(Array);
-			expect(model.getValueObservable().hasObserver(modelPlugin.observers["content"][0])).toBe(true);
+			expect(bindPlugin.observers["content"]).toBeInstanceOf(Array);
+			expect(model.getValueObservable().hasObserver(bindPlugin.observers["content"][0])).toBe(true);
 
 			expect(DomUtils.setAttribute.wasCalled).toBe(true);
 			expect(DomUtils.setAttribute.mostRecentCall.args[0]).toBe(dom);
@@ -130,7 +130,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 	});
 
-	describe("ModelPluginBindTheOtherWay", function () {
+	describe("BindPluginBindTheOtherWay", function () {
 
 		var plugins = null,
 			model = null,
@@ -141,7 +141,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			dom.setAttribute("data-model", "bind:checked,bool");
 			model = new Store({bool:false});
 			plugins = new Plugins;
-			plugins.add("model", new ModelPlugin(model));
+			plugins.add("model", new BindPlugin(model));
 		});
 
 		it("should update the model on dom change", function () {
@@ -178,7 +178,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 	});
 
 
-	describe("ModelPluginBindEnhanced", function () {
+	describe("BindPluginBindEnhanced", function () {
 
 		var plugins = null,
 		model = null,
@@ -200,7 +200,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				}
 			});
 			plugins = new Plugins;
-			plugins.add("model", new ModelPlugin(model));
+			plugins.add("model", new BindPlugin(model));
 		});
 
 		it("should also work with complex data", function () {
@@ -219,7 +219,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 	});
 
-	describe("ModelPluginBindTheOtherWayEnhanced", function () {
+	describe("BindPluginBindTheOtherWayEnhanced", function () {
 
 		var plugins = null,
 		model = null,
@@ -240,7 +240,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				}]);
 
 			plugins = new Plugins;
-			plugins.add("model", new ModelPlugin(model));
+			plugins.add("model", new BindPlugin(model));
 		});
 
 		it("should bind from dom to model", function () {
@@ -260,14 +260,14 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 	});
 
-	describe("ModelPluginItemRenderer", function () {
+	describe("BindPluginItemRenderer", function () {
 
-		var modelPlugin = null,
+		var bindPlugin = null,
 			plugins = null,
 			rootNode = null;
 
 		beforeEach(function () {
-			modelPlugin = new ModelPlugin(new Store([0, 1, 2, 3, 4, 5]));
+			bindPlugin = new BindPlugin(new Store([0, 1, 2, 3, 4, 5]));
 			plugins = {
 				name: "model",
 				apply: jasmine.createSpy()
@@ -276,11 +276,11 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		});
 
 		it("should provide an item renderer", function () {
-			expect(modelPlugin.ItemRenderer).toBeInstanceOf(Function);
+			expect(bindPlugin.ItemRenderer).toBeInstanceOf(Function);
 		});
 
 		it("should have the following API", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer();
+			var itemRenderer = new bindPlugin.ItemRenderer();
 			expect(itemRenderer.setRenderer).toBeInstanceOf(Function);
 			expect(itemRenderer.getRenderer).toBeInstanceOf(Function);
 			expect(itemRenderer.setRootNode).toBeInstanceOf(Function);
@@ -300,7 +300,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		});
 
 		it("should set the node to render", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer(),
+			var itemRenderer = new bindPlugin.ItemRenderer(),
 				div = document.createElement("div");
 
 			expect(itemRenderer.setRenderer(div)).toBe(true);
@@ -314,7 +314,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 			rootNode.appendChild(p);
 			spyOn(rootNode, "removeChild").andCallThrough();
-			itemRenderer = new modelPlugin.ItemRenderer();
+			itemRenderer = new bindPlugin.ItemRenderer();
 			expect(itemRenderer.setRootNode()).toBe(false);
 			expect(itemRenderer.setRootNode({})).toBe(false);
 
@@ -332,14 +332,14 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		});
 
 		it("shouldn't fail if rootNode has no children", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer();
+			var itemRenderer = new bindPlugin.ItemRenderer();
 			expect(function () {
 				itemRenderer.setRootNode(rootNode);
 			}).not.toThrow();
 		});
 
 		it("should set plugins", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer();
+			var itemRenderer = new bindPlugin.ItemRenderer();
 			expect(itemRenderer.setPlugins(plugins)).toBe(true);
 			expect(itemRenderer.getPlugins()).toBe(plugins);
 		});
@@ -350,7 +350,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				node;
 
 			rootNode.appendChild(div);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			div.innerHTML = '<p><span>date:</span><span data-model="bind:innerHTML,date"></span></p>' +
 			'<p><span>title:</span><span data-model="bind:innerHTML,title"></span></p>';
@@ -371,7 +371,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				item;
 
 			rootNode.appendChild(ul);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode),
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode),
 
 			item = itemRenderer.create(0);
 			expect(plugins.apply.wasCalled).toBe(true);
@@ -384,7 +384,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(div);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			expect(itemRenderer.create(0)).not.toBe(div);
 		});
@@ -394,7 +394,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(div);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			expect(itemRenderer.getRenderer()).toBe(div);
 		});
@@ -404,7 +404,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(div);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			expect(itemRenderer.getPlugins()).toBe(plugins);
 		});
@@ -414,19 +414,19 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(div);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 			expect(itemRenderer.getRootNode()).toBe(rootNode);
 		});
 
 		it("should have a function to get/set start", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer();
+			var itemRenderer = new bindPlugin.ItemRenderer();
 			expect(itemRenderer.setStart(0)).toBe(0);
 			expect(itemRenderer.setStart("5")).toBe(5);
 			expect(itemRenderer.getStart()).toBe(5);
 		});
 
 		it("should have a function to get/set nb", function () {
-			var itemRenderer = new modelPlugin.ItemRenderer();
+			var itemRenderer = new bindPlugin.ItemRenderer();
 			expect(itemRenderer.setNb(0)).toBe(0);
 			expect(itemRenderer.setNb("5")).toBe(5);
 			expect(itemRenderer.getNb()).toBe(5);
@@ -439,7 +439,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(dom);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 			expect(itemRenderer.items.toJSON()).toBe("[]");
 		});
 
@@ -449,7 +449,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(ul);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			item = itemRenderer.create(0);
 			expect(itemRenderer.items.get(0)).toBe(item);
@@ -460,7 +460,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(dom);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 			spyOn(rootNode, "appendChild").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
 
@@ -481,7 +481,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(dom);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 			spyOn(itemRenderer.items, "get").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
 
@@ -501,7 +501,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(dom);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			expect(itemRenderer.getNextItem(0)).toBeUndefined();
 			itemRenderer.addItem(3);
@@ -515,7 +515,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(dom);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			itemRenderer.addItem(2);
 			itemRenderer.addItem(0);
@@ -528,7 +528,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			itemRenderer;
 
 			rootNode.appendChild(dom);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			expect(function () {
 				itemRenderer.addItem(-1);
@@ -543,7 +543,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				item;
 
 			rootNode.appendChild(dom);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 			spyOn(rootNode, "removeChild").andCallThrough();
 			spyOn(itemRenderer.items, "set").andCallThrough();
 
@@ -572,7 +572,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(ul);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			item = itemRenderer.create(10);
 			expect(item).toBeUndefined();
@@ -584,7 +584,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(item);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			spyOn(itemRenderer, "addItem").andCallThrough();
 			spyOn(itemRenderer, "removeItem");
@@ -604,7 +604,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(item);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 			itemRenderer.setNb(3);
 			itemRenderer.setStart(1);
 			itemRenderer.render();
@@ -629,7 +629,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				itemRenderer;
 
 			rootNode.appendChild(item);
-			itemRenderer = new modelPlugin.ItemRenderer(plugins, rootNode);
+			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			itemRenderer.setNb("*");
 			itemRenderer.setStart(0);
@@ -637,7 +637,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			// First rendering with the 6 elements
 			itemRenderer.render();
 			// Remove the first one
-			modelPlugin.getModel().del(0);
+			bindPlugin.getModel().del(0);
 			// And the rendering should be updated
 			itemRenderer.render();
 			// There are now 5 items
@@ -649,7 +649,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toBe(5);
 
 			// Deletes item 0, 1, 2
-			modelPlugin.getModel().alter("splice", 0, 3);
+			bindPlugin.getModel().alter("splice", 0, 3);
 			// which should remove 3 dom nodes : the 5th,
 			itemRenderer.render();
 
@@ -661,8 +661,8 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		});
 	});
 
-	describe("ModelPluginForeach", function () {
-		var modelPlugin = null,
+	describe("BindPluginForeach", function () {
+		var bindPlugin = null,
 		model = null,
 		dom = null,
 		plugins = null;
@@ -674,9 +674,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			dom.innerHTML = '<li data-model="bind:innerHTML"></li>';
 
 			model = new Store(["Olives", "is", "fun"]);
-			modelPlugin = new ModelPlugin(model);
+			bindPlugin = new BindPlugin(model);
 			plugins = new Plugins;
-			plugins.add("model", modelPlugin);
+			plugins.add("model", bindPlugin);
 		});
 
 		it("should expand the node inside", function () {
@@ -725,15 +725,15 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		it("should remove the observers of the removed item", function () {
 			var handler;
 			plugins.apply(dom);
-			handler = modelPlugin.observers[2][0];
+			handler = bindPlugin.observers[2][0];
 			model.alter("pop");
 			expect(model.getValueObservable().hasObserver(handler)).toBe(false);
-			expect(modelPlugin.observers[2]).toBeUndefined();
+			expect(bindPlugin.observers[2]).toBeUndefined();
 		});
 
 		it("should not fail if the ItemRenderer is given a DOM that starts with a textnode", function () {
 			dom.innerHTML = " \n \t\t <li></li>";
-			spyOn(modelPlugin, "ItemRenderer").andCallThrough();
+			spyOn(bindPlugin, "ItemRenderer").andCallThrough();
 			expect(function () {
 				plugins.apply(dom);
 			}).not.toThrow();
@@ -742,16 +742,16 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 		it("should have a function for getting the item index in a store given a dom element", function () {
 			plugins.apply(dom);
-			expect(modelPlugin.getItemIndex()).toBe(false);
-			expect(modelPlugin.getItemIndex(document.createElement("li"))).toBe(false);
-			expect(modelPlugin.getItemIndex(dom.querySelector("li"))).toBe(0);
-			expect(modelPlugin.getItemIndex(dom.querySelectorAll("li")[2])).toBe(2);
+			expect(bindPlugin.getItemIndex()).toBe(false);
+			expect(bindPlugin.getItemIndex(document.createElement("li"))).toBe(false);
+			expect(bindPlugin.getItemIndex(dom.querySelector("li"))).toBe(0);
+			expect(bindPlugin.getItemIndex(dom.querySelectorAll("li")[2])).toBe(2);
 		});
 	});
 
-	describe("ModelPluginForeachEnhanced", function () {
+	describe("BindPluginForeachEnhanced", function () {
 
-		var modelPlugin = null,
+		var bindPlugin = null,
 		model = null,
 		dataSet = null,
 		dom = null,
@@ -780,17 +780,17 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			}}
 			];
 			model = new Store(dataSet);
-			modelPlugin = new ModelPlugin(model);
+			bindPlugin = new BindPlugin(model);
 
 			plugins = new Plugins;
-			plugins.add("model", modelPlugin);
+			plugins.add("model", bindPlugin);
 		});
 
 		it("should expand and fill in with a complex object's values", function () {
 			dom.innerHTML = '<li><em data-model="bind:innerHTML,value.date"></em><strong data-model="bind:innerHTML,value.title"></strong>' +
 			'<span data-model="bind:innerHTML,value.body"></span></li>';
 
-			modelPlugin.foreach(dom);
+			bindPlugin.foreach(dom);
 			expect(dom.querySelectorAll("li").length).toBe(3);
 			expect(dom.querySelectorAll("em")[0].innerHTML).toBe(dataSet[0].value.date);
 			expect(dom.querySelectorAll("strong")[0].innerHTML).toBe(dataSet[0].value.title);
@@ -809,7 +809,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			dom.innerHTML = '<li><em data-model="bind:innerHTML,value.date"></em><strong data-model="bind:innerHTML,value.title"></strong>' +
 			'<span data-model="bind:innerHTML,value.body"></span></li>';
 
-			modelPlugin.foreach(dom);
+			bindPlugin.foreach(dom);
 
 			model.set(1, {
 				value: {
@@ -826,9 +826,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 	});
 
-	describe("ModelPluginNestedForeach", function () {
+	describe("BindPluginNestedForeach", function () {
 
-		var modelPlugin = null,
+		var bindPlugin = null,
 		model = null,
 		dom = null,
 		plugins = null;
@@ -847,15 +847,15 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 				plugins: ["Store", "Observable", "StateMachine"]
 			}, {
 				name:"olives",
-				plugins: ["OObject", "ModelPlugin", "Plugins"]
+				plugins: ["OObject", "BindPlugin", "Plugins"]
 			}]);
-			modelPlugin = new ModelPlugin(model);
+			bindPlugin = new BindPlugin(model);
 			plugins = new Plugins;
-			plugins.add("model", modelPlugin);
+			plugins.add("model", bindPlugin);
 		});
 
 		it("should render nested foreach", function () {
-			modelPlugin.foreach(dom, "fwks");
+			bindPlugin.foreach(dom, "fwks");
 			// Nested for each are not supported yet. Should be done by April
 		});
 
@@ -863,9 +863,9 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 	});
 
 
-	describe("ModelPluginForeachLimits", function () {
+	describe("BindPluginForeachLimits", function () {
 
-		var modelPlugin = null,
+		var bindPlugin = null,
 			model = null,
 			dataSet = null,
 			dom = null,
@@ -877,14 +877,14 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 			dataSet = ["Olives", "is", "cool", "it handles", "pagination", "for me"];
 			model = new Store(dataSet);
-			modelPlugin = new ModelPlugin(model);
+			bindPlugin = new BindPlugin(model);
 
 			plugins = new Plugins;
-			plugins.add("model", modelPlugin);
+			plugins.add("model", bindPlugin);
 		});
 
 		it("should limit the list length to the given params", function () {
-			modelPlugin.foreach(dom, "id", 1, 3);
+			bindPlugin.foreach(dom, "id", 1, 3);
 			expect(dom.querySelectorAll("li").length).toBe(3);
 			expect(dom.querySelectorAll("li")[0].innerHTML).toBe("is");
 			expect(dom.querySelectorAll("li")[1].innerHTML).toBe("cool");
@@ -892,20 +892,20 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 		});
 
 		it("should not fail with outbounds values", function () {
-			modelPlugin.foreach(dom, "id", -1, 7);
+			bindPlugin.foreach(dom, "id", -1, 7);
 			expect(dom.querySelectorAll("li").length).toBe(6);
 			expect(dom.querySelectorAll("li")[0].innerHTML).toBe("Olives");
 			expect(dom.querySelectorAll("li")[5].innerHTML).toBe("for me");
 		});
 
 		it("should not add a new item if it's out of the limits", function () {
-			modelPlugin.foreach(dom, "id", 2, 3);
+			bindPlugin.foreach(dom, "id", 2, 3);
 			model.alter("push", "new item out of the limits");
 			expect(dom.querySelectorAll("li").length).toBe(3);
 		});
 
 		it("should not fail if an item is removed", function() {
-			modelPlugin.foreach(dom, "id", 2, 3);
+			bindPlugin.foreach(dom, "id", 2, 3);
 			model.alter("push", "new item out of the limits");
 			model.alter("pop");
 			expect(dom.querySelectorAll("li").length).toBe(3);
@@ -915,29 +915,29 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 		it("should store the item renderers according to their id", function () {
 			var itemRenderer;
-			spyOn(modelPlugin, "setItemRenderer").andCallThrough();
+			spyOn(bindPlugin, "setItemRenderer").andCallThrough();
 
-			modelPlugin.foreach(dom, "id", 2, 3);
-			expect(modelPlugin.setItemRenderer.mostRecentCall.args[0]).toBe("id");
-			itemRenderer = modelPlugin.setItemRenderer.mostRecentCall.args[1];
-			expect(itemRenderer).toBeInstanceOf(modelPlugin.ItemRenderer);
-			expect(modelPlugin.getItemRenderer).toBeInstanceOf(Function);
-			expect(modelPlugin.getItemRenderer("id")).toBe(itemRenderer);
+			bindPlugin.foreach(dom, "id", 2, 3);
+			expect(bindPlugin.setItemRenderer.mostRecentCall.args[0]).toBe("id");
+			itemRenderer = bindPlugin.setItemRenderer.mostRecentCall.args[1];
+			expect(itemRenderer).toBeInstanceOf(bindPlugin.ItemRenderer);
+			expect(bindPlugin.getItemRenderer).toBeInstanceOf(Function);
+			expect(bindPlugin.getItemRenderer("id")).toBe(itemRenderer);
 		});
 
 		it("should save the store as default if no id is given", function () {
 			var itemRenderer;
-			spyOn(modelPlugin, "setItemRenderer").andCallThrough();
+			spyOn(bindPlugin, "setItemRenderer").andCallThrough();
 
-			modelPlugin.foreach(dom);
-			itemRenderer = modelPlugin.setItemRenderer.mostRecentCall.args[1];
-			expect(modelPlugin.getItemRenderer("default")).toBe(itemRenderer);
+			bindPlugin.foreach(dom);
+			itemRenderer = bindPlugin.setItemRenderer.mostRecentCall.args[1];
+			expect(bindPlugin.getItemRenderer("default")).toBe(itemRenderer);
 		});
 
 		it("should allow for multiple foreaches", function () {
 			var dom2 = dom.cloneNode(true);
-			modelPlugin.foreach(dom, "id", 1, 3);
-			modelPlugin.foreach(dom2, "id2", 3, 3);
+			bindPlugin.foreach(dom, "id", 1, 3);
+			bindPlugin.foreach(dom2, "id2", 3, 3);
 
 			expect(dom2.querySelectorAll("li").length).toBe(3);
 			expect(dom.querySelectorAll("li")[0].innerHTML).toBe("is");
@@ -946,30 +946,30 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 		it("should update the foreach start", function () {
 			var itemRenderer;
-			modelPlugin.foreach(dom, "id", 1, 3);
-			itemRenderer = modelPlugin.getItemRenderer("id");
-			expect(modelPlugin.updateStart("fakeId")).toBe(false);
-			expect(modelPlugin.updateStart("id", 2)).toBe(true);
+			bindPlugin.foreach(dom, "id", 1, 3);
+			itemRenderer = bindPlugin.getItemRenderer("id");
+			expect(bindPlugin.updateStart("fakeId")).toBe(false);
+			expect(bindPlugin.updateStart("id", 2)).toBe(true);
 			expect(itemRenderer.getStart()).toBe(2);
 		});
 
 		it("should update the nb of items displayed by foreach", function () {
 			var itemRenderer;
-			modelPlugin.foreach(dom, "id", 1, 3);
-			itemRenderer = modelPlugin.getItemRenderer("id");
-			expect(modelPlugin.updateNb("fakeId")).toBe(false);
-			expect(modelPlugin.updateNb("id", 2)).toBe(true);
+			bindPlugin.foreach(dom, "id", 1, 3);
+			itemRenderer = bindPlugin.getItemRenderer("id");
+			expect(bindPlugin.updateNb("fakeId")).toBe(false);
+			expect(bindPlugin.updateNb("id", 2)).toBe(true);
 			expect(itemRenderer.getNb()).toBe(2);
 		});
 
 		it("should have a function to call itemRenderer's render", function () {
 			var itemRenderer;
-			modelPlugin.foreach(dom, "id", 1, 3);
-			itemRenderer = modelPlugin.getItemRenderer("id");
+			bindPlugin.foreach(dom, "id", 1, 3);
+			itemRenderer = bindPlugin.getItemRenderer("id");
 			spyOn(itemRenderer, "render");
 
-			expect(modelPlugin.refresh("fakeid")).toBe(false);
-			expect(modelPlugin.refresh("id")).toBe(true);
+			expect(bindPlugin.refresh("fakeid")).toBe(false);
+			expect(bindPlugin.refresh("id")).toBe(true);
 			expect(itemRenderer.render.wasCalled).toBe(true);
 		});
 
@@ -977,16 +977,16 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 
 	describe("ModelForm", function () {
 
-		var modelPlugin = null,
+		var bindPlugin = null,
 		plugins = null,
 		model = null,
 		form = null;
 
 		beforeEach(function () {
 			model = new Store();
-			modelPlugin = new ModelPlugin(model);
+			bindPlugin = new BindPlugin(model);
 			plugins = new Plugins();
-			plugins.add("model", modelPlugin);
+			plugins.add("model", bindPlugin);
 			form = document.createElement("form");
 			form.innerHTML = '<p><label>Firstname: </label><input type="text" name="firstname" value="olivier" /></p>' +
 			'<p><label>Lastname: </label><input type="text" name="lastname" value="wietrich" /></p>' +
@@ -1001,27 +1001,27 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			input.type = "text"
 				input.name = "firstname";
 			input.value = "olivier";
-			expect(modelPlugin.set).toBeInstanceOf(Function);
-			expect(modelPlugin.set(document.createElement("input"))).toBe(false);
-			expect(modelPlugin.set(input)).toBe(true);
+			expect(bindPlugin.set).toBeInstanceOf(Function);
+			expect(bindPlugin.set(document.createElement("input"))).toBe(false);
+			expect(bindPlugin.set(input)).toBe(true);
 			expect(model.get("firstname")).toBe("olivier");
 		});
 
 		it("should have a form function", function () {
-			expect(modelPlugin.form).toBeInstanceOf(Function);
+			expect(bindPlugin.form).toBeInstanceOf(Function);
 		});
 
 		it("should accept only form nodes", function () {
-			expect(modelPlugin.form()).toBe(false);
-			expect(modelPlugin.form(document.createElement("div"))).toBe(false);
-			expect(modelPlugin.form(form)).toBe(true);
+			expect(bindPlugin.form()).toBe(false);
+			expect(bindPlugin.form(document.createElement("div"))).toBe(false);
+			expect(bindPlugin.form(form)).toBe(true);
 		});
 
 		it("should make form listen to submit", function () {
 			spyOn(form, "addEventListener").andCallThrough();
-			spyOn(modelPlugin, "set");
+			spyOn(bindPlugin, "set");
 
-			modelPlugin.form(form);
+			bindPlugin.form(form);
 
 			expect(form.addEventListener.wasCalled).toBe(true);
 			expect(form.addEventListener.mostRecentCall.args[0]).toBe("submit");
@@ -1035,23 +1035,23 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 					preventDefault: jasmine.createSpy()
 			};
 			spyOn(form, "addEventListener").andCallThrough();
-			spyOn(modelPlugin, "set");
+			spyOn(bindPlugin, "set");
 
-			modelPlugin.form(form);
+			bindPlugin.form(form);
 			func = form.addEventListener.mostRecentCall.args[1];
 
 			expect(func).toBeInstanceOf(Function);
 			func(event);
 
-			expect(modelPlugin.set.wasCalled).toBe(true);
-			expect(modelPlugin.set.callCount).toBe(4);
+			expect(bindPlugin.set.wasCalled).toBe(true);
+			expect(bindPlugin.set.callCount).toBe(4);
 			expect(event.preventDefault.wasCalled).toBe(true);
 		});
 	});
 
-	describe("ModelPluginPlugins", function () {
+	describe("BindPluginPlugins", function () {
 
-		var modelPlugin = null,
+		var bindPlugin = null,
 			model = null,
 			newBindings = null,
 			dom = null;
@@ -1061,73 +1061,73 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (ModelPlugin, 
 			newBindings = {
 				toggleClass: jasmine.createSpy()
 			};
-			modelPlugin = new ModelPlugin(model);
-			modelPlugin.plugins = {}; modelPlugin.plugins.name = "model";
+			bindPlugin = new BindPlugin(model);
+			bindPlugin.plugins = {}; bindPlugin.plugins.name = "model";
 			dom = document.createElement("div");
 		});
 
 		it("should have the following methods", function () {
-			expect(modelPlugin.addBindings).toBeInstanceOf(Function);
-			expect(modelPlugin.getBinding).toBeInstanceOf(Function);
-			expect(modelPlugin.addBinding).toBeInstanceOf(Function);
-			expect(modelPlugin.hasBinding).toBeInstanceOf(Function);
-			expect(modelPlugin.execBinding).toBeInstanceOf(Function);
+			expect(bindPlugin.addBindings).toBeInstanceOf(Function);
+			expect(bindPlugin.getBinding).toBeInstanceOf(Function);
+			expect(bindPlugin.addBinding).toBeInstanceOf(Function);
+			expect(bindPlugin.hasBinding).toBeInstanceOf(Function);
+			expect(bindPlugin.execBinding).toBeInstanceOf(Function);
 		});
 
 		it("should add a new binding", function () {
-			expect(modelPlugin.addBinding("")).toBe(false);
-			expect(modelPlugin.addBinding("", {})).toBe(false);
-			expect(modelPlugin.addBinding("", function () {})).toBe(false);
-			expect(modelPlugin.addBinding("toggleClass", newBindings.toggleClass)).toBe(true);
-			expect(modelPlugin.getBinding("toggleClass")).toBe(newBindings.toggleClass);
+			expect(bindPlugin.addBinding("")).toBe(false);
+			expect(bindPlugin.addBinding("", {})).toBe(false);
+			expect(bindPlugin.addBinding("", function () {})).toBe(false);
+			expect(bindPlugin.addBinding("toggleClass", newBindings.toggleClass)).toBe(true);
+			expect(bindPlugin.getBinding("toggleClass")).toBe(newBindings.toggleClass);
 		});
 
 		it("should add multiple bindings at once", function () {
-			spyOn(modelPlugin, "addBinding").andCallThrough();
-			expect(modelPlugin.addBindings(newBindings)).toBe(true);
-			expect(modelPlugin.addBinding.wasCalled).toBe(true);
-			expect(modelPlugin.addBinding.mostRecentCall.args[0]).toBe("toggleClass");
-			expect(modelPlugin.addBinding.mostRecentCall.args[1]).toBe(newBindings.toggleClass);
+			spyOn(bindPlugin, "addBinding").andCallThrough();
+			expect(bindPlugin.addBindings(newBindings)).toBe(true);
+			expect(bindPlugin.addBinding.wasCalled).toBe(true);
+			expect(bindPlugin.addBinding.mostRecentCall.args[0]).toBe("toggleClass");
+			expect(bindPlugin.addBinding.mostRecentCall.args[1]).toBe(newBindings.toggleClass);
 		});
 
 		it("should tell if binding exists", function () {
-			modelPlugin.addBindings(newBindings);
-			expect(modelPlugin.hasBinding("toggleClass")).toBe(true);
-			expect(modelPlugin.hasBinding("valueOf")).toBe(false);
+			bindPlugin.addBindings(newBindings);
+			expect(bindPlugin.hasBinding("toggleClass")).toBe(true);
+			expect(bindPlugin.hasBinding("valueOf")).toBe(false);
 		});
 
 		it("should execute binding", function () {
-			expect(modelPlugin.execBinding(dom, "nop", false)).toBe(false);
-			modelPlugin.addBindings(newBindings);
-			expect(modelPlugin.execBinding(dom, "toggleClass", false, "otherParam")).toBe(true);
+			expect(bindPlugin.execBinding(dom, "nop", false)).toBe(false);
+			bindPlugin.addBindings(newBindings);
+			expect(bindPlugin.execBinding(dom, "toggleClass", false, "otherParam")).toBe(true);
 			expect(newBindings.toggleClass.mostRecentCall.args[0]).toBe(false);
 			expect(newBindings.toggleClass.mostRecentCall.args[1]).toBe("otherParam");
 			expect(newBindings.toggleClass.mostRecentCall.object).toBe(dom);
 		});
 
 		it("should execute new bindings", function () {
-			modelPlugin.addBindings(newBindings);
-			spyOn(modelPlugin, "execBinding");
-			modelPlugin.bind(dom, "toggleClass","property", "otherParam");
+			bindPlugin.addBindings(newBindings);
+			spyOn(bindPlugin, "execBinding");
+			bindPlugin.bind(dom, "toggleClass","property", "otherParam");
 			model.set("property", true);
-			expect(modelPlugin.execBinding.wasCalled).toBe(true);
-			expect(modelPlugin.execBinding.mostRecentCall.args[0]).toBe(dom);
-			expect(modelPlugin.execBinding.mostRecentCall.args[1]).toBe("toggleClass");
-			expect(modelPlugin.execBinding.mostRecentCall.args[2]).toBe(true);
-			expect(modelPlugin.execBinding.mostRecentCall.args[3]).toBe("otherParam");
+			expect(bindPlugin.execBinding.wasCalled).toBe(true);
+			expect(bindPlugin.execBinding.mostRecentCall.args[0]).toBe(dom);
+			expect(bindPlugin.execBinding.mostRecentCall.args[1]).toBe("toggleClass");
+			expect(bindPlugin.execBinding.mostRecentCall.args[2]).toBe(true);
+			expect(bindPlugin.execBinding.mostRecentCall.args[3]).toBe("otherParam");
 		});
 
 		it("should not double way bind the plugins", function () {
-			modelPlugin.addBindings(newBindings);
+			bindPlugin.addBindings(newBindings);
 			spyOn(dom, "addEventListener").andCallThrough();
-			modelPlugin.bind(dom, "toggleClass","property");
+			bindPlugin.bind(dom, "toggleClass","property");
 			expect(dom.addEventListener.wasCalled).toBe(false);
 		});
 
-		it("should add bindings at ModelPlugin init", function () {
-			var modelPlugin = new ModelPlugin(model, newBindings);
+		it("should add bindings at BindPlugin init", function () {
+			var bindPlugin = new BindPlugin(model, newBindings);
 
-			expect(modelPlugin.getBinding("toggleClass")).toBe(newBindings.toggleClass);
+			expect(bindPlugin.getBinding("toggleClass")).toBe(newBindings.toggleClass);
 		});
 
 	});
