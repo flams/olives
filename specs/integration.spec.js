@@ -4,9 +4,9 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store", "DomUtils", "Place.plugin"],
+require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store", "DomUtils", "Place.plugin", "LocalStore"],
 
-function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin) {
+function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin, LocalStore) {
 
 	function CreateMouseEvent(type) {
 		var event = document.createEvent("MouseEvents");
@@ -643,6 +643,37 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
 
 			expect(parentUI.dom.querySelectorAll("p")[0]).toBe(childUI1.dom);
 			expect(parentUI.dom.querySelectorAll("p")[1]).toBe(childUI2.dom);
+		});
+
+	});
+
+	describe("LocalStore is an Emily store which can be synchronized with localStorage", function () {
+
+		it("can be initialised like an Emily Store", function () {
+			var store = new LocalStore({
+				name: "Olives",
+				type: "MVC"
+			});
+
+			expect(store.get("type")).toBe("MVC");
+		});
+
+		it("can be synchronized with localStorage", function () {
+			var store = new LocalStore({
+				name: "Olives",
+				type: "MVC"
+			});
+
+			// the store is now persisted in localStorage
+			store.sync("OlivesStore");
+		});
+
+		it("can reload data from localStorage", function () {
+			var store = new LocalStore();
+
+			store.sync("OlivesStore");
+
+			expect(store.get("name")).toBe("Olives");
 		});
 
 	});
