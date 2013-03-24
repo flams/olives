@@ -677,6 +677,7 @@ describe("DomUtils is a collection of tools for manipulating the dom", function 
 
 * Added Bind.plugin.getItemIndex for getting the index of a foreach generated item in a store
 * Plugins constructor can be called with the list of plugins
+* Updated all documentations
 
 ####1.3.2 - 15 MAR 2013
 
