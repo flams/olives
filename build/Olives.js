@@ -125,9 +125,9 @@ define('Bind.plugin',["Store", "Observable", "Tools", "DomUtils"],
  * This plugin links dom nodes to a model
  * @requires Store, Observable
  */
-function ModelPlugin(Store, Observable, Tools, DomUtils) {
+function BindPlugin(Store, Observable, Tools, DomUtils) {
 
-	return function ModelPluginConstructor($model, $bindings) {
+	return function BindPluginConstructor($model, $bindings) {
 
 		/**
 		 * The model to watch
@@ -635,6 +635,16 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			}
 		};
 
+		this.getItemIndex = function getElementId(dom) {
+			var dataset = DomUtils.getDataset(dom);
+
+			if (dataset && typeof dataset[this.plugins.name + "_id"] != "undefined") {
+				return +dataset[this.plugins.name + "_id"];
+			} else {
+				return false;
+			}
+		};
+
 		/**
 		 * Prevents the submit and set the model with all form's inputs
 		 * @param {HTMLFormElement} form
@@ -734,8 +744,22 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define('Event.plugin',["DomUtils"], function (Utils) {
+define('Event.plugin',["DomUtils"],
 
+/**
+* @class
+* Event plugin adds events listeners to DOM nodes.
+* It can also delegate the event handling to a parent dom node
+* @requires Utils
+*/
+function EventPlugin(Utils) {
+
+	/**
+	 * The event plugin constructor.
+	 * ex: new EventPlugin({method: function(){} ...}, false);
+	 * @param {Object} the object that has the event handling methods
+	 * @param {Boolean} $isMobile if the event handler has to map with touch events
+	 */
 	return function EventPluginConstructor($parent, $isMobile) {
 
 		/**
@@ -761,7 +785,8 @@ define('Event.plugin',["DomUtils"], function (Utils) {
 		_isMobile = !!$isMobile;
 
 		/**
-		 * Add mapped event listener (for test purpose).
+		 * Add mapped event listener (for testing purpose).
+		 * @private
 		 */
 		this.addEventListener = function addEventListener(node, event, callback, useCapture) {
 			node.addEventListener(this.map(event), callback, !!useCapture);
@@ -769,24 +794,29 @@ define('Event.plugin',["DomUtils"], function (Utils) {
 
 		/**
 		 * Listen to DOM events.
-		 * @param {Object} DOM node
-		 * @param {String} event's name
-		 * @param {String} callback's name
+		 * @param {Object} node DOM node
+		 * @param {String} name event's name
+		 * @param {String} listener callback's name
 		 * @param {String} useCapture string
 		 */
 		this.listen = function listen(node, name, listener, useCapture) {
 			this.addEventListener(node, name, function(e){
-				_parent[listener].call(_parent,e, node);
+				_parent[listener].call(_parent, e, node);
 			}, !!useCapture);
 		};
 
 		/**
-		 *
+		 * Delegate the event handling to a parent DOM element
+		 * @param {Object} node DOM node
+		 * @param {String} selector CSS3 selector to the element that listens to the event
+		 * @param {String} name event's name
+		 * @param {String} listener callback's name
+		 * @param {String} useCapture string
 		 */
 		this.delegate = function delegate(node, selector, name, listener, useCapture) {
 			this.addEventListener(node, name, function(event){
 				if (Utils.matches(node, selector, event.target)) {
-					_parent[listener].call(_parent,event, node);
+					_parent[listener].call(_parent, event, node);
 				}
 			}, !!useCapture);
 		};
@@ -965,7 +995,7 @@ define('Plugins',["Tools", "DomUtils"],
  */
 function Plugins(Tools, DomUtils) {
 
-	return function PluginsConstructor() {
+	return function PluginsConstructor($plugins) {
 
 		/**
 		 * The list of plugins
@@ -1096,6 +1126,8 @@ function Plugins(Tools, DomUtils) {
 				return false;
 			}
 		};
+
+		this.addAll($plugins);
 
 	};
 });
@@ -1299,13 +1331,36 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
  */
 
 define('Place.plugin',["OObject", "Tools"],
+/**
+* @class
+* Place plugin places OObject in the DOM.
+* @requires OObject, Tools
+*/
+function PlacePlugin(OObject, Tools) {
 
-function (OObject, Tools) {
-
+	/**
+	 * Intilialize a Place.plugin with a list of OObjects
+	 * @param {Object} $uis a list of OObjects such as:
+	 *   {
+	 *		"header": new OObject(),
+	 *		"list": new OObject()
+	 *	 }
+	 * @Constructor
+	 */
 	return function PlacePluginConstructor($uis) {
 
+		/**
+		 * The list of uis currently set in this place plugin
+		 * @private
+		 */
 		var _uis = {};
 
+		/**
+		 * Attach an OObject to this DOM element
+		 * @param {HTML|SVGElement} node the dom node where to attach the OObject
+		 * @param {String} the name of the OObject to attach
+		 * @throws {NoSuchOObject} an error if there's no OObject for the given name
+		 */
 		this.place = function place(node, name) {
 			if (_uis[name] instanceof OObject) {
 				_uis[name].place(node);
@@ -1314,6 +1369,12 @@ function (OObject, Tools) {
 			}
 		};
 
+		/**
+		 * Add an OObject that can be attached to a dom element
+		 * @param {String} the name of the OObject to add to the list
+		 * @param {OObject} ui the OObject to add the list
+		 * @returns {Boolean} true if the OObject was added
+		 */
 		this.set = function set(name, ui) {
 			if (typeof name == "string" && ui instanceof OObject) {
 				_uis[name] = ui;
@@ -1323,12 +1384,25 @@ function (OObject, Tools) {
 			}
 		};
 
+		/**
+		 * Add multiple dom elements at once
+		 * @param {Object} $uis a list of OObjects such as:
+		 *   {
+		 *		"header": new OObject(),
+		 *		"list": new OObject()
+		 *	 }
+		 */
 		this.setAll = function setAll(uis) {
 			Tools.loop(uis, function (ui, name) {
 				this.set(name, ui);
 			}, this);
 		};
 
+		/**
+		 * Returns an OObject from the list given its name
+		 * @param {String} the name of the OObject to get
+		 * @returns {OObject} OObject for the given name
+		 */
 		this.get = function get(name) {
 			return _uis[name];
 		};
@@ -1348,81 +1422,38 @@ function (OObject, Tools) {
 define('SocketIOTransport',["Observable", "Tools"],
 /**
  * @class
- * Transport allows for client-server eventing.
+ * SocketIOTransport allows for client-server eventing.
  * It's based on socket.io.
  */
-function Transport(Observable, Tools) {
+function SocketIOTransport(Observable, Tools) {
 
 	/**
-	 * Defines the Transport
+	 * Defines the SocketIOTransport
 	 * @private
 	 * @param {Object} $io socket.io's object
-	 * @param {url} $url the url to connect Transport to
 	 * @returns
 	 */
-	return function TransportConstructor($io, $url) {
+	return function SocketIOTransportConstructor($socket) {
 
 		/**
 		 * @private
 		 * The socket.io's socket
 		 */
-		var _socket = null,
+		var _socket = null;
 
 		/**
-		 * @private
-		 * The socket.io globally defined module
+		 * Set the socket created by SocketIO
+		 * @param {Object} socket the socket.io socket
+		 * @returns true if it seems to be a socket.io socket
 		 */
-		_io = null,
-
-		/**
-		 * @private
-		 * The Observable that is used for the listen function
-		 */
-		_observable = new Observable(),
-
-		/**
-		 * @private
-		 * listen internally calls request, which returns a "stop listen" function
-		 * It should be saved in an object alongside the topic name
-		 */
-		_stops = {};
-
-		/**
-		 * Set the io handler (socket.io)
-		 * @param {Object} io the socket.io object
-		 * @returns true if it seems to be socket.io
-		 */
-		this.setIO = function setIO(io) {
-			if (io && typeof io.connect == "function") {
-				_io = io;
+		this.setSocket = function setSocket(socket) {
+			if (socket && typeof socket.emit == "function") {
+				_socket = socket;
 				return true;
 			} else {
 				return false;
 			}
 		};
-
-		/**
-		 * Get socket.io, for debugging purpose
-		 * @private
-		 * @param
-		 * @returns the handler
-		 */
-		this.getIO = function getIO() {
-			return _io;
-		};
-
-		/**
-		 * Connect Transport to an url
-		 * @param {Url} url the url to connect Transport to
-		 */
-		this.connect = function connect(url) {
-			if (typeof url == "string") {
-				_socket = _io.connect(url);
-				return true;
-			} else {
-				return false;
-			}
-		},
 
 		/**
 		 * Get the socket, for debugging purpose
@@ -1467,7 +1498,7 @@ function Transport(Observable, Tools) {
 		 * @param data
 		 * @param {Function} callback is the function to be called for ack
 		 */
-		this.removeListener = function emit(event, data, callback) {
+		this.removeListener = function removeListener(event, data, callback) {
 			return _socket.removeListener(event, data, callback);
 		};
 
@@ -1537,9 +1568,8 @@ function Transport(Observable, Tools) {
 		};
 
 		/**
-		 * Initializes the transport to the given url.
+		 * Sets the socket.io
 		 */
-		this.setIO($io);
-		this.connect($url);
+		this.setSocket($socket);
 	};
 });
