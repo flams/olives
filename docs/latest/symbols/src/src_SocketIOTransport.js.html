@@ -14,19 +14,19 @@
 <span class='line'>  7</span> </span><span class="NAME">define</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="STRN">"Observable"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Tools"</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>  8</span> </span><span class="COMM">/**
 <span class='line'>  9</span>  * @class
-<span class='line'> 10</span>  * Transport allows for client-server eventing.
+<span class='line'> 10</span>  * SocketIOTransport allows for client-server eventing.
 <span class='line'> 11</span>  * It's based on socket.io.
 <span class='line'> 12</span>  */</span><span class="WHIT">
-<span class='line'> 13</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">Transport</span><span class="PUNC">(</span><span class="NAME">Observable</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Tools</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">SocketIOTransport</span><span class="PUNC">(</span><span class="NAME">Observable</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Tools</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 14</span> 
 <span class='line'> 15</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='line'> 16</span> 	 * Defines the Transport
+<span class='line'> 16</span> 	 * Defines the SocketIOTransport
 <span class='line'> 17</span> 	 * @private
 <span class='line'> 18</span> 	 * @param {Object} $io socket.io's object
 <span class='line'> 19</span> 	 * @param {url} $url the url to connect Transport to
 <span class='line'> 20</span> 	 * @returns
 <span class='line'> 21</span> 	 */</span><span class="WHIT">
-<span class='line'> 22</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">TransportConstructor</span><span class="PUNC">(</span><span class="NAME">$io</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">$url</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">SocketIOTransportConstructor</span><span class="PUNC">(</span><span class="NAME">$io</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">$url</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 23</span> 
 <span class='line'> 24</span> </span><span class="WHIT">		</span><span class="COMM">/**
 <span class='line'> 25</span> 		 * @private
