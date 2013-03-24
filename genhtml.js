@@ -62,6 +62,7 @@ function Helpers(window) {
 		generatedMenu += '<ul>\n \
 			<li><a href="tests.html" target="_blank">Test your browser</a></li>\n \
 			<li><a href="docs/latest/index.html" target="_blank">JsDoc</a></li>\n \
+			<li><a href="http://todomvc.com/labs/architecture-examples/olives/" target="_blank">TodoMVC</a></li>\n \
 		 </ul>\n';
 
 		menu.innerHTML = generatedMenu;
