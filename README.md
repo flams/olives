@@ -650,7 +650,54 @@ describe("DomUtils is a collection of tools for manipulating the dom", function 
 ### Place.plugin
 
 ```js
+describe("Place.plugin places OObject in the DOM", function () {
 
+	it("has a function for adding adding an oobject", function () {
+		var parentUI = new OObject(),
+			childUI = new OObject(),
+			placePlugin = new PlacePlugin();
+
+		childUI.template = '<p></p>';
+
+		parentUI.template = '<div data-place="place: myUI"></div>';
+
+		parentUI.plugins.add("place", placePlugin);
+
+		placePlugin.set("myUI", childUI);
+
+		parentUI.render();
+
+		expect(parentUI.dom.childNodes[0]).toBe(childUI.dom);
+	});
+
+	it("has a function for adding multiple oobjects, equivalent to calling set multiple times", function () {
+		var parentUI = new OObject(),
+			childUI1 = new OObject(),
+			childUI2 = new OObject(),
+			placePlugin = new PlacePlugin();
+
+		childUI1.template = '<p></p>';
+		childUI2.template = '<p></p>';
+
+		parentUI.template = '<ul>';
+		parentUI.template += '<li data-place="place: myUI1"></li>';
+		parentUI.template += '<li data-place="place: myUI2"></li>';
+		parentUI.template += '</ul>';
+
+		parentUI.plugins.add("place", placePlugin);
+
+		placePlugin.setAll({
+			"myUI1": childUI1,
+			"myUI2": childUI2
+		});
+
+		parentUI.render();
+
+		expect(parentUI.dom.querySelectorAll("p")[0]).toBe(childUI1.dom);
+		expect(parentUI.dom.querySelectorAll("p")[1]).toBe(childUI2.dom);
+	});
+
+});
 ```
 
 ### SocketIOTransport
