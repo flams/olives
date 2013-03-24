@@ -11,9 +11,9 @@ define(["Store", "Observable", "Tools", "DomUtils"],
  * This plugin links dom nodes to a model
  * @requires Store, Observable
  */
-function ModelPlugin(Store, Observable, Tools, DomUtils) {
+function BindPlugin(Store, Observable, Tools, DomUtils) {
 
-	return function ModelPluginConstructor($model, $bindings) {
+	return function BindPluginConstructor($model, $bindings) {
 
 		/**
 		 * The model to watch
@@ -516,6 +516,16 @@ function ModelPlugin(Store, Observable, Tools, DomUtils) {
 			if (DomUtils.isAcceptedType(node) && node.name) {
 				_model.set(node.name, node.value);
 				return true;
+			} else {
+				return false;
+			}
+		};
+
+		this.getItemIndex = function getElementId(dom) {
+			var dataset = DomUtils.getDataset(dom);
+
+			if (dataset && typeof dataset[this.plugins.name + "_id"] != "undefined") {
+				return +dataset[this.plugins.name + "_id"];
 			} else {
 				return false;
 			}

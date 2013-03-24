@@ -4,45 +4,44 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["Place.plugin", "Plugins", "OObject"], function (UIPlugin, Plugins, OObject) {
+require(["Place.plugin", "Plugins", "OObject"], function (PlacePlugin, Plugins, OObject) {
 
-	describe("UIPluginTest", function () {
+	describe("PlacePluginTest", function () {
 
 		it("should be a constructor function", function () {
-			expect(UIPlugin).toBeInstanceOf(Function);
+			expect(PlacePlugin).toBeInstanceOf(Function);
 		});
 
 		it("should have the following api", function () {
-			var uiPlugin = new UIPlugin;
-			expect(uiPlugin.place).toBeInstanceOf(Function);
-			expect(uiPlugin.set).toBeInstanceOf(Function);
-			expect(uiPlugin.setAll).toBeInstanceOf(Function);
-			expect(uiPlugin.get).toBeInstanceOf(Function);
+			var placePlugin = new PlacePlugin;
+			expect(placePlugin.place).toBeInstanceOf(Function);
+			expect(placePlugin.set).toBeInstanceOf(Function);
+			expect(placePlugin.setAll).toBeInstanceOf(Function);
+			expect(placePlugin.get).toBeInstanceOf(Function);
 		});
 
 	});
 
-	describe("UIPluginRegister", function () {
+	describe("PlacePluginRegister", function () {
 
-		var uiPlugin = null,
+		var placePlugin = null,
 			falseUI = {},
 			rightUI = new OObject;
 
 		beforeEach(function () {
-			uiPlugin = new UIPlugin;
-		});
-
+			placePlugin = new PlacePlugin;
+		})
 		it("should set a new ui", function () {
-			expect(uiPlugin.set("ui")).toBe(false);
-			expect(uiPlugin.set()).toBe(false);
-			expect(uiPlugin.set("ui", "ui")).toBe(false);
-			expect(uiPlugin.set("ui", falseUI)).toBe(false);
-			expect(uiPlugin.set("ui", rightUI)).toBe(true);
+			expect(placePlugin.set("ui")).toBe(false);
+			expect(placePlugin.set()).toBe(false);
+			expect(placePlugin.set("ui", "ui")).toBe(false);
+			expect(placePlugin.set("ui", falseUI)).toBe(false);
+			expect(placePlugin.set("ui", rightUI)).toBe(true);
 		});
 
 		it("should get a set ui", function () {
-			uiPlugin.set("ui", rightUI);
-			expect(uiPlugin.get("ui")).toBe(rightUI);
+			placePlugin.set("ui", rightUI);
+			expect(placePlugin.get("ui")).toBe(rightUI);
 		});
 
 		it("should set multiple uis at once", function () {
@@ -51,53 +50,53 @@ require(["Place.plugin", "Plugins", "OObject"], function (UIPlugin, Plugins, OOb
 					"myUI2": new OObject
 				};
 
-			uiPlugin.setAll(uis);
-			expect(uiPlugin.get("myUI1")).toBe(uis.myUI1);
-			expect(uiPlugin.get("myUI2")).toBe(uis.myUI2);
+			placePlugin.setAll(uis);
+			expect(placePlugin.get("myUI1")).toBe(uis.myUI1);
+			expect(placePlugin.get("myUI2")).toBe(uis.myUI2);
 		});
 
 	});
 
-	describe("UIPluginInit", function () {
+	describe("PlacePluginInit", function () {
 
-		var uiPlugin = null,
+		var placePlugin = null,
 			uis = {
 				"myUI1": new OObject,
 				"myUI2": new OObject
 			};
 
-		it("should allow for initializing uiPlugin with multiple UIs", function () {
-			uiPlugin = new UIPlugin(uis);
+		it("should allow for initializing placePlugin with multiple UIs", function () {
+			placePlugin = new PlacePlugin(uis);
 
-			expect(uiPlugin.get("myUI1")).toBe(uis.myUI1);
-			expect(uiPlugin.get("myUI2")).toBe(uis.myUI2);
+			expect(placePlugin.get("myUI1")).toBe(uis.myUI1);
+			expect(placePlugin.get("myUI2")).toBe(uis.myUI2);
 		});
 
 	});
 
 
-	describe("UIPluginUILoading", function () {
+	describe("PlacePluginUILoading", function () {
 
-		var uiPlugin = null,
+		var placePlugin = null,
 			myUI = new OObject,
 			node = document.createElement("div");
 
 		beforeEach(function () {
-			uiPlugin = new UIPlugin;
-			uiPlugin.set("myUI", myUI);
+			placePlugin = new PlacePlugin;
+			placePlugin.set("myUI", myUI);
 
 		});
 
 		it("should call the place method of an ui", function () {
 			spyOn(myUI, "place");
-			uiPlugin.place(node, "myUI");
+			placePlugin.place(node, "myUI");
 			expect(myUI.place.wasCalled).toBe(true);
 			expect(myUI.place.mostRecentCall.args[0]).toBe(node);
 		});
 
 		it("should throw an exception if the ui is not registered", function () {
 			expect(function () {
-				uiPlugin.place(node, "missing");
+				placePlugin.place(node, "missing");
 			}).toThrow();
 		});
 

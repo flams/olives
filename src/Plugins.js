@@ -17,7 +17,7 @@ define(["Tools", "DomUtils"],
  */
 function Plugins(Tools, DomUtils) {
 
-	return function PluginsConstructor() {
+	return function PluginsConstructor($plugins) {
 
 		/**
 		 * The list of plugins
@@ -148,6 +148,8 @@ function Plugins(Tools, DomUtils) {
 				return false;
 			}
 		};
+
+		this.addAll($plugins);
 
 	};
 });

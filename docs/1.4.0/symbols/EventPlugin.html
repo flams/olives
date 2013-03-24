@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - Plugins</title>
+		<title>JsDoc Reference - EventPlugin</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -214,7 +214,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class Plugins
+				Class EventPlugin
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -222,19 +222,17 @@ ul.inheritsList
 				
 				
 			
-				Plugins is the link between the UI and your plugins.
-You can design your own plugin, declare them in your UI, and call them
-from the template, like :
-<tag data-yourPlugin="method: param"></tag>
+				Event plugin adds events listeners to DOM nodes.
+It can also delegate the event handling to a parent dom node
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_Plugins.js.html">Plugins.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_Event.plugin.js.html">Event.plugin.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Plugins.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class EventPlugin.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -247,7 +245,7 @@ from the template, like :
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/Plugins.html#constructor">Plugins</a></b>(Tools, DomUtils)
+								<b><a href="../symbols/EventPlugin.html#constructor">EventPlugin</a></b>(Utils)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -263,7 +261,7 @@ from the template, like :
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Plugins.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class EventPlugin.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -276,47 +274,63 @@ from the template, like :
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#add">add</a></b>(name, plugin)
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#delegate">delegate</a></b>(node, selector, name, listener, useCapture)
 								</div>
-								<div class="description">Add a plugin
-
-Note that once added, the function adds a "plugins" property to the plugin.</div>
+								<div class="description">Delegate the event handling to a parent DOM element</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;inner&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#-EventPluginConstructor">EventPluginConstructor</a></b>(the, $isMobile)
+								</div>
+								<div class="description">The event plugin constructor.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#addAll">addAll</a></b>(list)
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#getParent">getParent</a></b>()
 								</div>
-								<div class="description">Add multiple plugins at once</div>
+								<div class="description">Get the parent object.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#apply">apply</a></b>(dom)
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#listen">listen</a></b>(node, name, listener, useCapture)
 								</div>
-								<div class="description">Apply the plugins to a NodeList</div>
+								<div class="description">Listen to DOM events.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#del">del</a></b>(name)
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#map">map</a></b>(event's)
 								</div>
-								<div class="description">Delete a plugin from the list</div>
+								<div class="description">Get event mapping.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#get">get</a></b>(name)
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#setMap">setMap</a></b>(event's, event's)
 								</div>
-								<div class="description">Get a previously added plugin</div>
+								<div class="description">Set event mapping.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#setParent">setParent</a></b>(the)
+								</div>
+								<div class="description">Set the parent object.</div>
 							</td>
 						</tr>
 					
@@ -337,7 +351,7 @@ Note that once added, the function adds a "plugins" property to the plugin.</div
 				</div>
 				
 				<div class="fixedFont">
-						<b>Plugins</b>(Tools, DomUtils)
+						<b>EventPlugin</b>(Utils)
 				</div>
 				
 				<div class="description">
@@ -353,13 +367,7 @@ Note that once added, the function adds a "plugins" property to the plugin.</div
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								 <b>Tools</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>DomUtils</b>
+								 <b>Utils</b>
 								
 							</dt>
 								<dd></dd>
@@ -374,17 +382,10 @@ Note that once added, the function adds a "plugins" property to the plugin.</div
 						<dl class="detailList">
 						<dt class="heading">Requires:</dt>
 						
-							<dd>Tools</dd>
+							<dd>Utils</dd>
 						
 						</dl>
 					
-					
-						<dl class="detailList">
-						<dt class="heading">See:</dt>
-						
-							<dd>Model-Plugin for instance</dd>
-						
-						</dl>
 					
 
 			</div>
@@ -399,19 +400,15 @@ Note that once added, the function adds a "plugins" property to the plugin.</div
 					Method Detail
 				</div>
 				
-					<a name="add"> </a>
+					<a name="delegate"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>add</b>(name, plugin)
+					<b>delegate</b>(node, selector, name, listener, useCapture)
 					
 					</div>
 					<div class="description">
-						Add a plugin
-
-Note that once added, the function adds a "plugins" property to the plugin.
-It's an object that holds a name property, with the registered name of the plugin
-and an apply function, to use on new nodes that the plugin would generate
+						Delegate the event handling to a parent DOM element
 						
 						
 					</div>
@@ -421,46 +418,58 @@ and an apply function, to use on new nodes that the plugin would generate
 						
 							<dl class="detailList">
 							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>node</b>
+									
+								</dt>
+								<dd>DOM node</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>selector</b>
+									
+								</dt>
+								<dd>CSS3 selector to the element that listens to the event</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>name</b>
 									
 								</dt>
-								<dd>the name of the data that the plugin should look for</dd>
+								<dd>event's name</dd>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span> <b>plugin</b>
+									<span class="light fixedFont">{String}</span> <b>listener</b>
 									
 								</dt>
-								<dd>the plugin that has the functions to execute</dd>
+								<dd>callback's name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>useCapture</b>
+									
+								</dt>
+								<dd>string</dd>
 							
 							</dl>
 						
 						
 						
 						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>true if plugin successfully added.</dd>
-							
-							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name="addAll"> </a>
-					<div class="fixedFont">
+					<a name="-EventPluginConstructor"> </a>
+					<div class="fixedFont">&lt;inner&gt; 
 					
 					
-					<b>addAll</b>(list)
+					<b>EventPluginConstructor</b>(the, $isMobile)
 					
 					</div>
 					<div class="description">
-						Add multiple plugins at once
+						The event plugin constructor.
+ex: new EventPlugin({method: function(){} ...}, false);
 						
 						
 					</div>
@@ -472,124 +481,69 @@ and an apply function, to use on new nodes that the plugin would generate
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span> <b>list</b>
+									<span class="light fixedFont">{Object}</span> <b>the</b>
 									
 								</dt>
-								<dd>key is the plugin name and value is the plugin</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>true if correct param</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="apply"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{Boolean}</span>
-					<b>apply</b>(dom)
-					
-					</div>
-					<div class="description">
-						Apply the plugins to a NodeList
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
+								<dd>object that has the event handling methods</dd>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>dom</b>
+									<span class="light fixedFont">{Boolean}</span> <b>$isMobile</b>
 									
 								</dt>
-								<dd>the dom nodes on which to apply the plugins</dd>
+								<dd>if the event handler has to map with touch events</dd>
 							
 							</dl>
 						
 						
 						
 						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Boolean}</span> true if the param is a dom node</dd>
-							
-							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name="del"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{Boolean}</span>
-					<b>del</b>(name)
-					
-					</div>
-					<div class="description">
-						Delete a plugin from the list
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
-									
-								</dt>
-								<dd>the name of the plugin</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Boolean}</span> true if success</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="get"> </a>
+					<a name="getParent"> </a>
 					<div class="fixedFont">
 					
 					<span class="light">{Object}</span>
-					<b>get</b>(name)
+					<b>getParent</b>()
 					
 					</div>
 					<div class="description">
-						Get a previously added plugin
+						Get the parent object.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> the parent object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="listen"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>listen</b>(node, name, listener, useCapture)
+					
+					</div>
+					<div class="description">
+						Listen to DOM events.
 						
 						
 					</div>
@@ -601,10 +555,64 @@ and an apply function, to use on new nodes that the plugin would generate
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
+									<span class="light fixedFont">{Object}</span> <b>node</b>
+									
+								</dt>
+								<dd>DOM node</dd>
+							
+								<dt>
 									<span class="light fixedFont">{String}</span> <b>name</b>
 									
 								</dt>
-								<dd>the name of the plugin</dd>
+								<dd>event's name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>listener</b>
+									
+								</dt>
+								<dd>callback's name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>useCapture</b>
+									
+								</dt>
+								<dd>string</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="map"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>map</b>(event's)
+					
+					</div>
+					<div class="description">
+						Get event mapping.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>event's</b>
+									
+								</dt>
+								<dd>name</dd>
 							
 							</dl>
 						
@@ -615,7 +623,100 @@ and an apply function, to use on new nodes that the plugin would generate
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Object}</span> the plugin</dd>
+								<dd>the mapped event's name</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="setMap"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setMap</b>(event's, event's)
+					
+					</div>
+					<div class="description">
+						Set event mapping.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>event's</b>
+									
+								</dt>
+								<dd>name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>event's</b>
+									
+								</dt>
+								<dd>value</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>true if mapped</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="setParent"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setParent</b>(the)
+					
+					</div>
+					<div class="description">
+						Set the parent object.
+The parent object is an object which the functions are called by node listeners.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>the</b>
+									
+								</dt>
+								<dd>parent object</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>true if object has been set</dd>
 							
 							</dl>
 						
