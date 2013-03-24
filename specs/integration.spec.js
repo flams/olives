@@ -598,4 +598,10 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils) {
 
 	});
 
+	describe("Place.plugin places OObject in the DOM", function () {
+
+
+
+	});
+
 });
