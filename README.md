@@ -700,6 +700,41 @@ describe("Place.plugin places OObject in the DOM", function () {
 });
 ```
 
+### LocalStore
+
+```js
+describe("LocalStore is an Emily store which can be synchronized with localStorage", function () {
+
+	it("can be initialised like an Emily Store", function () {
+		var store = new LocalStore({
+			name: "Olives",
+			type: "MVC"
+		});
+
+		expect(store.get("type")).toBe("MVC");
+	});
+
+	it("can be synchronized with localStorage", function () {
+		var store = new LocalStore({
+			name: "Olives",
+			type: "MVC"
+		});
+
+		// the store is now persisted in localStorage
+		store.sync("OlivesStore");
+	});
+
+	it("can reload data from localStorage", function () {
+		var store = new LocalStore();
+
+		store.sync("OlivesStore");
+
+		expect(store.get("name")).toBe("Olives");
+	});
+
+});
+```
+
 ### SocketIOTransport
 
 ```js
@@ -751,12 +786,6 @@ describe("SocketIOTransport wraps socket.io to issue requests and listen to Oliv
 	});
 
 });
-```
-
-### LocalStore
-
-```js
-
 ```
 
 ##Live examples
