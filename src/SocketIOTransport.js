@@ -7,19 +7,19 @@
 define(["Observable", "Tools"],
 /**
  * @class
- * Transport allows for client-server eventing.
+ * SocketIOTransport allows for client-server eventing.
  * It's based on socket.io.
  */
-function Transport(Observable, Tools) {
+function SocketIOTransport(Observable, Tools) {
 
 	/**
-	 * Defines the Transport
+	 * Defines the SocketIOTransport
 	 * @private
 	 * @param {Object} $io socket.io's object
 	 * @param {url} $url the url to connect Transport to
 	 * @returns
 	 */
-	return function TransportConstructor($io, $url) {
+	return function SocketIOTransportConstructor($io, $url) {
 
 		/**
 		 * @private
