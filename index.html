@@ -6,118 +6,154 @@
 a powerful UI controller that you can extend with custom plugins, and built-in plugins for data binding. It's based on Emily JS Framework.">
 <meta name="author" content="Olivier Scherrer &amp Olivier Wietrich">
 <style type="text/css">
- * {
- 	margin: 0;
- 	padding: 0;
- }
+	* {
+		margin: 0;
+		padding: 0;
+	}
 
- a {
- 	color: #333;
- 	text-decoration: none;
- }
+	a {
+		color: #333;
+		text-decoration: none;
+	}
 
- body {
- 	background-image: url(img/noise.jpg);
- 	color: #666;
- 	 font-family: 'Belleza';
- }
+	body {
+		background-image: url(img/noise.jpg);
+		color: #666;
+		font-family: 'Belleza';
+	}
 
- #olives {
-  	background-image: url(img/bgcartouche.jpg);
- 	background-repeat: repeat-x;
- }
+	#olives {
+		background-image: url(img/bgcartouche.jpg);
+		background-repeat: repeat-x;
+	}
 
- header {
- 	height: 100px;
- 	width: 900px;
- 	color: white;
- 	padding: 30px;
- 	margin-left: auto;
- 	margin-right: auto;
- 	margin-bottom: 50px;
- 	text-align: center;
- }
+	.header {
+		height: 100px;
+		width: 900px;
+		color: white;
+		padding: 30px;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 50px;
+		text-align: center;
+	}
 
- header a {
+	.header h1 {
+		text-align: center;
+		font-family: 'Great Vibes', cursive;
+		font-size: 80px;
+		text-shadow: 2px 2px 2px #333;
+	}
 
- }
+	.header p {
+		text-align: center;
+		font-size: 24px;
+		text-shadow: 1px 1px 1px #333;
+	}
 
- ul {
-	list-style-type: none;
-	margin-left: auto;
-	margin-right: auto;
- }
+	.header p a {
+		background-color: grey;
+		padding: 10px;
+		border-radius: 5px;
+		color: white;
+		background: #c9de96; /* Old browsers */
+		background: -moz-linear-gradient(top, #c9de96 0%, #8ab66b 44%, #398235 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c9de96), color-stop(44%,#8ab66b), color-stop(100%,#398235)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* IE10+ */
+		background: linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c9de96', endColorstr='#398235',GradientType=0 ); /* IE6-9 */
+		box-shadow: 2px 2px 2px black;
+	}
 
- li {
- 	float: left;
- 	margin: 25px;
- }
+	#replaceContent {
+		margin-left: 320px;
+		width: 900px;
+	}
 
- #gallery {
- 	width: 800px;
- 	height: 250px;
- }
+	.menu,
+	#replaceContent pre {
+		margin: 10px;
+		padding: 10px;
+		background-color: #f0f0f0;
+		border-radius: 5px;
+		border: 1px solid #c0c0c0;
+	}
 
- #gallery li {
- 	text-align: center;
- }
+	#replaceContent ul {
+		margin: 10px;
+		padding: 10px;
+		padding-left: 20px;
+	}
 
- #gallery img {
- 	box-shadow: 5px 5px 5px #ccc;
- 	display: block;
- 	border: 0;
- 	margin-bottom: 20px;
- }
+	#replaceContent p {
+		margin: 10px;
+		padding: 10px;
+	}
 
- #gallery a span {
- 	clear: left;
- }
+	#replaceContent h3 {
+		margin: 20px;
+		padding: 10px;
+	}
 
- header h1 {
- 	text-align: center;
- 	font-family: 'Great Vibes', cursive;
- 	font-size: 80px;
- 	text-shadow: 2px 2px 2px #333;
- }
- header p {
- 	text-align: center;
- 	font-size: 24px;
- 	text-shadow: 1px 1px 1px #333;
- }
+	#replaceContent h2 {
+		margin: 10px;
+		padding: 10px;
+		border-bottom: 1px solid #c0c0c0;
+	}
 
- header p a {
- 	background-color: grey;
- 	padding: 10px;
- 	border-radius: 5px;
- 	color: white;
- 	background: #c9de96; /* Old browsers */
-	background: -moz-linear-gradient(top, #c9de96 0%, #8ab66b 44%, #398235 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c9de96), color-stop(44%,#8ab66b), color-stop(100%,#398235)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* IE10+ */
-	background: linear-gradient(top, #c9de96 0%,#8ab66b 44%,#398235 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c9de96', endColorstr='#398235',GradientType=0 ); /* IE6-9 */
-	box-shadow: 2px 2px 2px black;
-}
+	#replaceContent h4 {
+		margin: 10px;
+		padding: 10px;
+		padding-left: 20px;
+	}
 
- footer {
- 	width: 900px;
- 	margin-left: auto;
- 	margin-right: auto;
- 	display: block;
- 	clear:left;
- 	background-image: url(img/hr.jpg);
- 	background-repeat: repeat-x;
- 	padding-top: 30px;
- 	padding-bottom: 50px;
-	text-shadow:  0 1px 0 white;
-	text-align: center;
- }
+	h2 a,
+	h3 a {
+		float: right;
+	}
 
- footer p {
- 	margin-bottom: 20px;
- }
+	.menu {
+		width: 260px;
+		position: fixed;
+		left: 20px;
+		top: 200px;
+	}
+
+	.menu ul {
+		list-style-type: none;
+	}
+
+	.menu li {
+		padding: 3px;
+	}
+
+	.menu li.H3 {
+		padding-left: 20px;
+	}
+
+	.menu hr {
+		margin: 10px;
+	}
+
+	.footer {
+		width: 900px;
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+		clear:left;
+		background-image: url(img/hr.jpg);
+		background-repeat: repeat-x;
+		padding-top: 30px;
+		padding-bottom: 50px;
+		text-shadow:  0 1px 0 white;
+		text-align: center;
+	}
+
+	.footer p {
+		margin-bottom: 20px;
+	}
 
 </style>
 <link href='http://fonts.googleapis.com/css?family=Great+Vibes|Belleza' rel='stylesheet' type='text/css'>
@@ -126,7 +162,7 @@ a powerful UI controller that you can extend with custom plugins, and built-in p
 
 	<section id="olives">
 
-		<div class="header">
+		<div class="header" id="top">
 			<h1>Olives.js</h1>
 
 			<p>
@@ -137,58 +173,15 @@ a powerful UI controller that you can extend with custom plugins, and built-in p
 			</p>
 		</div>
 
-		<ul id="gallery">
-			<li>
-				<a href="http://groups.google.com/group/emily--olives">
-					<img src="img/groups.jpg" alt="Google Groups" width="150" height="150" />
-					<span>Google Groups</span>
-				</a>
-			</li>
-			<li>
-				<a href="https://github.com/flams/olives/wiki" target="_blank">
-					<img src="img/wiki.jpg" alt="Olives Wiki Picture" width="150" height="150" />
-					<span>Wiki</span>
-				</a>
-			</li>
-			<li>
-				<a href="docs/latest/index.html" target="_blank">
-					<img src="img/jsdoc.jpg" alt="Olives JsDoc Picture" width="150" height="150" />
-					<span>JsDoc</span>
-				</a>
-			</li>
-			<li>
-				<a href="https://github.com/flams/olives" target="_blank">
-					<img src="img/source.jpg" alt="Olives Source Picture" width="150" height="150" />
-					<span>Source</span>
-				</a>
-			</li>
-			<li>
-				<a href="tests.html" target="_blank">
-					<img src="img/tests.jpg" alt="Olives tests Picture" width="150" height="150" />
-					<span>Test your browser</span>
-				</a>
-			</li>
-						<li>
-				<a href="http://taiaut.net:8000" target="_blank">
-					<img src="img/suggestions.jpg" alt="Olives Suggestions Picture" width="150" height="150" />
-					<span>Suggestions example</span>
-				</a>
-			</li>
-									<li>
-				<a href="todo/index.html" target="_blank">
-					<img src="img/todo.jpg" alt="Olives todo Picture" width="150" height="150" />
-					<span>Todo example</span>
-				</a>
-			</li>
-			<li>
-				<a href="http://flams.github.com/emily" target="_blank">
-					<img src="img/emily.jpg" alt="Olives Emily Picture" width="150" height="150" />
-					<span>Emily Framework</span>
-				</a>
-			</li>
-		</ul>
+		<div class="menu">
 
-		<footer>
+		</div>
+
+		<div class="article" id="replaceContent">
+
+		</div>
+
+		<div class="footer">
 				Olives is released under the <a href="https://github.com/flams/olives/blob/master/LICENSE">MIT license</a>.
 
 				Copyright
@@ -200,13 +193,14 @@ a powerful UI controller that you can extend with custom plugins, and built-in p
 				<a href="http://owietrich.tumblr.com/">Olivier Wietrich</a>
 
 				2012-2013
-		</footer>
+		</div>
 
 <a href="http://github.com/flams/olives"> <img
 alt="Fork me on GitHub"
 src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
 style="position: fixed; top: 0; right: 0; border: 0;"> </a>
 
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
