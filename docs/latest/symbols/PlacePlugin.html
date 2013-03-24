@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - LocalStore</title>
+		<title>JsDoc Reference - PlacePlugin</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -214,7 +214,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class LocalStore
+				Class PlacePlugin
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -222,19 +222,16 @@ ul.inheritsList
 				
 				
 			
-				LocalStore is an Emily's Store that can be synchronized with localStorage
-Synchronize the store, reload your page/browser and resynchronize it with the same value
-and it gets restored.
-Only valid JSON data will be stored
+				Place plugin places OObject in the DOM.
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_LocalStore.js.html">LocalStore.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_Place.plugin.js.html">Place.plugin.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class LocalStore.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class PlacePlugin.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -247,7 +244,7 @@ Only valid JSON data will be stored
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/LocalStore.html#constructor">LocalStore</a></b>(Store, Tools)
+								<b><a href="../symbols/PlacePlugin.html#constructor">PlacePlugin</a></b>(OObject, Tools)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -263,7 +260,7 @@ Only valid JSON data will be stored
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class LocalStore.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class PlacePlugin.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -276,9 +273,45 @@ Only valid JSON data will be stored
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/LocalStore.html#sync">sync</a></b>(name)
+								<div class="fixedFont"><b><a href="../symbols/PlacePlugin.html#get">get</a></b>(the)
 								</div>
-								<div class="description">Synchronize the store with localStorage</div>
+								<div class="description">Returns an OObject from the list given its name</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PlacePlugin.html#place">place</a></b>(node, the)
+								</div>
+								<div class="description">Attach an OObject to this DOM element</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;inner&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PlacePlugin.html#-PlacePluginConstructor">PlacePluginConstructor</a></b>($uis)
+								</div>
+								<div class="description">Intilialize a Place.plugin with a list of OObjects</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PlacePlugin.html#set">set</a></b>(the, ui)
+								</div>
+								<div class="description">Add an OObject that can be attached to a dom element</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PlacePlugin.html#setAll">setAll</a></b>($uis)
+								</div>
+								<div class="description">Add multiple dom elements at once</div>
 							</td>
 						</tr>
 					
@@ -299,7 +332,7 @@ Only valid JSON data will be stored
 				</div>
 				
 				<div class="fixedFont">
-						<b>LocalStore</b>(Store, Tools)
+						<b>PlacePlugin</b>(OObject, Tools)
 				</div>
 				
 				<div class="description">
@@ -315,7 +348,7 @@ Only valid JSON data will be stored
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								 <b>Store</b>
+								 <b>OObject</b>
 								
 							</dt>
 								<dd></dd>
@@ -333,6 +366,13 @@ Only valid JSON data will be stored
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">Requires:</dt>
+						
+							<dd><a href="../symbols/OObject.html">OObject</a>, Tools</dd>
+						
+						</dl>
+					
 					
 
 			</div>
@@ -347,15 +387,15 @@ Only valid JSON data will be stored
 					Method Detail
 				</div>
 				
-					<a name="sync"> </a>
+					<a name="get"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{Boolean}</span>
-					<b>sync</b>(name)
+					<span class="light">{<a href="../symbols/OObject.html">OObject</a>}</span>
+					<b>get</b>(the)
 					
 					</div>
 					<div class="description">
-						Synchronize the store with localStorage
+						Returns an OObject from the list given its name
 						
 						
 					</div>
@@ -367,10 +407,10 @@ Only valid JSON data will be stored
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
+									<span class="light fixedFont">{String}</span> <b>the</b>
 									
 								</dt>
-								<dd>the name in which to save the data</dd>
+								<dd>name of the OObject to get</dd>
 							
 							</dl>
 						
@@ -381,9 +421,190 @@ Only valid JSON data will be stored
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Boolean}</span> true if the param is a string</dd>
+								<dd><span class="light fixedFont">{<a href="../symbols/OObject.html">OObject</a>}</span> OObject for the given name</dd>
 							
 							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="place"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>place</b>(node, the)
+					
+					</div>
+					<div class="description">
+						Attach an OObject to this DOM element
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{HTML|SVGElement}</span> <b>node</b>
+									
+								</dt>
+								<dd>the dom node where to attach the OObject</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>the</b>
+									
+								</dt>
+								<dd>name of the OObject to attach</dd>
+							
+							</dl>
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Throws:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{NoSuchOObject}</span>  <b></b>
+								</dt>
+								<dd>an error if there's no OObject for the given name</dd>
+							
+							</dl>
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="-PlacePluginConstructor"> </a>
+					<div class="fixedFont">&lt;inner&gt; 
+					
+					
+					<b>PlacePluginConstructor</b>($uis)
+					
+					</div>
+					<div class="description">
+						Intilialize a Place.plugin with a list of OObjects
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>$uis</b>
+									
+								</dt>
+								<dd>a list of OObjects such as:
+  {
+		"header": new OObject(),
+		"list": new OObject()
+	 }</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="set"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>set</b>(the, ui)
+					
+					</div>
+					<div class="description">
+						Add an OObject that can be attached to a dom element
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>the</b>
+									
+								</dt>
+								<dd>name of the OObject to add to the list</dd>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/OObject.html">OObject</a>}</span> <b>ui</b>
+									
+								</dt>
+								<dd>the OObject to add the list</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if the OObject was added</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="setAll"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setAll</b>($uis)
+					
+					</div>
+					<div class="description">
+						Add multiple dom elements at once
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>$uis</b>
+									
+								</dt>
+								<dd>a list of OObjects such as:
+  {
+		"header": new OObject(),
+		"list": new OObject()
+	 }</dd>
+							
+							</dl>
+						
+						
+						
+						
 						
 						
 						

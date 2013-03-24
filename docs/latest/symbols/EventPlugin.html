@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - OObject</title>
+		<title>JsDoc Reference - EventPlugin</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -214,7 +214,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class OObject
+				Class EventPlugin
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -222,17 +222,17 @@ ul.inheritsList
 				
 				
 			
-				OObject is a container for dom elements. It will also bind
-the dom to additional plugins like Data binding
+				Event plugin adds events listeners to DOM nodes.
+It can also delegate the event handling to a parent dom node
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_OObject.js.html">OObject.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_Event.plugin.js.html">Event.plugin.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class OObject.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class EventPlugin.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -245,7 +245,7 @@ the dom to additional plugins like Data binding
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#constructor">OObject</a></b>(StateMachine, Store, Plugins, DomUtils, Tools)
+								<b><a href="../symbols/EventPlugin.html#constructor">EventPlugin</a></b>(Utils)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -256,71 +256,12 @@ the dom to additional plugins like Data binding
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class OObject.">
-					<caption>Field Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#dom">dom</a></b>
-								</div>
-								<div class="description">This will hold the dom nodes built from the template.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#model">model</a></b>
-								</div>
-								<div class="description">The UI's Store
-It has set/get/del/has/watch/unwatch methods</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#plugins">plugins</a></b>
-								</div>
-								<div class="description">The module that will manage the plugins for this UI</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#template">template</a></b>
-								</div>
-								<div class="description">Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
-			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class OObject.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class EventPlugin.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -333,37 +274,63 @@ It has set/get/del/has/watch/unwatch methods</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#alive">alive</a></b>(node)
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#delegate">delegate</a></b>(node, selector, name, listener, useCapture)
 								</div>
-								<div class="description">Transforms dom nodes into a UI.</div>
+								<div class="description">Delegate the event handling to a parent DOM element</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;inner&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#-EventPluginConstructor">EventPluginConstructor</a></b>(the, $isMobile)
+								</div>
+								<div class="description">The event plugin constructor.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#place">place</a></b>(node, beforeNode)
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#getParent">getParent</a></b>()
 								</div>
-								<div class="description">Place the UI in a given dom node</div>
+								<div class="description">Get the parent object.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#render">render</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#listen">listen</a></b>(node, name, listener, useCapture)
 								</div>
-								<div class="description">Renders the template to dom nodes and applies the plugins on it
-It requires the template to be set first</div>
+								<div class="description">Listen to DOM events.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#setTemplateFromDom">setTemplateFromDom</a></b>(dom)
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#map">map</a></b>(event's)
 								</div>
-								<div class="description">Set the UI's template from a DOM element</div>
+								<div class="description">Get event mapping.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#setMap">setMap</a></b>(event's, event's)
+								</div>
+								<div class="description">Set event mapping.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/EventPlugin.html#setParent">setParent</a></b>(the)
+								</div>
+								<div class="description">Set the parent object.</div>
 							</td>
 						</tr>
 					
@@ -384,7 +351,7 @@ It requires the template to be set first</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>OObject</b>(StateMachine, Store, Plugins, DomUtils, Tools)
+						<b>EventPlugin</b>(Utils)
 				</div>
 				
 				<div class="description">
@@ -400,31 +367,7 @@ It requires the template to be set first</div>
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								 <b>StateMachine</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Store</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Plugins</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>DomUtils</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Tools</b>
+								 <b>Utils</b>
 								
 							</dt>
 								<dd></dd>
@@ -439,7 +382,7 @@ It requires the template to be set first</div>
 						<dl class="detailList">
 						<dt class="heading">Requires:</dt>
 						
-							<dd>StateMachine</dd>
+							<dd>Utils</dd>
 						
 						</dl>
 					
@@ -450,114 +393,6 @@ It requires the template to be set first</div>
 
 <!-- ============================== field details ========================== -->		
 			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="dom"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>dom</b>
-					
-					</div>
-					<div class="description">
-						This will hold the dom nodes built from the template.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="model"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>model</b>
-					
-					</div>
-					<div class="description">
-						The UI's Store
-It has set/get/del/has/watch/unwatch methods
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-							<dd>Emily's doc for more info on how it works.</dd>
-							
-							</dl>
-						
-						
-
-					<hr />
-				
-					<a name="plugins"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>plugins</b>
-					
-					</div>
-					<div class="description">
-						The module that will manage the plugins for this UI
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-							<dd>Olives/Plugins' doc for more info on how it works.</dd>
-							
-							</dl>
-						
-						
-
-					<hr />
-				
-					<a name="template"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{string or HTMLElement|SVGElement}</span>
-					<b>template</b>
-					
-					</div>
-					<div class="description">
-						Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
-			
 
 <!-- ============================== method details ========================= -->		
 			
@@ -565,17 +400,15 @@ It has set/get/del/has/watch/unwatch methods
 					Method Detail
 				</div>
 				
-					<a name="alive"> </a>
+					<a name="delegate"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>alive</b>(node)
+					<b>delegate</b>(node, selector, name, listener, useCapture)
 					
 					</div>
 					<div class="description">
-						Transforms dom nodes into a UI.
-It basically does a setTemplateFromDOM, then a place
-It's a helper function
+						Delegate the event handling to a parent DOM element
 						
 						
 					</div>
@@ -587,10 +420,199 @@ It's a helper function
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>node</b>
+									<span class="light fixedFont">{Object}</span> <b>node</b>
 									
 								</dt>
-								<dd>the dom to transform to a UI</dd>
+								<dd>DOM node</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>selector</b>
+									
+								</dt>
+								<dd>CSS3 selector to the element that listens to the event</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>event's name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>listener</b>
+									
+								</dt>
+								<dd>callback's name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>useCapture</b>
+									
+								</dt>
+								<dd>string</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="-EventPluginConstructor"> </a>
+					<div class="fixedFont">&lt;inner&gt; 
+					
+					
+					<b>EventPluginConstructor</b>(the, $isMobile)
+					
+					</div>
+					<div class="description">
+						The event plugin constructor.
+ex: new EventPlugin({method: function(){} ...}, false);
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>the</b>
+									
+								</dt>
+								<dd>object that has the event handling methods</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>$isMobile</b>
+									
+								</dt>
+								<dd>if the event handler has to map with touch events</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getParent"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getParent</b>()
+					
+					</div>
+					<div class="description">
+						Get the parent object.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> the parent object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="listen"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>listen</b>(node, name, listener, useCapture)
+					
+					</div>
+					<div class="description">
+						Listen to DOM events.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>node</b>
+									
+								</dt>
+								<dd>DOM node</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>event's name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>listener</b>
+									
+								</dt>
+								<dd>callback's name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>useCapture</b>
+									
+								</dt>
+								<dd>string</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="map"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>map</b>(event's)
+					
+					</div>
+					<div class="description">
+						Get event mapping.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>event's</b>
+									
+								</dt>
+								<dd>name</dd>
 							
 							</dl>
 						
@@ -601,7 +623,7 @@ It's a helper function
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if dom is an HTMLElement|SVGElement</dd>
+								<dd>the mapped event's name</dd>
 							
 							</dl>
 						
@@ -610,15 +632,15 @@ It's a helper function
 
 					<hr />
 				
-					<a name="place"> </a>
+					<a name="setMap"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>place</b>(node, beforeNode)
+					<b>setMap</b>(event's, event's)
 					
 					</div>
 					<div class="description">
-						Place the UI in a given dom node
+						Set event mapping.
 						
 						
 					</div>
@@ -630,78 +652,16 @@ It's a helper function
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>node</b>
+									<span class="light fixedFont">{String}</span> <b>event's</b>
 									
 								</dt>
-								<dd>the node on which to append the UI</dd>
+								<dd>name</dd>
 							
 								<dt>
-									<b>beforeNode</b>
+									<span class="light fixedFont">{String}</span> <b>event's</b>
 									
 								</dt>
-								<dd>the dom before which to append the UI</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="render"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>render</b>()
-					
-					</div>
-					<div class="description">
-						Renders the template to dom nodes and applies the plugins on it
-It requires the template to be set first
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setTemplateFromDom"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setTemplateFromDom</b>(dom)
-					
-					</div>
-					<div class="description">
-						Set the UI's template from a DOM element
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>dom</b>
-									
-								</dt>
-								<dd>the dom element that'll become the template of the UI</dd>
+								<dd>value</dd>
 							
 							</dl>
 						
@@ -712,7 +672,51 @@ It requires the template to be set first
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if dom is an HTMLElement|SVGElement</dd>
+								<dd>true if mapped</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="setParent"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setParent</b>(the)
+					
+					</div>
+					<div class="description">
+						Set the parent object.
+The parent object is an object which the functions are called by node listeners.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>the</b>
+									
+								</dt>
+								<dd>parent object</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>true if object has been set</dd>
 							
 							</dl>
 						

@@ -4,8 +4,22 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define(["DomUtils"], function (Utils) {
+define(["DomUtils"],
 
+/**
+* @class
+* Event plugin adds events listeners to DOM nodes.
+* It can also delegate the event handling to a parent dom node
+* @requires Utils
+*/
+function EventPlugin(Utils) {
+
+	/**
+	 * The event plugin constructor.
+	 * ex: new EventPlugin({method: function(){} ...}, false);
+	 * @param {Object} the object that has the event handling methods
+	 * @param {Boolean} $isMobile if the event handler has to map with touch events
+	 */
 	return function EventPluginConstructor($parent, $isMobile) {
 
 		/**
@@ -40,9 +54,9 @@ define(["DomUtils"], function (Utils) {
 
 		/**
 		 * Listen to DOM events.
-		 * @param {Object} DOM node
-		 * @param {String} event's name
-		 * @param {String} callback's name
+		 * @param {Object} node DOM node
+		 * @param {String} name event's name
+		 * @param {String} listener callback's name
 		 * @param {String} useCapture string
 		 */
 		this.listen = function listen(node, name, listener, useCapture) {
@@ -52,7 +66,12 @@ define(["DomUtils"], function (Utils) {
 		};
 
 		/**
-		 *
+		 * Delegate the event handling to a parent DOM element
+		 * @param {Object} node DOM node
+		 * @param {String} selector CSS3 selector to the element that listens to the event
+		 * @param {String} name event's name
+		 * @param {String} listener callback's name
+		 * @param {String} useCapture string
 		 */
 		this.delegate = function delegate(node, selector, name, listener, useCapture) {
 			this.addEventListener(node, name, function(event){
