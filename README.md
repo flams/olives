@@ -796,7 +796,7 @@ describe("SocketIOTransport wraps socket.io to issue requests and listen to Oliv
 
 ## Changelog
 
-####1.4.0 - pending...
+####1.4.0 - 24 MAR 2013
 
 * Added Bind.plugin.getItemIndex for getting the index of a foreach generated item in a store
 * Plugins constructor can be called with the list of plugins
