@@ -1,23 +1,107 @@
 ##What is Olives?
 
- * Olives is a JS MVC framework that helps you create realtime UIs.
- * It's a set of AMD/commonJS modules that you can extend with little to no effort.
- * It offers a high level of abstraction that greatly reduces boilerplate.
- * It can seamlessly integrate with graphical libraries.
- * It doesn't require you to learn a custom templating language.
- * It's based on Emily and socket.io to provide a simple and powerful way of communicating with a node.js server.
+ * Olives is a JS MV* framework that helps you create scalable and realtime UIs.
+ * It offers a powerful virtualised and double way data binding tool
+ * It has an open API for adding custom features via plugins
+ * It declaratively attaches behaviour to an HTML template
+ * It's based on [Emily](https://github.com/flams/emily) and socket.io to facilitate the communicaton with server side services on node.js
 
-##What modules does Olives provide?
+Olives is part of [TodoMVC.com](http://todomvc.com)
 
- * OObject: the spine of your UI.
- * Bind.plugin: a built-in plugin that synchronizes your View with the Model.
- * Event.plugin: make your dom listen to events.
- * LocalStore: A subtype of Emily Store for saving your model into localStorage.
- * SocketIOTransport: connect your UI with a node.js server using socket.io. This is the realtime part of Olives.
- * Place.plugin: compose UIs with multiple UIs.
- * Plugins: extend Olives with your own plugins.
+Example of a simplified todo list:
 
-Olives is based on [Emily](https://github.com/flams/emily)
+```html
+<div class="widget">
+
+	<div>
+		<!-- Typing something in the input field will trigger the addTask function -->
+		<input type="text" placeholder="What's to be done?" data-event="listen: keydown, addTask">
+	</div>
+
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>#</td>
+					<th>Task</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+
+			<!-- The data binding plugin will repeat the following template-->
+			<tbody data-bind="foreach">
+				<tr>
+					<!-- The getId function will be called on this td -->
+					<td data-bind="bind: getId">id</td>
+
+					<!-- The innerHTML of this td will be replaced by the value contained in the model
+						We will also add a custom plugin that will change the background of this DOM element -->
+					<td data-bind="bind: innerHTML" data-custom="color: lightblue">Name</td>
+
+					<!-- Clicking on this will trigger the removeTask function -->
+					<td><a href="#" data-event="listen: click, removeTask"><i class="icon-remove"></i></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</div>
+```
+
+```js
+// OObject is a container for DOM elements
+var widget = new OObject();
+
+// List will be our model, it's an array of values
+var list = new Store( [] );
+
+// We tell the event plugin where to find the methods to call when en event is triggered
+var event = new Event({
+
+	// Add task will add a task in the model
+	addTask: function ( event, node ) {
+		if ( event.keyCode == 13 ) {
+			list.alter( 'push', node.value );
+			node.value = '';
+		}
+	},
+
+	// Remove task will remove it
+	removeTask: function ( event, node ) {
+		list.del( node.getAttribute('data-bind_id') );
+	}
+});
+
+// The data binding plugin needs to know where to find the data
+var bind = new Bind(list, {
+
+	// Get id can be an extra formatter
+	getId: function ( item ) {
+		this.innerHTML = list.alter( 'indexOf', item);
+	}
+});
+
+// I'm adding the plugins to the widget
+widget.plugins.addAll({
+
+	// The event plugin will be reachable via data-event attributes
+	'event': event,
+
+	// The bind plugin will be reachable via data-bind attributes
+	'bind': bind,
+
+	// This is a custom plugin to show how simple it is to extend Olives!
+	'custom': {
+		color: function ( node, color ) {
+			node.style.backgroundColor = color;
+		}
+	}
+});
+
+// Apply the behaviour to the DOM element selected via CSS selector
+widget.alive( '.widget' );
+```
+
 
 ##How do I install it?
 
