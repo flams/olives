@@ -245,7 +245,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns
 			 */
 			this.getNextItem = function getNextItem(id) {
-				return this.items.alter("slice", id+1).filter(function (value) {
+				return this.items.proxy("slice", id+1, id+2).filter(function (value) {
 					if (DomUtils.isAcceptedType(value)) {
 						return true;
 					}
