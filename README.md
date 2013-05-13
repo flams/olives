@@ -880,6 +880,10 @@ describe("SocketIOTransport wraps socket.io to issue requests and listen to Oliv
 
 ## Changelog
 
+###1.4.1 - 13 MAY 2013
+
+* Improved virtualisation performances in the data binding plugin when used with large data sets (>100,000 items)
+
 ####1.4.0 - 24 MAR 2013
 
 * Added Bind.plugin.getItemIndex for getting the index of a foreach generated item in a store
