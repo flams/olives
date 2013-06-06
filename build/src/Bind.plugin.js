@@ -185,7 +185,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * The nodes created from the items are stored here
 			 * @private
 			 */
-			this.items = new Store([]);
+			this.items = {};
 
 			/**
 			 * Set the start limit
@@ -235,7 +235,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 				var node,
 					next;
 
-				if (typeof id == "number" && !this.items.get(id)) {
+				if (typeof id == "number" && !this.items[id]) {
 					node = this.create(id);
 					if (node) {
 						// IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
@@ -257,11 +257,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns
 			 */
 			this.getNextItem = function getNextItem(id) {
-				return this.items.proxy("slice", id+1).filter(function (value) {
-					if (DomUtils.isAcceptedType(value)) {
-						return true;
-					}
-				})[0];
+				return DomUtils.isAcceptedType(this.items[id+1]);
 			};
 
 			/**
@@ -271,10 +267,10 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns
 			 */
 			this.removeItem = function removeItem(id) {
-				var item = this.items.get(id);
+				var item = this.items[id];
 				if (item) {
 					_rootNode.removeChild(item);
-					this.items.set(id);
+					delete this.items[id];
 					_removeObserversForId(id);
 					return true;
 				} else {
@@ -299,7 +295,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 	            		child.setAttribute("data-" + _plugins.name+"_id", id);
 					});
 
-					this.items.set(id, newNode);
+					this.items[id] = newNode;
 					_plugins.apply(newNode);
 					return newNode;
 				}
@@ -323,8 +319,10 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 				if (_nb !== null && _start !== null) {
 
 					// Loop through the existing items
-					this.items.loop(function (value, idx) {
+					Tools.loop(this.items, function (value, idx) {
 						// If an item is out of the boundary
+						idx = Number(idx);
+
 						if (idx < _start || idx >= (_start + _tmpNb) || !_model.has(idx)) {
 							// Mark it
 							marked.push(idx);
