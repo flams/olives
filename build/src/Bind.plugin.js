@@ -32,14 +32,26 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 		 * each foreach has its itemRenderer
 		 * @private
 		 */
-		_itemRenderers = {};
+		_itemRenderers = {},
 
 		/**
 		 * The observers handlers
-		 * for debugging only
 		 * @private
 		 */
-		this.observers = {};
+		_observers = {};
+
+		/**
+		 * Exposed for debugging purpose
+		 * @private
+		 */
+		this.observers = _observers;
+
+		function _removeObserversForId(id) {
+			_observers[id] && _observers[id].forEach(function (handler) {
+				_model.unwatchValue(handler);
+			});
+			delete _observers[id];
+		}
 
 		/**
 		 * Define the model to watch for
@@ -263,6 +275,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 				if (item) {
 					_rootNode.removeChild(item);
 					this.items.set(id);
+					_removeObserversForId(id);
 					return true;
 				} else {
 					return false;
@@ -378,10 +391,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
             _model.watch("deleted", function (idx) {
             	itemRenderer.render();
                 // Also remove all observers
-                this.observers[idx] && this.observers[idx].forEach(function (handler) {
-                	_model.unwatchValue(handler);
-                }, this);
-                delete this.observers[idx];
+                _removeObserversForId(idx);
             },this);
 
             this.setItemRenderer(idItemRenderer, itemRenderer);
