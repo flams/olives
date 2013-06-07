@@ -257,7 +257,8 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns
 			 */
 			this.getNextItem = function getNextItem(id) {
-				return DomUtils.isAcceptedType(this.items[id+1]);
+				var possibleNextItem = this.items[id+1];
+				return DomUtils.isAcceptedType(possibleNextItem) ? possibleNextItem : false;
 			};
 
 			/**
