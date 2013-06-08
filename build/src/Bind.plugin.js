@@ -236,10 +236,10 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 					next;
 
 				if (typeof id == "number" && !this.items[id]) {
+					next = this.getClosestItem(id)
 					node = this.create(id);
 					if (node) {
 						// IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
-						next = this.getNextItem(id);
 						next ? _rootNode.insertBefore(node, next) : _rootNode.appendChild(node);
 						return true;
 					} else {
@@ -256,8 +256,20 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * @param {Number} id the id to start from
 			 * @returns
 			 */
-			this.getNextItem = function getNextItem(id) {
-				return DomUtils.isAcceptedType(this.items[id+1]);
+			this.getClosestItem = function getClosestItem(id) {
+				var keys = Object.keys(this.items).sort(Tools.compareNumbers),
+					closest,
+					diff;
+
+				Tools.loop(keys, function (itemIndex) {
+					var thisDiff = itemIndex-id;
+					if (thisDiff > 0 && (!diff || thisDiff < diff)) {
+						diff = thisDiff;
+						closest = itemIndex;
+					}
+				});
+
+				return this.items[closest];
 			};
 
 			/**
