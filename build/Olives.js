@@ -371,19 +371,12 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns
 			 */
 			this.getClosestItem = function getClosestItem(id) {
-				var keys = Object.keys(this.items).sort(Tools.compareNumbers),
-					closest,
-					diff;
+				var keys = Object.keys(this.items).map(function (string) {
+						return Number(string);
+					}),
+					closest = Tools.closestGreater(id, keys);
 
-				Tools.loop(keys, function (itemIndex) {
-					var thisDiff = itemIndex-id;
-					if (thisDiff > 0 && (!diff || thisDiff < diff)) {
-						diff = thisDiff;
-						closest = itemIndex;
-					}
-				});
-
-				return this.items[closest];
+				return this.items[keys[closest]];
 			};
 
 			/**
