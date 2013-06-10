@@ -487,8 +487,6 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			expect(itemRenderer.addItem(1)).toBe(true);
 			expect(itemRenderer.create.callCount).toBe(1);
 
-			expect(itemRenderer.items[0]).toBe(1);
-
 			expect(itemRenderer.addItem(1)).toBe(false);
 			expect(itemRenderer.create.callCount).toBe(1);
 
@@ -556,8 +554,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			expect(rootNode.removeChild.wasCalled).toBe(true);
 			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(item);
 
-			expect(itemRenderer.items[0]).toBe(1);
-			expect(itemRenderer.items[1]).toBeUndefined();
+			expect(itemRenderer.items[0]).toBeUndefined();
 		});
 
 		it("shouldn't create an item if it doesn't exist in the model", function () {
@@ -600,7 +597,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			rootNode.appendChild(item);
 			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 			itemRenderer.setNb(3);
-			itemRenderer.setStart(1);
+			itemRenderer.setStart(0);
 			itemRenderer.render();
 
 			spyOn(itemRenderer, "addItem").andCallThrough();
@@ -642,15 +639,17 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			// 5?? yes! the items from 0 to 4 are updated, the 5 is deleted!
 			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toBe(5);
 
+			itemRenderer.removeItem.reset();
+
 			// Deletes item 0, 1, 2
 			bindPlugin.getModel().alter("splice", 0, 3);
-			// which should remove 3 dom nodes : the 5th,
+			// which should remove 3 dom nodes
 			itemRenderer.render();
 
-			expect(itemRenderer.removeItem.callCount).toBe(5);
-			expect(itemRenderer.removeItem.calls[3].args[0]).toBe(3);
-			expect(itemRenderer.removeItem.calls[2].args[0]).toBe(4);
-			expect(itemRenderer.removeItem.calls[1].args[0]).toBe(5);
+			expect(itemRenderer.removeItem.callCount).toBe(3);
+			expect(itemRenderer.removeItem.calls[2].args[0]).toBe(2);
+			expect(itemRenderer.removeItem.calls[1].args[0]).toBe(3);
+			expect(itemRenderer.removeItem.calls[0].args[0]).toBe(4);
 
 		});
 	});

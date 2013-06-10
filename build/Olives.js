@@ -350,7 +350,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 					next;
 
 				if (typeof id == "number" && !this.items[id]) {
-					next = this.getClosestItem(id)
+					next = this.getNextItem(id)
 					node = this.create(id);
 					if (node) {
 						// IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
@@ -370,13 +370,19 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * @param {Number} id the id to start from
 			 * @returns
 			 */
-			this.getClosestItem = function getClosestItem(id) {
+			this.getNextItem = function getNextItem(id) {
 				var keys = Object.keys(this.items).map(function (string) {
 						return Number(string);
 					}),
-					closest = Tools.closestGreater(id, keys);
+					closest = Tools.closestGreater(id, keys),
+					closestId = keys[closest];
 
-				return this.items[keys[closest]];
+				// Only return if different
+				if (closestId != id) {
+					return this.items[closestId];
+				} else {
+					return;
+				}
 			};
 
 			/**
