@@ -880,6 +880,10 @@ describe("SocketIOTransport wraps socket.io to issue requests and listen to Oliv
 
 ## Changelog
 
+####1.4.2 - 10 JUNE 2013
+
+* Fixed performance and memory issues with data-binding's item renderer when using virtualised grid. Check a 1,000,000 rows Grid using Olives data-binding: http://podefr.github.io/olives-virtualised-grid/ 
+
 ####1.4.1 - 13 MAY 2013
 
 * Improved virtualisation performances in the data binding plugin when used with large data sets (>100,000 items)
