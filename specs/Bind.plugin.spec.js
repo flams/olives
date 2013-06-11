@@ -288,7 +288,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			expect(itemRenderer.create).toBeInstanceOf(Function);
 			expect(itemRenderer.setPlugins).toBeInstanceOf(Function);
 			expect(itemRenderer.getPlugins).toBeInstanceOf(Function);
-			expect(itemRenderer.items).toBeInstanceOf(Store);
+			expect(itemRenderer.items).toBeInstanceOf(Object);
 			expect(itemRenderer.addItem).toBeInstanceOf(Function);
 			expect(itemRenderer.removeItem).toBeInstanceOf(Function);
 			expect(itemRenderer.render).toBeInstanceOf(Function);
@@ -440,7 +440,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 
 			rootNode.appendChild(dom);
 			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
-			expect(itemRenderer.items.toJSON()).toBe("[]");
+			expect(itemRenderer.items).toBeInstanceOf(Object);
 		});
 
 		it("should store created items in the store", function () {
@@ -452,7 +452,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 
 			item = itemRenderer.create(0);
-			expect(itemRenderer.items.get(0)).toBe(item);
+			expect(itemRenderer.items[0]).toBe(item);
 		});
 
 		it("should have a function to add an item", function () {
@@ -472,8 +472,8 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			expect(itemRenderer.create.mostRecentCall.args[0]).toBe(1);
 
 			expect(rootNode.appendChild.wasCalled).toBe(true);
-			expect(rootNode.appendChild.mostRecentCall.args[0]).toBe(itemRenderer.items.get(1));
-			expect(rootNode.appendChild.mostRecentCall.args[1]).toBe(itemRenderer.items.get(2));
+			expect(rootNode.appendChild.mostRecentCall.args[0]).toBe(itemRenderer.items[1]);
+			expect(rootNode.appendChild.mostRecentCall.args[1]).toBe(itemRenderer.items[2]);
 		});
 
 		it("should not add an item that is already created", function () {
@@ -482,14 +482,10 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 
 			rootNode.appendChild(dom);
 			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
-			spyOn(itemRenderer.items, "get").andCallThrough();
 			spyOn(itemRenderer, "create").andCallThrough();
 
 			expect(itemRenderer.addItem(1)).toBe(true);
 			expect(itemRenderer.create.callCount).toBe(1);
-
-			expect(itemRenderer.items.get.wasCalled).toBe(true);
-			expect(itemRenderer.items.get.mostRecentCall.args[0]).toBe(1);
 
 			expect(itemRenderer.addItem(1)).toBe(false);
 			expect(itemRenderer.create.callCount).toBe(1);
@@ -505,8 +501,8 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 
 			expect(itemRenderer.getNextItem(0)).toBeUndefined();
 			itemRenderer.addItem(3);
-			expect(itemRenderer.getNextItem(0)).toBe(itemRenderer.items.get(3));
-			expect(itemRenderer.getNextItem(2)).toBe(itemRenderer.items.get(3));
+			expect(itemRenderer.getNextItem(0)).toBe(itemRenderer.items[3]);
+			expect(itemRenderer.getNextItem(2)).toBe(itemRenderer.items[3]);
 			expect(itemRenderer.getNextItem(3)).toBeUndefined();
 		});
 
@@ -545,7 +541,6 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			rootNode.appendChild(dom);
 			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 			spyOn(rootNode, "removeChild").andCallThrough();
-			spyOn(itemRenderer.items, "set").andCallThrough();
 
 			expect(itemRenderer.removeItem()).toBe(false);
 			expect(itemRenderer.removeItem({})).toBe(false);
@@ -553,17 +548,13 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 
 			itemRenderer.addItem(1);
 
-			item = itemRenderer.items.get(1);
+			item = itemRenderer.items[1];
 
 			expect(itemRenderer.removeItem(1)).toBe(true);
 			expect(rootNode.removeChild.wasCalled).toBe(true);
 			expect(rootNode.removeChild.mostRecentCall.args[0]).toBe(item);
 
-			// We don't delete the item but set it to undefined
-			// so we keep the indexes in line with the model's indexes
-			expect(itemRenderer.items.set.wasCalled).toBe(true);
-			expect(itemRenderer.items.set.mostRecentCall.args[0]).toBe(1);
-			expect(itemRenderer.items.set.mostRecentCall.args[1]).toBeUndefined();
+			expect(itemRenderer.items[0]).toBeUndefined();
 		});
 
 		it("shouldn't create an item if it doesn't exist in the model", function () {
@@ -576,7 +567,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 
 			item = itemRenderer.create(10);
 			expect(item).toBeUndefined();
-			expect(itemRenderer.items.has(10)).toBe(false);
+			expect(itemRenderer.items[10]).toBeUndefined();
 		});
 
 		it("should allow for populating the rootNode with items on render", function () {
@@ -606,7 +597,7 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			rootNode.appendChild(item);
 			itemRenderer = new bindPlugin.ItemRenderer(plugins, rootNode);
 			itemRenderer.setNb(3);
-			itemRenderer.setStart(1);
+			itemRenderer.setStart(0);
 			itemRenderer.render();
 
 			spyOn(itemRenderer, "addItem").andCallThrough();
@@ -648,15 +639,17 @@ require(["Bind.plugin", "Store", "Plugins", "DomUtils"], function (BindPlugin, S
 			// 5?? yes! the items from 0 to 4 are updated, the 5 is deleted!
 			expect(itemRenderer.removeItem.mostRecentCall.args[0]).toBe(5);
 
+			itemRenderer.removeItem.reset();
+
 			// Deletes item 0, 1, 2
 			bindPlugin.getModel().alter("splice", 0, 3);
-			// which should remove 3 dom nodes : the 5th,
+			// which should remove 3 dom nodes
 			itemRenderer.render();
 
-			expect(itemRenderer.removeItem.callCount).toBe(5);
-			expect(itemRenderer.removeItem.calls[3].args[0]).toBe(3);
-			expect(itemRenderer.removeItem.calls[2].args[0]).toBe(4);
-			expect(itemRenderer.removeItem.calls[1].args[0]).toBe(5);
+			expect(itemRenderer.removeItem.callCount).toBe(3);
+			expect(itemRenderer.removeItem.calls[2].args[0]).toBe(2);
+			expect(itemRenderer.removeItem.calls[1].args[0]).toBe(3);
+			expect(itemRenderer.removeItem.calls[0].args[0]).toBe(4);
 
 		});
 	});

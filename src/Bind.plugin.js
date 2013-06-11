@@ -32,14 +32,26 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 		 * each foreach has its itemRenderer
 		 * @private
 		 */
-		_itemRenderers = {};
+		_itemRenderers = {},
 
 		/**
 		 * The observers handlers
-		 * for debugging only
 		 * @private
 		 */
-		this.observers = {};
+		_observers = {};
+
+		/**
+		 * Exposed for debugging purpose
+		 * @private
+		 */
+		this.observers = _observers;
+
+		function _removeObserversForId(id) {
+			_observers[id] && _observers[id].forEach(function (handler) {
+				_model.unwatchValue(handler);
+			});
+			delete _observers[id];
+		}
 
 		/**
 		 * Define the model to watch for
@@ -173,7 +185,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * The nodes created from the items are stored here
 			 * @private
 			 */
-			this.items = new Store([]);
+			this.items = {};
 
 			/**
 			 * Set the start limit
@@ -223,11 +235,11 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 				var node,
 					next;
 
-				if (typeof id == "number" && !this.items.get(id)) {
+				if (typeof id == "number" && !this.items[id]) {
+					next = this.getNextItem(id)
 					node = this.create(id);
 					if (node) {
 						// IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
-						next = this.getNextItem(id);
 						next ? _rootNode.insertBefore(node, next) : _rootNode.appendChild(node);
 						return true;
 					} else {
@@ -245,11 +257,18 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns
 			 */
 			this.getNextItem = function getNextItem(id) {
-				return this.items.proxy("slice", id+1).filter(function (value) {
-					if (DomUtils.isAcceptedType(value)) {
-						return true;
-					}
-				})[0];
+				var keys = Object.keys(this.items).map(function (string) {
+						return Number(string);
+					}),
+					closest = Tools.closestGreater(id, keys),
+					closestId = keys[closest];
+
+				// Only return if different
+				if (closestId != id) {
+					return this.items[closestId];
+				} else {
+					return;
+				}
 			};
 
 			/**
@@ -259,10 +278,11 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 			 * @returns
 			 */
 			this.removeItem = function removeItem(id) {
-				var item = this.items.get(id);
+				var item = this.items[id];
 				if (item) {
 					_rootNode.removeChild(item);
-					this.items.set(id);
+					delete this.items[id];
+					_removeObserversForId(id);
 					return true;
 				} else {
 					return false;
@@ -286,7 +306,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 	            		child.setAttribute("data-" + _plugins.name+"_id", id);
 					});
 
-					this.items.set(id, newNode);
+					this.items[id] = newNode;
 					_plugins.apply(newNode);
 					return newNode;
 				}
@@ -310,8 +330,10 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 				if (_nb !== null && _start !== null) {
 
 					// Loop through the existing items
-					this.items.loop(function (value, idx) {
+					Tools.loop(this.items, function (value, idx) {
 						// If an item is out of the boundary
+						idx = Number(idx);
+
 						if (idx < _start || idx >= (_start + _tmpNb) || !_model.has(idx)) {
 							// Mark it
 							marked.push(idx);
@@ -378,10 +400,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
             _model.watch("deleted", function (idx) {
             	itemRenderer.render();
                 // Also remove all observers
-                this.observers[idx] && this.observers[idx].forEach(function (handler) {
-                	_model.unwatchValue(handler);
-                }, this);
-                delete this.observers[idx];
+                _removeObserversForId(idx);
             },this);
 
             this.setItemRenderer(idItemRenderer, itemRenderer);
