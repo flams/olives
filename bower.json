@@ -5,6 +5,13 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "components"
+    "components",
+    "Makefile",
+    "jsTestDriver.conf",
+    "lib",
+    "olives-integration*",
+    "release",
+    "specs",
+    "tools"
   ]
 }
