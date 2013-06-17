@@ -99,7 +99,7 @@ widget.plugins.addAll({
 });
 
 // Apply the behaviour to the DOM element selected via CSS selector
-widget.alive( '.widget' );
+widget.alive( document.querySelector('.widget') );
 ```
 
 
@@ -879,6 +879,10 @@ describe("SocketIOTransport wraps socket.io to issue requests and listen to Oliv
 * [Suggestions (Unavailable ATM)]()
 
 ## Changelog
+
+####1.4.2 - 10 JUNE 2013
+
+* Fixed performance and memory issues with data-binding's item renderer when using virtualised grid. Check a 1,000,000 rows Grid using Olives data-binding: http://podefr.github.io/olives-virtualised-grid/
 
 ####1.4.1 - 13 MAY 2013
 

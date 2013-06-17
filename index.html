@@ -6,6 +6,7 @@
 
 
 
+
 <html>
 <head>
 <title>Olives - Create real-time HTML5 applications, in no time. By Olivier Scherrer &amp; Olivier Wietrich</title>
@@ -180,7 +181,7 @@ a powerful UI controller that you can extend with custom plugins, and built-in p
 			</p>
 		</div>
 
-		<div class="menu"><ul><li><a href="release/Olives-1.4.2.tgz">Download Olives</a></li><li class="H2"><a href="#whatisolives">What is Olives?</a></li>
+		<div class="menu"><ul><li><a href="release/Olives-1.4.0.tgz">Download Olives</a></li><li class="H2"><a href="#whatisolives">What is Olives?</a></li>
 <li class="H2"><a href="#howdoiinstallit">How do I install it?</a></li>
 <li class="H2"><a href="#integrationtests">Integration tests:</a></li>
 <li class="H3"><a href="#oobject">OObject</a></li>
@@ -302,7 +303,7 @@ widget.plugins.addAll({
 });
 
 // Apply the behaviour to the DOM element selected via CSS selector
-widget.alive( '.widget' );
+widget.alive( document.querySelector('.widget') );
 </code></pre>
 
 <h2 id="howdoiinstallit">How do I install it?<a href="#top">top</a></h2>
@@ -1070,6 +1071,12 @@ olives.registerSocketIO(io);
 </ul>
 
 <h2 id="changelog">Changelog<a href="#top">top</a></h2>
+
+<h4 id="14210june2013">1.4.2 - 10 JUNE 2013</h4>
+
+<ul>
+<li>Fixed performance and memory issues with data-binding's item renderer when using virtualised grid. Check a 1,000,000 rows Grid using Olives data-binding: http://podefr.github.io/olives-virtualised-grid/</li>
+</ul>
 
 <h4 id="14113may2013">1.4.1 - 13 MAY 2013</h4>
 
