@@ -4,7 +4,7 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define(["DomUtils"],
+var DomUtils = require("./DomUtils");
 
 /**
 * @class
@@ -12,15 +12,13 @@ define(["DomUtils"],
 * It can also delegate the event handling to a parent dom node
 * @requires Utils
 */
-function EventPlugin(Utils) {
-
 	/**
 	 * The event plugin constructor.
 	 * ex: new EventPlugin({method: function(){} ...}, false);
 	 * @param {Object} the object that has the event handling methods
 	 * @param {Boolean} $isMobile if the event handler has to map with touch events
 	 */
-	return function EventPluginConstructor($parent, $isMobile) {
+module.exports = function EventPluginConstructor($parent, $isMobile) {
 
 		/**
 		 * The parent callback
@@ -75,7 +73,7 @@ function EventPlugin(Utils) {
 		 */
 		this.delegate = function delegate(node, selector, name, listener, useCapture) {
 			this.addEventListener(node, name, function(event){
-				if (Utils.matches(node, selector, event.target)) {
+				if (DomUtils.matches(node, selector, event.target)) {
 					_parent[listener].call(_parent, event, node);
 				}
 			}, !!useCapture);
@@ -129,6 +127,5 @@ function EventPlugin(Utils) {
 
 		//init
 		this.setParent($parent);
-	};
 
-});
+};

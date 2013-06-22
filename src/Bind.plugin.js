@@ -3,17 +3,18 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-
-define(["Store", "Observable", "Tools", "DomUtils"],
+var emily = require("emily"),
+	Store = emily.Store,
+	Observable = emily.Observable,
+	Tools = emily.Tools,
+	DomUtils = require("./DomUtils");
 
 /**
  * @class
  * This plugin links dom nodes to a model
  * @requires Store, Observable
  */
-function BindPlugin(Store, Observable, Tools, DomUtils) {
-
-	return function BindPluginConstructor($model, $bindings) {
+module.exports = function BindPluginConstructor($model, $bindings) {
 
 		/**
 		 * The model to watch
@@ -639,6 +640,4 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 		this.addBindings($bindings);
 
 
-	};
-
-});
+};

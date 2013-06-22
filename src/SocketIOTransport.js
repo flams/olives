@@ -4,21 +4,21 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define(["Observable", "Tools"],
+var Observable = require("emily").Observable,
+	Tools = require("emily").Tools;
+
 /**
  * @class
  * SocketIOTransport allows for client-server eventing.
  * It's based on socket.io.
  */
-function SocketIOTransport(Observable, Tools) {
-
 	/**
 	 * Defines the SocketIOTransport
 	 * @private
 	 * @param {Object} $io socket.io's object
 	 * @returns
 	 */
-	return function SocketIOTransportConstructor($socket) {
+module.exports = function SocketIOTransportConstructor($socket) {
 
 		/**
 		 * @private
@@ -156,5 +156,4 @@ function SocketIOTransport(Observable, Tools) {
 		 * Sets the socket.io
 		 */
 		this.setSocket($socket);
-	};
-});
+};

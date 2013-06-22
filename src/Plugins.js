@@ -3,8 +3,8 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-
-define(["Tools", "DomUtils"],
+	var Tools = require("emily").Tools,
+		DomUtils = require("./DomUtils");
 
 /**
  * @class
@@ -15,9 +15,7 @@ define(["Tools", "DomUtils"],
  * @see Model-Plugin for instance
  * @requires Tools
  */
-function Plugins(Tools, DomUtils) {
-
-	return function PluginsConstructor($plugins) {
+module.exports = function PluginsConstructor($plugins) {
 
 		/**
 		 * The list of plugins
@@ -151,5 +149,4 @@ function Plugins(Tools, DomUtils) {
 
 		this.addAll($plugins);
 
-	};
-});
+};

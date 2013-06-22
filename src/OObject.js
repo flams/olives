@@ -3,17 +3,19 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
+var StateMachine = require("emily").StateMachine,
+	Store = require("emily").Store,
+	Plugins = require("./Plugins"),
+	DomUtils = require("./DomUtils"),
+	Tools = require("emily").Tools;
 
-define(["StateMachine", "Store", "Plugins", "DomUtils", "Tools"],
 /**
 * @class
 * OObject is a container for dom elements. It will also bind
 * the dom to additional plugins like Data binding
 * @requires StateMachine
 */
-function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
-
-	return function OObjectConstructor(otherStore) {
+module.exports = function OObjectConstructor(otherStore) {
 
 		/**
 		 * This function creates the dom of the UI from its template
@@ -186,6 +188,4 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 			return _currentPlace;
 		};
 
-	};
-
-});
+};
