@@ -4,9 +4,9 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define(["Tools"], function (Tools) {
+var Tools = require("emily").Tools;
 
-	return {
+module.exports = {
 		/**
 		 * Returns a NodeList including the given dom node,
 		 * its childNodes and its siblingNodes
@@ -102,6 +102,4 @@ define(["Tools"], function (Tools) {
 			return Tools.toArray(this.getNodes(parent, selector)).indexOf(node) > -1;
 		}
 
-	};
-
-});
+};

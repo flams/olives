@@ -4,13 +4,13 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define(["OObject", "Tools"],
+	var OObject = require("./OObject"),
+		Tools = require("emily").Tools;
 /**
 * @class
 * Place plugin places OObject in the DOM.
 * @requires OObject, Tools
 */
-function PlacePlugin(OObject, Tools) {
 
 	/**
 	 * Intilialize a Place.plugin with a list of OObjects
@@ -21,7 +21,7 @@ function PlacePlugin(OObject, Tools) {
 	 *	 }
 	 * @Constructor
 	 */
-	return function PlacePluginConstructor($uis) {
+module.exports = function PlacePluginConstructor($uis) {
 
 		/**
 		 * The list of uis currently set in this place plugin
@@ -83,6 +83,4 @@ function PlacePlugin(OObject, Tools) {
 
 		this.setAll($uis);
 
-	};
-
-});
+};

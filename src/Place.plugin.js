@@ -5,7 +5,7 @@
  */
 
 	var OObject = require("./OObject"),
-		Tools = require("emily").Tools;
+		Tools = emily.Tools;
 /**
 * @class
 * Place plugin places OObject in the DOM.

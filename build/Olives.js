@@ -3,16 +3,36 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
+require=(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
 
+},{}],"olives":[function(require,module,exports){
+module.exports=require('/Qfeoh');
+},{}],"/Qfeoh":[function(require,module,exports){
+var emily = require("emily");
+
+console.log(emily, "is defined")
+
+module.exports = {
+	"Bind.plugin": 			require("./Bind.plugin"),
+	"DomUtils": 			require("./DomUtils"),
+	"Event.plugin": 		require("./Event.plugin"),
+	"LocalStore": 			require("./LocalStore"),
+	"OObject": 				require("./OObject"),
+	"Place.plugin": 		require("./Place.plugin"),
+	"Plugins": 				require("./Plugins"),
+	"SocketIOTransport": 	require("./SocketIOTransport")
+};
+
+},{"emily":1,"./Bind.plugin":2,"./DomUtils":3,"./Event.plugin":4,"./LocalStore":5,"./OObject":6,"./Place.plugin":7,"./Plugins":8,"./SocketIOTransport":9}],3:[function(require,module,exports){
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define('DomUtils',["Tools"], function (Tools) {
+var Tools = require("emily").Tools;
 
-	return {
+module.exports = {
 		/**
 		 * Returns a NodeList including the given dom node,
 		 * its childNodes and its siblingNodes
@@ -108,26 +128,289 @@ define('DomUtils',["Tools"], function (Tools) {
 			return Tools.toArray(this.getNodes(parent, selector)).indexOf(node) > -1;
 		}
 
-	};
+};
 
-});
-
+},{"emily":1}],5:[function(require,module,exports){
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define('Bind.plugin',["Store", "Observable", "Tools", "DomUtils"],
+var Store = require("emily").Store,
+	Tools = require("emily").Tools;
+
+/**
+ * @class
+ * LocalStore is an Emily's Store that can be synchronized with localStorage
+ * Synchronize the store, reload your page/browser and resynchronize it with the same value
+ * and it gets restored.
+ * Only valid JSON data will be stored
+ */
+function LocalStoreConstructor() {
+
+	/**
+	 * The name of the property in which to store the data
+	 * @private
+	 */
+	var _name = null,
+
+	/**
+	 * The localStorage
+	 * @private
+	 */
+	_localStorage = localStorage,
+
+	/**
+	 * Saves the current values in localStorage
+	 * @private
+	 */
+	setLocalStorage = function setLocalStorage() {
+		_localStorage.setItem(_name, this.toJSON());
+	};
+
+	/**
+	 * Override default localStorage with a new one
+	 * @param local$torage the new localStorage
+	 * @returns {Boolean} true if success
+	 * @private
+	 */
+	this.setLocalStorage = function setLocalStorage(local$torage) {
+		if (local$torage && local$torage.setItem instanceof Function) {
+			_localStorage = local$torage;
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	/**
+	 * Get the current localStorage
+	 * @returns localStorage
+	 * @private
+	 */
+	this.getLocalStorage = function getLocalStorage() {
+		return _localStorage;
+	};
+
+	/**
+	 * Synchronize the store with localStorage
+	 * @param {String} name the name in which to save the data
+	 * @returns {Boolean} true if the param is a string
+	 */
+	this.sync = function sync(name) {
+		var json;
+
+		if (typeof name == "string") {
+			_name = name;
+			json = JSON.parse(_localStorage.getItem(name));
+
+			Tools.loop(json, function (value, idx) {
+				if (!this.has(idx)) {
+					this.set(idx, value);
+				}
+			}, this);
+
+			setLocalStorage.call(this);
+
+			// Watch for modifications to update localStorage
+			this.watch("added", setLocalStorage, this);
+			this.watch("updated", setLocalStorage, this);
+			this.watch("deleted", setLocalStorage, this);
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+
+}
+
+module.exports = function LocalStoreFactory(init) {
+	LocalStoreConstructor.prototype = new Store(init);
+	return new LocalStoreConstructor;
+};
+
+
+},{"emily":1}],9:[function(require,module,exports){
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ */
+
+var Observable = require("emily").Observable,
+	Tools = require("emily").Tools;
+
+/**
+ * @class
+ * SocketIOTransport allows for client-server eventing.
+ * It's based on socket.io.
+ */
+	/**
+	 * Defines the SocketIOTransport
+	 * @private
+	 * @param {Object} $io socket.io's object
+	 * @returns
+	 */
+module.exports = function SocketIOTransportConstructor($socket) {
+
+		/**
+		 * @private
+		 * The socket.io's socket
+		 */
+		var _socket = null;
+
+		/**
+		 * Set the socket created by SocketIO
+		 * @param {Object} socket the socket.io socket
+		 * @returns true if it seems to be a socket.io socket
+		 */
+		this.setSocket = function setSocket(socket) {
+			if (socket && typeof socket.emit == "function") {
+				_socket = socket;
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		/**
+		 * Get the socket, for debugging purpose
+		 * @private
+		 * @returns {Object} the socket
+		 */
+		this.getSocket = function getSocket() {
+			return _socket;
+		},
+
+		/**
+		 * Subscribe to a socket event
+		 * @param {String} event the name of the event
+		 * @param {Function} func the function to execute when the event fires
+		 */
+		this.on = function on(event, func) {
+			return _socket.on(event, func);
+		},
+
+		/**
+		 * Subscribe to a socket event but disconnect as soon as it fires.
+		 * @param {String} event the name of the event
+		 * @param {Function} func the function to execute when the event fires
+		 */
+		this.once = function once(event, func) {
+			return _socket.once(event, func);
+		};
+
+		/**
+		 * Publish an event on the socket
+		 * @param {String} event the event to publish
+		 * @param data
+		 * @param {Function} callback is the function to be called for ack
+		 */
+		this.emit = function emit(event, data, callback) {
+			return _socket.emit(event, data, callback);
+		};
+
+		/**
+		 * Stop listening to events on a channel
+		 * @param {String} event the event to publish
+		 * @param data
+		 * @param {Function} callback is the function to be called for ack
+		 */
+		this.removeListener = function removeListener(event, data, callback) {
+			return _socket.removeListener(event, data, callback);
+		};
+
+		/**
+		 * Make a request on the node server
+		 * @param {String} channel watch the server's documentation to see available channels
+		 * @param data the request data, it could be anything
+		 * @param {Function} func the callback that will get the response.
+		 * @param {Object} scope the scope in which to execute the callback
+		 */
+		this.request = function request(channel, data, func, scope) {
+			if (typeof channel == "string"
+					&& typeof data != "undefined") {
+
+				var reqData = {
+						eventId: Date.now() + Math.floor(Math.random()*1e6),
+						data: data
+					},
+					boundCallback = function () {
+						func && func.apply(scope || null, arguments);
+					};
+
+				this.once(reqData.eventId, boundCallback);
+
+				this.emit(channel, reqData);
+
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		/**
+		 * Listen to an url and get notified on new data
+		 * @param {String} channel watch the server's documentation to see available channels
+		 * @param data the request data, it could be anything
+		 * @param {Function} func the callback that will get the data
+		 * @param {Object} scope the scope in which to execute the callback
+		 * @returns
+		 */
+		this.listen = function listen(channel, data, func, scope) {
+			if (typeof channel == "string"
+					&& typeof data != "undefined"
+					&& typeof func == "function") {
+
+				var reqData = {
+						eventId: Date.now() + Math.floor(Math.random()*1e6),
+						data: data,
+						keepAlive: true
+					},
+					boundCallback = function () {
+						func && func.apply(scope || null, arguments);
+					},
+					that = this;
+
+				this.on(reqData.eventId, boundCallback);
+
+				this.emit(channel, reqData);
+
+				return function stop() {
+					that.emit("disconnect-" + reqData.eventId);
+					that.removeListener(reqData.eventId, boundCallback);
+				};
+			} else {
+				return false;
+			}
+		};
+
+		/**
+		 * Sets the socket.io
+		 */
+		this.setSocket($socket);
+};
+
+},{"emily":1}],2:[function(require,module,exports){
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ */
+var emily = require("emily"),
+	Store = emily.Store,
+	Observable = emily.Observable,
+	Tools = emily.Tools,
+	DomUtils = require("./DomUtils");
 
 /**
  * @class
  * This plugin links dom nodes to a model
  * @requires Store, Observable
  */
-function BindPlugin(Store, Observable, Tools, DomUtils) {
-
-	return function BindPluginConstructor($model, $bindings) {
+module.exports = function BindPluginConstructor($model, $bindings) {
 
 		/**
 		 * The model to watch
@@ -753,17 +1036,16 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
 		this.addBindings($bindings);
 
 
-	};
+};
 
-});
-
+},{"emily":1,"./DomUtils":3}],4:[function(require,module,exports){
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define('Event.plugin',["DomUtils"],
+var DomUtils = require("./DomUtils");
 
 /**
 * @class
@@ -771,15 +1053,13 @@ define('Event.plugin',["DomUtils"],
 * It can also delegate the event handling to a parent dom node
 * @requires Utils
 */
-function EventPlugin(Utils) {
-
 	/**
 	 * The event plugin constructor.
 	 * ex: new EventPlugin({method: function(){} ...}, false);
 	 * @param {Object} the object that has the event handling methods
 	 * @param {Boolean} $isMobile if the event handler has to map with touch events
 	 */
-	return function EventPluginConstructor($parent, $isMobile) {
+module.exports = function EventPluginConstructor($parent, $isMobile) {
 
 		/**
 		 * The parent callback
@@ -834,7 +1114,7 @@ function EventPlugin(Utils) {
 		 */
 		this.delegate = function delegate(node, selector, name, listener, useCapture) {
 			this.addEventListener(node, name, function(event){
-				if (Utils.matches(node, selector, event.target)) {
+				if (DomUtils.matches(node, selector, event.target)) {
 					_parent[listener].call(_parent, event, node);
 				}
 			}, !!useCapture);
@@ -888,285 +1168,28 @@ function EventPlugin(Utils) {
 
 		//init
 		this.setParent($parent);
-	};
 
-});
+};
 
+},{"./DomUtils":3}],6:[function(require,module,exports){
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
+var StateMachine = require("emily").StateMachine,
+	Store = require("emily").Store,
+	Plugins = require("./Plugins"),
+	DomUtils = require("./DomUtils"),
+	Tools = require("emily").Tools;
 
-define('LocalStore',["Store", "Tools"],
-
-/**
- * @class
- * LocalStore is an Emily's Store that can be synchronized with localStorage
- * Synchronize the store, reload your page/browser and resynchronize it with the same value
- * and it gets restored.
- * Only valid JSON data will be stored
- */
-function LocalStore(Store, Tools) {
-
-	function LocalStoreConstructor() {
-
-		/**
-		 * The name of the property in which to store the data
-		 * @private
-		 */
-		var _name = null,
-
-		/**
-		 * The localStorage
-		 * @private
-		 */
-		_localStorage = localStorage,
-
-		/**
-		 * Saves the current values in localStorage
-		 * @private
-		 */
-		setLocalStorage = function setLocalStorage() {
-			_localStorage.setItem(_name, this.toJSON());
-		};
-
-		/**
-		 * Override default localStorage with a new one
-		 * @param local$torage the new localStorage
-		 * @returns {Boolean} true if success
-		 * @private
-		 */
-		this.setLocalStorage = function setLocalStorage(local$torage) {
-			if (local$torage && local$torage.setItem instanceof Function) {
-				_localStorage = local$torage;
-				return true;
-			} else {
-				return false;
-			}
-		};
-
-		/**
-		 * Get the current localStorage
-		 * @returns localStorage
-		 * @private
-		 */
-		this.getLocalStorage = function getLocalStorage() {
-			return _localStorage;
-		};
-
-		/**
-		 * Synchronize the store with localStorage
-		 * @param {String} name the name in which to save the data
-		 * @returns {Boolean} true if the param is a string
-		 */
-		this.sync = function sync(name) {
-			var json;
-
-			if (typeof name == "string") {
-				_name = name;
-				json = JSON.parse(_localStorage.getItem(name));
-
-				Tools.loop(json, function (value, idx) {
-					if (!this.has(idx)) {
-						this.set(idx, value);
-					}
-				}, this);
-
-				setLocalStorage.call(this);
-
-				// Watch for modifications to update localStorage
-				this.watch("added", setLocalStorage, this);
-				this.watch("updated", setLocalStorage, this);
-				this.watch("deleted", setLocalStorage, this);
-				return true;
-			} else {
-				return false;
-			}
-		};
-
-
-	}
-
-	return function LocalStoreFactory(init) {
-		LocalStoreConstructor.prototype = new Store(init);
-		return new LocalStoreConstructor;
-	};
-
-});
-
-/**
- * Olives http://flams.github.com/olives
- * The MIT License (MIT)
- * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- */
-
-define('Plugins',["Tools", "DomUtils"],
-
-/**
- * @class
- * Plugins is the link between the UI and your plugins.
- * You can design your own plugin, declare them in your UI, and call them
- * from the template, like :
- * <tag data-yourPlugin="method: param"></tag>
- * @see Model-Plugin for instance
- * @requires Tools
- */
-function Plugins(Tools, DomUtils) {
-
-	return function PluginsConstructor($plugins) {
-
-		/**
-		 * The list of plugins
-		 * @private
-		 */
-		var _plugins = {},
-
-		/**
-		 * Just a "functionalification" of trim
-		 * for code readability
-		 * @private
-		 */
-		trim = function trim(string) {
-			return string.trim();
-		},
-
-		/**
-		 * Call the plugins methods, passing them the dom node
-		 * A phrase can be :
-		 * <tag data-plugin='method: param, param; method:param...'/>
-		 * the function has to call every method of the plugin
-		 * passing it the node, and the given params
-		 * @private
-		 */
-		applyPlugin = function applyPlugin(node, phrase, plugin) {
-			// Split the methods
-			phrase.split(";")
-			.forEach(function (couple) {
-				// Split the result between method and params
-				var split = couple.split(":"),
-				// Trim the name
-				method = split[0].trim(),
-				// And the params, if any
-				params = split[1] ? split[1].split(",").map(trim) : [];
-
-				// The first param must be the dom node
-				params.unshift(node);
-
-				if (_plugins[plugin] && _plugins[plugin][method]) {
-					// Call the method with the following params for instance :
-					// [node, "param1", "param2" .. ]
-					_plugins[plugin][method].apply(_plugins[plugin], params);
-				}
-
-			});
-		};
-
-		/**
-		 * Add a plugin
-		 *
-		 * Note that once added, the function adds a "plugins" property to the plugin.
-		 * It's an object that holds a name property, with the registered name of the plugin
-		 * and an apply function, to use on new nodes that the plugin would generate
-		 *
-		 * @param {String} name the name of the data that the plugin should look for
-		 * @param {Object} plugin the plugin that has the functions to execute
-		 * @returns true if plugin successfully added.
-		 */
-		this.add = function add(name, plugin) {
-			var that = this,
-				propertyName = "plugins";
-
-			if (typeof name == "string" && typeof plugin == "object" && plugin) {
-				_plugins[name] = plugin;
-
-				plugin[propertyName] = {
-						name: name,
-						apply: function apply() {
-							return that.apply.apply(that, arguments);
-						}
-				};
-				return true;
-			} else {
-				return false;
-			}
-		};
-
-		/**
-		 * Add multiple plugins at once
-		 * @param {Object} list key is the plugin name and value is the plugin
-		 * @returns true if correct param
-		 */
-		this.addAll = function addAll(list) {
-			return Tools.loop(list, function (plugin, name) {
-				this.add(name, plugin);
-			}, this);
-		};
-
-		/**
-		 * Get a previously added plugin
-		 * @param {String} name the name of the plugin
-		 * @returns {Object} the plugin
-		 */
-		this.get = function get(name) {
-			return _plugins[name];
-		};
-
-		/**
-		 * Delete a plugin from the list
-		 * @param {String} name the name of the plugin
-		 * @returns {Boolean} true if success
-		 */
-		this.del = function del(name) {
-			return delete _plugins[name];
-		};
-
-		/**
-		 * Apply the plugins to a NodeList
-		 * @param {HTMLElement|SVGElement} dom the dom nodes on which to apply the plugins
-		 * @returns {Boolean} true if the param is a dom node
-		 */
-		this.apply = function apply(dom) {
-
-			var nodes;
-
-			if (DomUtils.isAcceptedType(dom)) {
-
-				nodes = DomUtils.getNodes(dom);
-				Tools.loop(Tools.toArray(nodes), function (node) {
-					Tools.loop(DomUtils.getDataset(node), function (phrase, plugin) {
-						applyPlugin(node, phrase, plugin);
-					});
-				});
-
-				return dom;
-
-			} else {
-				return false;
-			}
-		};
-
-		this.addAll($plugins);
-
-	};
-});
-
-/**
- * Olives http://flams.github.com/olives
- * The MIT License (MIT)
- * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
- */
-
-define('OObject',["StateMachine", "Store", "Plugins", "DomUtils", "Tools"],
 /**
 * @class
 * OObject is a container for dom elements. It will also bind
 * the dom to additional plugins like Data binding
 * @requires StateMachine
 */
-function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
-
-	return function OObjectConstructor(otherStore) {
+module.exports = function OObjectConstructor(otherStore) {
 
 		/**
 		 * This function creates the dom of the UI from its template
@@ -1339,23 +1362,22 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 			return _currentPlace;
 		};
 
-	};
+};
 
-});
-
+},{"emily":1,"./Plugins":8,"./DomUtils":3}],7:[function(require,module,exports){
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define('Place.plugin',["OObject", "Tools"],
+	var OObject = require("./OObject"),
+		Tools = require("emily").Tools;
 /**
 * @class
 * Place plugin places OObject in the DOM.
 * @requires OObject, Tools
 */
-function PlacePlugin(OObject, Tools) {
 
 	/**
 	 * Intilialize a Place.plugin with a list of OObjects
@@ -1366,7 +1388,7 @@ function PlacePlugin(OObject, Tools) {
 	 *	 }
 	 * @Constructor
 	 */
-	return function PlacePluginConstructor($uis) {
+module.exports = function PlacePluginConstructor($uis) {
 
 		/**
 		 * The list of uis currently set in this place plugin
@@ -1428,167 +1450,161 @@ function PlacePlugin(OObject, Tools) {
 
 		this.setAll($uis);
 
-	};
+};
 
-});
-
+},{"emily":1,"./OObject":6}],8:[function(require,module,exports){
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
+	var Tools = require("emily").Tools,
+		DomUtils = require("./DomUtils");
 
-define('SocketIOTransport',["Observable", "Tools"],
 /**
  * @class
- * SocketIOTransport allows for client-server eventing.
- * It's based on socket.io.
+ * Plugins is the link between the UI and your plugins.
+ * You can design your own plugin, declare them in your UI, and call them
+ * from the template, like :
+ * <tag data-yourPlugin="method: param"></tag>
+ * @see Model-Plugin for instance
+ * @requires Tools
  */
-function SocketIOTransport(Observable, Tools) {
-
-	/**
-	 * Defines the SocketIOTransport
-	 * @private
-	 * @param {Object} $io socket.io's object
-	 * @returns
-	 */
-	return function SocketIOTransportConstructor($socket) {
+module.exports = function PluginsConstructor($plugins) {
 
 		/**
+		 * The list of plugins
 		 * @private
-		 * The socket.io's socket
 		 */
-		var _socket = null;
+		var _plugins = {},
 
 		/**
-		 * Set the socket created by SocketIO
-		 * @param {Object} socket the socket.io socket
-		 * @returns true if it seems to be a socket.io socket
-		 */
-		this.setSocket = function setSocket(socket) {
-			if (socket && typeof socket.emit == "function") {
-				_socket = socket;
-				return true;
-			} else {
-				return false;
-			}
-		};
-
-		/**
-		 * Get the socket, for debugging purpose
+		 * Just a "functionalification" of trim
+		 * for code readability
 		 * @private
-		 * @returns {Object} the socket
 		 */
-		this.getSocket = function getSocket() {
-			return _socket;
+		trim = function trim(string) {
+			return string.trim();
 		},
 
 		/**
-		 * Subscribe to a socket event
-		 * @param {String} event the name of the event
-		 * @param {Function} func the function to execute when the event fires
+		 * Call the plugins methods, passing them the dom node
+		 * A phrase can be :
+		 * <tag data-plugin='method: param, param; method:param...'/>
+		 * the function has to call every method of the plugin
+		 * passing it the node, and the given params
+		 * @private
 		 */
-		this.on = function on(event, func) {
-			return _socket.on(event, func);
-		},
+		applyPlugin = function applyPlugin(node, phrase, plugin) {
+			// Split the methods
+			phrase.split(";")
+			.forEach(function (couple) {
+				// Split the result between method and params
+				var split = couple.split(":"),
+				// Trim the name
+				method = split[0].trim(),
+				// And the params, if any
+				params = split[1] ? split[1].split(",").map(trim) : [];
 
-		/**
-		 * Subscribe to a socket event but disconnect as soon as it fires.
-		 * @param {String} event the name of the event
-		 * @param {Function} func the function to execute when the event fires
-		 */
-		this.once = function once(event, func) {
-			return _socket.once(event, func);
+				// The first param must be the dom node
+				params.unshift(node);
+
+				if (_plugins[plugin] && _plugins[plugin][method]) {
+					// Call the method with the following params for instance :
+					// [node, "param1", "param2" .. ]
+					_plugins[plugin][method].apply(_plugins[plugin], params);
+				}
+
+			});
 		};
 
 		/**
-		 * Publish an event on the socket
-		 * @param {String} event the event to publish
-		 * @param data
-		 * @param {Function} callback is the function to be called for ack
+		 * Add a plugin
+		 *
+		 * Note that once added, the function adds a "plugins" property to the plugin.
+		 * It's an object that holds a name property, with the registered name of the plugin
+		 * and an apply function, to use on new nodes that the plugin would generate
+		 *
+		 * @param {String} name the name of the data that the plugin should look for
+		 * @param {Object} plugin the plugin that has the functions to execute
+		 * @returns true if plugin successfully added.
 		 */
-		this.emit = function emit(event, data, callback) {
-			return _socket.emit(event, data, callback);
-		};
+		this.add = function add(name, plugin) {
+			var that = this,
+				propertyName = "plugins";
 
-		/**
-		 * Stop listening to events on a channel
-		 * @param {String} event the event to publish
-		 * @param data
-		 * @param {Function} callback is the function to be called for ack
-		 */
-		this.removeListener = function removeListener(event, data, callback) {
-			return _socket.removeListener(event, data, callback);
-		};
+			if (typeof name == "string" && typeof plugin == "object" && plugin) {
+				_plugins[name] = plugin;
 
-		/**
-		 * Make a request on the node server
-		 * @param {String} channel watch the server's documentation to see available channels
-		 * @param data the request data, it could be anything
-		 * @param {Function} func the callback that will get the response.
-		 * @param {Object} scope the scope in which to execute the callback
-		 */
-		this.request = function request(channel, data, func, scope) {
-			if (typeof channel == "string"
-					&& typeof data != "undefined") {
-
-				var reqData = {
-						eventId: Date.now() + Math.floor(Math.random()*1e6),
-						data: data
-					},
-					boundCallback = function () {
-						func && func.apply(scope || null, arguments);
-					};
-
-				this.once(reqData.eventId, boundCallback);
-
-				this.emit(channel, reqData);
-
-				return true;
-			} else {
-				return false;
-			}
-		};
-
-		/**
-		 * Listen to an url and get notified on new data
-		 * @param {String} channel watch the server's documentation to see available channels
-		 * @param data the request data, it could be anything
-		 * @param {Function} func the callback that will get the data
-		 * @param {Object} scope the scope in which to execute the callback
-		 * @returns
-		 */
-		this.listen = function listen(channel, data, func, scope) {
-			if (typeof channel == "string"
-					&& typeof data != "undefined"
-					&& typeof func == "function") {
-
-				var reqData = {
-						eventId: Date.now() + Math.floor(Math.random()*1e6),
-						data: data,
-						keepAlive: true
-					},
-					boundCallback = function () {
-						func && func.apply(scope || null, arguments);
-					},
-					that = this;
-
-				this.on(reqData.eventId, boundCallback);
-
-				this.emit(channel, reqData);
-
-				return function stop() {
-					that.emit("disconnect-" + reqData.eventId);
-					that.removeListener(reqData.eventId, boundCallback);
+				plugin[propertyName] = {
+						name: name,
+						apply: function apply() {
+							return that.apply.apply(that, arguments);
+						}
 				};
+				return true;
 			} else {
 				return false;
 			}
 		};
 
 		/**
-		 * Sets the socket.io
+		 * Add multiple plugins at once
+		 * @param {Object} list key is the plugin name and value is the plugin
+		 * @returns true if correct param
 		 */
-		this.setSocket($socket);
-	};
-});
+		this.addAll = function addAll(list) {
+			return Tools.loop(list, function (plugin, name) {
+				this.add(name, plugin);
+			}, this);
+		};
+
+		/**
+		 * Get a previously added plugin
+		 * @param {String} name the name of the plugin
+		 * @returns {Object} the plugin
+		 */
+		this.get = function get(name) {
+			return _plugins[name];
+		};
+
+		/**
+		 * Delete a plugin from the list
+		 * @param {String} name the name of the plugin
+		 * @returns {Boolean} true if success
+		 */
+		this.del = function del(name) {
+			return delete _plugins[name];
+		};
+
+		/**
+		 * Apply the plugins to a NodeList
+		 * @param {HTMLElement|SVGElement} dom the dom nodes on which to apply the plugins
+		 * @returns {Boolean} true if the param is a dom node
+		 */
+		this.apply = function apply(dom) {
+
+			var nodes;
+
+			if (DomUtils.isAcceptedType(dom)) {
+
+				nodes = DomUtils.getNodes(dom);
+				Tools.loop(Tools.toArray(nodes), function (node) {
+					Tools.loop(DomUtils.getDataset(node), function (phrase, plugin) {
+						applyPlugin(node, phrase, plugin);
+					});
+				});
+
+				return dom;
+
+			} else {
+				return false;
+			}
+		};
+
+		this.addAll($plugins);
+
+};
+
+},{"emily":1,"./DomUtils":3}]},{},[])
+;

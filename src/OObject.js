@@ -3,11 +3,11 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-var StateMachine = require("emily").StateMachine,
-	Store = require("emily").Store,
+var StateMachine = emily.StateMachine,
+	Store = emily.Store,
 	Plugins = require("./Plugins"),
 	DomUtils = require("./DomUtils"),
-	Tools = require("emily").Tools;
+	Tools = emily.Tools;
 
 /**
 * @class

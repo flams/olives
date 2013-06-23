@@ -3,8 +3,7 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-var emily = require("emily"),
-	Store = emily.Store,
+var Store = emily.Store,
 	Observable = emily.Observable,
 	Tools = emily.Tools,
 	DomUtils = require("./DomUtils");

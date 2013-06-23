@@ -79,7 +79,7 @@ endif
 	git push --tags
 
 temp.js: clean-temp
-	browserify -r ./src/Olives.js:olives -o temp.js
+	browserify -r ./src/Olives.js:olives -o temp.js -i emily
 
 Olives.js: temp.js
 	mkdir -p build
