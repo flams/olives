@@ -3,7 +3,8 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-	var Tools = emily.Tools,
+	var emily = require("emily"),
+		Tools = emily.Tools,
 		DomUtils = require("./DomUtils");
 
 /**

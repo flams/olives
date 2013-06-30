@@ -4,7 +4,8 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-	var OObject = require("./OObject"),
+	var emily = require("emily"),
+		OObject = require("./OObject"),
 		Tools = emily.Tools;
 /**
 * @class

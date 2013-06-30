@@ -4,7 +4,8 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-var Store = emily.Store,
+var emily = require("emily"),
+	Store = emily.Store,
 	Tools = emily.Tools;
 
 /**

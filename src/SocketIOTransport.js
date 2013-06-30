@@ -4,7 +4,7 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-var Observable = emily.Observable,
+var emily = require("emily"),
 	Tools = emily.Tools;
 
 /**
