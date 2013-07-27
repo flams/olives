@@ -303,7 +303,7 @@ function (Router, Observable, Store) {
 		it("can clear the history", function () {
 			spyOn(historyStore, "reset");
 
-			historyStore.clearHistory();
+			router.clearHistory();
 			expect(historyStore.reset.wasCalled).toBe(true);
 			expect(historyStore.reset.mostRecentCall.args[0].length).toBe(0);
 		});
