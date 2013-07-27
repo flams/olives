@@ -96,7 +96,7 @@ function LocalStore(Store, Tools) {
 
 	return function LocalStoreFactory(init) {
 		LocalStoreConstructor.prototype = new Store(init);
-		return new LocalStoreConstructor;
+		return new LocalStoreConstructor();
 	};
 
 });

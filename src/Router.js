@@ -18,13 +18,13 @@ function Router(Observable, Store) {
 		 * The routes observable (the applications use it)
 		 * @private
 		 */
-		var _routes = new Observable,
+		var _routes = new Observable(),
 
 		/**
 		 * The events observable (used by Routing)
 		 * @private
 		 */
-		_events = new Observable,
+		_events = new Observable(),
 
 		/**
 		 * The routing history
