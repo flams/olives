@@ -205,10 +205,18 @@ function (Router, Observable, Store) {
 			router.navigate("route", obj2);
 
 			expect(historyStore.alter.wasCalled).toBe(true);
-			expect(historyStore.alter.callCount).toBe(3);
 			expect(historyStore.alter.mostRecentCall.args[0]).toBe("push");
 			expect(historyStore.alter.mostRecentCall.args[1].route).toBe("route");
 			expect(historyStore.alter.mostRecentCall.args[1].params).toBe(obj2);
+		});
+
+		it("clears the forward history if navigated back and then switch to a new route", function () {
+			router.set("route", function () {});
+			spyOn(historyStore, "alter");
+			router.navigate("route");
+			expect(historyStore.alter.calls[0].args[0]).toBe("splice");
+			expect(historyStore.alter.calls[0].args[1]).toBe(0);
+			expect(historyStore.alter.calls[0].args[2]).toBe(0);
 		});
 
 		it("can navigate through the history", function () {

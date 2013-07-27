@@ -114,6 +114,7 @@ function Router(Observable, Store) {
 		 */
 		this.navigate = function get(route, params) {
 			if (this.load(route, params)) {
+				_history.alter("splice", _currentPos, _history.getNbItems());
 				_history.alter("push", {
 					route: route,
 					params: params
