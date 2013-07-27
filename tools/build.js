@@ -1,6 +1,6 @@
 ({
     baseUrl: "../src",
-    include: ["Bind.plugin", "DomUtils", "Event.plugin", "LocalStore", "OObject", "Place.plugin", "Plugins", "SocketIOTransport"],
+    include: ["Bind.plugin", "DomUtils", "Event.plugin", "LocalStore", "OObject", "Place.plugin", "Plugins", "SocketIOTransport", "Router"],
     paths: {
     	"Store": "empty:",
     	"Tools": "empty:",
