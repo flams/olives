@@ -110,7 +110,7 @@ function (Router, Observable, Store) {
 
 	});
 
-	describe("RouterWatch", function () {
+	describe("Router notifies the activity", function () {
 
 		var router = null,
 		eventsObservable = null;
@@ -175,7 +175,7 @@ function (Router, Observable, Store) {
 		});
 	});
 
-	describe("RouterHistory", function () {
+	describe("Router can keep track of the history", function () {
 
 		var router = null,
 			historyStore = null;
@@ -185,13 +185,13 @@ function (Router, Observable, Store) {
 			historyStore = router.getHistoryStore();
 		});
 
-		it("should have a function to retrieve history store", function () {
+		it("has a function to retrieve history store", function () {
 			expect(router.getHistoryStore).toBeInstanceOf(Function);
 			expect(router.getHistoryStore()).toBeInstanceOf(Store);
 			expect(router.getHistoryStore().toJSON()).toBe("[]");
 		});
 
-		it("should set history while changing route", function () {
+		it("sets history while changing route", function () {
 			var obj0 = {},
 				obj1 = {},
 				obj2 = {};
@@ -211,7 +211,7 @@ function (Router, Observable, Store) {
 			expect(historyStore.alter.mostRecentCall.args[1].params).toBe(obj2);
 		});
 
-		it("should have a function to navigate through the history", function () {
+		it("can navigate through the history", function () {
 			var obj0 = {o:0},
 			obj1 = {o:1},
 			obj2 = {o:2};
@@ -248,7 +248,7 @@ function (Router, Observable, Store) {
 			expect(historyStore.get.mostRecentCall.args[0]).toBe(4);
 		});
 
-		it("should have a back function for go(-1)", function () {
+		it("has a back function for go(-1)", function () {
 			expect(router.back).toBeInstanceOf(Function);
 
 			spyOn(router, "go").andReturn(true);
@@ -257,13 +257,55 @@ function (Router, Observable, Store) {
 			expect(router.go.mostRecentCall.args[0]).toBe(-1);
 		});
 
-		it("should have a forward function for go(1)", function() {
+		it("has a forward function for go(1)", function() {
 			expect(router.forward).toBeInstanceOf(Function);
 
 			spyOn(router, "go").andReturn(true);
 			expect(router.forward()).toBe(true);
 			expect(router.go.wasCalled).toBe(true);
 			expect(router.go.mostRecentCall.args[0]).toBe(1);
+		});
+
+		it("can limit the history to max history", function () {
+			expect(router.getMaxHistory()).toBe(10);
+			expect(router.setMaxHistory(-1)).toBe(false);
+			expect(router.setMaxHistory(0)).toBe(true);
+			expect(router.getMaxHistory()).toBe(0);
+		});
+
+		it("ensures that the history doesn't grow bigger than max history while navigating", function () {
+			router.set("route", function () {});
+			spyOn(router, "ensureMaxHistory");
+			router.navigate("route");
+			expect(router.ensureMaxHistory.wasCalled).toBe(true);
+			expect(router.ensureMaxHistory.mostRecentCall.args[0]).toBe(historyStore);
+		});
+
+		it("reduces the depth of the history", function () {
+			spyOn(historyStore, "count").andReturn(10);
+			spyOn(router, "getMaxHistory").andReturn(10);
+			spyOn(historyStore, "proxy");
+
+			router.ensureMaxHistory(historyStore);
+
+			expect(historyStore.proxy.wasCalled).toBe(false);
+
+			router.getMaxHistory.andReturn(3);
+
+			router.ensureMaxHistory(historyStore);
+
+			expect(historyStore.proxy.wasCalled).toBe(true);
+			expect(historyStore.proxy.mostRecentCall.args[0]).toBe("splice");
+			expect(historyStore.proxy.mostRecentCall.args[1]).toBe(0);
+			expect(historyStore.proxy.mostRecentCall.args[2]).toBe(7);
+		});
+
+		it("can clear the history", function () {
+			spyOn(historyStore, "reset");
+
+			historyStore.clearHistory();
+			expect(historyStore.reset.wasCalled).toBe(true);
+			expect(historyStore.reset.mostRecentCall.args[0].length).toBe(0);
 		});
 
 	});

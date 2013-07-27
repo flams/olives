@@ -36,13 +36,7 @@ function Router(Observable, Store) {
 		 * For navigating through the history, remembers the current position
 		 * @private
 		 */
-		_currentPos = 0,
-
-		/**
-		 * The depth of the history
-		 * @private
-		 */
-		_maxHistory = 10;
+		_currentPos = 0;
 
 		/**
 		 * Only for debugging
@@ -58,32 +52,6 @@ function Router(Observable, Store) {
 		 */
 		this.getEventsObservable = function getEventsObservable() {
 			return _events;
-		};
-
-		/**
-		 * Set the maximum length of history
-		 * As the user navigates through the application, the
-		 * routeur keeps track of the history. Set the depth of the history
-		 * depending on your need and the amount of memory that you can allocate it
-		 * @param {Number} maxHistory the depth of history
-		 * @returns {Boolean} true if maxHistory is equal or greater than 0
-		 */
-		this.setMaxHistory = function setMaxHistory(maxHistory) {
-			if (maxHistory >= 0) {
-				_maxHistory = maxHistory;
-				return true;
-			} else {
-				return false;
-			}
-
-		};
-
-		/**
-		 * Get the current max history setting
-		 * @returns {Number} the depth of history
-		 */
-		this.getMaxHistory = function getMaxHistory() {
-			return _maxHistory;
 		};
 
 		/**
@@ -118,28 +86,12 @@ function Router(Observable, Store) {
 					route: route,
 					params: params
 				});
-				this.ensureMaxHistory(_history);
 				_currentPos = _history.getNbItems();
 				return true;
 			} else {
 				return false;
 			}
 
-		};
-
-		/**
-		 * Ensure that history doesn't grow bigger than the max history setting
-		 * @param {Store} history the history store
-		 * @private
-		 */
-		this.ensureMaxHistory = function ensureMaxHistory(history) {
-			var count = history.count(),
-				max = this.getMaxHistory(),
-				excess = count - max;
-
-			if (excess > 0) {
-				history.proxy("splice", 0, excess);
-			}
 		};
 
 		/**
@@ -180,21 +132,6 @@ function Router(Observable, Store) {
 		 */
 		this.getHistoryStore = function getHistoryStore() {
 			return _history;
-		};
-
-		/**
-		 * Get the current length of history
-		 * @returns {Number} the length of history
-		 */
-		this.getHistoryCount = function getHistoryCount() {
-			return _history.count();
-		};
-
-		/**
-		 * Flush the entire history
-		 */
-		this.clearHistory = function clearHistory() {
-			_history.reset([]);
 		};
 
 		/**
