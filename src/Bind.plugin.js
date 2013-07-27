@@ -563,11 +563,11 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
          * @param {HTMLFormElement} DOMfrom
          * @returns true if valid form
          */
-        this.form = function form(DOMfrom) {
-            if (DOMfrom && form.nodeName == "FORM") {
+        this.form = function form(DOMform) {
+            if (DOMform && DOMform.nodeName == "FORM") {
                 var that = this;
-                DOMfrom.addEventListener("submit", function (event) {
-                    Tools.toArray(DOMfrom.querySelectorAll("[name]")).forEach(that.set, that);
+                DOMform.addEventListener("submit", function (event) {
+                    Tools.toArray(DOMform.querySelectorAll("[name]")).forEach(that.set, that);
                     event.preventDefault();
                 }, true);
                 return true;

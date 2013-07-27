@@ -44,6 +44,9 @@ tests: temp.js
 		--tests all \
 		--reset
 
+jshint:
+	jshint src/*.js
+
 build: clean-build Olives.js
 	cp LICENSE build/
 	cp -rf src/ build/src/
