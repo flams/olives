@@ -882,7 +882,7 @@ describe("SocketIOTransport wraps socket.io to issue requests and listen to Oliv
 
 ###1.5.0 - PENDING
 
-* add Stack for stacking up UI elements, ordering, showing and hiding them
+* Add Stack for stacking up UI elements, ordering, showing and hiding them by taking them out of the DOM. The preferred way for managing what should be displayed on the screen while caring about the performance of your app.
 
 ####1.4.2 - 10 JUNE 2013
 
