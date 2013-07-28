@@ -26,7 +26,7 @@ require(["Place.plugin", "Plugins", "OObject"], function (PlacePlugin, Plugins, 
 
 		var placePlugin = null,
 			falseUI = {},
-			rightUI = new new OObject();
+			rightUI = new OObject();
 
 		beforeEach(function () {
 			placePlugin = new PlacePlugin();
