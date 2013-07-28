@@ -4,9 +4,9 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store", "DomUtils", "Place.plugin", "LocalStore"],
+require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store", "DomUtils", "Place.plugin", "LocalStore", "Router"],
 
-function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin, LocalStore) {
+function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin, LocalStore, Router) {
 
 	function CreateMouseEvent(type) {
 		var event = document.createEvent("MouseEvents");
@@ -723,6 +723,51 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
 
 			// Stop can be called whenever the listener is no more interested by the channel's updates
 			stop();
+		});
+
+	});
+
+	describe("Router determines the navigation in your application", function () {
+
+		it("can navigate to routes and pass arguments", function () {
+			var router = new Router();
+
+			var routeObserver1 = jasmine.createSpy(),
+				routeObserver2 = jasmine.createSpy(),
+
+				params = {};
+
+			router.set("route1", routeObserver1);
+			router.set("route2", routeObserver2);
+
+			router.navigate("route1", params);
+
+			expect(routeObserver1.wasCalled).toBe(true);
+			expect(routeObserver1.mostRecentCall.args[0]).toBe(params);
+			expect(routeObserver2.wasCalled).toBe(false);
+
+			router.navigate("route2", params);
+
+			expect(routeObserver2.wasCalled).toBe(true);
+			expect(routeObserver2.mostRecentCall.args[0]).toBe(params);
+		});
+
+		it("publishes events when navigating to a new route", function () {
+			var router = new Router();
+
+			var observer = jasmine.createSpy(),
+				scope = {},
+				params = {};
+
+			router.watch(observer, scope);
+
+			router.set("route", function () {});
+
+			router.navigate("route", params);
+
+			expect(observer.wasCalled).toBe(true);
+			expect(observer.mostRecentCall.args[0]).toBe("route");
+			expect(observer.mostRecentCall.args[1]).toBe(params);
 		});
 
 	});

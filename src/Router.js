@@ -149,7 +149,7 @@ function Router(Observable, Store) {
 		 */
 		this.load = function load(route, params) {
 			if (_routes.notify(route, params)) {
-				_events.notify("route", route);
+				_events.notify("route", route, params);
 				return true;
 			} else {
 				return false;

@@ -162,6 +162,7 @@ function (Router, Observable, Store) {
 			expect(eventsObservable.notify.wasCalled).toBe(true);
 			expect(eventsObservable.notify.mostRecentCall.args[0]).toBe("route");
 			expect(eventsObservable.notify.mostRecentCall.args[1]).toBe("new route");
+			expect(eventsObservable.notify.mostRecentCall.args[2]).toBe(params);
 		});
 
 		it("doesn't notify if route doesn't exist", function () {
