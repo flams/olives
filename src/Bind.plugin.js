@@ -198,7 +198,8 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
              * @returns the value
              */
             this.setStart = function setStart(start) {
-                return _start = parseInt(start, 10);
+            	_start = parseInt(start, 10);
+                return _start;
             };
 
             /**
@@ -217,7 +218,8 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
              * @returns the value
              */
             this.setNb = function setNb(nb) {
-                return _nb = nb == "*" ? nb : parseInt(nb, 10);
+                _nb = nb == "*" ? nb : parseInt(nb, 10);
+                return _nb;
             };
 
             /**

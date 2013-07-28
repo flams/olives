@@ -124,7 +124,14 @@ function Stack() {
 		 */
 		this.move = function move(dom, position) {
 			if (this.has(dom)) {
-				_parent.insertBefore(dom, _parent.childNodes[position]);
+				// Preventing a bug in IE when insertBefore is not given a valid
+				// second argument
+				var nextElement = _parent.childNodes[position];
+				if (nextElement) {
+					_parent.insertBefore(dom, nextElement);
+				} else {
+					_parent.appendChild(dom);
+				}
 				return dom;
 			} else {
 				return false;
@@ -184,7 +191,7 @@ function Stack() {
 
 		this.show = function show(dom) {
 			if (this.has(dom) && dom.parentNode === _hidePlace) {
-				_parent.appendChild(dom);
+				this.move(dom, _childNodes.indexOf(dom));
 				return true;
 			} else {
 				return false;
