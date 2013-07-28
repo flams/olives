@@ -279,6 +279,47 @@ require(["Stack"], function (Stack) {
 			expect(children[2]).toBe(dom3);
 		});
 
+		it("can hide all the dom elements at once", function () {
+			var dom1 = document.createElement(),
+				dom2 = document.createElement(),
+				dom3 = document.createElement();
+
+			stack.add(dom1);
+			stack.add(dom2);
+			stack.add(dom3);
+
+			spyOn(stack, "hide");
+
+			stack.hideAll();
+
+			expect(stack.hide.callCount).toBe(3);
+			expect(stack.hide.calls[0].args[0]).toBe(dom1);
+			expect(stack.hide.calls[1].args[0]).toBe(dom2);
+			expect(stack.hide.calls[2].args[0]).toBe(dom3);
+			expect(stack.hide.mostRecentCall.object).toBe(stack);
+		});
+
+		it("can show all the dom elements at once", function () {
+			var dom1 = document.createElement(),
+				dom2 = document.createElement(),
+				dom3 = document.createElement();
+
+			stack.add(dom1);
+			stack.add(dom2);
+			stack.add(dom3);
+
+			spyOn(stack, "show");
+
+			stack.hideAll();
+			stack.showAll();
+
+			expect(stack.show.callCount).toBe(3);
+			expect(stack.show.calls[0].args[0]).toBe(dom1);
+			expect(stack.show.calls[1].args[0]).toBe(dom2);
+			expect(stack.show.calls[2].args[0]).toBe(dom3);
+			expect(stack.show.mostRecentCall.object).toBe(stack);
+		});
+
 	});
 
 });

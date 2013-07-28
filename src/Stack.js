@@ -182,6 +182,12 @@ function Stack() {
 			return _childNodes.indexOf(childDom) >= 0;
 		};
 
+		/**
+		 * Hide a dom element that was previously added to the stack
+		 * It will be taken out of the dom until displayed again
+		 * @param {HTMLElement} dom the dom to hide
+		 * @return {boolean} if dom element is in the stack
+		 */
 		this.hide = function hide(dom) {
 			if (this.has(dom)) {
 				_hidePlace.appendChild(dom);
@@ -191,6 +197,12 @@ function Stack() {
 			}
 		};
 
+		/**
+		 * Show a dom element that was previously hidden
+		 * It will be added back to the dom
+		 * @param {HTMLElement} dom the dom to show
+		 * @return {boolean} if dom element is current hidden
+		 */
 		this.show = function show(dom) {
 			if (this.has(dom) && dom.parentNode === _hidePlace) {
 				this.move(dom, _childNodes.indexOf(dom));
@@ -198,6 +210,20 @@ function Stack() {
 			} else {
 				return false;
 			}
+		};
+
+		/**
+		 * Helper function for hiding all the dom elements
+		 */
+		this.hideAll = function hideAll() {
+			_childNodes.forEach(this.hide, this);
+		};
+
+		/**
+		 * Helper function for showing all the dom elements
+		 */
+		this.showAll = function showAll() {
+			_childNodes.forEach(this.show, this);
 		};
 
 		/**
@@ -214,16 +240,25 @@ function Stack() {
 		 */
 		this._setParent = function _setParent(parent) {
 			if (parent instanceof HTMLElement) {
-				return _parent = parent;
+				_parent = parent;
+				return _parent;
 			} else {
 				return false;
 			}
 		};
 
+		/**
+		 * Get the place where the DOM elements are hidden
+		 * @private
+		 */
 		this.getHidePlace = function getHidePlace() {
 			return _hidePlace;
 		};
 
+		/**
+		 * Set the place where the DOM elements are hidden
+		 * @private
+		 */
 		this.setHidePlace = function setHidePlace(hidePlace) {
 			if (hidePlace instanceof HTMLElement) {
 				_hidePlace = hidePlace;

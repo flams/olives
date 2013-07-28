@@ -13,7 +13,7 @@ define(["Store", "Observable", "Tools", "DomUtils"],
  */
 function BindPlugin(Store, Observable, Tools, DomUtils) {
 
-	"use strict";
+    "use strict";
 
     return function BindPluginConstructor($model, $bindings) {
 
@@ -200,7 +200,7 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
              * @returns the value
              */
             this.setStart = function setStart(start) {
-            	_start = parseInt(start, 10);
+                _start = parseInt(start, 10);
                 return _start;
             };
 
