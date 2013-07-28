@@ -262,18 +262,21 @@ require(["Stack"], function (Stack) {
 
 		it("shows back the dom element at the place it was before", function () {
 			var dom1 = document.createElement(),
-				dom2 = document.createElement();
+				dom2 = document.createElement(),
+				dom3 = document.createElement();
 
 			stack.add(dom1);
 			stack.add(dom2);
+			stack.add(dom3);
 
-			stack.hide(dom1);
-			stack.show(dom1);
+			stack.hide(dom2);
+			stack.show(dom2);
 
 			var children = [].slice.call(parent.childNodes);
 
 			expect(children[0]).toBe(dom1);
 			expect(children[1]).toBe(dom2);
+			expect(children[2]).toBe(dom3);
 		});
 
 	});
