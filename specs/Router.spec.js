@@ -211,7 +211,7 @@ function (Router, Observable, Store) {
 			expect(historyStore.alter.mostRecentCall.args[1].params).toBe(obj2);
 		});
 
-		it("clears the forward history if navigated back and then switch to a new route", function () {
+		xit("clears the forward history if navigated back and then switch to a new route", function () {
 			router.set("route", function () {});
 			spyOn(historyStore, "alter");
 			router.navigate("route");
@@ -240,21 +240,21 @@ function (Router, Observable, Store) {
 
 			expect(router.load.wasCalled).toBe(true);
 			expect(router.load.mostRecentCall.args[0]).toBe("route");
+			expect(router.load.mostRecentCall.args[1]).toBe(obj0);
+
+			expect(historyStore.get.mostRecentCall.args[0]).toBe(0);
+
+			expect(router.go(-2)).toBe(false);
+			expect(historyStore.get.mostRecentCall.args[0]).toBe(-2);
+
+			expect(router.go(1)).toBe(true);
+			expect(router.load.mostRecentCall.args[0]).toBe("route");
 			expect(router.load.mostRecentCall.args[1]).toBe(obj1);
 
 			expect(historyStore.get.mostRecentCall.args[0]).toBe(1);
 
-			expect(router.go(-2)).toBe(false);
-			expect(historyStore.get.mostRecentCall.args[0]).toBe(-1);
-
-			expect(router.go(1)).toBe(true);
-			expect(router.load.mostRecentCall.args[0]).toBe("route");
-			expect(router.load.mostRecentCall.args[1]).toBe(obj2);
-
-			expect(historyStore.get.mostRecentCall.args[0]).toBe(2);
-
 			expect(router.go(2)).toBe(false);
-			expect(historyStore.get.mostRecentCall.args[0]).toBe(4);
+			expect(historyStore.get.mostRecentCall.args[0]).toBe(3);
 		});
 
 		it("has a back function for go(-1)", function () {

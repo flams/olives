@@ -36,7 +36,7 @@ function Router(Observable, Store) {
 		 * For navigating through the history, remembers the current position
 		 * @private
 		 */
-		_currentPos = 0,
+		_currentPos = -1,
 
 		/**
 		 * The depth of the history
@@ -114,13 +114,13 @@ function Router(Observable, Store) {
 		 */
 		this.navigate = function get(route, params) {
 			if (this.load(route, params)) {
-				_history.alter("splice", _currentPos, _history.getNbItems());
+				//_history.alter("splice", _currentPos, _history.getNbItems());
 				_history.alter("push", {
 					route: route,
 					params: params
 				});
 				this.ensureMaxHistory(_history);
-				_currentPos = _history.getNbItems();
+				_currentPos = _history.count() -1;
 				return true;
 			} else {
 				return false;
@@ -207,8 +207,8 @@ function Router(Observable, Store) {
 			var history = _history.get(_currentPos + nb);
 
 			if (history) {
-				this.load(history.route, history.params);
 				_currentPos += nb;
+				this.load(history.route, history.params);
 				return true;
 			} else {
 				return false;

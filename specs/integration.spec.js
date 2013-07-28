@@ -770,6 +770,33 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
 			expect(observer.mostRecentCall.args[1]).toBe(params);
 		});
 
+		it("keeps track of the history while navigating", function () {
+			var router = new Router();
+
+			var observer = jasmine.createSpy();
+
+			router.watch(observer);
+
+			router.set("route1", function () {});
+			router.set("route2", function () {});
+			router.set("route3", function () {});
+			router.set("route4", function () {});
+			router.set("route5", function () {});
+
+			router.setMaxHistory(3);
+
+			router.navigate("route1");
+			router.navigate("route2");
+
+			router.back();
+
+			expect(observer.mostRecentCall.args[0]).toBe("route1");
+
+			router.forward();
+
+			expect(observer.mostRecentCall.args[0]).toBe("route2");
+		});
+
 	});
 
 });
