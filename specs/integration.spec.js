@@ -846,6 +846,17 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
 			expect(router.getHistoryCount()).toBe(5);
 		});
 
+		it("can remove a route", function () {
+			var router = new Router(),
+				handle;
+
+			handle = router.set("route1");
+
+			router.unset(handle);
+
+			expect(router.navigate("route1")).toBe(false);
+		});
+
 	});
 
 });
