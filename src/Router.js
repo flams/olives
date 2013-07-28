@@ -114,8 +114,9 @@ function Router(Observable, Store) {
 		 */
 		this.navigate = function get(route, params) {
 			if (this.load(route, params)) {
-				//_history.alter("splice", _currentPos, _history.getNbItems());
-				_history.alter("push", {
+				// Before adding a new route to the history, we must clear the forward history
+				_history.proxy("splice", _currentPos +1, _history.count());
+				_history.proxy("push", {
 					route: route,
 					params: params
 				});

@@ -734,11 +734,11 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
 
 			var routeObserver1 = jasmine.createSpy(),
 				routeObserver2 = jasmine.createSpy(),
-
+				scope = {},
 				params = {};
 
 			router.set("route1", routeObserver1);
-			router.set("route2", routeObserver2);
+			router.set("route2", routeObserver2, scope);
 
 			router.navigate("route1", params);
 
@@ -750,6 +750,7 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
 
 			expect(routeObserver2.wasCalled).toBe(true);
 			expect(routeObserver2.mostRecentCall.args[0]).toBe(params);
+			expect(routeObserver2.mostRecentCall.object).toBe(scope);
 		});
 
 		it("publishes events when navigating to a new route", function () {
@@ -795,6 +796,54 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
 			router.forward();
 
 			expect(observer.mostRecentCall.args[0]).toBe("route2");
+
+			router.navigate("route3");
+
+			router.navigate("route4");
+
+			expect(router.go(-2)).toBe(true);
+
+			expect(observer.mostRecentCall.args[0]).toBe("route2");
+
+			expect(router.back()).toBe(false);
+
+			expect(router.forward()).toBe(true);
+
+			expect(observer.mostRecentCall.args[0]).toBe("route3");
+
+			router.navigate("route5");
+
+			expect(router.forward()).toBe(false);
+
+			router.back();
+
+			expect(observer.mostRecentCall.args[0]).toBe("route3");
+		});
+
+		it("can clear the history", function () {
+			var router = new Router();
+
+			router.set("route1");
+			router.set("route2");
+
+			router.navigate("route1");
+			router.navigate("route2");
+			router.clearHistory();
+
+			expect(router.back()).toBe(false);
+		});
+
+		it("can tell the depth of the history", function () {
+			var router = new Router();
+
+			router.set("route1", function () {});
+			router.navigate("route1");
+			router.navigate("route1");
+			router.navigate("route1");
+			router.navigate("route1");
+			router.navigate("route1");
+
+			expect(router.getHistoryCount()).toBe(5);
 		});
 
 	});

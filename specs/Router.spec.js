@@ -197,7 +197,7 @@ function (Router, Observable, Store) {
 				obj1 = {},
 				obj2 = {};
 
-			spyOn(historyStore, "alter");
+			spyOn(historyStore, "proxy").andCallThrough();
 
 			router.set("route", function () {});
 
@@ -205,19 +205,24 @@ function (Router, Observable, Store) {
 			router.navigate("route", obj1);
 			router.navigate("route", obj2);
 
-			expect(historyStore.alter.wasCalled).toBe(true);
-			expect(historyStore.alter.mostRecentCall.args[0]).toBe("push");
-			expect(historyStore.alter.mostRecentCall.args[1].route).toBe("route");
-			expect(historyStore.alter.mostRecentCall.args[1].params).toBe(obj2);
+			expect(historyStore.proxy.wasCalled).toBe(true);
+			expect(historyStore.proxy.mostRecentCall.args[0]).toBe("push");
+			expect(historyStore.proxy.mostRecentCall.args[1].route).toBe("route");
+			expect(historyStore.proxy.mostRecentCall.args[1].params).toBe(obj2);
 		});
 
-		xit("clears the forward history if navigated back and then switch to a new route", function () {
-			router.set("route", function () {});
-			spyOn(historyStore, "alter");
-			router.navigate("route");
-			expect(historyStore.alter.calls[0].args[0]).toBe("splice");
-			expect(historyStore.alter.calls[0].args[1]).toBe(0);
-			expect(historyStore.alter.calls[0].args[2]).toBe(0);
+		it("clears the forward history when navigating to a new route", function () {
+			router.set("route1", function () {});
+			router.set("route2", function () {});
+			router.set("route3", function () {});
+			spyOn(historyStore, "proxy").andCallThrough();
+			router.navigate("route1");
+			router.navigate("route2");
+			historyStore.proxy.reset();
+			router.navigate("route3");
+			expect(historyStore.proxy.calls[0].args[0]).toBe("splice");
+			expect(historyStore.proxy.calls[0].args[1]).toBe(2);
+			expect(historyStore.proxy.calls[0].args[2]).toBe(2);
 		});
 
 		it("can navigate through the history", function () {
@@ -293,7 +298,7 @@ function (Router, Observable, Store) {
 		it("reduces the depth of the history", function () {
 			spyOn(historyStore, "count").andReturn(10);
 			spyOn(router, "getMaxHistory").andReturn(10);
-			spyOn(historyStore, "proxy");
+			spyOn(historyStore, "proxy").andCallThrough();
 
 			router.ensureMaxHistory(historyStore);
 
