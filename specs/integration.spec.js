@@ -756,6 +756,70 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
             expect(parent2.childNodes[1]).toBe(UI2);
             expect(parent2.childNodes[2]).toBe(UI3);
         });
+
+        it("can reorder the UI elements in a Stack", function () {
+            var stack = new Stack();
+            var parent = document.createElement("div");
+            var UI1 = document.createElement("span");
+            var UI2 = document.createElement("div");
+            var UI3 = document.createElement("ul");
+
+            stack.add(UI1);
+            stack.add(UI2);
+            stack.add(UI3);
+
+            stack.place(parent);
+
+            stack.up(UI2);
+
+            expect(parent.childNodes[0]).toBe(UI1);
+            expect(parent.childNodes[1]).toBe(UI3);
+            expect(parent.childNodes[2]).toBe(UI2);
+
+            stack.down(UI3)
+
+            expect(parent.childNodes[0]).toBe(UI3);
+            expect(parent.childNodes[1]).toBe(UI1);
+            expect(parent.childNodes[2]).toBe(UI2);
+
+            stack.move(UI2, 0);
+
+            expect(parent.childNodes[0]).toBe(UI2);
+            expect(parent.childNodes[1]).toBe(UI3);
+            expect(parent.childNodes[2]).toBe(UI1);
+
+            stack.move(UI2, 1);
+
+            expect(parent.childNodes[0]).toBe(UI3);
+            expect(parent.childNodes[1]).toBe(UI2);
+            expect(parent.childNodes[2]).toBe(UI1);
+
+            stack.move(UI3, 2);
+
+            expect(parent.childNodes[0]).toBe(UI2);
+            expect(parent.childNodes[1]).toBe(UI1);
+            expect(parent.childNodes[2]).toBe(UI3);
+
+        });
+
+        it("can directly insert a dom element at a given place", function () {
+            var stack = new Stack();
+            var parent = document.createElement("div");
+            var UI1 = document.createElement("span");
+            var UI2 = document.createElement("div");
+            var UI3 = document.createElement("ul");
+
+            stack.add(UI1);
+            stack.add(UI3);
+
+            stack.place(parent);
+
+            stack.insert(UI2, 1);
+
+            expect(parent.childNodes[0]).toBe(UI1);
+            expect(parent.childNodes[1]).toBe(UI2);
+            expect(parent.childNodes[2]).toBe(UI3);
+        });
     });
 
 });

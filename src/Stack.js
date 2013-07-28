@@ -96,7 +96,7 @@ function Stack() {
 		this.up = function up(dom) {
 			if (this.has(dom)) {
 				var domPosition = this.getPosition(dom);
-				this.move(dom, domPosition-1);
+				this.move(dom, domPosition + 2);
 				return dom;
 			} else {
 				return false;
@@ -111,7 +111,7 @@ function Stack() {
 		this.down = function down(dom) {
 			if (this.has(dom)) {
 				var domPosition = this.getPosition(dom);
-				this.move(dom, domPosition+2);
+				this.move(dom, domPosition - 1);
 				return dom;
 			} else {
 				return false;
@@ -126,9 +126,12 @@ function Stack() {
 		 */
 		this.move = function move(dom, position) {
 			if (this.has(dom)) {
+				var domIndex = _childNodes.indexOf(dom);
+				_childNodes.splice(domIndex, 1);
+				_childNodes.splice(position, 0, dom);
 				// Preventing a bug in IE when insertBefore is not given a valid
 				// second argument
-				var nextElement = _parent.childNodes[position];
+				var nextElement = _childNodes[position +1];
 				if (nextElement) {
 					_parent.insertBefore(dom, nextElement);
 				} else {
@@ -148,7 +151,7 @@ function Stack() {
 		 */
 		this.insert = function insert(dom, position) {
 			if (!this.has(dom) && dom instanceof HTMLElement) {
-				_childNodes.push(dom);
+				_childNodes.splice(position, 0, dom);
 				_parent.insertBefore(dom, _parent.childNodes[position]);
 				return dom;
 			} else {
@@ -162,7 +165,7 @@ function Stack() {
 		 * @returns {HTMLElement} dom
 		 */
 		this.getPosition = function getPosition(dom) {
-			return [].slice.call(_parent.childNodes).indexOf(dom);
+			return _childNodes.indexOf(dom);
 		};
 
 		/**
@@ -179,7 +182,7 @@ function Stack() {
 		 * @returns {HTMLElement} dom
 		 */
 		this.has = function has(childDom) {
-			return _childNodes.indexOf(childDom) >= 0;
+			return this.getPosition(childDom) >= 0;
 		};
 
 		/**

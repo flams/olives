@@ -116,7 +116,7 @@ require(["Stack"], function (Stack) {
 
 		it("should have a function for moving an element up in the stack", function () {
 			var dom1 = document.createElement("p"),
-				dom2 = document.createElement("p");
+				dom2 = document.createElement("a");
 
 			expect(stack.up).toBeInstanceOf(Function);
 
@@ -124,7 +124,7 @@ require(["Stack"], function (Stack) {
 			stack.add(dom1);
 			stack.add(dom2);
 
-			expect(stack.up(dom2)).toBe(dom2);
+			expect(stack.up(dom1)).toBe(dom1);
 
 			expect(parentDom.childNodes[0]).toBe(dom2);
 			expect(parentDom.childNodes[1]).toBe(dom1);
@@ -140,7 +140,7 @@ require(["Stack"], function (Stack) {
 			stack.add(dom1);
 			stack.add(dom2);
 
-			expect(stack.down(dom1)).toBe(dom1);
+			expect(stack.down(dom2)).toBe(dom2);
 
 			expect(parentDom.childNodes[0]).toBe(dom2);
 			expect(parentDom.childNodes[1]).toBe(dom1);
@@ -156,8 +156,8 @@ require(["Stack"], function (Stack) {
 			stack.add(dom2);
 			stack.add(dom3);
 
-			expect(stack.move(dom3, 0)).toBe(dom3);
-			expect(parentDom.childNodes[0]).toBe(dom3);
+			expect(stack.move(dom3, 1)).toBe(dom3);
+			expect(parentDom.childNodes[1]).toBe(dom3);
 		});
 
 		it("should have a function for inserting a new element at a specific position in the stack", function () {
