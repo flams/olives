@@ -880,6 +880,10 @@ describe("SocketIOTransport wraps socket.io to issue requests and listen to Oliv
 
 ## Changelog
 
+###1.5.0 - PENDING
+
+* add Stack for stacking up UI elements, ordering, showing and hiding them
+
 ####1.4.2 - 10 JUNE 2013
 
 * Fixed performance and memory issues with data-binding's item renderer when using virtualised grid. Check a 1,000,000 rows Grid using Olives data-binding: http://podefr.github.io/olives-virtualised-grid/
