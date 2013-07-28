@@ -4,9 +4,9 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store", "DomUtils", "Place.plugin", "LocalStore", "Router"],
+require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store", "DomUtils", "Place.plugin", "LocalStore", "Stack"],
 
-function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin, LocalStore, Router) {
+function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin, LocalStore, Stack) {
 
     function CreateMouseEvent(type) {
         var event = document.createEvent("MouseEvents");
@@ -726,6 +726,28 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
             stop();
         });
 
+    });
+
+    describe("Stack for stacking UI element, ordering and hiding/showing them", function () {
+
+        it("can stack up UI elements that can be moved around by moving the stack", function () {
+            var stack = new Stack();
+            var parent1 = document.createElement("div");
+            var parent2 =document.createElement("div");
+            var UI1 = document.createElement("div");
+            var UI2 = document.createElement("div");
+            var UI3 = document.createElement("div");
+
+            stack.add(UI1);
+            stack.add(UI2);
+            stack.add(UI3);
+
+            stack.place(parent1);
+
+            expect(parent1.childNodes[0]).toBe(UI1);
+            expect(parent1.childNodes[1]).toBe(UI2);
+            expect(parent1.childNodes[2]).toBe(UI3);
+        });
     });
 
 });

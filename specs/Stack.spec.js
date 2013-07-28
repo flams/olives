@@ -272,11 +272,9 @@ require(["Stack"], function (Stack) {
 			stack.hide(dom2);
 			stack.show(dom2);
 
-			var children = [].slice.call(parent.childNodes);
-
-			expect(children[0]).toBe(dom1);
-			expect(children[1]).toBe(dom2);
-			expect(children[2]).toBe(dom3);
+			expect(parent.childNodes[0]).toBe(dom1);
+			expect(parent.childNodes[1]).toBe(dom2);
+			expect(parent.childNodes[2]).toBe(dom3);
 		});
 
 		it("can hide all the dom elements at once", function () {
