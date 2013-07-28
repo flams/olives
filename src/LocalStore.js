@@ -15,6 +15,8 @@ define(["Store", "Tools"],
  */
 function LocalStore(Store, Tools) {
 
+	"use strict";
+
 	function LocalStoreConstructor() {
 
 		/**

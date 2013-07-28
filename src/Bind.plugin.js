@@ -13,6 +13,8 @@ define(["Store", "Observable", "Tools", "DomUtils"],
  */
 function BindPlugin(Store, Observable, Tools, DomUtils) {
 
+	"use strict";
+
     return function BindPluginConstructor($model, $bindings) {
 
         /**

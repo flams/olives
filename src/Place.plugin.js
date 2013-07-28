@@ -12,6 +12,8 @@ define(["OObject", "Tools"],
 */
 function PlacePlugin(OObject, Tools) {
 
+	"use strict";
+
     /**
      * Intilialize a Place.plugin with a list of OObjects
      * @param {Object} $uis a list of OObjects such as:

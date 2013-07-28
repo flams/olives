@@ -14,6 +14,8 @@ define(["DomUtils"],
 */
 function EventPlugin(Utils) {
 
+    "use strict";
+
     /**
      * The event plugin constructor.
      * ex: new EventPlugin({method: function(){} ...}, false);

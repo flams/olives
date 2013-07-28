@@ -15,6 +15,8 @@ define(
  */
 function Stack() {
 
+	"use strict";
+
 	return function StackConstructor($parent) {
 
 		/**

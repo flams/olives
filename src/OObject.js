@@ -13,6 +13,8 @@ define(["StateMachine", "Store", "Plugins", "DomUtils", "Tools"],
 */
 function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 
+	"use strict";
+
     return function OObjectConstructor(otherStore) {
 
         /**
