@@ -12,7 +12,7 @@ require(["Stack"], function (Stack) {
 			parentDom = null;
 
 		beforeEach(function () {
-			stack = new Stack;
+			stack = new Stack();
 			parentDom = document.createElement("div");
 		});
 
@@ -49,7 +49,7 @@ require(["Stack"], function (Stack) {
 			childDom = null;
 
 		beforeEach(function () {
-			stack = new Stack;
+			stack = new Stack();
 			parentDom = document.createElement("div");
 			childDom = document.createElement("p");
 
@@ -209,11 +209,13 @@ require(["Stack"], function (Stack) {
 	describe("Stack Hide and Show", function () {
 
 		var stack = null,
-			hidePlace = null;
+			hidePlace = null,
+			parent = null;
 
 		beforeEach(function () {
 			stack = new Stack();
 			hidePlace = stack.getHidePlace();
+			parent = stack.getParent();
 		});
 
 		it("has a dom fragment to attach the hidden elements to", function () {
@@ -226,10 +228,8 @@ require(["Stack"], function (Stack) {
 
 		it("has a function for hiding an element in the stack", function () {
 			var dom1 = document.createElement("div");
-				dom2 = document.createElement("div");
 
 			stack.add(dom1);
-			stack.add(dom2);
 
 			expect(stack.hide()).toBe(false);
 			expect(stack.hide({})).toBe(false);
@@ -238,7 +238,42 @@ require(["Stack"], function (Stack) {
 
 			expect(stack.hide(dom1)).toBe(true);
 
+			expect(hidePlace.appendChild.wasCalled).toBe(true);
+			expect(hidePlace.appendChild.mostRecentCall.args[0]).toBe(dom1);
+		});
 
+		it("has a function for showing an element that was previously hid", function () {
+			var dom1 = document.createElement("div");
+
+			stack.add(dom1);
+
+			expect(stack.show()).toBe(false);
+			expect(stack.show({})).toBe(false);
+			expect(stack.show(dom1)).toBe(false);
+			stack.hide(dom1);
+
+			spyOn(parent, "appendChild");
+
+			expect(stack.show(dom1)).toBe(true);
+
+			expect(parent.appendChild.wasCalled).toBe(true);
+			expect(parent.appendChild.mostRecentCall.args[0]).toBe(dom1);
+		});
+
+		it("shows back the dom element at the place it was before", function () {
+			var dom1 = document.createElement(),
+				dom2 = document.createElement();
+
+			stack.add(dom1);
+			stack.add(dom2);
+
+			stack.hide(dom1);
+			stack.show(dom1);
+
+			var children = [].slice.call(parent.childNodes);
+
+			expect(children[0]).toBe(dom1);
+			expect(children[1]).toBe(dom2);
 		});
 
 	});

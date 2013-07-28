@@ -13,7 +13,7 @@ require(["Place.plugin", "Plugins", "OObject"], function (PlacePlugin, Plugins, 
 		});
 
 		it("should have the following api", function () {
-			var placePlugin = new PlacePlugin;
+			var placePlugin = new PlacePlugin();
 			expect(placePlugin.place).toBeInstanceOf(Function);
 			expect(placePlugin.set).toBeInstanceOf(Function);
 			expect(placePlugin.setAll).toBeInstanceOf(Function);
@@ -26,11 +26,12 @@ require(["Place.plugin", "Plugins", "OObject"], function (PlacePlugin, Plugins, 
 
 		var placePlugin = null,
 			falseUI = {},
-			rightUI = new OObject;
+			rightUI = new new OObject();
 
 		beforeEach(function () {
-			placePlugin = new PlacePlugin;
-		})
+			placePlugin = new PlacePlugin();
+		});
+
 		it("should set a new ui", function () {
 			expect(placePlugin.set("ui")).toBe(false);
 			expect(placePlugin.set()).toBe(false);
@@ -46,8 +47,8 @@ require(["Place.plugin", "Plugins", "OObject"], function (PlacePlugin, Plugins, 
 
 		it("should set multiple uis at once", function () {
 			var uis = {
-					"myUI1": new OObject,
-					"myUI2": new OObject
+					"myUI1": new OObject(),
+					"myUI2": new OObject()
 				};
 
 			placePlugin.setAll(uis);
@@ -61,8 +62,8 @@ require(["Place.plugin", "Plugins", "OObject"], function (PlacePlugin, Plugins, 
 
 		var placePlugin = null,
 			uis = {
-				"myUI1": new OObject,
-				"myUI2": new OObject
+				"myUI1": new OObject(),
+				"myUI2": new OObject()
 			};
 
 		it("should allow for initializing placePlugin with multiple UIs", function () {
@@ -78,11 +79,11 @@ require(["Place.plugin", "Plugins", "OObject"], function (PlacePlugin, Plugins, 
 	describe("PlacePluginUILoading", function () {
 
 		var placePlugin = null,
-			myUI = new OObject,
+			myUI = new OObject(),
 			node = document.createElement("div");
 
 		beforeEach(function () {
-			placePlugin = new PlacePlugin;
+			placePlugin = new PlacePlugin();
 			placePlugin.set("myUI", myUI);
 
 		});

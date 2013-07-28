@@ -168,7 +168,7 @@ require(["SocketIOTransport", "Observable"], function (SocketIOTransport, Observ
 
 			socket.once.mostRecentCall.args[1]();
 
-			expect(callback.mostRecentCall.object).toBe(scope)
+			expect(callback.mostRecentCall.object).toBe(scope);
 		});
 
 		it("should also listen to kept-alive socket", function () {
@@ -209,7 +209,7 @@ require(["SocketIOTransport", "Observable"], function (SocketIOTransport, Observ
 			spyOn(socketIOTransport, "emit");
 			spyOn(socketIOTransport, "removeListener");
 
-			var stopFunc = socketIOTransport.listen("channel", "data", callback);
+			stopFunc = socketIOTransport.listen("channel", "data", callback);
 			eventId = socketIOTransport.on.mostRecentCall.args[0];
 
 			expect(stopFunc.name).toBe("stop");

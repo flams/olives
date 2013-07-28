@@ -175,7 +175,16 @@ function Stack() {
 
 		this.hide = function hide(dom) {
 			if (this.has(dom)) {
+				_hidePlace.appendChild(dom);
+				return true;
+			} else {
+				return false;
+			}
+		};
 
+		this.show = function show(dom) {
+			if (this.has(dom) && dom.parentNode === _hidePlace) {
+				_parent.appendChild(dom);
 				return true;
 			} else {
 				return false;

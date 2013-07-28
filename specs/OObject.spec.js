@@ -14,8 +14,8 @@ require(["OObject", "Tools", "Store", "Plugins"], function (OObject, Tools, Stor
 
 		it("should give augmented UI the following API", function () {
 			var UI = function () {};
-			UI.prototype = new OObject;
-			ui = new UI;
+			UI.prototype = new OObject();
+			ui = new UI();
 
 			expect(ui.template).toBe(null);
 			expect(ui.dom).toBe(null);
@@ -41,12 +41,12 @@ require(["OObject", "Tools", "Store", "Plugins"], function (OObject, Tools, Stor
 		});
 
 		it("should have a model property that is a store", function () {
-			oObject = new OObject;
+			oObject = new OObject();
 			expect(oObject.model).toBeInstanceOf(Store);
 		});
 
 		it("should allow for changing the model at init", function () {
-			var store = new Store;
+			var store = new Store();
 			oObject = new OObject(store);
 			expect(oObject.model).toBe(store);
 		});
@@ -64,7 +64,7 @@ require(["OObject", "Tools", "Store", "Plugins"], function (OObject, Tools, Stor
 			dom = document.createElement("div");
 
 		beforeEach(function () {
-			oObject = new OObject;
+			oObject = new OObject();
 			dom.innerHTML = "<p><span>Olives</span></p><p><span>Emily</span></p>";
 		});
 
@@ -92,8 +92,8 @@ require(["OObject", "Tools", "Store", "Plugins"], function (OObject, Tools, Stor
 			UI = function () {};
 
 		beforeEach(function () {
-			UI.prototype = new OObject;
-			ui = new UI;
+			UI.prototype = new OObject();
+			ui = new UI();
 		});
 
 		it("should render a string template ", function () {
@@ -157,8 +157,8 @@ require(["OObject", "Tools", "Store", "Plugins"], function (OObject, Tools, Stor
 		UI = function () {};
 
 		beforeEach(function () {
-			UI.prototype = new OObject;
-			ui = new UI;
+			UI.prototype = new OObject();
+			ui = new UI();
 		});
 
 		it("should apply plugins on render", function () {
@@ -178,8 +178,8 @@ require(["OObject", "Tools", "Store", "Plugins"], function (OObject, Tools, Stor
 		UI = function () {};
 
 		beforeEach(function () {
-			UI.prototype = new OObject;
-			ui = new UI;
+			UI.prototype = new OObject();
+			ui = new UI();
 		});
 
 
@@ -203,9 +203,9 @@ require(["OObject", "Tools", "Store", "Plugins"], function (OObject, Tools, Stor
 			place2 = null;
 
 		beforeEach(function () {
-			UI.prototype = new OObject;
+			UI.prototype = new OObject();
 			UI.prototype.template = "<p>Olives</p>";
-			ui = new UI;
+			ui = new UI();
 
 			place1 = document.createElement("div");
 			place2 = document.createElement("div");
@@ -245,8 +245,8 @@ require(["OObject", "Tools", "Store", "Plugins"], function (OObject, Tools, Stor
 			var UI2 = function(){},
 				ui2;
 
-			UI2.prototype = new OObject;
-			ui2 = new UI2;
+			UI2.prototype = new OObject();
+			ui2 = new UI2();
 			ui2.template = "<p>Emily</p>";
 
 			ui.place( place1);
