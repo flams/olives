@@ -747,6 +747,14 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
             expect(parent1.childNodes[0]).toBe(UI1);
             expect(parent1.childNodes[1]).toBe(UI2);
             expect(parent1.childNodes[2]).toBe(UI3);
+
+            stack.place(parent2);
+
+            expect(parent1.childNodes.length).toBe(0);
+
+            expect(parent2.childNodes[0]).toBe(UI1);
+            expect(parent2.childNodes[1]).toBe(UI2);
+            expect(parent2.childNodes[2]).toBe(UI3);
         });
     });
 
