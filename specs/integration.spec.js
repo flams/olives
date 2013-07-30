@@ -776,7 +776,7 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
             expect(parent.childNodes[1]).toBe(UI3);
             expect(parent.childNodes[2]).toBe(UI2);
 
-            stack.down(UI3)
+            stack.down(UI3);
 
             expect(parent.childNodes[0]).toBe(UI3);
             expect(parent.childNodes[1]).toBe(UI1);
