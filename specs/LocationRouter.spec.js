@@ -125,4 +125,33 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 
 	});
 
+	describe("LocationRouter can be destroyed", function () {
+		var locationRouter = null;
+
+		beforeEach(function() {
+			locationRouter = new LocationRouter();
+		});
+
+		it("removes the watch handler", function () {
+			spyOn(locationRouter, "watch").andReturn(1337);
+			spyOn(locationRouter, "unwatch");
+
+			locationRouter.start();
+
+			locationRouter.destroy();
+
+			expect(locationRouter.unwatch).toHaveBeenCalledWith(1337);
+		});
+
+		it("removes the hashchange event listener", function () {
+			spyOn(window, "removeEventListener");
+
+			locationRouter.start();
+
+			locationRouter.destroy();
+
+			expect(window.removeEventListener).toHaveBeenCalledWith("hashchange", locationRouter.boundOnHashChange, true);
+		});
+	});
+
 });
