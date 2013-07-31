@@ -883,7 +883,8 @@ describe("SocketIOTransport wraps socket.io to issue requests and listen to Oliv
 ###1.5.0 - PENDING
 
 * Add Stack for stacking up UI elements, ordering, showing and hiding them by taking them out of the DOM. The preferred way for managing what should be displayed on the screen while caring about the performance of your app.
-* Add "use strict" statement
+* Add Location Router based on Emily's Router for managing routes based on the URL's hashtag.
+* Add "use strict" statements
 * Bind plugin repeats the template when the bound property is an array
 
 ####1.4.2 - 10 JUNE 2013

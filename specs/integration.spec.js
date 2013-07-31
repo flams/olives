@@ -822,4 +822,8 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
         });
     });
 
+    describe("LocationRouter", function () {
+
+    });
+
 });
