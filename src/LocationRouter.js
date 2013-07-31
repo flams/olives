@@ -4,14 +4,14 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define(["Router"],
+define(["Router", "Tools"],
 
 /**
  * @class
  * A locationRouter is a router which navigates to the route defined in the URL and updates this URL
  * while navigating. It's a subtype of Emily's Router
  */
-function LocationRouter(Router) {
+function LocationRouter(Router, Tools) {
 
 	"use strict";
 
@@ -35,7 +35,7 @@ function LocationRouter(Router) {
 		 * 		will navigate to the route "album" and give two arguments "holiday" and "2013"
 		 */
 		this.parse = function parse(hash) {
-			return hash.split("#")[0].split("/");
+			return hash.split("#").pop().split("/");
 		};
 
 		/**
@@ -78,8 +78,8 @@ function LocationRouter(Router) {
 		 * Parse the hash and navigate to the corresponding url
 		 * @private
 		 */
-		this.onHashChange  = function onHashChange(hash) {
-			var parsedHash = this.parse(hash);
+		this.onHashChange  = function onHashChange(event) {
+			var parsedHash = this.parse(event.newUrl.split("#").pop());
 			this.navigate.apply(this, parsedHash);
 		};
 
@@ -112,7 +112,7 @@ function LocationRouter(Router) {
 		 * @private
 		 */
 		this.onRouteChange = function onRouteChange() {
-			window.location.hash = this.toUrl(arguments);
+			window.location.hash = this.toUrl(Tools.toArray(arguments));
 		};
 
 	}
