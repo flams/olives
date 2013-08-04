@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - BindPlugin</title>
+		<title>JsDoc Reference - Stack</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -218,7 +218,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class BindPlugin
+				Class Stack
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -226,16 +226,19 @@ ul.inheritsList
 				
 				
 			
-				This plugin links dom nodes to a model
+				A Stack is a tool for managing DOM elements as groups. Within a group, dom elements
+can be added, removed, moved around. The group can be moved to another parent node
+while keeping the DOM elements in the same order, excluding the parent dom elements's
+children that are not in the Stack.
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_Bind.plugin.js.html">Bind.plugin.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_Stack.js.html">Stack.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class BindPlugin.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Stack.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -248,7 +251,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/BindPlugin.html#constructor">BindPlugin</a></b>(Store, Observable, Tools, DomUtils)
+								<b><a href="../symbols/Stack.html#constructor">Stack</a></b>()
 							</div>
 							<div class="description"></div>
 						</td>
@@ -264,7 +267,7 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class BindPlugin.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Stack.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -277,81 +280,137 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BindPlugin.html#addBinding">addBinding</a></b>(name, binding)
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#add">add</a></b>(dom)
 								</div>
-								<div class="description">Add a new way to handle a binding</div>
+								<div class="description">Add a DOM element to the stack.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BindPlugin.html#addBindings">addBindings</a></b>(list)
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#count">count</a></b>()
 								</div>
-								<div class="description">Add multiple binding at once</div>
+								<div class="description">Count the number of elements in a stack</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BindPlugin.html#bind">bind</a></b>(node, name, name)
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#down">down</a></b>(dom)
 								</div>
-								<div class="description">Both ways binding between a dom node attributes and the model</div>
+								<div class="description">Move an element down in the stack</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BindPlugin.html#foreach">foreach</a></b>(node, idItemRenderer, start, nb)
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#getParent">getParent</a></b>()
 								</div>
-								<div class="description">Expands the inner dom nodes of a given dom node, filling it with model's values</div>
+								<div class="description">Get the parent node that a stack is currently attached to</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BindPlugin.html#form">form</a></b>(DOMfrom)
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#getPosition">getPosition</a></b>(dom)
 								</div>
-								<div class="description">Prevents the submit and set the model with all form's inputs</div>
+								<div class="description">Get the position of an element in the stack</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BindPlugin.html#refresh">refresh</a></b>(id)
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#has">has</a></b>(dom)
 								</div>
-								<div class="description">Refresh a foreach after having modified its limits</div>
+								<div class="description">Tells if a DOM element is in the stack</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BindPlugin.html#setModel">setModel</a></b>(model)
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#hide">hide</a></b>(dom)
 								</div>
-								<div class="description">Define the model to watch for</div>
+								<div class="description">Hide a dom element that was previously added to the stack
+It will be taken out of the dom until displayed again</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BindPlugin.html#updateNb">updateNb</a></b>(id, nb)
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#hideAll">hideAll</a></b>()
 								</div>
-								<div class="description">Update the number of item to display in a foreach</div>
+								<div class="description">Helper function for hiding all the dom elements</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BindPlugin.html#updateStart">updateStart</a></b>(id, start)
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#insert">insert</a></b>(dom, position)
 								</div>
-								<div class="description">Update the lower boundary of a foreach</div>
+								<div class="description">Insert a new element at a specific position in the stack</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#move">move</a></b>(dom, position)
+								</div>
+								<div class="description">Move an element that is already in the stack to a new position</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#place">place</a></b>(newParentDom)
+								</div>
+								<div class="description">Place a stack by appending its DOM elements to a new parent</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#remove">remove</a></b>(dom)
+								</div>
+								<div class="description">Remove a DOM element from the stack.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#show">show</a></b>(dom)
+								</div>
+								<div class="description">Show a dom element that was previously hidden
+It will be added back to the dom</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#showAll">showAll</a></b>()
+								</div>
+								<div class="description">Helper function for showing all the dom elements</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Stack.html#up">up</a></b>(dom)
+								</div>
+								<div class="description">Move an element up in the stack</div>
 							</td>
 						</tr>
 					
@@ -372,7 +431,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>BindPlugin</b>(Store, Observable, Tools, DomUtils)
+						<b>Stack</b>()
 				</div>
 				
 				<div class="description">
@@ -384,46 +443,10 @@ ul.inheritsList
 				
 				
 					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								 <b>Store</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Observable</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Tools</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>DomUtils</b>
-								
-							</dt>
-								<dd></dd>
-						
-						</dl>
 					
 					
 					
 					
-					
-					
-						<dl class="detailList">
-						<dt class="heading">Requires:</dt>
-						
-							<dd>Store, Observable</dd>
-						
-						</dl>
 					
 					
 
@@ -439,15 +462,15 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="addBinding"> </a>
+					<a name="add"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>addBinding</b>(name, binding)
+					<span class="light">{HTMLElement}</span>
+					<b>add</b>(dom)
 					
 					</div>
 					<div class="description">
-						Add a new way to handle a binding
+						Add a DOM element to the stack. It will be appended.
 						
 						
 					</div>
@@ -459,16 +482,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
 									
 								</dt>
-								<dd>of the binding</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span> <b>binding</b>
-									
-								</dt>
-								<dd>the function to handle the binding</dd>
+								<dd>the DOM element to add</dd>
 							
 							</dl>
 						
@@ -479,7 +496,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd></dd>
+								<dd><span class="light fixedFont">{HTMLElement}</span> dom</dd>
 							
 							</dl>
 						
@@ -488,15 +505,47 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="addBindings"> </a>
+					<a name="count"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>addBindings</b>(list)
+					<span class="light">{Number}</span>
+					<b>count</b>()
 					
 					</div>
 					<div class="description">
-						Add multiple binding at once
+						Count the number of elements in a stack
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Number}</span> the number of items</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="down"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{HTMLElement}</span>
+					<b>down</b>(dom)
+					
+					</div>
+					<div class="description">
+						Move an element down in the stack
 						
 						
 					</div>
@@ -508,10 +557,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span> <b>list</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
 									
 								</dt>
-								<dd>the list of bindings to add</dd>
+								<dd>the dom element to move down</dd>
 							
 							</dl>
 						
@@ -522,7 +571,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd></dd>
+								<dd><span class="light fixedFont">{HTMLElement}</span> dom</dd>
 							
 							</dl>
 						
@@ -531,15 +580,47 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="bind"> </a>
+					<a name="getParent"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>bind</b>(node, name, name)
+					<span class="light">{HTMLElement}</span>
+					<b>getParent</b>()
 					
 					</div>
 					<div class="description">
-						Both ways binding between a dom node attributes and the model
+						Get the parent node that a stack is currently attached to
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{HTMLElement}</span> parent node</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getPosition"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{HTMLElement}</span>
+					<b>getPosition</b>(dom)
+					
+					</div>
+					<div class="description">
+						Get the position of an element in the stack
 						
 						
 					</div>
@@ -551,22 +632,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>node</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
 									
 								</dt>
-								<dd>the dom node to apply the plugin to</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
-									
-								</dt>
-								<dd>the name of the property to look for in the model's value</dd>
-							
-								<dt>
-									<b>name</b>
-									
-								</dt>
-								<dd></dd>
+								<dd>the dom to get the position from</dd>
 							
 							</dl>
 						
@@ -577,7 +646,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd></dd>
+								<dd><span class="light fixedFont">{HTMLElement}</span> dom</dd>
 							
 							</dl>
 						
@@ -586,15 +655,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="foreach"> </a>
+					<a name="has"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>foreach</b>(node, idItemRenderer, start, nb)
+					<span class="light">{HTMLElement}</span>
+					<b>has</b>(dom)
 					
 					</div>
 					<div class="description">
-						Expands the inner dom nodes of a given dom node, filling it with model's values
+						Tells if a DOM element is in the stack
 						
 						
 					</div>
@@ -606,64 +675,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>node</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
 									
 								</dt>
-								<dd>the dom node to apply foreach to</dd>
-							
-								<dt>
-									<b>idItemRenderer</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>start</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>nb</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="form"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>form</b>(DOMfrom)
-					
-					</div>
-					<div class="description">
-						Prevents the submit and set the model with all form's inputs
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{HTMLFormElement}</span> <b>DOMfrom</b>
-									
-								</dt>
-								<dd></dd>
+								<dd>the dom to tell if its in the stack</dd>
 							
 							</dl>
 						
@@ -674,7 +689,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if valid form</dd>
+								<dd><span class="light fixedFont">{HTMLElement}</span> dom</dd>
 							
 							</dl>
 						
@@ -683,15 +698,16 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="refresh"> </a>
+					<a name="hide"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>refresh</b>(id)
+					<span class="light">{boolean}</span>
+					<b>hide</b>(dom)
 					
 					</div>
 					<div class="description">
-						Refresh a foreach after having modified its limits
+						Hide a dom element that was previously added to the stack
+It will be taken out of the dom until displayed again
 						
 						
 					</div>
@@ -703,10 +719,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>id</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
 									
 								</dt>
-								<dd>the id of the foreach to refresh</dd>
+								<dd>the dom to hide</dd>
 							
 							</dl>
 						
@@ -717,7 +733,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if the foreach exists</dd>
+								<dd><span class="light fixedFont">{boolean}</span> if dom element is in the stack</dd>
 							
 							</dl>
 						
@@ -726,15 +742,40 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="setModel"> </a>
+					<a name="hideAll"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{Boolean}</span>
-					<b>setModel</b>(model)
+					
+					<b>hideAll</b>()
 					
 					</div>
 					<div class="description">
-						Define the model to watch for
+						Helper function for hiding all the dom elements
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="insert"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{HTMLElement}</span>
+					<b>insert</b>(dom, position)
+					
+					</div>
+					<div class="description">
+						Insert a new element at a specific position in the stack
 						
 						
 					</div>
@@ -746,10 +787,16 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Store}</span> <b>model</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
 									
 								</dt>
-								<dd>the model to watch for changes</dd>
+								<dd>the dom element to insert</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>position</b>
+									
+								</dt>
+								<dd>the position to which to insert the DOM element</dd>
 							
 							</dl>
 						
@@ -760,7 +807,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Boolean}</span> true if the model was set</dd>
+								<dd><span class="light fixedFont">{HTMLElement}</span> dom</dd>
 							
 							</dl>
 						
@@ -769,15 +816,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="updateNb"> </a>
+					<a name="move"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>updateNb</b>(id, nb)
+					<span class="light">{HTMLElement}</span>
+					<b>move</b>(dom, position)
 					
 					</div>
 					<div class="description">
-						Update the number of item to display in a foreach
+						Move an element that is already in the stack to a new position
 						
 						
 					</div>
@@ -789,16 +836,16 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>id</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
 									
 								</dt>
-								<dd>the id of the foreach to update</dd>
+								<dd>the dom element to move</dd>
 							
 								<dt>
-									<span class="light fixedFont">{Number}</span> <b>nb</b>
+									<span class="light fixedFont">{Number}</span> <b>position</b>
 									
 								</dt>
-								<dd>the number of items to display</dd>
+								<dd>the position to which to move the DOM element</dd>
 							
 							</dl>
 						
@@ -809,7 +856,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if the foreach exists</dd>
+								<dd><span class="light fixedFont">{HTMLElement}</span> dom</dd>
 							
 							</dl>
 						
@@ -818,15 +865,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="updateStart"> </a>
+					<a name="place"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>updateStart</b>(id, start)
+					<span class="light">{HTMLElement}</span>
+					<b>place</b>(newParentDom)
 					
 					</div>
 					<div class="description">
-						Update the lower boundary of a foreach
+						Place a stack by appending its DOM elements to a new parent
 						
 						
 					</div>
@@ -838,16 +885,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>id</b>
+									<span class="light fixedFont">{HTMLElement}</span> <b>newParentDom</b>
 									
 								</dt>
-								<dd>the id of the foreach to update</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>start</b>
-									
-								</dt>
-								<dd>the new value</dd>
+								<dd>the new DOM element to append the stack to</dd>
 							
 							</dl>
 						
@@ -858,7 +899,162 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if the foreach exists</dd>
+								<dd><span class="light fixedFont">{HTMLElement}</span> newParentDom</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="remove"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{HTMLElement}</span>
+					<b>remove</b>(dom)
+					
+					</div>
+					<div class="description">
+						Remove a DOM element from the stack.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
+									
+								</dt>
+								<dd>the DOM element to remove</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{HTMLElement}</span> dom</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="show"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{boolean}</span>
+					<b>show</b>(dom)
+					
+					</div>
+					<div class="description">
+						Show a dom element that was previously hidden
+It will be added back to the dom
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
+									
+								</dt>
+								<dd>the dom to show</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> if dom element is current hidden</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="showAll"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>showAll</b>()
+					
+					</div>
+					<div class="description">
+						Helper function for showing all the dom elements
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="up"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{HTMLElement}</span>
+					<b>up</b>(dom)
+					
+					</div>
+					<div class="description">
+						Move an element up in the stack
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{HTMLElement}</span> <b>dom</b>
+									
+								</dt>
+								<dd>the dom element to move up</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{HTMLElement}</span> dom</dd>
 							
 							</dl>
 						
@@ -879,7 +1075,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Aug 04 2013 14:33:45 GMT+0100 (BST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Aug 04 2013 14:33:46 GMT+0100 (BST)
 		</div>
 	</body>
 </html>

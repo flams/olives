@@ -13,6 +13,8 @@ define(["StateMachine", "Store", "Plugins", "DomUtils", "Tools"],
 */
 function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 
+	"use strict";
+
     return function OObjectConstructor(otherStore) {
 
         /**
@@ -45,7 +47,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
                 // as it wouldn't be possible to know which node would belong to which UI
                 // This is probably a DOM limitation.
                 if (baseNode.childNodes.length > 1) {
-                    throw Error("UI.template should have only one parent node");
+                    throw new Error("UI.template should have only one parent node");
                 } else {
                     UI.dom = baseNode.childNodes[0];
                 }
@@ -54,7 +56,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 
             } else {
                 // An explicit message I hope
-                throw Error("UI.template must be set prior to render");
+                throw new Error("UI.template must be set prior to render");
             }
         },
 

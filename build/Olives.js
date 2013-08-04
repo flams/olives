@@ -12,6 +12,8 @@
 
 define('DomUtils',["Tools"], function (Tools) {
 
+	
+
 	return {
 		/**
 		 * Returns a NodeList including the given dom node,
@@ -126,6 +128,8 @@ define('Bind.plugin',["Store", "Observable", "Tools", "DomUtils"],
  * @requires Store, Observable
  */
 function BindPlugin(Store, Observable, Tools, DomUtils) {
+
+    
 
     return function BindPluginConstructor($model, $bindings) {
 
@@ -312,7 +316,8 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
              * @returns the value
              */
             this.setStart = function setStart(start) {
-                return _start = parseInt(start, 10);
+                _start = parseInt(start, 10);
+                return _start;
             };
 
             /**
@@ -331,7 +336,8 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
              * @returns the value
              */
             this.setNb = function setNb(nb) {
-                return _nb = nb == "*" ? nb : parseInt(nb, 10);
+                _nb = nb == "*" ? nb : parseInt(nb, 10);
+                return _nb;
             };
 
             /**
@@ -781,122 +787,124 @@ define('Event.plugin',["DomUtils"],
 */
 function EventPlugin(Utils) {
 
-	/**
-	 * The event plugin constructor.
-	 * ex: new EventPlugin({method: function(){} ...}, false);
-	 * @param {Object} the object that has the event handling methods
-	 * @param {Boolean} $isMobile if the event handler has to map with touch events
-	 */
-	return function EventPluginConstructor($parent, $isMobile) {
+    
 
-		/**
-		 * The parent callback
-		 * @private
-		 */
-		var _parent = null,
+    /**
+     * The event plugin constructor.
+     * ex: new EventPlugin({method: function(){} ...}, false);
+     * @param {Object} the object that has the event handling methods
+     * @param {Boolean} $isMobile if the event handler has to map with touch events
+     */
+    return function EventPluginConstructor($parent, $isMobile) {
 
-		/**
-		 * The mapping object.
-		 * @private
-		 */
-		_map = {
-			"mousedown" : "touchstart",
-			"mouseup" : "touchend",
-			"mousemove" : "touchmove"
-		},
+        /**
+         * The parent callback
+         * @private
+         */
+        var _parent = null,
 
-		/**
-		 * Is touch device.
-		 * @private
-		 */
-		_isMobile = !!$isMobile;
+        /**
+         * The mapping object.
+         * @private
+         */
+        _map = {
+            "mousedown" : "touchstart",
+            "mouseup" : "touchend",
+            "mousemove" : "touchmove"
+        },
 
-		/**
-		 * Add mapped event listener (for testing purpose).
-		 * @private
-		 */
-		this.addEventListener = function addEventListener(node, event, callback, useCapture) {
-			node.addEventListener(this.map(event), callback, !!useCapture);
-		};
+        /**
+         * Is touch device.
+         * @private
+         */
+        _isMobile = !!$isMobile;
 
-		/**
-		 * Listen to DOM events.
-		 * @param {Object} node DOM node
-		 * @param {String} name event's name
-		 * @param {String} listener callback's name
-		 * @param {String} useCapture string
-		 */
-		this.listen = function listen(node, name, listener, useCapture) {
-			this.addEventListener(node, name, function(e){
-				_parent[listener].call(_parent, e, node);
-			}, !!useCapture);
-		};
+        /**
+         * Add mapped event listener (for testing purpose).
+         * @private
+         */
+        this.addEventListener = function addEventListener(node, event, callback, useCapture) {
+            node.addEventListener(this.map(event), callback, !!useCapture);
+        };
 
-		/**
-		 * Delegate the event handling to a parent DOM element
-		 * @param {Object} node DOM node
-		 * @param {String} selector CSS3 selector to the element that listens to the event
-		 * @param {String} name event's name
-		 * @param {String} listener callback's name
-		 * @param {String} useCapture string
-		 */
-		this.delegate = function delegate(node, selector, name, listener, useCapture) {
-			this.addEventListener(node, name, function(event){
-				if (Utils.matches(node, selector, event.target)) {
-					_parent[listener].call(_parent, event, node);
-				}
-			}, !!useCapture);
-		};
+        /**
+         * Listen to DOM events.
+         * @param {Object} node DOM node
+         * @param {String} name event's name
+         * @param {String} listener callback's name
+         * @param {String} useCapture string
+         */
+        this.listen = function listen(node, name, listener, useCapture) {
+            this.addEventListener(node, name, function(e){
+                _parent[listener].call(_parent, e, node);
+            }, !!useCapture);
+        };
 
-		/**
-		 * Get the parent object.
-		 * @return {Object} the parent object
-		 */
-		this.getParent = function getParent() {
-			return _parent;
-		};
+        /**
+         * Delegate the event handling to a parent DOM element
+         * @param {Object} node DOM node
+         * @param {String} selector CSS3 selector to the element that listens to the event
+         * @param {String} name event's name
+         * @param {String} listener callback's name
+         * @param {String} useCapture string
+         */
+        this.delegate = function delegate(node, selector, name, listener, useCapture) {
+            this.addEventListener(node, name, function(event){
+                if (Utils.matches(node, selector, event.target)) {
+                    _parent[listener].call(_parent, event, node);
+                }
+            }, !!useCapture);
+        };
 
-		/**
-		 * Set the parent object.
-		 * The parent object is an object which the functions are called by node listeners.
-		 * @param {Object} the parent object
-		 * @return true if object has been set
-		 */
-		this.setParent = function setParent(parent) {
-			if (parent instanceof Object){
-				_parent = parent;
-				return true;
-			}
-			return false;
-		};
+        /**
+         * Get the parent object.
+         * @return {Object} the parent object
+         */
+        this.getParent = function getParent() {
+            return _parent;
+        };
 
-		/**
-		 * Get event mapping.
-		 * @param {String} event's name
-		 * @return the mapped event's name
-		 */
-		this.map = function map(name) {
-			return _isMobile ? (_map[name] || name) : name;
-		};
+        /**
+         * Set the parent object.
+         * The parent object is an object which the functions are called by node listeners.
+         * @param {Object} the parent object
+         * @return true if object has been set
+         */
+        this.setParent = function setParent(parent) {
+            if (parent instanceof Object){
+                _parent = parent;
+                return true;
+            }
+            return false;
+        };
 
-		/**
-		 * Set event mapping.
-		 * @param {String} event's name
-		 * @param {String} event's value
-		 * @return true if mapped
-		 */
-		this.setMap = function setMap(name, value) {
-			if (typeof name == "string" &&
-				typeof value == "string") {
-				_map[name] = value;
-				return true;
-			}
-			return false;
-		};
+        /**
+         * Get event mapping.
+         * @param {String} event's name
+         * @return the mapped event's name
+         */
+        this.map = function map(name) {
+            return _isMobile ? (_map[name] || name) : name;
+        };
 
-		//init
-		this.setParent($parent);
-	};
+        /**
+         * Set event mapping.
+         * @param {String} event's name
+         * @param {String} event's value
+         * @return true if mapped
+         */
+        this.setMap = function setMap(name, value) {
+            if (typeof name == "string" &&
+                typeof value == "string") {
+                _map[name] = value;
+                return true;
+            }
+            return false;
+        };
+
+        //init
+        this.setParent($parent);
+    };
 
 });
 
@@ -916,6 +924,8 @@ define('LocalStore',["Store", "Tools"],
  * Only valid JSON data will be stored
  */
 function LocalStore(Store, Tools) {
+
+	
 
 	function LocalStoreConstructor() {
 
@@ -1021,6 +1031,8 @@ define('Plugins',["Tools", "DomUtils"],
  * @requires Tools
  */
 function Plugins(Tools, DomUtils) {
+
+	
 
 	return function PluginsConstructor($plugins) {
 
@@ -1174,6 +1186,8 @@ define('OObject',["StateMachine", "Store", "Plugins", "DomUtils", "Tools"],
 */
 function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 
+	
+
     return function OObjectConstructor(otherStore) {
 
         /**
@@ -1206,7 +1220,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
                 // as it wouldn't be possible to know which node would belong to which UI
                 // This is probably a DOM limitation.
                 if (baseNode.childNodes.length > 1) {
-                    throw Error("UI.template should have only one parent node");
+                    throw new Error("UI.template should have only one parent node");
                 } else {
                     UI.dom = baseNode.childNodes[0];
                 }
@@ -1215,7 +1229,7 @@ function OObject(StateMachine, Store, Plugins, DomUtils, Tools) {
 
             } else {
                 // An explicit message I hope
-                throw Error("UI.template must be set prior to render");
+                throw new Error("UI.template must be set prior to render");
             }
         },
 
@@ -1369,6 +1383,8 @@ define('Place.plugin',["OObject", "Tools"],
 */
 function PlacePlugin(OObject, Tools) {
 
+	
+
     /**
      * Intilialize a Place.plugin with a list of OObjects
      * @param {Object} $uis a list of OObjects such as:
@@ -1457,6 +1473,8 @@ define('SocketIOTransport',["Observable", "Tools"],
  * It's based on socket.io.
  */
 function SocketIOTransport(Observable, Tools) {
+
+	
 
 	/**
 	 * Defines the SocketIOTransport
@@ -1610,152 +1628,201 @@ function SocketIOTransport(Observable, Tools) {
 });
 
 /**
- * https://github.com/flams/Olives-services
+ * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012 Olivier Scherrer <pode.fr@gmail.com>
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define('Router',["Observable", "Store"],
+define('Stack',[],
 
 /**
  * @class
- * Routing allows for navigating in an application by defining routes.
+ * A Stack is a tool for managing DOM elements as groups. Within a group, dom elements
+ * can be added, removed, moved around. The group can be moved to another parent node
+ * while keeping the DOM elements in the same order, excluding the parent dom elements's
+ * children that are not in the Stack.
  */
-function Router(Observable, Store) {
+function Stack() {
 
-	return function RouterConstructor() {
+	
+
+	return function StackConstructor($parent) {
 
 		/**
-		 * The routes observable (the applications use it)
+		 * The parent DOM element is a documentFragment by default
 		 * @private
 		 */
-		var _routes = new Observable(),
+		var _parent = document.createDocumentFragment(),
 
 		/**
-		 * The events observable (used by Routing)
+		 * The place where the dom elements hide
 		 * @private
 		 */
-		_events = new Observable(),
+		_hidePlace = document.createDocumentFragment(),
 
 		/**
-		 * The routing history
+		 * The list of dom elements that are part of the stack
+		 * Helps for excluding elements that are not part of it
 		 * @private
 		 */
-		_history = new Store([]),
+		_childNodes = [];
 
 		/**
-		 * For navigating through the history, remembers the current position
-		 * @private
+		 * Add a DOM element to the stack. It will be appended.
+		 * @param {HTMLElement} dom the DOM element to add
+		 * @returns {HTMLElement} dom
 		 */
-		_currentPos = 0;
-
-		/**
-		 * Only for debugging
-		 * @private
-		 */
-		this.getRoutesObservable = function getRoutesObservable() {
-			return _routes;
-		};
-
-		/**
-		 * Only for debugging
-		 * @private
-		 */
-		this.getEventsObservable = function getEventsObservable() {
-			return _events;
-		};
-
-		/**
-		 * Set a new route
-		 * @param {String} route the name of the route
-		 * @param {Function} func the function to be execute when navigating to the route
-		 * @param {Object} scope the scope in which to execute the function
-		 * @returns a handle to remove the route
-		 */
-		this.set = function set() {
-			return _routes.watch.apply(_routes, arguments);
-		};
-
-		/**
-		 * Remove a route
-		 * @param {Object} handle the handle provided by the set method
-		 * @returns true if successfully removed
-		 */
-		this.unset = function unset(handle) {
-			return _routes.unwatch(handle);
-		};
-
-		/**
-		 * Navigate to a route
-		 * @param {String} route the route to navigate to
-		 * @param {*} *params
-		 * @returns
-		 */
-		this.navigate = function get(route, params) {
-			if (this.load(route, params)) {
-				_history.alter("push", {
-					route: route,
-					params: params
-				});
-				_currentPos = _history.getNbItems();
-				return true;
-			} else {
-				return false;
-			}
-
-		};
-
-		/**
-		 * Actually loads the route
-		 * @private
-		 */
-		this.load = function load(route, params) {
-			if (_routes.notify(route, params)) {
-				_events.notify("route", route);
-				return true;
+		this.add = function add(dom) {
+			if (!this.has(dom) && dom instanceof HTMLElement) {
+				_parent.appendChild(dom);
+				_childNodes.push(dom);
+				return dom;
 			} else {
 				return false;
 			}
 		};
 
 		/**
-		 * Watch for route changes
-		 * @param {Function} func the func to execute when the route changes
-		 * @param {Object} scope the scope in which to execute the function
-		 * @returns {Object} the handle to unwatch for route changes
+		 * Remove a DOM element from the stack.
+		 * @param {HTMLElement} dom the DOM element to remove
+		 * @returns {HTMLElement} dom
 		 */
-		this.watch = function watch(func, scope) {
-			return _events.watch("route", func, scope);
+		this.remove = function remove(dom) {
+			var index;
+			if (this.has(dom)) {
+				index = _childNodes.indexOf(dom);
+				_parent.removeChild(dom);
+				_childNodes.splice(index, 1);
+				return dom;
+			} else {
+				return false;
+			}
 		};
 
 		/**
-		 * Unwatch routes changes
-		 * @param {Object} handle the handle was returned by the watch function
-		 * @returns true if unwatch
+		 * Place a stack by appending its DOM elements to a new parent
+		 * @param {HTMLElement} newParentDom the new DOM element to append the stack to
+		 * @returns {HTMLElement} newParentDom
 		 */
-		this.unwatch = function unwatch(handle) {
-			return _events.unwatch(handle);
+		this.place = function place(newParentDom) {
+			if (newParentDom instanceof HTMLElement) {
+				[].slice.call(_parent.childNodes).forEach(function (childDom) {
+					if (this.has(childDom)) {
+						newParentDom.appendChild(childDom);
+					}
+				}, this);
+				return this._setParent(newParentDom);
+			} else {
+				return false;
+			}
 		};
 
 		/**
-		 * Get the history store, for debugging only
-		 * @private
+		 * Move an element up in the stack
+		 * @param {HTMLElement} dom the dom element to move up
+		 * @returns {HTMLElement} dom
 		 */
-		this.getHistoryStore = function getHistoryStore() {
-			return _history;
+		this.up = function up(dom) {
+			if (this.has(dom)) {
+				var domPosition = this.getPosition(dom);
+				this.move(dom, domPosition + 2);
+				return dom;
+			} else {
+				return false;
+			}
 		};
 
 		/**
-		 * Go back and forth in the history
-		 * @param {Number} nb the amount of history to rewind/forward
-		 * @returns true if history exists
+		 * Move an element down in the stack
+		 * @param {HTMLElement} dom the dom element to move down
+		 * @returns {HTMLElement} dom
 		 */
-		this.go = function go(nb) {
-			var history = _history.get(_currentPos + nb);
+		this.down = function down(dom) {
+			if (this.has(dom)) {
+				var domPosition = this.getPosition(dom);
+				this.move(dom, domPosition - 1);
+				return dom;
+			} else {
+				return false;
+			}
+		};
 
-			if (history) {
-				this.load(history.route, history.params);
-				_currentPos += nb;
+		/**
+		 * Move an element that is already in the stack to a new position
+		 * @param {HTMLElement} dom the dom element to move
+		 * @param {Number} position the position to which to move the DOM element
+		 * @returns {HTMLElement} dom
+		 */
+		this.move = function move(dom, position) {
+			if (this.has(dom)) {
+				var domIndex = _childNodes.indexOf(dom);
+				_childNodes.splice(domIndex, 1);
+				_childNodes.splice(position, 0, dom);
+				// Preventing a bug in IE when insertBefore is not given a valid
+				// second argument
+				var nextElement = _childNodes[position +1];
+				if (nextElement) {
+					_parent.insertBefore(dom, nextElement);
+				} else {
+					_parent.appendChild(dom);
+				}
+				return dom;
+			} else {
+				return false;
+			}
+		};
+
+		/**
+		 * Insert a new element at a specific position in the stack
+		 * @param {HTMLElement} dom the dom element to insert
+		 * @param {Number} position the position to which to insert the DOM element
+		 * @returns {HTMLElement} dom
+		 */
+		this.insert = function insert(dom, position) {
+			if (!this.has(dom) && dom instanceof HTMLElement) {
+				_childNodes.splice(position, 0, dom);
+				_parent.insertBefore(dom, _parent.childNodes[position]);
+				return dom;
+			} else {
+				return false;
+			}
+		};
+
+		/**
+		 * Get the position of an element in the stack
+		 * @param {HTMLElement} dom the dom to get the position from
+		 * @returns {HTMLElement} dom
+		 */
+		this.getPosition = function getPosition(dom) {
+			return _childNodes.indexOf(dom);
+		};
+
+		/**
+		 * Count the number of elements in a stack
+		 * @returns {Number} the number of items
+		 */
+		this.count = function count() {
+			return _parent.childNodes.length;
+		};
+
+		/**
+		 * Tells if a DOM element is in the stack
+		 * @param {HTMLElement} dom the dom to tell if its in the stack
+		 * @returns {HTMLElement} dom
+		 */
+		this.has = function has(childDom) {
+			return this.getPosition(childDom) >= 0;
+		};
+
+		/**
+		 * Hide a dom element that was previously added to the stack
+		 * It will be taken out of the dom until displayed again
+		 * @param {HTMLElement} dom the dom to hide
+		 * @return {boolean} if dom element is in the stack
+		 */
+		this.hide = function hide(dom) {
+			if (this.has(dom)) {
+				_hidePlace.appendChild(dom);
 				return true;
 			} else {
 				return false;
@@ -1763,21 +1830,204 @@ function Router(Observable, Store) {
 		};
 
 		/**
-		 * Go back in the history, short for go(-1)
-		 * @returns
+		 * Show a dom element that was previously hidden
+		 * It will be added back to the dom
+		 * @param {HTMLElement} dom the dom to show
+		 * @return {boolean} if dom element is current hidden
 		 */
-		this.back = function back() {
-			return this.go(-1);
+		this.show = function show(dom) {
+			if (this.has(dom) && dom.parentNode === _hidePlace) {
+				this.move(dom, _childNodes.indexOf(dom));
+				return true;
+			} else {
+				return false;
+			}
 		};
 
 		/**
-		 * Go forward in the history, short for go(1)
-		 * @returns
+		 * Helper function for hiding all the dom elements
 		 */
-		this.forward = function forward() {
-			return this.go(1);
+		this.hideAll = function hideAll() {
+			_childNodes.forEach(this.hide, this);
 		};
+
+		/**
+		 * Helper function for showing all the dom elements
+		 */
+		this.showAll = function showAll() {
+			_childNodes.forEach(this.show, this);
+		};
+
+		/**
+		 * Get the parent node that a stack is currently attached to
+		 * @returns {HTMLElement} parent node
+		 */
+		this.getParent = function _getParent() {
+				return _parent;
+		};
+
+		/**
+		 * Set the parent element (without appending the stacks dom elements to)
+		 * @private
+		 */
+		this._setParent = function _setParent(parent) {
+			if (parent instanceof HTMLElement) {
+				_parent = parent;
+				return _parent;
+			} else {
+				return false;
+			}
+		};
+
+		/**
+		 * Get the place where the DOM elements are hidden
+		 * @private
+		 */
+		this.getHidePlace = function getHidePlace() {
+			return _hidePlace;
+		};
+
+		/**
+		 * Set the place where the DOM elements are hidden
+		 * @private
+		 */
+		this.setHidePlace = function setHidePlace(hidePlace) {
+			if (hidePlace instanceof HTMLElement) {
+				_hidePlace = hidePlace;
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		this._setParent($parent);
 
 	};
+
+});
+
+/**
+ * Olives http://flams.github.com/olives
+ * The MIT License (MIT)
+ * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ */
+
+define('LocationRouter',["Router", "Tools"],
+
+/**
+ * @class
+ * A locationRouter is a router which navigates to the route defined in the URL and updates this URL
+ * while navigating. It's a subtype of Emily's Router
+ */
+function LocationRouter(Router, Tools) {
+
+    
+
+    function LocationRouterConstructor() {
+
+        /**
+         * The handle on the watch
+         * @private
+         */
+        var _watchHandle;
+
+        /**
+         * The function that parses the url to determine the route to navigate to.
+         * It has a default behavior explained below, but can be overriden as long as
+         * it has the same contract.
+         * @param {String} hash the hash coming from window.location.has
+         * @returns {Array} has to return an array with the list of arguments to call
+         *    navigate with. The first item of the array must be the name of the route.
+         *
+         * Example: #album/holiday/2013
+         *      will navigate to the route "album" and give two arguments "holiday" and "2013"
+         */
+        this.parse = function parse(hash) {
+            return hash.split("#").pop().split("/");
+        };
+
+        /**
+         * The function that converts, or serialises the route and its arguments to a valid URL.
+         * It has a default behavior below, but can be overriden as long as it has the same contract.
+         * @param {Array} args the list of arguments to serialize
+         * @returns {String} the serialized arguments to add to the url hashmark
+         *
+         * Example:
+         *      ["album", "holiday", "2013"];
+         *      will give "album/holiday/2013"
+         *
+         */
+        this.toUrl = function toUrl(args) {
+            return args.join("/");
+        };
+
+        /**
+         * When all the routes and handlers have been defined, start the location router
+         * so it parses the URL and navigates to the corresponding route.
+         * It will also start listening to route changes and hashmark changes to navigate.
+         * While navigating, the hashmark itself will also change to reflect the current route state
+         */
+        this.start = function start() {
+            var parsedHash = this.parse(window.location.hash);
+            this.navigate.apply(this, parsedHash);
+            this.bindOnHashChange();
+            this.bindOnRouteChange();
+        };
+
+        /**
+         * Remove the events handler for cleaning.
+         */
+        this.destroy = function destroy() {
+            this.unwatch(_watchHandle);
+            window.removeEventListener("hashchange", this.boundOnHashChange, true);
+        };
+
+        /**
+         * Parse the hash and navigate to the corresponding url
+         * @private
+         */
+        this.onHashChange  = function onHashChange(event) {
+            var parsedHash = this.parse(event.newUrl.split("#").pop());
+            this.navigate.apply(this, parsedHash);
+        };
+
+        /**
+         * The bound version of onHashChange for add/removeEventListener
+         * @private
+         */
+        this.boundOnHashChange = this.onHashChange.bind(this);
+
+        /**
+         * Add an event listener to hashchange to navigate to the corresponding route
+         * when it changes
+         * @private
+         */
+        this.bindOnHashChange = function bindOnHashChange() {
+            window.addEventListener("hashchange", this.boundOnHashChange, true);
+        };
+
+        /**
+         * Watch route change events from the router to update the location
+         * @private
+         */
+        this.bindOnRouteChange = function bindOnRouteChange() {
+            _watchHandle = this.watch("route", this.onRouteChange, this);
+        };
+
+        /**
+         * The handler for when the route changes
+         * It updates the location
+         * @private
+         */
+        this.onRouteChange = function onRouteChange() {
+            window.location.hash = this.toUrl(Tools.toArray(arguments));
+        };
+
+    }
+
+    return function LocationRouterFactory() {
+        LocationRouterConstructor.prototype = new Router();
+        return new LocationRouterConstructor();
+    };
 
 });

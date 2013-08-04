@@ -12,6 +12,8 @@ define(["Observable", "Tools"],
  */
 function SocketIOTransport(Observable, Tools) {
 
+	"use strict";
+
 	/**
 	 * Defines the SocketIOTransport
 	 * @private

@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - Plugins</title>
+		<title>JsDoc Reference - LocationRouter</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -218,7 +218,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class Plugins
+				Class LocationRouter
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -226,19 +226,17 @@ ul.inheritsList
 				
 				
 			
-				Plugins is the link between the UI and your plugins.
-You can design your own plugin, declare them in your UI, and call them
-from the template, like :
-<tag data-yourPlugin="method: param"></tag>
+				A locationRouter is a router which navigates to the route defined in the URL and updates this URL
+while navigating. It's a subtype of Emily's Router
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_Plugins.js.html">Plugins.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_LocationRouter.js.html">LocationRouter.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Plugins.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class LocationRouter.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -251,7 +249,7 @@ from the template, like :
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/Plugins.html#constructor">Plugins</a></b>(Tools, DomUtils)
+								<b><a href="../symbols/LocationRouter.html#constructor">LocationRouter</a></b>(Router, Tools)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -267,7 +265,7 @@ from the template, like :
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Plugins.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class LocationRouter.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -280,47 +278,37 @@ from the template, like :
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#add">add</a></b>(name, plugin)
+								<div class="fixedFont"><b><a href="../symbols/LocationRouter.html#destroy">destroy</a></b>()
 								</div>
-								<div class="description">Add a plugin
-
-Note that once added, the function adds a "plugins" property to the plugin.</div>
+								<div class="description">Remove the events handler for cleaning.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#addAll">addAll</a></b>(list)
+								<div class="fixedFont"><b><a href="../symbols/LocationRouter.html#parse">parse</a></b>(hash)
 								</div>
-								<div class="description">Add multiple plugins at once</div>
+								<div class="description">The function that parses the url to determine the route to navigate to.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#apply">apply</a></b>(dom)
+								<div class="fixedFont"><b><a href="../symbols/LocationRouter.html#start">start</a></b>()
 								</div>
-								<div class="description">Apply the plugins to a NodeList</div>
+								<div class="description">When all the routes and handlers have been defined, start the location router
+so it parses the URL and navigates to the corresponding route.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#del">del</a></b>(name)
+								<div class="fixedFont"><b><a href="../symbols/LocationRouter.html#toUrl">toUrl</a></b>(args)
 								</div>
-								<div class="description">Delete a plugin from the list</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Plugins.html#get">get</a></b>(name)
-								</div>
-								<div class="description">Get a previously added plugin</div>
+								<div class="description">The function that converts, or serialises the route and its arguments to a valid URL.</div>
 							</td>
 						</tr>
 					
@@ -341,7 +329,7 @@ Note that once added, the function adds a "plugins" property to the plugin.</div
 				</div>
 				
 				<div class="fixedFont">
-						<b>Plugins</b>(Tools, DomUtils)
+						<b>LocationRouter</b>(Router, Tools)
 				</div>
 				
 				<div class="description">
@@ -357,13 +345,13 @@ Note that once added, the function adds a "plugins" property to the plugin.</div
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								 <b>Tools</b>
+								 <b>Router</b>
 								
 							</dt>
 								<dd></dd>
 						
 							<dt>
-								 <b>DomUtils</b>
+								 <b>Tools</b>
 								
 							</dt>
 								<dd></dd>
@@ -375,20 +363,6 @@ Note that once added, the function adds a "plugins" property to the plugin.</div
 					
 					
 					
-						<dl class="detailList">
-						<dt class="heading">Requires:</dt>
-						
-							<dd>Tools</dd>
-						
-						</dl>
-					
-					
-						<dl class="detailList">
-						<dt class="heading">See:</dt>
-						
-							<dd>Model-Plugin for instance</dd>
-						
-						</dl>
 					
 
 			</div>
@@ -403,19 +377,42 @@ Note that once added, the function adds a "plugins" property to the plugin.</div
 					Method Detail
 				</div>
 				
-					<a name="add"> </a>
+					<a name="destroy"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>add</b>(name, plugin)
+					<b>destroy</b>()
 					
 					</div>
 					<div class="description">
-						Add a plugin
+						Remove the events handler for cleaning.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
 
-Note that once added, the function adds a "plugins" property to the plugin.
-It's an object that holds a name property, with the registered name of the plugin
-and an apply function, to use on new nodes that the plugin would generate
+					<hr />
+				
+					<a name="parse"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>parse</b>(hash)
+					
+					</div>
+					<div class="description">
+						The function that parses the url to determine the route to navigate to.
+It has a default behavior explained below, but can be overriden as long as
+it has the same contract.
 						
 						
 					</div>
@@ -427,16 +424,10 @@ and an apply function, to use on new nodes that the plugin would generate
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
+									<span class="light fixedFont">{String}</span> <b>hash</b>
 									
 								</dt>
-								<dd>the name of the data that the plugin should look for</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>plugin</b>
-									
-								</dt>
-								<dd>the plugin that has the functions to execute</dd>
+								<dd>the hash coming from window.location.has</dd>
 							
 							</dl>
 						
@@ -447,7 +438,11 @@ and an apply function, to use on new nodes that the plugin would generate
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if plugin successfully added.</dd>
+								<dd><span class="light fixedFont">{Array}</span> has to return an array with the list of arguments to call
+   navigate with. The first item of the array must be the name of the route.
+
+Example: #album/holiday/2013
+     will navigate to the route "album" and give two arguments "holiday" and "2013"</dd>
 							
 							</dl>
 						
@@ -456,15 +451,18 @@ and an apply function, to use on new nodes that the plugin would generate
 
 					<hr />
 				
-					<a name="addAll"> </a>
+					<a name="start"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>addAll</b>(list)
+					<b>start</b>()
 					
 					</div>
 					<div class="description">
-						Add multiple plugins at once
+						When all the routes and handlers have been defined, start the location router
+so it parses the URL and navigates to the corresponding route.
+It will also start listening to route changes and hashmark changes to navigate.
+While navigating, the hashmark itself will also change to reflect the current route state
 						
 						
 					</div>
@@ -472,42 +470,25 @@ and an apply function, to use on new nodes that the plugin would generate
 					
 					
 						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>list</b>
-									
-								</dt>
-								<dd>key is the plugin name and value is the plugin</dd>
-							
-							</dl>
 						
 						
 						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>true if correct param</dd>
-							
-							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name="apply"> </a>
+					<a name="toUrl"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{Boolean}</span>
-					<b>apply</b>(dom)
+					<span class="light">{String}</span>
+					<b>toUrl</b>(args)
 					
 					</div>
 					<div class="description">
-						Apply the plugins to a NodeList
+						The function that converts, or serialises the route and its arguments to a valid URL.
+It has a default behavior below, but can be overriden as long as it has the same contract.
 						
 						
 					</div>
@@ -519,10 +500,10 @@ and an apply function, to use on new nodes that the plugin would generate
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>dom</b>
+									<span class="light fixedFont">{Array}</span> <b>args</b>
 									
 								</dt>
-								<dd>the dom nodes on which to apply the plugins</dd>
+								<dd>the list of arguments to serialize</dd>
 							
 							</dl>
 						
@@ -533,93 +514,11 @@ and an apply function, to use on new nodes that the plugin would generate
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Boolean}</span> true if the param is a dom node</dd>
-							
-							</dl>
-						
-						
-						
+								<dd><span class="light fixedFont">{String}</span> the serialized arguments to add to the url hashmark
 
-					<hr />
-				
-					<a name="del"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{Boolean}</span>
-					<b>del</b>(name)
-					
-					</div>
-					<div class="description">
-						Delete a plugin from the list
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
-									
-								</dt>
-								<dd>the name of the plugin</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Boolean}</span> true if success</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="get"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{Object}</span>
-					<b>get</b>(name)
-					
-					</div>
-					<div class="description">
-						Get a previously added plugin
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
-									
-								</dt>
-								<dd>the name of the plugin</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Object}</span> the plugin</dd>
+Example:
+     ["album", "holiday", "2013"];
+     will give "album/holiday/2013"</dd>
 							
 							</dl>
 						
