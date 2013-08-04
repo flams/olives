@@ -4,9 +4,9 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store", "DomUtils", "Place.plugin", "LocalStore", "Stack"],
+require(["OObject", "Plugins", "Event.plugin", "Bind.plugin", "Store", "DomUtils", "Place.plugin", "LocalStore", "Stack", "LocationRouter"],
 
-function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin, LocalStore, Stack) {
+function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin, LocalStore, Stack, LocationRouter) {
 
     function CreateMouseEvent(type) {
         var event = document.createEvent("MouseEvents");
@@ -822,7 +822,63 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
         });
     });
 
-    describe("LocationRouter", function () {
+    describe("LocationRouter is a router that watches hashmark changes and updates it when the route changes", function () {
+
+        it("navigates to the route described by the URL on start", function () {
+            var locationRouter = new LocationRouter();
+            var spy = jasmine.createSpy();
+
+            locationRouter.set("route", spy);
+
+            window.location.hash = "route/66";
+
+            locationRouter.start();
+
+            expect(spy).toHaveBeenCalledWith("66");
+        });
+
+        it("updates the hashmark when navigating to routes", function () {
+            var locationRouter = new LocationRouter();
+
+            locationRouter.set("route", function () {});
+
+            locationRouter.start();
+
+            locationRouter.navigate("route", "66");
+
+            expect(window.location.hash).toBe("#route/66");
+        });
+
+        it("allows the parse function to be overridden to determine how hashmarks translates to route params", function () {
+            var locationRouter = new LocationRouter(),
+                parseResult = [1, 2, 3];
+
+            window.location.hash = "myRoute/and/params/will/be/converted/to/1/2/3";
+
+            spyOn(locationRouter, "navigate");
+
+            locationRouter.parse = jasmine.createSpy().andReturn(parseResult);
+
+            locationRouter.start();
+
+            expect(locationRouter.parse).toHaveBeenCalledWith("#myRoute/and/params/will/be/converted/to/1/2/3");
+            expect(locationRouter.navigate.mostRecentCall.args[0]).toBe(1);
+            expect(locationRouter.navigate.mostRecentCall.args[1]).toBe(2);
+            expect(locationRouter.navigate.mostRecentCall.args[2]).toBe(3);
+        });
+
+        it("allows the toUrl function to be overridden to determine how route params translate to hashmark", function () {
+            var locationRouter = new LocationRouter();
+
+            locationRouter.toUrl = jasmine.createSpy().andReturn("myRoute/1/2/3");
+
+
+            locationRouter.onRouteChange("myRoute", 1, 2, 3);
+
+            expect(locationRouter.toUrl.mostRecentCall.args[0]).toEqual(["myRoute", 1, 2, 3]);
+
+            expect(window.location.hash).toBe("#myRoute/1/2/3");
+        });
 
     });
 

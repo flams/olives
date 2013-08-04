@@ -154,4 +154,19 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 		});
 	});
 
+	describe("LocationRouter integration", function () {
+		it("shouldn't navigate two times when navigate() is called and the router listens to changes on the hashmark", function () {
+			var locationRouter = new LocationRouter();
+			var spy = jasmine.createSpy();
+
+			locationRouter.set("route", spy);
+
+			locationRouter.start();
+
+			locationRouter.navigate("route", 66);
+
+			expect(spy.callCount).toBe(1);
+		});
+	});
+
 });
