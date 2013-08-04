@@ -117,4 +117,4 @@ endif
 	git checkout master
 
 
-.PHONY: docs clean-docs clean-build build tests release clean gh-pages
+.PHONY: docs clean-docs clean-build build tests release clean gh-pages jshint
