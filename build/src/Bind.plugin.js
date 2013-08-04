@@ -13,392 +13,404 @@ define(["Store", "Observable", "Tools", "DomUtils"],
  */
 function BindPlugin(Store, Observable, Tools, DomUtils) {
 
-	return function BindPluginConstructor($model, $bindings) {
+    "use strict";
 
-		/**
-		 * The model to watch
-		 * @private
-		 */
-		var _model = null,
+    return function BindPluginConstructor($model, $bindings) {
 
-		/**
-		 * The list of custom bindings
-		 * @private
-		 */
-		_bindings = {},
+        /**
+         * The model to watch
+         * @private
+         */
+        var _model = null,
 
-		/**
-		 * The list of itemRenderers
-		 * each foreach has its itemRenderer
-		 * @private
-		 */
-		_itemRenderers = {},
+        /**
+         * The list of custom bindings
+         * @private
+         */
+        _bindings = {},
 
-		/**
-		 * The observers handlers
-		 * @private
-		 */
-		_observers = {};
+        /**
+         * The list of itemRenderers
+         * each foreach has its itemRenderer
+         * @private
+         */
+        _itemRenderers = {},
 
-		/**
-		 * Exposed for debugging purpose
-		 * @private
-		 */
-		this.observers = _observers;
+        /**
+         * The observers handlers
+         * @private
+         */
+        _observers = {};
 
-		function _removeObserversForId(id) {
-			_observers[id] && _observers[id].forEach(function (handler) {
-				_model.unwatchValue(handler);
-			});
-			delete _observers[id];
-		}
+        /**
+         * Exposed for debugging purpose
+         * @private
+         */
+        this.observers = _observers;
 
-		/**
-		 * Define the model to watch for
-		 * @param {Store} model the model to watch for changes
-		 * @returns {Boolean} true if the model was set
-		 */
-		this.setModel = function setModel(model) {
-			if (model instanceof Store) {
-				// Set the model
-				_model = model;
-				return true;
-			} else {
-				return false;
-			}
-		};
+        function _removeObserversForId(id) {
+            if (_observers[id]) {
+                _observers[id].forEach(function (handler) {
+                    _model.unwatchValue(handler);
+                });
+                delete _observers[id];
+            }
+        }
 
-		/**
-		 * Get the store that is watched for
-		 * for debugging only
-		 * @private
-		 * @returns the Store
-		 */
-		this.getModel = function getModel() {
-			return _model;
-		};
+        /**
+         * Define the model to watch for
+         * @param {Store} model the model to watch for changes
+         * @returns {Boolean} true if the model was set
+         */
+        this.setModel = function setModel(model) {
+            if (model instanceof Store) {
+                // Set the model
+                _model = model;
+                return true;
+            } else {
+                return false;
+            }
+        };
 
-		/**
-		 * The item renderer defines a dom node that can be duplicated
-		 * It is made available for debugging purpose, don't use it
-		 * @private
-		 */
-		this.ItemRenderer = function ItemRenderer($plugins, $rootNode) {
+        /**
+         * Get the store that is watched for
+         * for debugging only
+         * @private
+         * @returns the Store
+         */
+        this.getModel = function getModel() {
+            return _model;
+        };
 
-			/**
-			 * The node that will be cloned
-			 * @private
-			 */
-			var _node = null,
+        /**
+         * The item renderer defines a dom node that can be duplicated
+         * It is made available for debugging purpose, don't use it
+         * @private
+         */
+        this.ItemRenderer = function ItemRenderer($plugins, $rootNode) {
 
-			/**
-			 * The object that contains plugins.name and plugins.apply
-			 * @private
-			 */
-			_plugins = null,
+            /**
+             * The node that will be cloned
+             * @private
+             */
+            var _node = null,
 
-			/**
-			 * The _rootNode where to append the created items
-			 * @private
-			 */
-			_rootNode = null,
+            /**
+             * The object that contains plugins.name and plugins.apply
+             * @private
+             */
+            _plugins = null,
 
-			/**
-			 * The lower boundary
-			 * @private
-			 */
-			_start = null,
+            /**
+             * The _rootNode where to append the created items
+             * @private
+             */
+            _rootNode = null,
 
-			/**
-			 * The number of item to display
-			 * @private
-			 */
-			_nb = null;
+            /**
+             * The lower boundary
+             * @private
+             */
+            _start = null,
 
-			/**
-			 * Set the duplicated node
-			 * @private
-			 */
-			this.setRenderer = function setRenderer(node) {
-				_node = node;
-				return true;
-			};
+            /**
+             * The number of item to display
+             * @private
+             */
+            _nb = null;
 
-			/**
-			 * Returns the node that is going to be used for rendering
-			 * @private
-			 * @returns the node that is duplicated
-			 */
-			this.getRenderer = function getRenderer() {
-				return _node;
-			};
+            /**
+             * Set the duplicated node
+             * @private
+             */
+            this.setRenderer = function setRenderer(node) {
+                _node = node;
+                return true;
+            };
 
-			/**
-			 * Sets the rootNode and gets the node to copy
-			 * @private
-			 * @param {HTMLElement|SVGElement} rootNode
-			 * @returns
-			 */
-			this.setRootNode = function setRootNode(rootNode) {
-				var renderer;
-				if (DomUtils.isAcceptedType(rootNode)) {
-					_rootNode = rootNode;
-					renderer = _rootNode.querySelector("*");
-					this.setRenderer(renderer);
-					renderer && _rootNode.removeChild(renderer);
-					return true;
-				} else {
-					return false;
-				}
-			};
+            /**
+             * Returns the node that is going to be used for rendering
+             * @private
+             * @returns the node that is duplicated
+             */
+            this.getRenderer = function getRenderer() {
+                return _node;
+            };
 
-			/**
-			 * Gets the rootNode
-			 * @private
-			 * @returns _rootNode
-			 */
-			this.getRootNode = function getRootNode() {
-				return _rootNode;
-			};
+            /**
+             * Sets the rootNode and gets the node to copy
+             * @private
+             * @param {HTMLElement|SVGElement} rootNode
+             * @returns
+             */
+            this.setRootNode = function setRootNode(rootNode) {
+                var renderer;
+                if (DomUtils.isAcceptedType(rootNode)) {
+                    _rootNode = rootNode;
+                    renderer = _rootNode.querySelector("*");
+                    this.setRenderer(renderer);
+                    if (renderer) {
+                        _rootNode.removeChild(renderer);
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            };
 
-			/**
-			 * Set the plugins objet that contains the name and the apply function
-			 * @private
-			 * @param plugins
-			 * @returns true
-			 */
-			this.setPlugins = function setPlugins(plugins) {
-				_plugins = plugins;
-				return true;
-			};
+            /**
+             * Gets the rootNode
+             * @private
+             * @returns _rootNode
+             */
+            this.getRootNode = function getRootNode() {
+                return _rootNode;
+            };
 
-			/**
-			 * Get the plugins object
-			 * @private
-			 * @returns the plugins object
-			 */
-			this.getPlugins = function getPlugins() {
-				return _plugins;
-			};
+            /**
+             * Set the plugins objet that contains the name and the apply function
+             * @private
+             * @param plugins
+             * @returns true
+             */
+            this.setPlugins = function setPlugins(plugins) {
+                _plugins = plugins;
+                return true;
+            };
 
-			/**
-			 * The nodes created from the items are stored here
-			 * @private
-			 */
-			this.items = {};
+            /**
+             * Get the plugins object
+             * @private
+             * @returns the plugins object
+             */
+            this.getPlugins = function getPlugins() {
+                return _plugins;
+            };
 
-			/**
-			 * Set the start limit
-			 * @private
-			 * @param {Number} start the value to start rendering the items from
-			 * @returns the value
-			 */
-			this.setStart = function setStart(start) {
-				return _start = parseInt(start, 10);
-			};
+            /**
+             * The nodes created from the items are stored here
+             * @private
+             */
+            this.items = {};
 
-			/**
-			 * Get the start value
-			 * @private
-			 * @returns the start value
-			 */
-			this.getStart = function getStart() {
-				return _start;
-			};
+            /**
+             * Set the start limit
+             * @private
+             * @param {Number} start the value to start rendering the items from
+             * @returns the value
+             */
+            this.setStart = function setStart(start) {
+                _start = parseInt(start, 10);
+                return _start;
+            };
 
-			/**
-			 * Set the number of item to display
-			 * @private
-			 * @param {Number/String} nb the number of item to display or "*" for all
-			 * @returns the value
-			 */
-			this.setNb = function setNb(nb) {
-				return _nb = nb == "*" ? nb : parseInt(nb, 10);
-			};
+            /**
+             * Get the start value
+             * @private
+             * @returns the start value
+             */
+            this.getStart = function getStart() {
+                return _start;
+            };
 
-			/**
-			 * Get the number of item to display
-			 * @private
-			 * @returns the value
-			 */
-			this.getNb = function getNb() {
-				return _nb;
-			};
+            /**
+             * Set the number of item to display
+             * @private
+             * @param {Number/String} nb the number of item to display or "*" for all
+             * @returns the value
+             */
+            this.setNb = function setNb(nb) {
+                _nb = nb == "*" ? nb : parseInt(nb, 10);
+                return _nb;
+            };
 
-			/**
-			 * Adds a new item and adds it in the items list
-			 * @private
-			 * @param {Number} id the id of the item
-			 * @returns
-			 */
-			this.addItem = function addItem(id) {
-				var node,
-					next;
+            /**
+             * Get the number of item to display
+             * @private
+             * @returns the value
+             */
+            this.getNb = function getNb() {
+                return _nb;
+            };
 
-				if (typeof id == "number" && !this.items[id]) {
-					next = this.getNextItem(id)
-					node = this.create(id);
-					if (node) {
-						// IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
-						next ? _rootNode.insertBefore(node, next) : _rootNode.appendChild(node);
-						return true;
-					} else {
-						return false;
-					}
-				} else {
-					return false;
-				}
-			};
+            /**
+             * Adds a new item and adds it in the items list
+             * @private
+             * @param {Number} id the id of the item
+             * @returns
+             */
+            this.addItem = function addItem(id) {
+                var node,
+                    next;
 
-			/**
-			 * Get the next item in the item store given an id.
-			 * @private
-			 * @param {Number} id the id to start from
-			 * @returns
-			 */
-			this.getNextItem = function getNextItem(id) {
-				var keys = Object.keys(this.items).map(function (string) {
-						return Number(string);
-					}),
-					closest = Tools.closestGreater(id, keys),
-					closestId = keys[closest];
+                if (typeof id == "number" && !this.items[id]) {
+                    next = this.getNextItem(id);
+                    node = this.create(id);
+                    if (node) {
+                        // IE (until 9) apparently fails to appendChild when insertBefore's second argument is null, hence this.
+                        if (next) {
+                            _rootNode.insertBefore(node, next);
+                        } else {
+                            _rootNode.appendChild(node);
+                        }
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            };
 
-				// Only return if different
-				if (closestId != id) {
-					return this.items[closestId];
-				} else {
-					return;
-				}
-			};
+            /**
+             * Get the next item in the item store given an id.
+             * @private
+             * @param {Number} id the id to start from
+             * @returns
+             */
+            this.getNextItem = function getNextItem(id) {
+                var keys = Object.keys(this.items).map(function (string) {
+                        return Number(string);
+                    }),
+                    closest = Tools.closestGreater(id, keys),
+                    closestId = keys[closest];
 
-			/**
-			 * Remove an item from the dom and the items list
-			 * @private
-			 * @param {Number} id the id of the item to remove
-			 * @returns
-			 */
-			this.removeItem = function removeItem(id) {
-				var item = this.items[id];
-				if (item) {
-					_rootNode.removeChild(item);
-					delete this.items[id];
-					_removeObserversForId(id);
-					return true;
-				} else {
-					return false;
-				}
-			};
+                // Only return if different
+                if (closestId != id) {
+                    return this.items[closestId];
+                } else {
+                    return;
+                }
+            };
 
-			/**
-			 * create a new node. Actually makes a clone of the initial one
-			 * and adds pluginname_id to each node, then calls plugins.apply to apply all plugins
-			 * @private
-			 * @param id
-			 * @param pluginName
-			 * @returns the associated node
-			 */
-			this.create = function create(id) {
-				if (_model.has(id)) {
-					var newNode = _node.cloneNode(true),
-					nodes = DomUtils.getNodes(newNode);
+            /**
+             * Remove an item from the dom and the items list
+             * @private
+             * @param {Number} id the id of the item to remove
+             * @returns
+             */
+            this.removeItem = function removeItem(id) {
+                var item = this.items[id];
+                if (item) {
+                    _rootNode.removeChild(item);
+                    delete this.items[id];
+                    _removeObserversForId(id);
+                    return true;
+                } else {
+                    return false;
+                }
+            };
 
-					Tools.toArray(nodes).forEach(function (child) {
-	            		child.setAttribute("data-" + _plugins.name+"_id", id);
-					});
+            /**
+             * create a new node. Actually makes a clone of the initial one
+             * and adds pluginname_id to each node, then calls plugins.apply to apply all plugins
+             * @private
+             * @param id
+             * @param pluginName
+             * @returns the associated node
+             */
+            this.create = function create(id) {
+                if (_model.has(id)) {
+                    var newNode = _node.cloneNode(true),
+                    nodes = DomUtils.getNodes(newNode);
 
-					this.items[id] = newNode;
-					_plugins.apply(newNode);
-					return newNode;
-				}
-			};
+                    Tools.toArray(nodes).forEach(function (child) {
+                        child.setAttribute("data-" + _plugins.name+"_id", id);
+                    });
 
-			/**
-			 * Renders the dom tree, adds nodes that are in the boundaries
-			 * and removes the others
-			 * @private
-			 * @returns true boundaries are set
-			 */
-			this.render = function render() {
-				// If the number of items to render is all (*)
-				// Then get the number of items
-				var _tmpNb = _nb == "*" ? _model.getNbItems() : _nb;
+                    this.items[id] = newNode;
+                    _plugins.apply(newNode);
+                    return newNode;
+                }
+            };
 
-				// This will store the items to remove
-				var marked = [];
+            /**
+             * Renders the dom tree, adds nodes that are in the boundaries
+             * and removes the others
+             * @private
+             * @returns true boundaries are set
+             */
+            this.render = function render() {
+                // If the number of items to render is all (*)
+                // Then get the number of items
+                var _tmpNb = _nb == "*" ? _model.getNbItems() : _nb;
 
-				// Render only if boundaries have been set
-				if (_nb !== null && _start !== null) {
+                // This will store the items to remove
+                var marked = [];
 
-					// Loop through the existing items
-					Tools.loop(this.items, function (value, idx) {
-						// If an item is out of the boundary
-						idx = Number(idx);
+                // Render only if boundaries have been set
+                if (_nb !== null && _start !== null) {
 
-						if (idx < _start || idx >= (_start + _tmpNb) || !_model.has(idx)) {
-							// Mark it
-							marked.push(idx);
-						}
-					}, this);
+                    // Loop through the existing items
+                    Tools.loop(this.items, function (value, idx) {
+                        // If an item is out of the boundary
+                        idx = Number(idx);
 
-					// Remove the marked item from the highest id to the lowest
-					// Doing this will avoid the id change during removal
-					// (removing id 2 will make id 3 becoming 2)
-					marked.sort(Tools.compareNumbers).reverse().forEach(this.removeItem, this);
+                        if (idx < _start || idx >= (_start + _tmpNb) || !_model.has(idx)) {
+                            // Mark it
+                            marked.push(idx);
+                        }
+                    }, this);
 
-					// Now that we have removed the old nodes
-					// Add the missing one
-					for (var i=_start, l=_tmpNb+_start; i<l; i++) {
-						this.addItem(i);
-					}
-					return true;
-				} else {
-					return false;
-				}
-			};
+                    // Remove the marked item from the highest id to the lowest
+                    // Doing this will avoid the id change during removal
+                    // (removing id 2 will make id 3 becoming 2)
+                    marked.sort(Tools.compareNumbers).reverse().forEach(this.removeItem, this);
 
-			this.setPlugins($plugins);
-			this.setRootNode($rootNode);
-		};
+                    // Now that we have removed the old nodes
+                    // Add the missing one
+                    for (var i=_start, l=_tmpNb+_start; i<l; i++) {
+                        this.addItem(i);
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            };
 
-		/**
-		 * Save an itemRenderer according to its id
-		 * @private
-		 * @param {String} id the id of the itemRenderer
-		 * @param {ItemRenderer} itemRenderer an itemRenderer object
-		 */
-		this.setItemRenderer = function setItemRenderer(id, itemRenderer) {
-			id = id || "default";
-			_itemRenderers[id] = itemRenderer;
-		};
+            this.setPlugins($plugins);
+            this.setRootNode($rootNode);
+        };
 
-		/**
-		 * Get an itemRenderer
-		 * @private
-		 * @param {String} id the name of the itemRenderer
-		 * @returns the itemRenderer
-		 */
-		this.getItemRenderer = function getItemRenderer(id) {
-			return _itemRenderers[id];
-		};
+        /**
+         * Save an itemRenderer according to its id
+         * @private
+         * @param {String} id the id of the itemRenderer
+         * @param {ItemRenderer} itemRenderer an itemRenderer object
+         */
+        this.setItemRenderer = function setItemRenderer(id, itemRenderer) {
+            id = id || "default";
+            _itemRenderers[id] = itemRenderer;
+        };
 
-		/**
-		 * Expands the inner dom nodes of a given dom node, filling it with model's values
-		 * @param {HTMLElement|SVGElement} node the dom node to apply foreach to
-		 */
-		this.foreach = function foreach(node, idItemRenderer, start, nb) {
-			var itemRenderer = new this.ItemRenderer(this.plugins, node);
+        /**
+         * Get an itemRenderer
+         * @private
+         * @param {String} id the name of the itemRenderer
+         * @returns the itemRenderer
+         */
+        this.getItemRenderer = function getItemRenderer(id) {
+            return _itemRenderers[id];
+        };
 
-			itemRenderer.setStart(start || 0);
-			itemRenderer.setNb(nb || "*");
+        /**
+         * Expands the inner dom nodes of a given dom node, filling it with model's values
+         * @param {HTMLElement|SVGElement} node the dom node to apply foreach to
+         */
+        this.foreach = function foreach(node, idItemRenderer, start, nb) {
+            var itemRenderer = new this.ItemRenderer(this.plugins, node);
 
-			itemRenderer.render();
+            itemRenderer.setStart(start || 0);
+            itemRenderer.setNb(nb || "*");
 
-			// Add the newly created item
+            itemRenderer.render();
+
+            // Add the newly created item
             _model.watch("added", itemRenderer.render, itemRenderer);
 
-			// If an item is deleted
+            // If an item is deleted
             _model.watch("deleted", function (idx) {
-            	itemRenderer.render();
+                itemRenderer.render();
                 // Also remove all observers
                 _removeObserversForId(idx);
             },this);
@@ -413,13 +425,13 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
           * @returns true if the foreach exists
           */
          this.updateStart = function updateStart(id, start) {
-        	 var itemRenderer = this.getItemRenderer(id);
-        	 if (itemRenderer) {
-        		 itemRenderer.setStart(start);
-        		 return true;
-        	 } else {
-        		 return false;
-        	 }
+             var itemRenderer = this.getItemRenderer(id);
+             if (itemRenderer) {
+                 itemRenderer.setStart(start);
+                 return true;
+             } else {
+                 return false;
+             }
          };
 
          /**
@@ -429,13 +441,13 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
           * @returns true if the foreach exists
           */
          this.updateNb = function updateNb(id, nb) {
-        	 var itemRenderer = this.getItemRenderer(id);
-        	 if (itemRenderer) {
-        		 itemRenderer.setNb(nb);
-        		 return true;
-        	 } else {
-        		 return false;
-        	 }
+             var itemRenderer = this.getItemRenderer(id);
+             if (itemRenderer) {
+                 itemRenderer.setNb(nb);
+                 return true;
+             } else {
+                 return false;
+             }
          };
 
          /**
@@ -444,201 +456,201 @@ function BindPlugin(Store, Observable, Tools, DomUtils) {
           * @returns true if the foreach exists
           */
          this.refresh = function refresh(id) {
-        	var itemRenderer = this.getItemRenderer(id);
-    	 	if (itemRenderer) {
-    	 		itemRenderer.render();
-    	 		return true;
-    	 	} else {
-    	 		return false;
-    	 	}
+            var itemRenderer = this.getItemRenderer(id);
+            if (itemRenderer) {
+                itemRenderer.render();
+                return true;
+            } else {
+                return false;
+            }
          };
 
-		/**
-		 * Both ways binding between a dom node attributes and the model
-		 * @param {HTMLElement|SVGElement} node the dom node to apply the plugin to
-		 * @param {String} name the name of the property to look for in the model's value
-		 * @returns
-		 */
-		this.bind = function bind(node, property, name) {
+        /**
+         * Both ways binding between a dom node attributes and the model
+         * @param {HTMLElement|SVGElement} node the dom node to apply the plugin to
+         * @param {String} name the name of the property to look for in the model's value
+         * @returns
+         */
+        this.bind = function bind(node, property, name) {
 
-			// Name can be unset if the value of a row is plain text
-			name = name || "";
+            // Name can be unset if the value of a row is plain text
+            name = name || "";
 
-			// In case of an array-like model the id is the index of the model's item to look for.
-			// The _id is added by the foreach function
-			var id = node.getAttribute("data-" + this.plugins.name+"_id"),
+            // In case of an array-like model the id is the index of the model's item to look for.
+            // The _id is added by the foreach function
+            var id = node.getAttribute("data-" + this.plugins.name+"_id"),
 
-			// Else, it is the first element of the following
-			split = name.split("."),
+            // Else, it is the first element of the following
+            split = name.split("."),
 
-			// So the index of the model is either id or the first element of split
-			modelIdx = id || split.shift(),
+            // So the index of the model is either id or the first element of split
+            modelIdx = id || split.shift(),
 
-			// And the name of the property to look for in the value is
-			prop = id ? name : split.join("."),
+            // And the name of the property to look for in the value is
+            prop = id ? name : split.join("."),
 
-			// Get the model's value
-			get =  Tools.getNestedProperty(_model.get(modelIdx), prop),
+            // Get the model's value
+            get =  Tools.getNestedProperty(_model.get(modelIdx), prop),
 
-			// When calling bind like bind:newBinding,param1, param2... we need to get them
-			extraParam = Tools.toArray(arguments).slice(3);
+            // When calling bind like bind:newBinding,param1, param2... we need to get them
+            extraParam = Tools.toArray(arguments).slice(3);
 
-			// 0 and false are acceptable falsy values
-			if (get || get === 0 || get === false) {
-				// If the binding hasn't been overriden
-				if (!this.execBinding.apply(this,
-						[node, property, get]
-					// Extra params are passed to the new binding too
-						.concat(extraParam))) {
-					// Execute the default one which is a simple assignation
-					//node[property] = get;
-					DomUtils.setAttribute(node, property, get);
-				}
-			}
+            // 0 and false are acceptable falsy values
+            if (get || get === 0 || get === false) {
+                // If the binding hasn't been overriden
+                if (!this.execBinding.apply(this,
+                        [node, property, get]
+                    // Extra params are passed to the new binding too
+                        .concat(extraParam))) {
+                    // Execute the default one which is a simple assignation
+                    //node[property] = get;
+                    DomUtils.setAttribute(node, property, get);
+                }
+            }
 
-			// Only watch for changes (double way data binding) if the binding
-			// has not been redefined
-			if (!this.hasBinding(property)) {
-				node.addEventListener("change", function (event) {
-					if (_model.has(modelIdx)) {
-						if (prop) {
-							_model.update(modelIdx, name, node[property]);
-						} else {
-							_model.set(modelIdx, node[property]);
-						}
-					}
-				}, true);
+            // Only watch for changes (double way data binding) if the binding
+            // has not been redefined
+            if (!this.hasBinding(property)) {
+                node.addEventListener("change", function (event) {
+                    if (_model.has(modelIdx)) {
+                        if (prop) {
+                            _model.update(modelIdx, name, node[property]);
+                        } else {
+                            _model.set(modelIdx, node[property]);
+                        }
+                    }
+                }, true);
 
-			}
+            }
 
-			// Watch for changes
-			this.observers[modelIdx] = this.observers[modelIdx] || [];
-			this.observers[modelIdx].push(_model.watchValue(modelIdx, function (value) {
-				if (!this.execBinding.apply(this,
-						[node, property, Tools.getNestedProperty(value, prop)]
-						// passing extra params too
-						.concat(extraParam))) {
-					//node[property] = Tools.getNestedProperty(value, prop);
-					DomUtils.setAttribute(node, property, Tools.getNestedProperty(value, prop));
-				}
-			}, this));
+            // Watch for changes
+            this.observers[modelIdx] = this.observers[modelIdx] || [];
+            this.observers[modelIdx].push(_model.watchValue(modelIdx, function (value) {
+                if (!this.execBinding.apply(this,
+                        [node, property, Tools.getNestedProperty(value, prop)]
+                        // passing extra params too
+                        .concat(extraParam))) {
+                    //node[property] = Tools.getNestedProperty(value, prop);
+                    DomUtils.setAttribute(node, property, Tools.getNestedProperty(value, prop));
+                }
+            }, this));
 
-		};
+        };
 
-		/**
-		 * Set the node's value into the model, the name is the model's property
-		 * @private
-		 * @param {HTMLElement|SVGElement} node
-		 * @returns true if the property is added
-		 */
-		this.set = function set(node) {
-			if (DomUtils.isAcceptedType(node) && node.name) {
-				_model.set(node.name, node.value);
-				return true;
-			} else {
-				return false;
-			}
-		};
+        /**
+         * Set the node's value into the model, the name is the model's property
+         * @private
+         * @param {HTMLElement|SVGElement} node
+         * @returns true if the property is added
+         */
+        this.set = function set(node) {
+            if (DomUtils.isAcceptedType(node) && node.name) {
+                _model.set(node.name, node.value);
+                return true;
+            } else {
+                return false;
+            }
+        };
 
-		this.getItemIndex = function getElementId(dom) {
-			var dataset = DomUtils.getDataset(dom);
+        this.getItemIndex = function getElementId(dom) {
+            var dataset = DomUtils.getDataset(dom);
 
-			if (dataset && typeof dataset[this.plugins.name + "_id"] != "undefined") {
-				return +dataset[this.plugins.name + "_id"];
-			} else {
-				return false;
-			}
-		};
+            if (dataset && typeof dataset[this.plugins.name + "_id"] != "undefined") {
+                return +dataset[this.plugins.name + "_id"];
+            } else {
+                return false;
+            }
+        };
 
-		/**
-		 * Prevents the submit and set the model with all form's inputs
-		 * @param {HTMLFormElement} form
-		 * @returns true if valid form
-		 */
-		this.form = function form(form) {
-			if (form && form.nodeName == "FORM") {
-				var that = this;
-				form.addEventListener("submit", function (event) {
-					Tools.toArray(form.querySelectorAll("[name]")).forEach(that.set, that);
-					event.preventDefault();
-				}, true);
-				return true;
-			} else {
-				return false;
-			}
-		};
+        /**
+         * Prevents the submit and set the model with all form's inputs
+         * @param {HTMLFormElement} DOMfrom
+         * @returns true if valid form
+         */
+        this.form = function form(DOMform) {
+            if (DOMform && DOMform.nodeName == "FORM") {
+                var that = this;
+                DOMform.addEventListener("submit", function (event) {
+                    Tools.toArray(DOMform.querySelectorAll("[name]")).forEach(that.set, that);
+                    event.preventDefault();
+                }, true);
+                return true;
+            } else {
+                return false;
+            }
+        };
 
-		/**
-		 * Add a new way to handle a binding
-		 * @param {String} name of the binding
-		 * @param {Function} binding the function to handle the binding
-		 * @returns
-		 */
-		this.addBinding = function addBinding(name, binding) {
-			if (name && typeof name == "string" && typeof binding == "function") {
-				_bindings[name] = binding;
-				return true;
-			} else {
-				return false;
-			}
-		};
+        /**
+         * Add a new way to handle a binding
+         * @param {String} name of the binding
+         * @param {Function} binding the function to handle the binding
+         * @returns
+         */
+        this.addBinding = function addBinding(name, binding) {
+            if (name && typeof name == "string" && typeof binding == "function") {
+                _bindings[name] = binding;
+                return true;
+            } else {
+                return false;
+            }
+        };
 
-		/**
-		 * Execute a binding
-		 * Only used by the plugin
-		 * @private
-		 * @param {HTMLElement} node the dom node on which to execute the binding
-		 * @param {String} name the name of the binding
-		 * @param {Any type} value the value to pass to the function
-		 * @returns
-		 */
-		this.execBinding = function execBinding(node, name) {
-			if (this.hasBinding(name)) {
-				_bindings[name].apply(node, Array.prototype.slice.call(arguments, 2));
-				return true;
-			} else {
-				return false;
-			}
-		};
+        /**
+         * Execute a binding
+         * Only used by the plugin
+         * @private
+         * @param {HTMLElement} node the dom node on which to execute the binding
+         * @param {String} name the name of the binding
+         * @param {Any type} value the value to pass to the function
+         * @returns
+         */
+        this.execBinding = function execBinding(node, name) {
+            if (this.hasBinding(name)) {
+                _bindings[name].apply(node, Array.prototype.slice.call(arguments, 2));
+                return true;
+            } else {
+                return false;
+            }
+        };
 
-		/**
-		 * Check if the binding exists
-		 * @private
-		 * @param {String} name the name of the binding
-		 * @returns
-		 */
-		this.hasBinding = function hasBinding(name) {
-			return _bindings.hasOwnProperty(name);
-		};
+        /**
+         * Check if the binding exists
+         * @private
+         * @param {String} name the name of the binding
+         * @returns
+         */
+        this.hasBinding = function hasBinding(name) {
+            return _bindings.hasOwnProperty(name);
+        };
 
-		/**
-		 * Get a binding
-		 * For debugging only
-		 * @private
-		 * @param {String} name the name of the binding
-		 * @returns
-		 */
-		this.getBinding = function getBinding(name) {
-			return _bindings[name];
-		};
+        /**
+         * Get a binding
+         * For debugging only
+         * @private
+         * @param {String} name the name of the binding
+         * @returns
+         */
+        this.getBinding = function getBinding(name) {
+            return _bindings[name];
+        };
 
-		/**
-		 * Add multiple binding at once
-		 * @param {Object} list the list of bindings to add
-		 * @returns
-		 */
-		this.addBindings = function addBindings(list) {
-			return Tools.loop(list, function (binding, name) {
-				this.addBinding(name, binding);
-			}, this);
-		};
+        /**
+         * Add multiple binding at once
+         * @param {Object} list the list of bindings to add
+         * @returns
+         */
+        this.addBindings = function addBindings(list) {
+            return Tools.loop(list, function (binding, name) {
+                this.addBinding(name, binding);
+            }, this);
+        };
 
-		// Inits the model
-		this.setModel($model);
-		// Inits bindings
-		this.addBindings($bindings);
+        // Inits the model
+        this.setModel($model);
+        // Inits bindings
+        this.addBindings($bindings);
 
 
-	};
+    };
 
 });

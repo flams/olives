@@ -44,6 +44,9 @@ tests: temp.js
 		--tests all \
 		--reset
 
+jshint:
+	jshint src/*.js specs/*.js
+
 build: clean-build Olives.js
 	cp LICENSE build/
 	cp -rf src/ build/src/
@@ -114,4 +117,4 @@ endif
 	git checkout master
 
 
-.PHONY: docs clean-docs clean-build build tests release clean gh-pages
+.PHONY: docs clean-docs clean-build build tests release clean gh-pages jshint

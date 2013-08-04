@@ -18,11 +18,11 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 		});
 
 		it("should inherit from Store", function () {
-			expect(new LocalStore).toBeInstanceOf(Store);
+			expect(new LocalStore()).toBeInstanceOf(Store);
 		});
 
 		it("should have a function to set/get localStorage", function () {
-			var localStore = new LocalStore;
+			var localStore = new LocalStore();
 
 			expect(localStore.setLocalStorage).toBeInstanceOf(Function);
 			expect(localStore.setLocalStorage()).toBe(false);
@@ -31,7 +31,7 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 		});
 
 		it("should sync with localStorage by default", function () {
-			var localStore = new LocalStore;
+			var localStore = new LocalStore();
 
 			expect(localStore.getLocalStorage()).toBe(localStorage);
 		});
@@ -43,7 +43,7 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 		var localStore = null;
 
 		beforeEach(function () {
-			localStore = new LocalStore;
+			localStore = new LocalStore();
 			localStorage.removeItem("store");
 		});
 
@@ -127,7 +127,7 @@ require(["Store", "LocalStore"], function (Store, LocalStore) {
 		var localStore = null;
 
 		beforeEach(function () {
-			localStore = new LocalStore;
+			localStore = new LocalStore();
 			localStorage.removeItem("store");
 		});
 

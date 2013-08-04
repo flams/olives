@@ -125,8 +125,8 @@ require(["Plugins"], function (Plugins) {
 		});
 
 		it("should call multiple plugins on apply", function () {
-			dom.innerHTML = '<span data-plugin1="method"></span><p data-plugin2="method1"></p>' +
-								'<div data-plugin1="method" data-plugin2="method1;method2"></div>';
+			dom.innerHTML = '<span data-plugin1="method"></span><p data-plugin2="method1"></p>';
+			dom.innerHTML += '<div data-plugin1="method" data-plugin2="method1;method2"></div>';
 
 			plugins.add("plugin1", plugin1);
 			plugins.add("plugin2", plugin2);
