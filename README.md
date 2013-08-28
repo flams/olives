@@ -1043,6 +1043,11 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ## Changelog
 
+###1.5.1 - PENDING
+
+* Fix a bug in stack preventing a hidden element to be displayed back at its original place
+* Fix a bug in LocationRouter that caused the URL not to be updated while navigating
+
 ###1.5.0 - 04 AUG 2013
 
 * Add Stack for stacking up UI elements, ordering, showing and hiding them by taking them out of the DOM. The preferred way for managing what should be displayed on the screen while caring about the performance of your app.
