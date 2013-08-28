@@ -103,7 +103,7 @@ function LocationRouter(Router, Tools) {
          * @private
          */
         this.bindOnRouteChange = function bindOnRouteChange() {
-            _watchHandle = this.watch("route", this.onRouteChange, this);
+            _watchHandle = this.watch(this.onRouteChange, this);
         };
 
         /**

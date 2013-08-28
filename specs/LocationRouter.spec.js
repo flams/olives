@@ -111,7 +111,7 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 
 			locationRouter.bindOnRouteChange();
 
-			expect(locationRouter.watch).toHaveBeenCalledWith("route", locationRouter.onRouteChange, locationRouter);
+			expect(locationRouter.watch).toHaveBeenCalledWith(locationRouter.onRouteChange, locationRouter);
 		});
 
 		it("updates the hash in the url on route change", function () {
