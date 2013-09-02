@@ -1633,7 +1633,7 @@ function SocketIOTransport(Observable, Tools) {
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 
-define('Stack',[],
+define('Stack',['Tools'],
 
 /**
  * @class
@@ -1645,6 +1645,8 @@ define('Stack',[],
 function Stack() {
 
 	
+
+	var Tools = require("Tools");
 
 	return function StackConstructor($parent) {
 
@@ -1658,7 +1660,7 @@ function Stack() {
 		 * The place where the dom elements hide
 		 * @private
 		 */
-		_hidePlace = document.createDocumentFragment(),
+		_hidePlace = document.createElement("div"),
 
 		/**
 		 * The list of dom elements that are part of the stack
@@ -1725,7 +1727,7 @@ function Stack() {
 		this.up = function up(dom) {
 			if (this.has(dom)) {
 				var domPosition = this.getPosition(dom);
-				this.move(dom, domPosition + 2);
+				this.move(dom, domPosition + 1);
 				return dom;
 			} else {
 				return false;
@@ -1757,20 +1759,32 @@ function Stack() {
 			if (this.has(dom)) {
 				var domIndex = _childNodes.indexOf(dom);
 				_childNodes.splice(domIndex, 1);
-				_childNodes.splice(position, 0, dom);
 				// Preventing a bug in IE when insertBefore is not given a valid
 				// second argument
-				var nextElement = _childNodes[position +1];
+				var nextElement = getNextElementInDom(position);
 				if (nextElement) {
 					_parent.insertBefore(dom, nextElement);
 				} else {
 					_parent.appendChild(dom);
 				}
+				_childNodes.splice(position, 0, dom);
 				return dom;
 			} else {
 				return false;
 			}
 		};
+
+		function getNextElementInDom(position) {
+			if (position >= _childNodes.length) {
+				return;
+			}
+			var nextElement = _childNodes[position];
+			if (Tools.toArray(_parent.childNodes).indexOf(nextElement) == -1) {
+				return getNextElementInDom(position +1);
+			} else {
+				return nextElement;
+			}
+		}
 
 		/**
 		 * Insert a new element at a specific position in the stack
@@ -2011,7 +2025,7 @@ function LocationRouter(Router, Tools) {
          * @private
          */
         this.bindOnRouteChange = function bindOnRouteChange() {
-            _watchHandle = this.watch("route", this.onRouteChange, this);
+            _watchHandle = this.watch(this.onRouteChange, this);
         };
 
         /**
