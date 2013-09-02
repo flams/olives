@@ -123,6 +123,14 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 			expect(window.location.hash).toBe("#hello/im/the/router");
 		});
 
+		it("clears the previous history on start so the route coming from the url is the initial one", function () {
+			spyOn(locationRouter, "clearHistory");
+
+			locationRouter.start();
+
+			expect(locationRouter.clearHistory).toHaveBeenCalled();
+		});
+
 	});
 
 	describe("LocationRouter can be destroyed", function () {
