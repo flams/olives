@@ -76,7 +76,7 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 			spyOn(locationRouter, "parse").andReturn(array);
 			spyOn(locationRouter, "navigate");
 
-			locationRouter.onHashChange({ newUrl: "url#hello/im/the/router"});
+			locationRouter.onHashChange({ newURL: "url#hello/im/the/router"});
 
 			expect(locationRouter.parse).toHaveBeenCalledWith("hello/im/the/router");
 			expect(locationRouter.navigate).toHaveBeenCalledWith("hello", "im", "the", "router");
