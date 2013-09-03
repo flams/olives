@@ -7,6 +7,7 @@
 
 
 
+
 <html>
 <head>
 <title>Olives - Create real-time HTML5 applications, in no time. By Olivier Scherrer &amp; Olivier Wietrich</title>
@@ -181,7 +182,7 @@ a powerful UI controller that you can extend with custom plugins, and built-in p
 			</p>
 		</div>
 
-		<div class="menu"><ul><li><a href="release/Olives-1.5.1.tgz">Download Olives</a></li><li class="H2"><a href="#whatisolives">What is Olives?</a></li>
+		<div class="menu"><ul><li><a href="release/Olives-1.4.0.tgz">Download Olives</a></li><li class="H2"><a href="#whatisolives">What is Olives?</a></li>
 <li class="H2"><a href="#howdoiinstallit">How do I install it?</a></li>
 <li class="H2"><a href="#integrationtests">Integration tests:</a></li>
 <li class="H3"><a href="#oobject">OObject</a></li>
@@ -192,8 +193,11 @@ a powerful UI controller that you can extend with custom plugins, and built-in p
 <li class="H3"><a href="#placeplugin">Place.plugin</a></li>
 <li class="H3"><a href="#localstore">LocalStore</a></li>
 <li class="H3"><a href="#socketiotransport">SocketIOTransport</a></li>
+<li class="H3"><a href="#stack">Stack</a></li>
+<li class="H3"><a href="#locationrouter">LocationRouter</a></li>
 <li class="H2"><a href="#liveexamples">Live examples</a></li>
 <li class="H2"><a href="#changelog">Changelog</a></li>
+<li class="H3"><a href="#15103sep2013">1.5.1 - 03 SEP 2013</a></li>
 </ul>
 <ul>
  			<li><a href="tests.html" target="_blank">Test your browser</a></li>
@@ -206,7 +210,7 @@ a powerful UI controller that you can extend with custom plugins, and built-in p
 
 <ul>
 <li>Olives is a JS MV* framework that helps you create scalable and realtime UIs.</li>
-<li>It offers a powerful virtualised and double way data binding tool</li>
+<li>It offers a powerful virtualised and two way data binding tool</li>
 <li>It has an open API for adding custom features via plugins</li>
 <li>It declaratively attaches behaviour to an HTML template</li>
 <li>It's based on <a href="https://github.com/flams/emily">Emily</a> and socket.io to facilitate the communicaton with server side services on node.js</li>
@@ -433,7 +437,7 @@ olives.registerSocketIO(io);
     });
 
     it("calls render prior to place if the UI has never been rendered", function () {
-        var oobject = new OObject,
+        var oobject = new OObject(),
             parent = document.createElement("div"),
             child = document.createElement("p");
 
@@ -445,7 +449,7 @@ olives.registerSocketIO(io);
     });
 
     it("should throw an error if trying to render or place an oobject without specifying a template", function () {
-        var oobject = new OObject;
+        var oobject = new OObject();
 
         expect(function () {
             oobject.render();
@@ -513,7 +517,7 @@ olives.registerSocketIO(io);
             template = '&lt;p data-i18n="translate: hello"&gt;&lt;/p&gt;',
             translationMap = {};
 
-        translationMap["hello"] = "bonjour";
+        translationMap.hello = "bonjour";
 
         dom.innerHTML = template;
 
@@ -537,7 +541,8 @@ olives.registerSocketIO(io);
             actions = {},
             called = false;
 
-        translationMap["hello"] = "bonjour",
+        translationMap.hello = "bonjour";
+
         actions.onClick = function () {
             called = true;
         };
@@ -782,7 +787,7 @@ olives.registerSocketIO(io);
         store.alter("push", {
             name: "Emily",
             type: "Library"
-        })
+        });
 
         expect(oobject.dom.childNodes.length).toBe(2);
         expect(oobject.dom.querySelectorAll("li .itemName")[1].innerText).toBe("Emily");
@@ -841,7 +846,7 @@ olives.registerSocketIO(io);
 
     it("has a function for setting the attribute of both an HTML and an SVG element", function () {
         var htmlElement = document.createElement("p"),
-            svgElement = svgElement = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+            svgElement = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
 
         DomUtils.setAttribute(svgElement, "width", 100);
 
@@ -1062,6 +1067,166 @@ olives.registerSocketIO(io);
 });
 </code></pre>
 
+<h3 id="stack">Stack<a href="#top">top</a></h3>
+
+<pre><code class="js">describe("Stack for stacking UI element, ordering and hiding/showing them", function () {
+
+    it("can stack up UI elements that can be moved around by moving the stack", function () {
+        var stack = new Stack();
+        var parent1 = document.createElement("div");
+        var parent2 =document.createElement("div");
+        var UI1 = document.createElement("div");
+        var UI2 = document.createElement("div");
+        var UI3 = document.createElement("div");
+
+        stack.add(UI1);
+        stack.add(UI2);
+        stack.add(UI3);
+
+        stack.place(parent1);
+
+        expect(parent1.childNodes[0]).toBe(UI1);
+        expect(parent1.childNodes[1]).toBe(UI2);
+        expect(parent1.childNodes[2]).toBe(UI3);
+
+        stack.place(parent2);
+
+        expect(parent1.childNodes.length).toBe(0);
+
+        expect(parent2.childNodes[0]).toBe(UI1);
+        expect(parent2.childNodes[1]).toBe(UI2);
+        expect(parent2.childNodes[2]).toBe(UI3);
+    });
+
+    it("can reorder the UI elements in a Stack", function () {
+        var stack = new Stack();
+        var parent = document.createElement("div");
+        var UI1 = document.createElement("span");
+        var UI2 = document.createElement("div");
+        var UI3 = document.createElement("ul");
+
+        stack.add(UI1);
+        stack.add(UI2);
+        stack.add(UI3);
+
+        stack.place(parent);
+
+        stack.up(UI2);
+
+        expect(parent.childNodes[0]).toBe(UI1);
+        expect(parent.childNodes[1]).toBe(UI3);
+        expect(parent.childNodes[2]).toBe(UI2);
+
+        stack.down(UI3);
+
+        expect(parent.childNodes[0]).toBe(UI3);
+        expect(parent.childNodes[1]).toBe(UI1);
+        expect(parent.childNodes[2]).toBe(UI2);
+
+        stack.move(UI2, 0);
+
+        expect(parent.childNodes[0]).toBe(UI2);
+        expect(parent.childNodes[1]).toBe(UI3);
+        expect(parent.childNodes[2]).toBe(UI1);
+
+        stack.move(UI2, 1);
+
+        expect(parent.childNodes[0]).toBe(UI3);
+        expect(parent.childNodes[1]).toBe(UI2);
+        expect(parent.childNodes[2]).toBe(UI1);
+
+        stack.move(UI3, 2);
+
+        expect(parent.childNodes[0]).toBe(UI2);
+        expect(parent.childNodes[1]).toBe(UI1);
+        expect(parent.childNodes[2]).toBe(UI3);
+
+    });
+
+    it("can directly insert a dom element at a given place", function () {
+        var stack = new Stack();
+        var parent = document.createElement("div");
+        var UI1 = document.createElement("span");
+        var UI2 = document.createElement("div");
+        var UI3 = document.createElement("ul");
+
+        stack.add(UI1);
+        stack.add(UI3);
+
+        stack.place(parent);
+
+        stack.insert(UI2, 1);
+
+        expect(parent.childNodes[0]).toBe(UI1);
+        expect(parent.childNodes[1]).toBe(UI2);
+        expect(parent.childNodes[2]).toBe(UI3);
+    });
+});
+</code></pre>
+
+<h3 id="locationrouter">LocationRouter<a href="#top">top</a></h3>
+
+<pre><code class="js">describe("LocationRouter is a router that watches hashmark changes and updates it when the route changes", function () {
+
+    it("navigates to the route described by the URL on start", function () {
+        var locationRouter = new LocationRouter();
+        var spy = jasmine.createSpy();
+
+        locationRouter.set("route", spy);
+
+        window.location.hash = "route/66";
+
+        locationRouter.start();
+
+        expect(spy).toHaveBeenCalledWith("66");
+    });
+
+    it("updates the hashmark when navigating to routes", function () {
+        var locationRouter = new LocationRouter();
+
+        locationRouter.set("route", function () {});
+
+        locationRouter.start();
+
+        locationRouter.navigate("route", "66");
+
+        expect(window.location.hash).toBe("#route/66");
+    });
+
+    it("allows the parse function to be overridden to determine how hashmarks translates to route params", function () {
+        var locationRouter = new LocationRouter(),
+            parseResult = [1, 2, 3];
+
+        window.location.hash = "myRoute/and/params/will/be/converted/to/1/2/3";
+
+        spyOn(locationRouter, "navigate");
+
+        locationRouter.parse = jasmine.createSpy().andReturn(parseResult);
+
+        locationRouter.start();
+
+        expect(locationRouter.parse).toHaveBeenCalledWith("#myRoute/and/params/will/be/converted/to/1/2/3");
+        expect(locationRouter.navigate.mostRecentCall.args[0]).toBe(1);
+        expect(locationRouter.navigate.mostRecentCall.args[1]).toBe(2);
+        expect(locationRouter.navigate.mostRecentCall.args[2]).toBe(3);
+    });
+
+    it("allows the toUrl function to be overridden to determine how route params translate to hashmark", function () {
+        var locationRouter = new LocationRouter();
+
+        locationRouter.toUrl = jasmine.createSpy().andReturn("myRoute/1/2/3");
+
+
+        locationRouter.onRouteChange("myRoute", 1, 2, 3);
+
+        expect(locationRouter.toUrl.mostRecentCall.args[0]).toEqual(["myRoute", 1, 2, 3]);
+
+        expect(window.location.hash).toBe("#myRoute/1/2/3");
+    });
+
+});
+</code></pre>
+
 <h2 id="liveexamples">Live examples<a href="#top">top</a></h2>
 
 <ul>
@@ -1071,6 +1236,22 @@ olives.registerSocketIO(io);
 </ul>
 
 <h2 id="changelog">Changelog<a href="#top">top</a></h2>
+
+<h3 id="15103sep2013">1.5.1 - 03 SEP 2013<a href="#top">top</a></h3>
+
+<ul>
+<li>Fix a bug in stack preventing a hidden element to be displayed back at its original place</li>
+<li>Fix a bug in LocationRouter that caused the URL not to be updated while navigating</li>
+<li>LocationRouter clears the previous history on start</li>
+</ul>
+
+<h4 id="15004aug2013">1.5.0 - 04 AUG 2013</h4>
+
+<ul>
+<li>Add Stack for stacking up UI elements, ordering, showing and hiding them by taking them out of the DOM. The preferred way for managing what should be displayed on the screen while caring about the performance of your app.</li>
+<li>Add Location Router based on Emily's Router for managing routes based on the URL's hashmark.</li>
+<li>Add "use strict" statements</li>
+</ul>
 
 <h4 id="14210june2013">1.4.2 - 10 JUNE 2013</h4>
 
