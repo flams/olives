@@ -1043,11 +1043,11 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ## Changelog
 
-###1.5.1 - PENDING
+###1.5.1 - 03 SEP 2013
 
 * Fix a bug in stack preventing a hidden element to be displayed back at its original place
 * Fix a bug in LocationRouter that caused the URL not to be updated while navigating
-* LocationRouter clears the previous history
+* LocationRouter clears the previous history on start
 
 ###1.5.0 - 04 AUG 2013
 
