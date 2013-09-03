@@ -80,7 +80,7 @@ function LocationRouter(Router, Tools) {
          * @private
          */
         this.onHashChange  = function onHashChange(event) {
-            var parsedHash = this.parse(event.newUrl.split("#").pop());
+            var parsedHash = this.parse(event.newURL.split("#").pop());
             this.navigate.apply(this, parsedHash);
         };
 
