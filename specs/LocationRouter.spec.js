@@ -111,7 +111,7 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 
 			locationRouter.bindOnRouteChange();
 
-			expect(locationRouter.watch).toHaveBeenCalledWith("route", locationRouter.onRouteChange, locationRouter);
+			expect(locationRouter.watch).toHaveBeenCalledWith(locationRouter.onRouteChange, locationRouter);
 		});
 
 		it("updates the hash in the url on route change", function () {
@@ -121,6 +121,14 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 			expect(locationRouter.toUrl.mostRecentCall.args[0]).toEqual(["hello", "im", "the", "router"]);
 
 			expect(window.location.hash).toBe("#hello/im/the/router");
+		});
+
+		it("clears the previous history on start so the route coming from the url is the initial one", function () {
+			spyOn(locationRouter, "clearHistory");
+
+			locationRouter.start();
+
+			expect(locationRouter.clearHistory).toHaveBeenCalled();
 		});
 
 	});

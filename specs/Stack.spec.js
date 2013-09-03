@@ -220,7 +220,7 @@ require(["Stack"], function (Stack) {
 
 		it("has a dom fragment to attach the hidden elements to", function () {
 			var dom = document.createElement();
-			expect(stack.getHidePlace().nodeName).toBe("#document-fragment");
+			expect(stack.getHidePlace().nodeName).toBe("DIV");
 			expect(stack.setHidePlace()).toBe(false);
 			expect(stack.setHidePlace(dom)).toBe(true);
 			expect(stack.getHidePlace()).toBe(dom);
@@ -242,7 +242,7 @@ require(["Stack"], function (Stack) {
 			expect(hidePlace.appendChild.mostRecentCall.args[0]).toBe(dom1);
 		});
 
-		it("has a function for showing an element that was previously hid", function () {
+		it("has a function for showing an element that was previously hidden", function () {
 			var dom1 = document.createElement("div");
 
 			stack.add(dom1);
@@ -261,9 +261,9 @@ require(["Stack"], function (Stack) {
 		});
 
 		it("shows back the dom element at the place it was before", function () {
-			var dom1 = document.createElement(),
-				dom2 = document.createElement(),
-				dom3 = document.createElement();
+			var dom1 = document.createElement("div"),
+				dom2 = document.createElement("p"),
+				dom3 = document.createElement("ul");
 
 			stack.add(dom1);
 			stack.add(dom2);
@@ -278,9 +278,9 @@ require(["Stack"], function (Stack) {
 		});
 
 		it("can hide all the dom elements at once", function () {
-			var dom1 = document.createElement(),
-				dom2 = document.createElement(),
-				dom3 = document.createElement();
+			var dom1 = document.createElement("div"),
+				dom2 = document.createElement("p"),
+				dom3 = document.createElement("ul");
 
 			stack.add(dom1);
 			stack.add(dom2);
@@ -298,9 +298,9 @@ require(["Stack"], function (Stack) {
 		});
 
 		it("can show all the dom elements at once", function () {
-			var dom1 = document.createElement(),
-				dom2 = document.createElement(),
-				dom3 = document.createElement();
+			var dom1 = document.createElement("div"),
+				dom2 = document.createElement("p"),
+				dom3 = document.createElement("ul");
 
 			stack.add(dom1);
 			stack.add(dom2);
@@ -316,6 +316,40 @@ require(["Stack"], function (Stack) {
 			expect(stack.show.calls[1].args[0]).toBe(dom2);
 			expect(stack.show.calls[2].args[0]).toBe(dom3);
 			expect(stack.show.mostRecentCall.object).toBe(stack);
+		});
+
+		it("can show an element even if the next one is hidden", function () {
+			var dom1 = document.createElement("div"),
+				dom2 = document.createElement("p"),
+				dom3 = document.createElement("ul"),
+				place = document.createElement("div");
+
+			stack.add(dom1);
+			stack.add(dom2);
+			stack.add(dom3);
+
+			stack.place(place);
+
+			stack.hideAll();
+
+			expect(function () {
+				stack.show(dom1);
+			}).not.toThrow();
+
+			expect(place.childNodes[0]).toBe(dom1);
+
+			expect(function () {
+				stack.show(dom3);
+			}).not.toThrow();
+
+			expect(place.childNodes[1]).toBe(dom3);
+
+			expect(function () {
+				stack.show(dom2);
+			}).not.toThrow();
+
+			expect(place.childNodes[1]).toBe(dom2);
+
 		});
 
 	});

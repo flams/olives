@@ -60,6 +60,7 @@ function LocationRouter(Router, Tools) {
          * While navigating, the hashmark itself will also change to reflect the current route state
          */
         this.start = function start() {
+            this.clearHistory();
             var parsedHash = this.parse(window.location.hash);
             this.navigate.apply(this, parsedHash);
             this.bindOnHashChange();
@@ -103,7 +104,7 @@ function LocationRouter(Router, Tools) {
          * @private
          */
         this.bindOnRouteChange = function bindOnRouteChange() {
-            _watchHandle = this.watch("route", this.onRouteChange, this);
+            _watchHandle = this.watch(this.onRouteChange, this);
         };
 
         /**

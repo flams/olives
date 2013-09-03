@@ -760,9 +760,9 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
         it("can reorder the UI elements in a Stack", function () {
             var stack = new Stack();
             var parent = document.createElement("div");
-            var UI1 = document.createElement("span");
-            var UI2 = document.createElement("div");
-            var UI3 = document.createElement("ul");
+            var UI1 = document.createElement("UI1");
+            var UI2 = document.createElement("UI2");
+            var UI3 = document.createElement("UI3");
 
             stack.add(UI1);
             stack.add(UI2);
