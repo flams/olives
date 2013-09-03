@@ -1982,6 +1982,7 @@ function LocationRouter(Router, Tools) {
          * While navigating, the hashmark itself will also change to reflect the current route state
          */
         this.start = function start() {
+            this.clearHistory();
             var parsedHash = this.parse(window.location.hash);
             this.navigate.apply(this, parsedHash);
             this.bindOnHashChange();
