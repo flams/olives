@@ -21,7 +21,49 @@ function LocationRouter(Router, Tools) {
          * The handle on the watch
          * @private
          */
-        var _watchHandle;
+        var _watchHandle,
+
+        /**
+         * The default route to navigate to when nothing is supplied in the url
+         * @private
+         */
+        _defaultRoute = "";
+
+        /**
+         * Navigates to the current hash or to the default route if none is supplied in the url
+         * @private
+         */
+         /*jshint validthis:true*/
+        function doNavigate() {
+            if (window.location.hash) {
+                var parsedHash = this.parse(window.location.hash);
+                this.navigate.apply(this, parsedHash);
+            } else {
+                this.navigate(_defaultRoute);
+            }
+        }
+
+        /**
+         * Set the default route to navigate to when nothing is defined in the url
+         * @param {String} defaultRoute the defaultRoute to navigate to
+         * @returns {Boolean} true if it's not an empty string
+         */
+        this.setDefaultRoute = function setDefaultRoute(defaultRoute) {
+            if (defaultRoute && typeof defaultRoute == "string") {
+                _defaultRoute = defaultRoute;
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        /**
+         * Get the currently set default route
+         * @returns {String} the default route
+         */
+        this.getDefaultRoute = function getDefaultRoute() {
+            return _defaultRoute;
+        };
 
         /**
          * The function that parses the url to determine the route to navigate to.
@@ -59,10 +101,9 @@ function LocationRouter(Router, Tools) {
          * It will also start listening to route changes and hashmark changes to navigate.
          * While navigating, the hashmark itself will also change to reflect the current route state
          */
-        this.start = function start() {
-            this.clearHistory();
-            var parsedHash = this.parse(window.location.hash);
-            this.navigate.apply(this, parsedHash);
+        this.start = function start(defaultRoute) {
+            this.setDefaultRoute(defaultRoute);
+            doNavigate.call(this);
             this.bindOnHashChange();
             this.bindOnRouteChange();
         };
@@ -79,9 +120,8 @@ function LocationRouter(Router, Tools) {
          * Parse the hash and navigate to the corresponding url
          * @private
          */
-        this.onHashChange  = function onHashChange(event) {
-            var parsedHash = this.parse(event.newURL.split("#").pop());
-            this.navigate.apply(this, parsedHash);
+        this.onHashChange  = function onHashChange() {
+            doNavigate.call(this);
         };
 
         /**

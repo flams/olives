@@ -28,6 +28,24 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 			locationRouter = new LocationRouter();
 		});
 
+        it("has a default route to navigate to when none is supplied in the url", function () {
+            expect(locationRouter.getDefaultRoute).toBeInstanceOf(Function);
+            expect(locationRouter.getDefaultRoute()).toBe("");
+
+            expect(locationRouter.setDefaultRoute).toBeInstanceOf(Function);
+            expect(locationRouter.setDefaultRoute()).toBe(false);
+            expect(locationRouter.setDefaultRoute("")).toBe(false);
+            expect(locationRouter.setDefaultRoute("default")).toBe(true);
+
+            expect(locationRouter.getDefaultRoute()).toBe("default");
+        });
+
+        it("can be given the default route on start", function () {
+            locationRouter.start("home");
+
+            expect(locationRouter.getDefaultRoute()).toBe("home");
+        });
+
 		it("has a default function for parsing a hashtag", function () {
 			expect(locationRouter.parse).toBeInstanceOf(Function);
 
@@ -55,6 +73,16 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 			expect(locationRouter.navigate).toHaveBeenCalledWith("hello", "im", "the", "router");
 		});
 
+        it("navigates to the default route if no route is defined in the url", function () {
+            window.location.hash = "";
+
+            spyOn(locationRouter, "navigate");
+
+            locationRouter.start("default");
+
+            expect(locationRouter.navigate).toHaveBeenCalledWith("default");
+        });
+
 		it("listens to hash change on start", function () {
 			spyOn(locationRouter, "bindOnHashChange");
 
@@ -73,14 +101,26 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 
 		it("parses the new hash and navigates to the corresponding route when the hash changes", function () {
 			var array = ["hello", "im", "the", "router"];
+            window.location.hash = "hello/im/the/router";
 			spyOn(locationRouter, "parse").andReturn(array);
 			spyOn(locationRouter, "navigate");
 
-			locationRouter.onHashChange({ newURL: "url#hello/im/the/router"});
+			locationRouter.onHashChange();
 
-			expect(locationRouter.parse).toHaveBeenCalledWith("hello/im/the/router");
+			expect(locationRouter.parse).toHaveBeenCalledWith(window.location.hash);
 			expect(locationRouter.navigate).toHaveBeenCalledWith("hello", "im", "the", "router");
 		});
+
+        it("navigates to the default route if the hash is empty", function () {
+            window.location.hash = "";
+
+            spyOn(locationRouter, "navigate");
+            locationRouter.setDefaultRoute("default");
+
+            locationRouter.onHashChange();
+
+            expect(locationRouter.navigate).toHaveBeenCalledWith("default");
+        });
 
 	});
 
@@ -121,14 +161,6 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 			expect(locationRouter.toUrl.mostRecentCall.args[0]).toEqual(["hello", "im", "the", "router"]);
 
 			expect(window.location.hash).toBe("#hello/im/the/router");
-		});
-
-		it("clears the previous history on start so the route coming from the url is the initial one", function () {
-			spyOn(locationRouter, "clearHistory");
-
-			locationRouter.start();
-
-			expect(locationRouter.clearHistory).toHaveBeenCalled();
 		});
 
 	});
