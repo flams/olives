@@ -1043,6 +1043,12 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ## Changelog
 
+###1.5.3 - 07 SEP 2013
+
+* Fix a bug in locationRouter causing a route to be called two times
+* locationRouter can start at a default route
+* Stack can also transit between two views by showing the new one and hiding the previously displayed
+
 ###1.5.2 - 04 SEP 2013
 
 * Fix a bug in LocationRouter that caused the URL not to be updated while navigating

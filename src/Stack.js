@@ -38,7 +38,9 @@ function Stack() {
 		 * Helps for excluding elements that are not part of it
 		 * @private
 		 */
-		_childNodes = [];
+		_childNodes = [],
+
+		_lastTransit = null;
 
 		/**
 		 * Add a DOM element to the stack. It will be appended.
@@ -279,6 +281,22 @@ function Stack() {
 		this.setHidePlace = function setHidePlace(hidePlace) {
 			if (hidePlace instanceof HTMLElement) {
 				_hidePlace = hidePlace;
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		this.getLastTransit = function getLastTransit() {
+			return _lastTransit;
+		};
+
+		this.transit = function transit(dom) {
+			if (_lastTransit) {
+				this.hide(_lastTransit);
+			}
+			if (this.show(dom)) {
+				_lastTransit = dom;
 				return true;
 			} else {
 				return false;
