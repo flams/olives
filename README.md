@@ -1078,7 +1078,7 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ## Changelog
 
-###1.5.3 - 07 SEP 2013
+###1.6.0 - 07 SEP 2013
 
 * Fix a bug in locationRouter causing a route to be called two times
 * locationRouter can start at a default route
