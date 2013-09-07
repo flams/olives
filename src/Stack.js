@@ -287,10 +287,20 @@ function Stack() {
 			}
 		};
 
+		/**
+		 * Get the last dom element that the stack transitted to
+		 * @returns {HTMLElement} the last dom element
+		 */
 		this.getLastTransit = function getLastTransit() {
 			return _lastTransit;
 		};
 
+		/**
+		 * Transit between views, will show the new one and hide the previous
+		 * element that the stack transitted to, if any.
+		 * @param {HTMLElement} dom the element to transit to
+		 * @returns {Boolean} false if the element can't be shown
+		 */
 		this.transit = function transit(dom) {
 			if (_lastTransit) {
 				this.hide(_lastTransit);
