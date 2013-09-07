@@ -837,6 +837,19 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
             expect(spy).toHaveBeenCalledWith("66");
         });
 
+        it("falls back to the route provided by default if no route is specified in the URL", function () {
+        	var locationRouter = new LocationRouter();
+        	var spy = jasmine.createSpy();
+
+            locationRouter.set("default", spy);
+
+        	window.location.hash = "";
+
+        	locationRouter.start("default");
+
+        	expect(spy).toHaveBeenCalled();
+        });
+
         it("updates the hashmark when navigating to routes", function () {
             var locationRouter = new LocationRouter();
 
