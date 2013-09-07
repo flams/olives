@@ -820,6 +820,29 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
             expect(parent.childNodes[1]).toBe(UI2);
             expect(parent.childNodes[2]).toBe(UI3);
         });
+
+        it("can transit between views", function () {
+            var stack = new Stack();
+            var parent = document.createElement("div");
+        	var UI1 = document.createElement("span");
+            var UI2 = document.createElement("div");
+            var UI3 = document.createElement("ul");
+
+            stack.add(UI1);
+            stack.add(UI2);
+
+            stack.place(parent);
+
+            stack.hideAll();
+
+            stack.transit(UI1);
+
+            expect(parent.childNodes[0]).toBe(UI1);
+
+            stack.transit(UI2);
+
+            expect(parent.childNodes[0]).toBe(UI2);
+        });
     });
 
     describe("LocationRouter is a router that watches hashmark changes and updates it when the route changes", function () {
