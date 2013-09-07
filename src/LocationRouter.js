@@ -27,7 +27,13 @@ function LocationRouter(Router, Tools) {
          * The default route to navigate to when nothing is supplied in the url
          * @private
          */
-        _defaultRoute = "";
+        _defaultRoute = "",
+
+        /**
+         * The last route that was navigated to
+         * @private
+         */
+        _lastRoute = window.location.hash;
 
         /**
          * Navigates to the current hash or to the default route if none is supplied in the url
@@ -121,7 +127,9 @@ function LocationRouter(Router, Tools) {
          * @private
          */
         this.onHashChange  = function onHashChange() {
-            doNavigate.call(this);
+            if (window.location.hash != _lastRoute) {
+                doNavigate.call(this);
+            }
         };
 
         /**
@@ -154,6 +162,11 @@ function LocationRouter(Router, Tools) {
          */
         this.onRouteChange = function onRouteChange() {
             window.location.hash = this.toUrl(Tools.toArray(arguments));
+            _lastRoute = window.location.hash;
+        };
+
+        this.getLastRoute = function getLastRoute() {
+            return _lastRoute;
         };
 
     }

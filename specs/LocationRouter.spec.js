@@ -122,6 +122,15 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
             expect(locationRouter.navigate).toHaveBeenCalledWith("default");
         });
 
+        it("doesn't navigate on hash change when the route in the url has been set by a route change event", function () {
+            locationRouter.onRouteChange("my", "route");
+            spyOn(locationRouter, "navigate");
+
+            locationRouter.onHashChange();
+
+            expect(locationRouter.navigate).not.toHaveBeenCalled();
+        });
+
 	});
 
 	describe("LocationRouter updates the URL when navigating", function () {
@@ -162,6 +171,18 @@ require(["LocationRouter", "Router"], function (LocationRouter, Router) {
 
 			expect(window.location.hash).toBe("#hello/im/the/router");
 		});
+
+        it("remembers the last route that has been navigated to", function () {
+            window.location.hash = "my/route";
+
+            locationRouter = new LocationRouter();
+
+            expect(locationRouter.getLastRoute()).toBe(window.location.hash);
+
+            locationRouter.onRouteChange("my", "route");
+
+            expect(locationRouter.getLastRoute()).toBe(window.location.hash);
+        });
 
 	});
 
