@@ -352,6 +352,42 @@ require(["Stack"], function (Stack) {
 
 		});
 
+		it("can transit between the new view and the previously displayed", function() {
+			var dom1 = document.createElement("div"),
+				dom2 = document.createElement("div"),
+				dom3 = document.createElement("div"),
+				place = document.createElement("div");
+
+			stack.add(dom1);
+			stack.add(dom2);
+			stack.add(dom3);
+
+			stack.place(place);
+
+			stack.hide(dom2);
+			stack.hide(dom3);
+
+			expect(stack.getLastTransit()).toBe(null);
+
+			stack.transit(dom2);
+
+			expect(stack.getLastTransit()).toBe(dom2);
+
+			expect(place.childNodes[0]).toBe(dom1);
+			expect(place.childNodes[1]).toBe(dom2);
+
+			stack.transit(dom3);
+
+			expect(stack.getLastTransit()).toBe(dom3);
+
+			expect(place.childNodes[0]).toBe(dom1);
+			expect(place.childNodes[1]).toBe(dom3);
+
+			expect(stack.transit(document.createElement("div"))).toBe(false);
+
+			expect(stack.getLastTransit()).toBe(dom3);
+		});
+
 	});
 
 });

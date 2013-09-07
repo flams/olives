@@ -38,7 +38,9 @@ function Stack() {
 		 * Helps for excluding elements that are not part of it
 		 * @private
 		 */
-		_childNodes = [];
+		_childNodes = [],
+
+		_lastTransit = null;
 
 		/**
 		 * Add a DOM element to the stack. It will be appended.
@@ -279,6 +281,32 @@ function Stack() {
 		this.setHidePlace = function setHidePlace(hidePlace) {
 			if (hidePlace instanceof HTMLElement) {
 				_hidePlace = hidePlace;
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		/**
+		 * Get the last dom element that the stack transitted to
+		 * @returns {HTMLElement} the last dom element
+		 */
+		this.getLastTransit = function getLastTransit() {
+			return _lastTransit;
+		};
+
+		/**
+		 * Transit between views, will show the new one and hide the previous
+		 * element that the stack transitted to, if any.
+		 * @param {HTMLElement} dom the element to transit to
+		 * @returns {Boolean} false if the element can't be shown
+		 */
+		this.transit = function transit(dom) {
+			if (_lastTransit) {
+				this.hide(_lastTransit);
+			}
+			if (this.show(dom)) {
+				_lastTransit = dom;
 				return true;
 			} else {
 				return false;
