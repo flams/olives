@@ -967,6 +967,29 @@ describe("Stack for stacking UI element, ordering and hiding/showing them", func
         expect(parent.childNodes[1]).toBe(UI2);
         expect(parent.childNodes[2]).toBe(UI3);
     });
+
+    it("can transit between views", function () {
+        var stack = new Stack();
+        var parent = document.createElement("div");
+    	var UI1 = document.createElement("span");
+        var UI2 = document.createElement("div");
+        var UI3 = document.createElement("ul");
+
+        stack.add(UI1);
+        stack.add(UI2);
+
+        stack.place(parent);
+
+        stack.hideAll();
+
+        stack.transit(UI1);
+
+        expect(parent.childNodes[0]).toBe(UI1);
+
+        stack.transit(UI2);
+
+        expect(parent.childNodes[0]).toBe(UI2);
+    });
 });
 ```
 
@@ -986,6 +1009,19 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
         locationRouter.start();
 
         expect(spy).toHaveBeenCalledWith("66");
+    });
+
+    it("falls back to the route provided by default if no route is specified in the URL", function () {
+        var locationRouter = new LocationRouter();
+        var spy = jasmine.createSpy();
+
+        locationRouter.set("default", spy);
+
+        window.location.hash = "";
+
+        locationRouter.start("default");
+
+        expect(spy).toHaveBeenCalled();
     });
 
     it("updates the hashmark when navigating to routes", function () {
@@ -1039,7 +1075,6 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 * [The todo application](http://flams.github.com/olives/todo/index.html) Available on [TodoMVC](http://todomvc.com)
 * [Ideafy by Taiaut](http://www.taiaut.com/taiaut.com/index.php)
-* [Suggestions (Unavailable ATM)]()
 
 ## Changelog
 
@@ -1049,7 +1084,7 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 * locationRouter can start at a default route
 * Stack can also transit between two views by showing the new one and hiding the previously displayed
 
-###1.5.2 - 04 SEP 2013
+####1.5.2 - 04 SEP 2013
 
 * Fix a bug in LocationRouter that caused the URL not to be updated while navigating
 

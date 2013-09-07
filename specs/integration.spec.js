@@ -824,7 +824,7 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
         it("can transit between views", function () {
             var stack = new Stack();
             var parent = document.createElement("div");
-        	var UI1 = document.createElement("span");
+            var UI1 = document.createElement("span");
             var UI2 = document.createElement("div");
             var UI3 = document.createElement("ul");
 
@@ -861,16 +861,16 @@ function(OObject, Plugins, EventPlugin, BindPlugin, Store, DomUtils, PlacePlugin
         });
 
         it("falls back to the route provided by default if no route is specified in the URL", function () {
-        	var locationRouter = new LocationRouter();
-        	var spy = jasmine.createSpy();
+            var locationRouter = new LocationRouter();
+            var spy = jasmine.createSpy();
 
             locationRouter.set("default", spy);
 
-        	window.location.hash = "";
+            window.location.hash = "";
 
-        	locationRouter.start("default");
+            locationRouter.start("default");
 
-        	expect(spy).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalled();
         });
 
         it("updates the hashmark when navigating to routes", function () {
