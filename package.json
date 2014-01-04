@@ -19,7 +19,7 @@
  ],
  "dependencies": {
   "requirejs": ">=2.1.5",
-  "emily": ">=1.8.0",
+  "emily": ">=2.0.0",
   "socket.io": ">=0.9.6"
   },
  "keywords": ["framework", "web", "realtime", "UI", "MVC", "scalable", "AMD/commonJS", "data-binding", "Router", "node.js"],
