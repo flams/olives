@@ -72,7 +72,7 @@ module.exports = function EventPluginConstructor($parent, $isMobile) {
      */
     this.delegate = function delegate(node, selector, name, listener, useCapture) {
         this.addEventListener(node, name, function(event){
-            if (Utils.matches(node, selector, event.target)) {
+            if (DomUtils.matches(node, selector, event.target)) {
                 _parent[listener].call(_parent, event, node);
             }
         }, !!useCapture);

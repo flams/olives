@@ -3,7 +3,7 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-var EventPlugin = require("../src/EventPlugin");
+var EventPlugin = require("../src/Event.plugin");
 
 describe("EventPluginInit", function () {
 

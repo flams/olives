@@ -219,7 +219,7 @@ describe("Stack Hide and Show", function () {
     });
 
     it("has a dom fragment to attach the hidden elements to", function () {
-        var dom = document.createElement();
+        var dom = document.createElement("div");
         expect(stack.getHidePlace().nodeName).toBe("DIV");
         expect(stack.setHidePlace()).toBe(false);
         expect(stack.setHidePlace(dom)).toBe(true);

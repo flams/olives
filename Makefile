@@ -5,7 +5,7 @@
 #
 # Targets:
 #
-# make tests: runs the JsTestDriver tests
+# make test: launch tests and watch for changes
 #
 # make docs: generates the documentation into docs/latest
 # make build: generates Olives.js and Olives.min.js as they appear in the release
@@ -39,10 +39,9 @@ docs: clean-docs
 		-d=docs/latest/ \
 		-t=tools/JsDoc/templates/jsdoc
 
-tests: temp.js
-	java -jar $(JsTestDriver) \
-		--tests all \
-		--reset
+test:
+	watchify -r ./specs/*.js -i olives -o tests.js
+	karma start karma.config.js
 
 jshint:
 	jshint src/*.js specs/*.js

@@ -4,7 +4,7 @@
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
 var LocationRouter = require("../src/LocationRouter"),
-    Router = require("../src/Router");
+    Router = require("emily").Router;
 
 describe("LocationRouter initialisation", function () {
 

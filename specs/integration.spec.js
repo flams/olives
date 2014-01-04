@@ -6,7 +6,7 @@
 var OObject = require("../src/OObject"),
     Plugins = require("../src/Plugins"),
     EventPlugin = require("../src/Event.plugin"),
-    BindPlugin = require("../Bind.plugin"),
+    BindPlugin = require("../src/Bind.plugin"),
     Store = require("emily").Store,
     DomUtils = require("../src/DomUtils"),
     PlacePlugin = require("../src/Place.plugin"),

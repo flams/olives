@@ -5,7 +5,7 @@
  */
 
 var SocketIOTransport = require("../src/SocketIOTransport"),
-    Observable = require("../Observable");
+    Observable = require("emily").Observable;
 
 var socket = null;
 
