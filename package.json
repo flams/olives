@@ -20,7 +20,7 @@
     "Olivier Wietrich <olivier.wietrich@gmail.com"
   ],
   "dependencies": {
-    "emily": ">=2.0.0",
+    "emily": ">=2.0.0-beta",
     "socket.io": ">=0.9.6"
   },
   "keywords": [
