@@ -3,12 +3,10 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-var Store = require("emily").Store,
+var olives = require("./src/olives"),
 	isConnected = false;
 
-var handlers = new Store({});
-
-exports.registerSocketIO = function (io) {
+olives.registerSocketIO = function (io, handlers) {
 
 	if (isConnected) {
 		return false;
@@ -56,6 +54,6 @@ exports.registerSocketIO = function (io) {
 	}
 };
 
-exports.handlers = handlers;
+module.exports = olives;
 
 

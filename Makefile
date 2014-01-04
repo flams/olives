@@ -8,7 +8,7 @@
 # make test: launch tests and watch for changes
 #
 # make docs: generates the documentation into docs/latest
-# make build: generates Olives.js and Olives.min.js as they appear in the release
+# make build: generates olives.js and olives.min.js as they appear in the release
 #
 # make all: tests + docs + build
 #
@@ -19,18 +19,17 @@
 ################################################################################################
 
 SRC := $(wildcard src/*.js)
-JsTestDriver = $(shell find tools -name "JsTestDriver-*.jar" -type f)
 
-all: tests docs build
+all: test docs build
+
+clean-temp:
+	rm -f temp.js
 
 clean-docs:
 	-rm -rf docs/latest/
 
 clean-build:
 	-rm -rf build/
-
-clean-temp:
-	rm -f temp.js
 
 docs: clean-docs
 	java -jar tools/JsDoc/jsrun.jar \
@@ -40,15 +39,29 @@ docs: clean-docs
 		-t=tools/JsDoc/templates/jsdoc
 
 test:
-	watchify -r ./specs/*.js -i olives -o tests.js
+	watchify -r ./specs/*.js -i olives -o tests.js &
 	karma start karma.config.js
 
 jshint:
 	jshint src/*.js specs/*.js
 
-build: clean-build Olives.js
+temp.js:
+	browserify -r ./src/olives.js:olives -u emily -o temp.js
+
+olives.js: temp.js
+	mkdir -p build
+	cat LICENSE-MINI temp.js > build/$@
+
+olives.min.js:
+	java -jar tools/GoogleCompiler/compiler.jar \
+		--js build/olives.js \
+		--js_output_file build/olives.min.js \
+		--create_source_map build/olives-map
+
+clean: clean-build clean-docs clean-temp
+
+build: clean-build clean-temp olives.js olives.min.js
 	cp LICENSE build/
-	cp -rf src/ build/src/
 
 release: all
 ifndef VERSION
@@ -79,20 +92,6 @@ endif
 	git tag $(VERSION)
 
 	git push --tags
-
-temp.js: clean-temp
-	r.js -o tools/build.js
-
-Olives.js: temp.js
-	mkdir -p build
-	cat LICENSE-MINI temp.js > build/$@
-
-	java -jar tools/GoogleCompiler/compiler.jar \
-		--js build/Olives.js \
-		--js_output_file build/Olives.min.js \
-		--create_source_map build/Olives-map
-
-clean: clean-build clean-docs clean-temp
 
 gh-pages:
 ifndef VERSION
