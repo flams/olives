@@ -7,7 +7,7 @@
 
 var Tools = require("emily").Tools;
 
-return {
+module.exports = {
     /**
      * Returns a NodeList including the given dom node,
      * its childNodes and its siblingNodes
@@ -102,5 +102,4 @@ return {
     matches : function matches(parent, selector, node){
         return Tools.toArray(this.getNodes(parent, selector)).indexOf(node) > -1;
     }
-
 };
