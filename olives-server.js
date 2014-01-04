@@ -3,9 +3,10 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-var requirejs = require("requirejs"),
-	emily = require("emily"),
+var Store = require("emily").Store,
 	isConnected = false;
+
+var handlers = new Store({});
 
 exports.registerSocketIO = function (io) {
 
@@ -45,20 +46,16 @@ exports.registerSocketIO = function (io) {
 			};
 
 			// for each handler, described in Emily as they can be used from node.js as well
-			emily.handlers.loop(connectHandler);
+			handlers.loop(connectHandler);
 			// Also connect on new handlers
-			emily.handlers.watch("added", connectHandler);
+			handlers.watch("added", connectHandler);
 
 		});
 
 		isConnected = true;
 	}
-
-
 };
 
-exports.handlers = emily.handlers;
-
-exports.requirejs = requirejs;
+exports.handlers = handlers;
 
 
