@@ -63,7 +63,7 @@ clean: clean-build clean-docs clean-temp
 build: clean-build clean-temp olives.js olives.min.js
 	cp LICENSE build/
 
-release: all
+release: docs build
 ifndef VERSION
 	@echo "You must give a VERSION number to make release"
 	@exit 2
