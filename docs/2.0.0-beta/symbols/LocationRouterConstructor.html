@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - OObject</title>
+		<title>JsDoc Reference - LocationRouterConstructor</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -191,23 +191,11 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/BindPlugin.html">BindPlugin</a></li>
+	<li><a href="../symbols/LocalStoreConstructor.html">LocalStoreConstructor</a></li>
 	
-	<li><a href="../symbols/EventPlugin.html">EventPlugin</a></li>
+	<li><a href="../symbols/LocationRouterConstructor.html">LocationRouterConstructor</a></li>
 	
-	<li><a href="../symbols/LocalStore.html">LocalStore</a></li>
-	
-	<li><a href="../symbols/LocationRouter.html">LocationRouter</a></li>
-	
-	<li><a href="../symbols/OObject.html">OObject</a></li>
-	
-	<li><a href="../symbols/PlacePlugin.html">PlacePlugin</a></li>
-	
-	<li><a href="../symbols/Plugins.html">Plugins</a></li>
-	
-	<li><a href="../symbols/SocketIOTransport.html">SocketIOTransport</a></li>
-	
-	<li><a href="../symbols/Stack.html">Stack</a></li>
+	<li><a href="../symbols/module.exports.html">module.exports</a></li>
 	
 </ul>
 <hr />
@@ -218,7 +206,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class OObject
+				Class LocationRouterConstructor
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -226,17 +214,17 @@ ul.inheritsList
 				
 				
 			
-				OObject is a container for dom elements. It will also bind
-the dom to additional plugins like Data binding
+				A locationRouter is a router which navigates to the route defined in the URL and updates this URL
+while navigating. It's a subtype of Emily's Router
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_OObject.js.html">OObject.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_LocationRouter.js.html">LocationRouter.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class OObject.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class LocationRouterConstructor.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -249,7 +237,7 @@ the dom to additional plugins like Data binding
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#constructor">OObject</a></b>(StateMachine, Store, Plugins, DomUtils, Tools)
+								<b><a href="../symbols/LocationRouterConstructor.html#constructor">LocationRouterConstructor</a></b>()
 							</div>
 							<div class="description"></div>
 						</td>
@@ -260,71 +248,12 @@ the dom to additional plugins like Data binding
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class OObject.">
-					<caption>Field Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#dom">dom</a></b>
-								</div>
-								<div class="description">This will hold the dom nodes built from the template.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#model">model</a></b>
-								</div>
-								<div class="description">The UI's Store
-It has set/get/del/has/watch/unwatch methods</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#plugins">plugins</a></b>
-								</div>
-								<div class="description">The module that will manage the plugins for this UI</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/OObject.html#template">template</a></b>
-								</div>
-								<div class="description">Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
-			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class OObject.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class LocationRouterConstructor.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -337,37 +266,55 @@ It has set/get/del/has/watch/unwatch methods</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#alive">alive</a></b>(node)
+								<div class="fixedFont"><b><a href="../symbols/LocationRouterConstructor.html#destroy">destroy</a></b>()
 								</div>
-								<div class="description">Transforms dom nodes into a UI.</div>
+								<div class="description">Remove the events handler for cleaning.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#place">place</a></b>(node, beforeNode)
+								<div class="fixedFont"><b><a href="../symbols/LocationRouterConstructor.html#getDefaultRoute">getDefaultRoute</a></b>()
 								</div>
-								<div class="description">Place the UI in a given dom node</div>
+								<div class="description">Get the currently set default route</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#render">render</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/LocationRouterConstructor.html#parse">parse</a></b>(hash)
 								</div>
-								<div class="description">Renders the template to dom nodes and applies the plugins on it
-It requires the template to be set first</div>
+								<div class="description">The function that parses the url to determine the route to navigate to.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/OObject.html#setTemplateFromDom">setTemplateFromDom</a></b>(dom)
+								<div class="fixedFont"><b><a href="../symbols/LocationRouterConstructor.html#setDefaultRoute">setDefaultRoute</a></b>(defaultRoute)
 								</div>
-								<div class="description">Set the UI's template from a DOM element</div>
+								<div class="description">Set the default route to navigate to when nothing is defined in the url</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/LocationRouterConstructor.html#start">start</a></b>(defaultRoute)
+								</div>
+								<div class="description">When all the routes and handlers have been defined, start the location router
+so it parses the URL and navigates to the corresponding route.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/LocationRouterConstructor.html#toUrl">toUrl</a></b>(args)
+								</div>
+								<div class="description">The function that converts, or serialises the route and its arguments to a valid URL.</div>
 							</td>
 						</tr>
 					
@@ -388,7 +335,7 @@ It requires the template to be set first</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>OObject</b>(StateMachine, Store, Plugins, DomUtils, Tools)
+						<b>LocationRouterConstructor</b>()
 				</div>
 				
 				<div class="description">
@@ -400,52 +347,10 @@ It requires the template to be set first</div>
 				
 				
 					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								 <b>StateMachine</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Store</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Plugins</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>DomUtils</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>Tools</b>
-								
-							</dt>
-								<dd></dd>
-						
-						</dl>
 					
 					
 					
 					
-					
-					
-						<dl class="detailList">
-						<dt class="heading">Requires:</dt>
-						
-							<dd>StateMachine</dd>
-						
-						</dl>
 					
 					
 
@@ -454,114 +359,6 @@ It requires the template to be set first</div>
 
 <!-- ============================== field details ========================== -->		
 			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="dom"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>dom</b>
-					
-					</div>
-					<div class="description">
-						This will hold the dom nodes built from the template.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="model"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>model</b>
-					
-					</div>
-					<div class="description">
-						The UI's Store
-It has set/get/del/has/watch/unwatch methods
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-							<dd>Emily's doc for more info on how it works.</dd>
-							
-							</dl>
-						
-						
-
-					<hr />
-				
-					<a name="plugins"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>plugins</b>
-					
-					</div>
-					<div class="description">
-						The module that will manage the plugins for this UI
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-							<dd>Olives/Plugins' doc for more info on how it works.</dd>
-							
-							</dl>
-						
-						
-
-					<hr />
-				
-					<a name="template"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{string or HTMLElement|SVGElement}</span>
-					<b>template</b>
-					
-					</div>
-					<div class="description">
-						Describes the template, can either be like "&lt;p&gt;&lt;/p&gt;" or HTMLElements
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
-			
 
 <!-- ============================== method details ========================= -->		
 			
@@ -569,17 +366,74 @@ It has set/get/del/has/watch/unwatch methods
 					Method Detail
 				</div>
 				
-					<a name="alive"> </a>
+					<a name="destroy"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>alive</b>(node)
+					<b>destroy</b>()
 					
 					</div>
 					<div class="description">
-						Transforms dom nodes into a UI.
-It basically does a setTemplateFromDOM, then a place
-It's a helper function
+						Remove the events handler for cleaning.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getDefaultRoute"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getDefaultRoute</b>()
+					
+					</div>
+					<div class="description">
+						Get the currently set default route
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> the default route</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="parse"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>parse</b>(hash)
+					
+					</div>
+					<div class="description">
+						The function that parses the url to determine the route to navigate to.
+It has a default behavior explained below, but can be overriden as long as
+it has the same contract.
 						
 						
 					</div>
@@ -591,10 +445,10 @@ It's a helper function
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>node</b>
+									<span class="light fixedFont">{String}</span> <b>hash</b>
 									
 								</dt>
-								<dd>the dom to transform to a UI</dd>
+								<dd>the hash coming from window.location.has</dd>
 							
 							</dl>
 						
@@ -605,7 +459,11 @@ It's a helper function
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if dom is an HTMLElement|SVGElement</dd>
+								<dd><span class="light fixedFont">{Array}</span> has to return an array with the list of arguments to call
+   navigate with. The first item of the array must be the name of the route.
+
+Example: #album/holiday/2013
+     will navigate to the route "album" and give two arguments "holiday" and "2013"</dd>
 							
 							</dl>
 						
@@ -614,15 +472,15 @@ It's a helper function
 
 					<hr />
 				
-					<a name="place"> </a>
+					<a name="setDefaultRoute"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>place</b>(node, beforeNode)
+					<span class="light">{Boolean}</span>
+					<b>setDefaultRoute</b>(defaultRoute)
 					
 					</div>
 					<div class="description">
-						Place the UI in a given dom node
+						Set the default route to navigate to when nothing is defined in the url
 						
 						
 					</div>
@@ -634,78 +492,10 @@ It's a helper function
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>node</b>
+									<span class="light fixedFont">{String}</span> <b>defaultRoute</b>
 									
 								</dt>
-								<dd>the node on which to append the UI</dd>
-							
-								<dt>
-									<b>beforeNode</b>
-									
-								</dt>
-								<dd>the dom before which to append the UI</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="render"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>render</b>()
-					
-					</div>
-					<div class="description">
-						Renders the template to dom nodes and applies the plugins on it
-It requires the template to be set first
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setTemplateFromDom"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setTemplateFromDom</b>(dom)
-					
-					</div>
-					<div class="description">
-						Set the UI's template from a DOM element
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{HTMLElement|SVGElement}</span> <b>dom</b>
-									
-								</dt>
-								<dd>the dom element that'll become the template of the UI</dd>
+								<dd>the defaultRoute to navigate to</dd>
 							
 							</dl>
 						
@@ -716,7 +506,94 @@ It requires the template to be set first
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>true if dom is an HTMLElement|SVGElement</dd>
+								<dd><span class="light fixedFont">{Boolean}</span> true if it's not an empty string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="start"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>start</b>(defaultRoute)
+					
+					</div>
+					<div class="description">
+						When all the routes and handlers have been defined, start the location router
+so it parses the URL and navigates to the corresponding route.
+It will also start listening to route changes and hashmark changes to navigate.
+While navigating, the hashmark itself will also change to reflect the current route state
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>defaultRoute</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="toUrl"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>toUrl</b>(args)
+					
+					</div>
+					<div class="description">
+						The function that converts, or serialises the route and its arguments to a valid URL.
+It has a default behavior below, but can be overriden as long as it has the same contract.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>args</b>
+									
+								</dt>
+								<dd>the list of arguments to serialize</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> the serialized arguments to add to the url hashmark
+
+Example:
+     ["album", "holiday", "2013"];
+     will give "album/holiday/2013"</dd>
 							
 							</dl>
 						
@@ -737,7 +614,7 @@ It requires the template to be set first
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sat Sep 07 2013 17:44:35 GMT+0100 (BST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Feb 05 2014 00:25:22 GMT-0500 (EST)
 		</div>
 	</body>
 </html>
