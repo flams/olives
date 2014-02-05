@@ -1,10 +1,12 @@
 /**
  * Olives http://flams.github.com/olives
  * The MIT License (MIT)
- * Copyright (c) 2012-2013 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
+ * Copyright (c) 2012-2014 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
+"use strict";
 
-define(["Store", "Tools"],
+var Store = require("emily").Store,
+    Tools = require("emily").Tools;
 
 /**
  * @class
@@ -13,92 +15,84 @@ define(["Store", "Tools"],
  * and it gets restored.
  * Only valid JSON data will be stored
  */
-function LocalStore(Store, Tools) {
+function LocalStoreConstructor() {
 
-	"use strict";
+    /**
+     * The name of the property in which to store the data
+     * @private
+     */
+    var _name = null,
 
-	function LocalStoreConstructor() {
+    /**
+     * The localStorage
+     * @private
+     */
+    _localStorage = localStorage,
 
-		/**
-		 * The name of the property in which to store the data
-		 * @private
-		 */
-		var _name = null,
+    /**
+     * Saves the current values in localStorage
+     * @private
+     */
+    setLocalStorage = function setLocalStorage() {
+        _localStorage.setItem(_name, this.toJSON());
+    };
 
-		/**
-		 * The localStorage
-		 * @private
-		 */
-		_localStorage = localStorage,
+    /**
+     * Override default localStorage with a new one
+     * @param local$torage the new localStorage
+     * @returns {Boolean} true if success
+     * @private
+     */
+    this.setLocalStorage = function setLocalStorage(local$torage) {
+        if (local$torage && local$torage.setItem instanceof Function) {
+            _localStorage = local$torage;
+            return true;
+        } else {
+            return false;
+        }
+    };
 
-		/**
-		 * Saves the current values in localStorage
-		 * @private
-		 */
-		setLocalStorage = function setLocalStorage() {
-			_localStorage.setItem(_name, this.toJSON());
-		};
+    /**
+     * Get the current localStorage
+     * @returns localStorage
+     * @private
+     */
+    this.getLocalStorage = function getLocalStorage() {
+        return _localStorage;
+    };
 
-		/**
-		 * Override default localStorage with a new one
-		 * @param local$torage the new localStorage
-		 * @returns {Boolean} true if success
-		 * @private
-		 */
-		this.setLocalStorage = function setLocalStorage(local$torage) {
-			if (local$torage && local$torage.setItem instanceof Function) {
-				_localStorage = local$torage;
-				return true;
-			} else {
-				return false;
-			}
-		};
+    /**
+     * Synchronize the store with localStorage
+     * @param {String} name the name in which to save the data
+     * @returns {Boolean} true if the param is a string
+     */
+    this.sync = function sync(name) {
+        var json;
 
-		/**
-		 * Get the current localStorage
-		 * @returns localStorage
-		 * @private
-		 */
-		this.getLocalStorage = function getLocalStorage() {
-			return _localStorage;
-		};
+        if (typeof name == "string") {
+            _name = name;
+            json = JSON.parse(_localStorage.getItem(name));
 
-		/**
-		 * Synchronize the store with localStorage
-		 * @param {String} name the name in which to save the data
-		 * @returns {Boolean} true if the param is a string
-		 */
-		this.sync = function sync(name) {
-			var json;
+            Tools.loop(json, function (value, idx) {
+                if (!this.has(idx)) {
+                    this.set(idx, value);
+                }
+            }, this);
 
-			if (typeof name == "string") {
-				_name = name;
-				json = JSON.parse(_localStorage.getItem(name));
+            setLocalStorage.call(this);
 
-				Tools.loop(json, function (value, idx) {
-					if (!this.has(idx)) {
-						this.set(idx, value);
-					}
-				}, this);
+            // Watch for modifications to update localStorage
+            this.watch("added", setLocalStorage, this);
+            this.watch("updated", setLocalStorage, this);
+            this.watch("deleted", setLocalStorage, this);
+            return true;
+        } else {
+            return false;
+        }
+    };
+}
 
-				setLocalStorage.call(this);
-
-				// Watch for modifications to update localStorage
-				this.watch("added", setLocalStorage, this);
-				this.watch("updated", setLocalStorage, this);
-				this.watch("deleted", setLocalStorage, this);
-				return true;
-			} else {
-				return false;
-			}
-		};
-
-
-	}
-
-	return function LocalStoreFactory(init) {
-		LocalStoreConstructor.prototype = new Store(init);
-		return new LocalStoreConstructor();
-	};
-
-});
+module.exports = function LocalStoreFactory(init) {
+    LocalStoreConstructor.prototype = new Store(init);
+    return new LocalStoreConstructor();
+};
