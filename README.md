@@ -105,24 +105,25 @@ widget.alive( document.querySelector('.widget') );
 
 ##How do I install it?
 
-Olives requires an AMD/commonJS compatible loader. I use requirejs: http://requirejs.org/
+Olives requires emily: https://github.com/flams/emily
 
 ```html
-	<script src="./require.js"></script>
-	<script src="./Emily.js"></script>
-	<script src="./Olives.js"></script>
+	<script src="emily.js"></script>
+	<script src="olives.js"></script>
 ```
 
 ```js
-require(["Module"], function (Module) {
-	// Do what you want with Module
-});
+var olives = require("olives");
+
+var OObject = olives.OObject;
+var LocalStore = olives.LocalStore;
+
+...
 ```
 
 If your application is based on node and you want the realtime part of Olives, on the server side, do:
 
 ```bash
-npm install requirejs
 npm install olives
 ```
 
@@ -139,6 +140,8 @@ olives.registerSocketIO(io);
 
 ```js
 describe("OObject is a container for DOM elements and a starting point for adding it behaviour", function () {
+
+	var OObject = olives.OObject;
 
     it("can accept DOM elements from an HTML template", function () {
         var oobject = new OObject();
@@ -310,6 +313,8 @@ describe("OObject is a container for DOM elements and a starting point for addin
 ```js
 describe("plugins can add behaviour to your HTML", function () {
 
+	var Plugins = olives.Plugins;
+
     it("has a function for attaching behaviour to the template", function () {
         var plugins = new Plugins(),
             dom = document.createElement("div"),
@@ -414,6 +419,8 @@ describe("plugins can add behaviour to your HTML", function () {
 ```js
 describe("Event plugin can bind event listeners to the DOM", function () {
 
+	var EventPlugin = olives["Event.plugin"];
+
     it("has a method for adding an event listener to a dom element", function () {
         var oobject = new OObject(),
             // The event plugin must be given an object
@@ -487,6 +494,8 @@ describe("Event plugin can bind event listeners to the DOM", function () {
 
 ```js
 describe("Bind plugin can bind an SVG/HTML template with a Store for two-way binding", function () {
+
+	var BindPlugin = olives["Bind.plugin"];
 
     it("sets the property of a DOM element to the value set in the store, for a given key", function () {
         var oobject = new OObject(),
@@ -634,6 +643,8 @@ describe("Bind plugin can bind an SVG/HTML template with a Store for two-way bin
 ```js
 describe("DomUtils is a collection of tools for manipulating the dom", function () {
 
+	var DomUtils = olives.DomUtils;
+
     it("has a function for getting an element's dataset even if the browser doesn't support the property", function () {
 
         var dom = document.createElement("div");
@@ -736,6 +747,8 @@ describe("DomUtils is a collection of tools for manipulating the dom", function 
 ```js
 describe("Place.plugin places OObject in the DOM", function () {
 
+	var PlacePlugin = olives["Place.plugin"];
+
     it("has a function for adding adding an oobject", function () {
         var parentUI = new OObject(),
             childUI = new OObject(),
@@ -789,6 +802,8 @@ describe("Place.plugin places OObject in the DOM", function () {
 ```js
 describe("LocalStore is an Emily store which can be synchronized with localStorage", function () {
 
+	var LocalStore = olives.LocalStore;
+
     it("can be initialised like an Emily Store", function () {
         var store = new LocalStore({
             name: "Olives",
@@ -823,6 +838,8 @@ describe("LocalStore is an Emily store which can be synchronized with localStora
 
 ```js
 describe("SocketIOTransport wraps socket.io to issue requests and listen to Olives channels from a node.js server", function () {
+
+	var SocketIOTransport = olives.SocketIOTransport;
 
     xit("[SERVER SIDE] has a function for adding an Olives handler", function () {
         var olives = require("olives");
@@ -876,6 +893,8 @@ describe("SocketIOTransport wraps socket.io to issue requests and listen to Oliv
 
 ```js
 describe("Stack for stacking UI element, ordering and hiding/showing them", function () {
+
+	var Stack = olives.Stack;
 
     it("can stack up UI elements that can be moved around by moving the stack", function () {
         var stack = new Stack();
@@ -998,6 +1017,8 @@ describe("Stack for stacking UI element, ordering and hiding/showing them", func
 ```js
 describe("LocationRouter is a router that watches hashmark changes and updates it when the route changes", function () {
 
+	var LocationRouter = olives.LocationRouter;
+
     it("navigates to the route described by the URL on start", function () {
         var locationRouter = new LocationRouter();
         var spy = jasmine.createSpy();
@@ -1075,8 +1096,13 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 * [The todo application](http://flams.github.com/olives/todo/index.html) Available on [TodoMVC](http://todomvc.com)
 * [Ideafy by Taiaut](http://www.taiaut.com/taiaut.com/index.php)
+* [Eyeswitch](http://eyeswitch.com)
 
 ## Changelog
+
+##2.0.0 beta - 04 FEB 2014
+
+* Remove dependency on require.js
 
 ###1.6.0 - 07 SEP 2013
 
