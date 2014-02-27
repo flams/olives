@@ -1100,6 +1100,10 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ## Changelog
 
+###2.0.0 - 26 FEB 2014
+
+* The OObject doesn't create or hold a reference to a Store by default.
+
 ##2.0.0 beta - 04 FEB 2014
 
 * Remove dependency on require.js
