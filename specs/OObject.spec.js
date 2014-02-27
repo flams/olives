@@ -34,32 +34,6 @@ describe("OObjectTest", function () {
 
 });
 
-describe("OObjectModel", function () {
-
-    var oObject = null;
-
-    beforeEach(function () {
-        oObject = null;
-    });
-
-    it("should have a model property that is a store", function () {
-        oObject = new OObject();
-        expect(oObject.model).toBeInstanceOf(Store);
-    });
-
-    it("should allow for changing the model at init", function () {
-        var store = new Store();
-        oObject = new OObject(store);
-        expect(oObject.model).toBe(store);
-    });
-
-    it("should init a basic store if the given object is not a store", function () {
-        oObject = new OObject(true);
-        expect(oObject.model).toBeInstanceOf(Store);
-    });
-
-});
-
 describe("OObjectAlive", function () {
 
     var oObject = null,

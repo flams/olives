@@ -112,13 +112,6 @@ module.exports = function OObjectConstructor(otherStore) {
     });
 
     /**
-     * The UI's Store
-     * It has set/get/del/has/watch/unwatch methods
-     * @see Emily's doc for more info on how it works.
-     */
-    this.model = otherStore instanceof Store ? otherStore : new Store();
-
-    /**
      * The module that will manage the plugins for this UI
      * @see Olives/Plugins' doc for more info on how it works.
      */
