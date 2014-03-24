@@ -1,17 +1,23 @@
 {
   "name": "olives",
-  "version": "1.6.0",
-  "main": "build/Olives.min.js",
+  "version": "2.0.0",
+  "main": "buld/olives.min.js",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "components",
-    "Makefile",
-    "jsTestDriver.conf",
+    "docs",
     "lib",
-    "olives-integration*",
     "release",
+    "report",
     "specs",
+    "src",
     "tools"
+    "LICENSE",
+    "LICENSE-MINI",
+    "Makefile",
+    "docs",
+    "olives-integration.test.html",
+    "olives-integration.test.js",
+    "package.json",
+    "tests.html",
+    "test.js",
   ]
 }
