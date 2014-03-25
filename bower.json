@@ -1,7 +1,7 @@
 {
   "name": "olives",
   "version": "2.0.0",
-  "main": "buld/olives.min.js",
+  "main": "build/olives.min.js",
   "ignore": [
     "docs",
     "lib",
