@@ -18,6 +18,8 @@
     "olives-integration.test.js",
     "package.json",
     "tests.html",
-    "test.js"
+    "test.js",
+    "karma.config.js",
+    "olives-server.js"
   ]
 }
