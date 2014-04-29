@@ -1,7 +1,7 @@
 {
   "name": "olives",
   "description": "A JS Framework for creating realtime and scalable web applications. Based on Emily.js and socket.io",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "homepage": "http://flams.github.com/olives/",
   "licenses": [
     {
@@ -38,10 +38,11 @@
     "UI",
     "MVC",
     "scalable",
-    "AMD/commonJS",
     "data-binding",
     "Router",
-    "node.js"
+    "node.js",
+    "socket.io",
+    "all the buzz words"
   ],
   "repository": {
     "type": "git",
@@ -61,10 +62,11 @@
     "karma-html2js-preprocessor": "~0.1.0",
     "karma-jasmine": "~0.1.5",
     "requirejs": "~2.1.9",
-    "karma-requirejs": "~0.2.1",
-    "karma-coffee-preprocessor": "~0.1.2",
     "karma-phantomjs-launcher": "~0.1.1",
     "karma": "~0.10.9",
     "karma-browserify": "0.0.6"
+  },
+  "scripts": {
+      "test": "watchify -r ./specs/*.js -i olives -o tests.js; karma start karma.config.js"
   }
 }
