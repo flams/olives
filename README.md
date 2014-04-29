@@ -968,7 +968,6 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 });
 ```
 
-
 ##Live examples
 
 * [The todo application](http://flams.github.com/olives/todo/index.html) Available on [TodoMVC](http://todomvc.com)
@@ -977,12 +976,16 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ## Changelog
 
-###3.0.0 - 28 APR 2014
+###3.0.1 - 28 APR 2014
+
+* Doc update.
+
+####3.0.0 - 28 APR 2014
 
 * Remove each library's implementation and use npm modules instead. Backward compatible appart from DomUtils which has been removed.
 * The browserified version isn't built anymore, it'll have to be done as part of the package of the final app.
 
-###2.0.0 - 26 FEB 2014
+####2.0.0 - 26 FEB 2014
 
 * The OObject doesn't create or hold a reference to a Store by default.
 
