@@ -102,26 +102,7 @@ widget.plugins.addAll({
 widget.alive( document.querySelector('.widget') );
 ```
 
-
 ##How do I install it?
-
-Olives requires emily: https://github.com/flams/emily
-
-```html
-	<script src="emily.js"></script>
-	<script src="olives.js"></script>
-```
-
-```js
-var olives = require("olives");
-
-var OObject = olives.OObject;
-var LocalStore = olives.LocalStore;
-
-...
-```
-
-If your application is based on node and you want the realtime part of Olives, on the server side, do:
 
 ```bash
 npm install olives
@@ -130,7 +111,7 @@ npm install olives
 ```js
 var olives = require("olives");
 
-// Register your instance of socket.io
+// Register your instance of socket.io if you want to use socketio-transport.
 olives.registerSocketIO(io);
 ```
 
