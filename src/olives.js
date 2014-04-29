@@ -6,14 +6,13 @@
  "use strict";
 
 module.exports = {
-	"Bind.plugin": require("./Bind.plugin"),
-	"DomUtils": require("./DomUtils"),
-	"Event.plugin": require("./Event.plugin"),
-	"LocalStore": require("./LocalStore"),
-	"LocationRouter": require("./LocationRouter"),
-	"OObject": require("./OObject"),
-	"Place.plugin": require("./Place.plugin"),
-	"Plugins": require("./Plugins"),
-	"SocketIOTransport": require("./SocketIOTransport"),
-	"Stack": require("./Stack")
+	"Bind.plugin": require("data-binding-plugin"),
+	"Event.plugin": require("event-plugin"),
+	"LocalStore": require("local-observable-store"),
+	"LocationRouter": require("url-highway"),
+	"OObject": require("seam-view"),
+	"Place.plugin": require("place-plugin"),
+	"Plugins": require("seam"),
+	"SocketIOTransport": require("socketio-transport"),
+	"Stack": require("dom-stack")
 };

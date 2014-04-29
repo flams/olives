@@ -3,16 +3,15 @@
  * The MIT License (MIT)
  * Copyright (c) 2012-2014 Olivier Scherrer <pode.fr@gmail.com> - Olivier Wietrich <olivier.wietrich@gmail.com>
  */
-var OObject = require("../src/OObject"),
-    Plugins = require("../src/Plugins"),
-    EventPlugin = require("../src/Event.plugin"),
-    BindPlugin = require("../src/Bind.plugin"),
+var OObject = require("../src/olives")["OObject"],
+    Plugins = require("../src/olives")["Plugins"],
+    EventPlugin = require("../src/olives")["Event.plugin"],
+    BindPlugin = require("../src/olives")["Bind.plugin"],
     Store = require("emily").Store,
-    DomUtils = require("../src/DomUtils"),
-    PlacePlugin = require("../src/Place.plugin"),
-    LocalStore = require("../src/LocalStore"),
-    Stack = require("../src/Stack"),
-    LocationRouter = require("../src/LocationRouter");
+    PlacePlugin = require("../src/olives")["Place.plugin"],
+    LocalStore = require("../src/olives")["LocalStore"],
+    Stack = require("../src/olives")["Stack"],
+    LocationRouter = require("../src/olives")["LocationRouter"];
 
 function CreateMouseEvent(type) {
     var event = document.createEvent("MouseEvents");
