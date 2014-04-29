@@ -1100,6 +1100,11 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ## Changelog
 
+###3.0.0 - 28 APR 2014
+
+* Remove each library's implementation and use npm modules instead. Backward compatible appart from DomUtils which has been removed.
+* The browserified version isn't built anymore, it'll have to be done as part of the package of the final app.
+
 ###2.0.0 - 26 FEB 2014
 
 * The OObject doesn't create or hold a reference to a Store by default.
@@ -1158,6 +1163,3 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
  * UI-pugin is now called Place.plugin
  * Plugins are now name as "name.plugin.js" instead of "name-plugin.js"
  * Updated JSDocs
-
-
-
