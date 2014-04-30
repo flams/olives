@@ -51,7 +51,7 @@
   "bugs": {
     "url": "https://github.com/flams/olives/issues"
   },
-  "main": "olives-server.js",
+  "main": "src/olives.js",
   "engines": {
     "node": ">= 0.8.0"
   },

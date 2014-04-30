@@ -713,58 +713,7 @@ describe("LocalStore is an Emily store which can be synchronized with localStora
 
 ### SocketIOTransport
 
-```js
-describe("SocketIOTransport wraps socket.io to issue requests and listen to Olives channels from a node.js server", function () {
-
-	var SocketIOTransport = olives.SocketIOTransport;
-
-    xit("[SERVER SIDE] has a function for adding an Olives handler", function () {
-        var olives = require("olives");
-
-        // socket is the socket created by socket.io, listening to the web server
-        olives.registerSocketIO(socket);
-
-        olives.handlers.set("myHandler", function (payload, onEnd, onData) {
-
-            // payload comes from the client and holds data needed to issue the request
-            // It can be of any type
-
-            // Call onEnd when you want to send something to the client that will close the connection
-            onEnd(data);
-
-            // Call onData if it's a chunk and that more are coming, so the connection stays alive
-            onData(data);
-
-        });
-    });
-
-    xit("can issue a request to a handler on the server side", function () {
-        var transport = new SocketIOTransport(fakeSocket);
-
-        // The payload can be any type, or a JSON
-        var payload = {};
-
-        transport.request("myHandler", payload, function callback(data) {
-            // Do what you want with data
-        });
-    });
-
-    xit("can listen to a kept-alive socket", function () {
-        var transport = new SocketIOTransport(fakeSocket);
-
-        // The payload can be any type, or a JSON
-        var payload = {};
-
-        var stop = transport.listen("myHandler", payload, function callback(data) {
-            // Do what you want with data
-        });
-
-        // Stop can be called whenever the listener is no more interested by the channel's updates
-        stop();
-    });
-
-});
-```
+Check out documentation [here](https://github.com/cosmosio/socketio-transport)
 
 ### Stack
 

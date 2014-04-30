@@ -13,6 +13,6 @@ module.exports = {
 	"OObject": require("seam-view"),
 	"Place.plugin": require("place-plugin"),
 	"Plugins": require("seam"),
-	"SocketIOTransport": require("socketio-transport").Client,
+	"SocketIOTransport": require("socketio-transport"),
 	"Stack": require("dom-stack")
 };
