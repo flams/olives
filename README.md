@@ -714,6 +714,7 @@ describe("LocalStore is an Emily store which can be synchronized with localStora
 ### SocketIOTransport
 
 Check out documentation [here](https://github.com/cosmosio/socketio-transport)
+And see example [here](https://github.com/podefr/socketio-transport-example)
 
 ### Stack
 
