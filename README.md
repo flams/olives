@@ -926,6 +926,10 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ## Changelog
 
+###3.0.5 - 02 JUNE 2014
+
+* Clean up
+
 ###3.0.4 - 02 JUNE 2014
 
 * Fix issue preventing Olives from loading on the server side in Event-plugin
