@@ -5,21 +5,13 @@
  */
  "use strict";
 
-// Don't load the same modules in browser
-if (typeof window == "object") {
-    module.exports = {
-        "Bind.plugin": require("data-binding-plugin"),
-        "LocalStore": require("local-observable-store"),
-        "LocationRouter": require("url-highway"),
-        "OObject": require("seam-view"),
-        "Place.plugin": require("place-plugin"),
-        "Plugins": require("seam"),
-        "SocketIOTransport": require("socketio-transport"),
-        "Stack": require("dom-stack")
-    };
-} else {
-    // than in node.js
-    module.exports = {
-        "SocketIOTransport": require("socketio-transport")
-    }
-}
+module.exports = {
+    "Bind.plugin": require("data-binding-plugin"),
+    "LocalStore": require("local-observable-store"),
+    "LocationRouter": require("url-highway"),
+    "OObject": require("seam-view"),
+    "Place.plugin": require("place-plugin"),
+    "Plugins": require("seam"),
+    "SocketIOTransport": require("socketio-transport"),
+    "Stack": require("dom-stack")
+};
