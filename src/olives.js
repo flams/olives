@@ -10,6 +10,7 @@ module.exports = {
     "LocalStore": require("local-observable-store"),
     "LocationRouter": require("url-highway"),
     "OObject": require("seam-view"),
+    "Event.plugin": require("event-plugin"),
     "Place.plugin": require("place-plugin"),
     "Plugins": require("seam"),
     "SocketIOTransport": require("socketio-transport"),
