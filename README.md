@@ -926,6 +926,10 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ## Changelog
 
+###3.0.6 - 30 AUG 2015
+
+* Update to Emilie 3.0.7
+
 ###3.0.5 - 02 JUNE 2014
 
 * Clean up
