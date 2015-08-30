@@ -1,7 +1,7 @@
 {
   "name": "olives",
   "description": "A JS Framework for creating realtime and scalable web applications. Based on Emily.js and socket.io",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "homepage": "http://flams.github.com/olives/",
   "licenses": [
     {
@@ -19,7 +19,7 @@
     "Olivier Wietrich <olivier.wietrich@gmail.com"
   ],
   "dependencies": {
-    "emily": "3.0.1",
+    "emily": "3.0.7",
     "socketio-transport": "0.0.4",
     "dom-stack": "0.0.1",
     "event-plugin": "0.0.3",
