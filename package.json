@@ -1,7 +1,7 @@
 {
   "name": "olives",
   "description": "A JS Framework for creating realtime and scalable web applications. Based on Emily.js and socket.io",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "homepage": "http://flams.github.com/olives/",
   "license": "MIT",
   "files": [
@@ -23,7 +23,7 @@
     "seam-view": "0.0.1",
     "url-highway": "0.0.3",
     "data-binding-plugin": "0.0.6",
-    "local-observable-store": "0.0.2"
+    "local-observable-store": "0.0.3"
   },
   "keywords": [
     "framework",
