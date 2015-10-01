@@ -957,7 +957,7 @@ describe("LocationRouter is a router that watches hashmark changes and updates i
 
 ####3.0.0 - 28 APR 2014
 
-* Remove each library's implementation and use npm modules instead. Backward compatible appart from DomUtils which has been removed.
+* Remove each library's implementation and use npm modules instead. Backward compatible apart from DomUtils which has been removed.
 * The browserified version isn't built anymore, it'll have to be done as part of the package of the final app.
 
 ####2.0.0 - 26 FEB 2014
